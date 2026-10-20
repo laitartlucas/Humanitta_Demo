@@ -1,30 +1,48 @@
-# Humanittá Gestão — Plataforma de Saúde Integral · Design System (Etapa 1)
+# Humanittá Gestão — Plataforma de Saúde Integral · Base multiagente (Etapa 2)
 
-Design completo e base de componentes do sistema de gestão da **Humanittá Saúde Integral** (Ronda Alta/RS).
+Design completo **e** base técnica compartilhada do sistema de gestão da **Humanittá Saúde Integral** (Ronda Alta/RS),
+pronta para o desenvolvimento paralelo de oito agentes.
 É uma demonstração comercial: todos os pacientes, valores, conversas e métricas são **fictícios**.
 
 ## Rodar
 ```bash
 npm install
-npm run dev        # demonstração navegável (login: escolha o perfil de demonstração e preencha qualquer senha)
-npm run typecheck  # TypeScript strict
+npm run dev        # http://localhost:5173 — login: escolha o perfil (e o profissional) de demonstração, qualquer senha
+npm run verify     # typecheck strict + testes de contrato + build
+npm test           # só os testes (vitest)
+npm run typecheck
 npm run build
 ```
-Stack: React 18 · TypeScript (strict) · Tailwind CSS 3.4 · lucide-react · Vite. Alias `@ds/*` → `design_system/*`.
+Stack: React 18 · TypeScript (strict) · Tailwind CSS 3.4 · lucide-react · Vite · react-router-dom 6 · vitest.
+Aliases: `@ds/*` → `design_system/*` · `@core` → `src/core` · `@app/*` → `src/app/*` · `@modules/*` → `src/modules/*`.
+
+Restaurar os dados de demonstração: abra qualquer URL com `?reset-demo`.
+
+## Documentação técnica (comece aqui)
+| Documento | Conteúdo |
+|---|---|
+| [docs/AGENT_CONTRACT.md](docs/AGENT_CONTRACT.md) | Pastas por agente, interfaces, serviços, hooks, rotas, permissões, critérios de aceitação, integração |
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Camadas, roteamento, estado global, persistência, sessão demo, erros |
+| [docs/DATA_MODELS.md](docs/DATA_MODELS.md) | Entidades, IDs, relacionamentos, ciclos de vida, semente e decisões de consistência |
+| [docs/INTEGRATION_GUIDE.md](docs/INTEGRATION_GUIDE.md) | Worktrees, prompt de cada agente, migração de telas, change requests, checklist do integrador |
+| [docs/DEVELOPMENT_RULES.md](docs/DEVELOPMENT_RULES.md) | Regras de código, visual, dados, segurança, testes e Git |
+
+Propriedade de arquivos executável: [`agents.config.json`](agents.config.json) · `npm run check:boundaries` · `npm run agents:worktrees`.
 
 ## Estrutura
-- `design_system/foundations` — tokens (TS, CSS, JSON), estilos globais, artboard de fundamentos
-- `design_system/components` — componentes reutilizáveis + artboards de componentes, estados e modais
-- `design_system/layouts` — AppShell, Sidebar retrátil, Header, navegação móvel + artboard responsivo
-- `design_system/access` — perfis (Administrador, Recepcionista, Profissional, Financeiro) e matriz de permissões de interface
-- `design_system/screens/professional-portal` — Portal do Profissional (Meu Dashboard, Minha Agenda, Meus Pacientes, Meus Atendimentos, Meu Perfil)
-- `design_system/screens/*` — 11 módulos administrativos (login, dashboard, agenda, patients, professionals, attendances, finance, messaging, ai-assistant, reports, settings), cada um com tela, componentes, modais e artboard de design
-- `design_system/mocks` — tipos de domínio e dados fictícios
-- `design_system/assets` — símbolo e logotipos (aproximação vetorial; substituir pelos arquivos oficiais)
-- `design_system/documentation` — **DESIGN_SYSTEM.md · COMPONENTS.md · SCREENS.md · RESPONSIVE_GUIDE.md · DESIGN_HANDOFF.md · PERMISSIONS.md**
+- `src/app` — roteador (URLs reais), shell autenticado com guarda de rota, login de demonstração
+- `src/core` — modelo de dados único, store + persistência local, repositórios, serviços tipados, seletores, hooks, permissões, erros
+- `src/modules/<módulo>` — rotas e containers de cada agente (ligam URL e dados às telas do design system)
+- `design_system/foundations` — tokens (TS, CSS, JSON), estilos globais
+- `design_system/components` — componentes reutilizáveis + artboards
+- `design_system/layouts` — AppShell, Sidebar, Header, navegação móvel
+- `design_system/access` — perfis (Administrador, Recepcionista, Profissional, Financeiro) e matriz de permissões
+- `design_system/screens/*` — telas dos módulos administrativos e do Portal do Profissional (preservadas da Etapa 1)
+- `design_system/mocks` — tipos de domínio e dados fictícios de origem (a semente do core é montada a partir deles)
+- `design_system/documentation` — DESIGN_SYSTEM · COMPONENTS · SCREENS · RESPONSIVE_GUIDE · DESIGN_HANDOFF · PERMISSIONS
+- `tests` — testes de contrato do core e testes dos módulos
 
-> Ocultar menus por perfil não é segurança: o controle de acesso efetivo deve ser implementado no servidor (ver `PERMISSIONS.md`).
-
-Para dividir o trabalho entre os agentes de desenvolvimento, comece pelo `DESIGN_HANDOFF.md`.
+> **Segurança:** o seletor de perfil do login e a ocultação de menus são apenas demonstração. Não há autenticação real;
+> o controle de acesso efetivo deve ser implementado no servidor (ver `docs/DEVELOPMENT_RULES.md §6` e `PERMISSIONS.md`).
 
 Desenvolvido por Laitart Tech.

@@ -1,2 +1,2 @@
 export { LoginScreen } from './LoginScreen';
-export type { LoginScreenProps } from './LoginScreen';
+export type { LoginScreenProps, DemoProfessionalOption } from './LoginScreen';

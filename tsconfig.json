@@ -14,7 +14,13 @@
     "resolveJsonModule": true,
     "noEmit": true,
     "baseUrl": ".",
-    "paths": { "@ds/*": ["design_system/*"] }
+    "paths": {
+      "@ds/*": ["design_system/*"],
+      "@core": ["src/core/index.ts"],
+      "@core/*": ["src/core/*"],
+      "@app/*": ["src/app/*"],
+      "@modules/*": ["src/modules/*"]
+    }
   },
-  "include": ["src", "design_system"]
+  "include": ["src", "design_system", "tests"]
 }

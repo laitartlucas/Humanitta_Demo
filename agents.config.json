@@ -1,0 +1,114 @@
+{
+  "$comment": "Fonte única de propriedade de arquivos por agente. Lido por scripts/check-boundaries.mjs e scripts/setup-worktrees.*. Somente o Integrador (00) altera.",
+  "baseBranch": "main",
+  "integrator": {
+    "id": "00",
+    "name": "Integrador / Arquiteto",
+    "owns": [
+      "package.json",
+      "package-lock.json",
+      "tsconfig.json",
+      "vite.config.ts",
+      "tailwind.config.ts",
+      "postcss.config.js",
+      "index.html",
+      "agents.config.json",
+      "src/main.tsx",
+      "src/App.tsx",
+      "src/app/**",
+      "src/core/**",
+      "tests/core.contract.test.ts",
+      "scripts/**",
+      "docs/**",
+      "README.md",
+      "design_system/foundations/**",
+      "design_system/components/**",
+      "design_system/layouts/**",
+      "design_system/assets/**",
+      "design_system/access/**",
+      "design_system/mocks/**",
+      "design_system/documentation/**",
+      "design_system/screens/login/**"
+    ]
+  },
+  "agents": [
+    {
+      "id": "01",
+      "slug": "dashboard",
+      "name": "Dashboard",
+      "branch": "agent/01-dashboard",
+      "owns": ["design_system/screens/dashboard/**", "src/modules/dashboard/**", "tests/modules/dashboard/**"]
+    },
+    {
+      "id": "02",
+      "slug": "agenda",
+      "name": "Agenda",
+      "branch": "agent/02-agenda",
+      "owns": ["design_system/screens/agenda/**", "src/modules/agenda/**", "tests/modules/agenda/**"]
+    },
+    {
+      "id": "03",
+      "slug": "pacientes",
+      "name": "Pacientes",
+      "branch": "agent/03-pacientes",
+      "owns": ["design_system/screens/patients/**", "src/modules/patients/**", "tests/modules/patients/**"]
+    },
+    {
+      "id": "04",
+      "slug": "profissionais-portal",
+      "name": "Profissionais e Portal do Profissional",
+      "branch": "agent/04-profissionais-portal",
+      "owns": [
+        "design_system/screens/professionals/**",
+        "design_system/screens/professional-portal/**",
+        "src/modules/professionals/**",
+        "src/modules/portal/**",
+        "tests/modules/professionals/**",
+        "tests/modules/portal/**"
+      ]
+    },
+    {
+      "id": "05",
+      "slug": "atendimentos",
+      "name": "Atendimentos",
+      "branch": "agent/05-atendimentos",
+      "owns": ["design_system/screens/attendances/**", "src/modules/attendances/**", "tests/modules/attendances/**"]
+    },
+    {
+      "id": "06",
+      "slug": "financeiro",
+      "name": "Financeiro",
+      "branch": "agent/06-financeiro",
+      "owns": ["design_system/screens/finance/**", "src/modules/finance/**", "tests/modules/finance/**"]
+    },
+    {
+      "id": "07",
+      "slug": "whatsapp-ia",
+      "name": "WhatsApp e Assistente IA",
+      "branch": "agent/07-whatsapp-ia",
+      "owns": [
+        "design_system/screens/messaging/**",
+        "design_system/screens/ai-assistant/**",
+        "src/modules/messaging/**",
+        "src/modules/ai-assistant/**",
+        "tests/modules/messaging/**",
+        "tests/modules/ai-assistant/**"
+      ]
+    },
+    {
+      "id": "08",
+      "slug": "relatorios-config",
+      "name": "Relatórios e Configurações",
+      "branch": "agent/08-relatorios-config",
+      "owns": [
+        "design_system/screens/reports/**",
+        "design_system/screens/settings/**",
+        "src/modules/reports/**",
+        "src/modules/settings/**",
+        "tests/modules/reports/**",
+        "tests/modules/settings/**"
+      ]
+    }
+  ],
+  "sharedRequestFile": "docs/change-requests/<id-do-agente>-<assunto>.md"
+}

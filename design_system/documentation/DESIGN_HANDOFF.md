@@ -38,6 +38,9 @@ humanitta-design-system/
 
 ## 2. Divisão sugerida entre os 8 agentes
 
+> **Substituída na Etapa 2.** A divisão vigente, as pastas permitidas e o procedimento de integração estão em
+> [`docs/AGENT_CONTRACT.md`](../../docs/AGENT_CONTRACT.md) e em `agents.config.json`. A tabela abaixo fica como histórico do design.
+
 | Agente | Escopo (pastas que pode editar) | Depende de |
 |---|---|---|
 | **A1 · Design System & Shell** | `foundations/`, `components/`, `layouts/`, `assets/`, `tailwind.config.ts`, convenções do cliente de API (`services/http`) | — (dono dos tokens) |

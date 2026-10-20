@@ -2,18 +2,24 @@
   "name": "humanitta-design-system",
   "private": true,
   "version": "1.0.0",
-  "description": "Humanittá Gestão — Design System e telas (Etapa 1, demonstração)",
+  "description": "Humanittá Gestão — base multiagente (design system + arquitetura compartilhada, demonstração)",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
     "typecheck": "tsc --noEmit",
-    "preview": "vite preview"
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "preview": "vite preview",
+    "verify": "npm run typecheck && npm test && vite build",
+    "check:boundaries": "node scripts/check-boundaries.mjs",
+    "agents:worktrees": "node scripts/setup-worktrees.mjs"
   },
   "dependencies": {
     "lucide-react": "0.441.0",
     "react": "18.3.1",
-    "react-dom": "18.3.1"
+    "react-dom": "18.3.1",
+    "react-router-dom": "6.26.2"
   },
   "devDependencies": {
     "@types/react": "18.3.5",
@@ -23,6 +29,7 @@
     "postcss": "8.4.45",
     "tailwindcss": "3.4.10",
     "typescript": "5.5.4",
-    "vite": "5.4.3"
+    "vite": "5.4.3",
+    "vitest": "2.1.9"
   }
 }

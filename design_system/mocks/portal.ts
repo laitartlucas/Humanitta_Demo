@@ -637,3 +637,16 @@ export const MY_SESSIONS: ActiveSession[] = [
   { id: 'ses-2', device: 'Safari · iPhone', location: 'Ronda Alta/RS (aprox.)', lastActive: 'Hoje, 07:48', current: false },
   { id: 'ses-3', device: 'Safari · iPad', location: 'Sarandi/RS (aprox.)', lastActive: 'Ontem, 19:12', current: false },
 ];
+
+/* ------------------------------------------------------------------ */
+/* Sementes reutilizadas pela base compartilhada (src/core/data/seed.ts) */
+/* ------------------------------------------------------------------ */
+
+export {
+  LAUREN_EXTRA as PORTAL_EXTRA_APPOINTMENTS,
+  STATUS_AT_PORTAL_NOW as PORTAL_STATUS_OVERRIDES,
+  TREATMENT as PORTAL_TREATMENTS,
+  ALERTS as PORTAL_ALERTS,
+  ADMIN_NOTES as PORTAL_ADMIN_NOTES,
+  SUMMARY_BY_SERVICE as PORTAL_SUMMARY_BY_SERVICE,
+};

@@ -4,12 +4,22 @@ import { AuthLayout } from '@ds/layouts';
 import { Badge, Button, Checkbox, Input, Logo, Select } from '@ds/components';
 import { ROLES, ROLE_LABEL, type Role } from '@ds/access';
 
+export interface DemoProfessionalOption {
+  /** Id do USUÁRIO profissional (não do cadastro de profissional). */
+  value: string;
+  label: string;
+  email: string;
+}
+
 export interface LoginScreenProps {
   /**
    * Chamado após a autenticação simulada. Na demo o perfil vem do seletor de apresentação;
    * no sistema real ele vem da conta autenticada no servidor (nunca de um campo do formulário).
+   * `demoUserId` vem preenchido quando o perfil é Profissional e há `demoProfessionals`.
    */
-  onLogin?: (role: Role) => void;
+  onLogin?: (role: Role, demoUserId?: string) => void;
+  /** Profissionais fictícios para escolher no perfil Profissional (somente demonstração). */
+  demoProfessionals?: DemoProfessionalOption[];
 }
 
 const DEMO_EMAILS: Record<Role, string> = {
@@ -20,8 +30,9 @@ const DEMO_EMAILS: Record<Role, string> = {
 };
 const DEMO_EMAIL = DEMO_EMAILS.admin;
 
-export function LoginScreen({ onLogin }: LoginScreenProps) {
+export function LoginScreen({ onLogin, demoProfessionals = [] }: LoginScreenProps) {
   const [role, setRole] = useState<Role>('admin');
+  const [proUserId, setProUserId] = useState<string>(demoProfessionals[0]?.value ?? '');
   const [email, setEmail] = useState(DEMO_EMAIL);
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -48,7 +59,7 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
         setError('E-mail ou senha incorretos. Verifique os dados e tente novamente.');
         return;
       }
-      onLogin?.(role);
+      onLogin?.(role, role === 'profissional' && proUserId ? proUserId : undefined);
     }, 1100);
   }
 
@@ -74,11 +85,27 @@ export function LoginScreen({ onLogin }: LoginScreenProps) {
               onChange={(e) => {
                 const next = e.target.value as Role;
                 setRole(next);
-                setEmail(DEMO_EMAILS[next]);
+                const pro = demoProfessionals.find((p) => p.value === proUserId);
+                setEmail(next === 'profissional' && pro ? pro.email : DEMO_EMAILS[next]);
               }}
               options={ROLES.map((r) => ({ value: r, label: ROLE_LABEL[r] }))}
               hint="Somente para a apresentação. No sistema real o perfil e as permissões vêm da conta autenticada."
             />
+            {role === 'profissional' && demoProfessionals.length > 0 && (
+              <div className="mt-4">
+                <Select
+                  label="Profissional (demonstração)"
+                  value={proUserId}
+                  onChange={(e) => {
+                    setProUserId(e.target.value);
+                    const pro = demoProfessionals.find((p) => p.value === e.target.value);
+                    if (pro) setEmail(pro.email);
+                  }}
+                  options={demoProfessionals.map((p) => ({ value: p.value, label: p.label }))}
+                  hint="O portal mostra somente a agenda, os pacientes e os atendimentos deste profissional."
+                />
+              </div>
+            )}
           </div>
           {error && (
             <div
