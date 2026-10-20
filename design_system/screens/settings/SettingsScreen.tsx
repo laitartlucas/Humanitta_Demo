@@ -1,7 +1,9 @@
-import { useState, type ComponentType, type MouseEvent } from 'react';
+import { useCallback, useState, type ComponentType } from 'react';
 import {
   Bell,
   Building2,
+  CalendarOff,
+  Info,
   CalendarClock,
   DoorOpen,
   KeyRound,
@@ -16,7 +18,9 @@ import {
 } from 'lucide-react';
 import { Badge, Button, PageHeader, Select, useToast } from '@ds/components';
 import { cn } from '@ds/foundations/cn';
+import { SettingsDraftProvider, type SettingsDrafts } from './draft';
 import {
+  BlockRequestsSection,
   ClinicDataSection,
   HoursSection,
   IntegrationsSection,
@@ -25,6 +29,7 @@ import {
   RoomsSection,
   ServicesSection,
   SpecialtiesSection,
+  SystemInfoSection,
   UsersSection,
   VisualIdentitySection,
 } from './sections';
@@ -37,9 +42,11 @@ export type SettingsSectionId =
   | 'horarios'
   | 'usuarios'
   | 'permissoes'
+  | 'solicitacoes'
   | 'notificacoes'
   | 'identidade'
-  | 'integracoes';
+  | 'integracoes'
+  | 'sistema';
 
 export interface SettingsScreenProps {
   /** Seção aberta inicialmente (padrão "clinica"). */
@@ -75,6 +82,7 @@ const GROUPS: SectionGroup[] = [
     items: [
       { id: 'usuarios', label: 'Usuários', description: 'Quem acessa o sistema e com qual perfil.', icon: Users, component: UsersSection },
       { id: 'permissoes', label: 'Permissões', description: 'O que cada perfil pode ver e editar.', icon: KeyRound, component: PermissionsSection },
+      { id: 'solicitacoes', label: 'Solicitações de bloqueio', description: 'Aprovação dos bloqueios de horário pedidos pelos profissionais.', icon: CalendarOff, component: BlockRequestsSection },
       { id: 'notificacoes', label: 'Notificações', description: 'Lembretes, confirmações e alertas automáticos.', icon: Bell, component: NotificationsSection },
     ],
   },
@@ -82,7 +90,8 @@ const GROUPS: SectionGroup[] = [
     label: 'Sistema',
     items: [
       { id: 'identidade', label: 'Identidade visual', description: 'Logo, cores e textos institucionais.', icon: Palette, component: VisualIdentitySection },
-      { id: 'integracoes', label: 'Integrações', description: 'WhatsApp, pagamentos e outros serviços conectados.', icon: PlugZap, component: IntegrationsSection },
+      { id: 'integracoes', label: 'Integrações', description: 'WhatsApp, pagamentos e outros serviços (simulados na demonstração).', icon: PlugZap, component: IntegrationsSection },
+      { id: 'sistema', label: 'Informações do sistema', description: 'Versão, ambiente, dados de demonstração e estado das integrações.', icon: Info, component: SystemInfoSection },
     ],
   },
 ];
@@ -96,10 +105,11 @@ function findSection(id: SettingsSectionId): SectionDef {
 export function SettingsScreen({ initialSection = 'clinica' }: SettingsScreenProps) {
   const { toast } = useToast();
   const [active, setActive] = useState<SettingsSectionId>(initialSection);
-  const [dirty, setDirty] = useState(false);
+  const [drafts, setDrafts] = useState<SettingsDrafts>({ dirtyIds: [], saveAll: async () => ({ saved: 0, failed: 0 }), discardAll: () => undefined });
   const [saving, setSaving] = useState(false);
-  /** Incrementado ao descartar: remonta a seção e restaura os dados de demonstração. */
-  const [resetKey, setResetKey] = useState(0);
+  const onDraftsChange = useCallback((d: SettingsDrafts) => setDrafts(d), []);
+  const dirty = drafts.dirtyIds.length > 0;
+  const dirtyLabels = drafts.dirtyIds.map((id) => ALL_SECTIONS.find((s) => s.id === id)?.label ?? id);
 
   const section = findSection(active);
 
@@ -108,24 +118,18 @@ export function SettingsScreen({ initialSection = 'clinica' }: SettingsScreenPro
     document.getElementById('settings-content')?.focus({ preventScroll: true });
   }
 
-  function markDirtyOnToggle(e: MouseEvent<HTMLDivElement>) {
-    const target = e.target as HTMLElement;
-    if (target.closest('[role="switch"], input[type="checkbox"], input[type="radio"]')) setDirty(true);
-  }
-
-  function save() {
+  async function save() {
     setSaving(true);
-    window.setTimeout(() => {
-      setSaving(false);
-      setDirty(false);
-      toast({ tone: 'success', title: 'Alterações salvas', description: 'Configurações atualizadas nesta demonstração. Nenhum dado real foi alterado.' });
-    }, 600);
+    const { saved, failed } = await drafts.saveAll();
+    setSaving(false);
+    if (failed === 0 && saved > 0)
+      toast({ tone: 'success', title: 'Alterações salvas', description: 'Configurações atualizadas nos dados de demonstração. Nenhum dado real foi alterado.' });
+    else if (failed > 0 && saved > 0) toast({ tone: 'warning', title: 'Parte das alterações foi salva', description: 'Revise as seções que continuam com alterações pendentes.' });
   }
 
   function discard() {
-    setResetKey((k) => k + 1);
-    setDirty(false);
-    toast({ tone: 'info', title: 'Alterações descartadas', description: 'Os valores de demonstração foram restaurados.' });
+    drafts.discardAll();
+    toast({ tone: 'info', title: 'Alterações descartadas', description: 'Os valores salvos foram restaurados.' });
   }
 
   return (
@@ -200,8 +204,8 @@ export function SettingsScreen({ initialSection = 'clinica' }: SettingsScreenPro
               </h3>
               <p className="text-body text-graphite-600">{section.description}</p>
             </div>
-            {/* Todas as seções ficam montadas: alterações persistem ao trocar de seção até salvar/descartar. */}
-            <div key={resetKey} onChangeCapture={() => setDirty(true)} onClickCapture={markDirtyOnToggle}>
+            {/* Todas as seções ficam montadas: rascunhos persistem ao trocar de seção até salvar/descartar. */}
+            <SettingsDraftProvider onChange={onDraftsChange}>
               {ALL_SECTIONS.map((s) => {
                 const SectionComponent = s.component;
                 return (
@@ -210,7 +214,7 @@ export function SettingsScreen({ initialSection = 'clinica' }: SettingsScreenPro
                   </div>
                 );
               })}
-            </div>
+            </SettingsDraftProvider>
           </section>
 
           <div
@@ -220,9 +224,9 @@ export function SettingsScreen({ initialSection = 'clinica' }: SettingsScreenPro
           >
             <p className="flex-1 text-body-sm text-graphite-600" aria-live="polite">
               {dirty ? (
-                <span className="font-semibold text-warning">Há alterações não salvas nas configurações.</span>
+                <span className="font-semibold text-warning">Alterações não salvas em: {dirtyLabels.join(', ')}.</span>
               ) : (
-                'Nenhuma alteração pendente. Ambiente de demonstração.'
+                'Nenhuma alteração pendente. Listas e interruptores são salvos na hora. Ambiente de demonstração.'
               )}
             </p>
             <div className="flex flex-col-reverse gap-2 sm:flex-row sm:gap-3">
