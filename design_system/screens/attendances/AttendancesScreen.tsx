@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import {
   CalendarCheck,
   CheckCheck,
@@ -6,33 +6,31 @@ import {
   ClipboardCheck,
   ClipboardList,
   Clock,
-  DoorOpen,
   Download,
   ExternalLink,
   FilterX,
   History,
   Hourglass,
-  Lock,
+  ListChecks,
   LogIn,
   Play,
-  ShieldCheck,
+  ShieldAlert,
   Stethoscope,
   Timer,
   UserX,
-  Wallet,
-  XCircle,
-  type LucideIcon,
 } from 'lucide-react';
-import type { Appointment, AppointmentStatus } from '@ds/mocks/types';
 import {
   Avatar,
   Badge,
   Button,
   Card,
   Checkbox,
+  ConfirmDialog,
   DataTable,
   Drawer,
   EmptyState,
+  Input,
+  KpiCard,
   PageHeader,
   ProgressBar,
   SearchInput,
@@ -40,239 +38,110 @@ import {
   SpecialtyTag,
   StatusBadge,
   Tabs,
-  Textarea,
   useToast,
 } from '@ds/components';
 import type { DataTableColumn } from '@ds/components';
 import { cn } from '@ds/foundations/cn';
+import { formatCurrency, formatDate, formatTime } from '@ds/mocks/clinical';
+import { can, now, nowIso, todayKey, useAccessContext, useCan, useClinicSettings, useDb, usePatient, useProfessionals, useRooms, useSpecialties } from '@core';
+import type { Specialty } from '@core';
 import {
-  ALL_SPECIALTIES,
-  CHANNEL_NAMES,
-  DEMO_NOW,
-  ROOM_USAGE,
-  SPECIALTY_NAMES,
-  addMinutes,
-  ageFrom,
-  appointments as allAppointments,
-  formatCurrency,
-  formatDate,
-  formatTime,
-  getPatientById,
-  getProfessionalById,
-  getRoomName,
-  getTodayAppointments,
-  professionals,
-  rooms,
-  toLocalIso,
-} from '@ds/mocks/clinical';
-import { AttendanceDetailsModal, AttendanceFooterActions } from './modals';
+  SORT_LABEL,
+  STAGE_GROUP_LABEL,
+  STAGE_GROUP_ORDER,
+  computeIndicators,
+  filterAttendances,
+  historyBetween,
+  historyStats,
+  matchesGroup,
+  minutesBetween,
+  shiftDateKey,
+  sortAttendances,
+  type AttendanceSort,
+  type AttendanceView,
+  type StageGroup,
+} from '@modules/attendances/model';
+import { useAttendanceAvailability, useAttendanceFlow, useAttendanceViews, useDemoRecord } from '@modules/attendances/hooks';
+import type { DemoNote } from '@modules/attendances/clinicalNote';
+import { DemoRecordPanel } from './components/DemoRecordPanel';
+import { StatBlock, durationLabel, plural } from './components/Timeline';
+import { AttendanceDetailsContent, AttendanceDetailsModal, AttendanceFooterActions, FinishAttendanceDialog } from './modals';
 
 export interface AttendancesScreenProps {
   /** Abre a ficha do paciente (navegação controlada pelo App). */
   onOpenPatient?: (patientId: string) => void;
   /** Abre a agenda do dia. */
   onOpenAgenda?: () => void;
+  /** Atendimento aberto no painel de detalhes (id do agendamento, vindo da URL). */
+  selectedId?: string | null;
+  /** Abre/fecha o painel de detalhes (o container sincroniza com a URL). */
+  onSelect?: (appointmentId: string | null) => void;
 }
 
-/* ------------------------------------------------------------------ */
-/* Tipos e constantes                                                   */
-/* ------------------------------------------------------------------ */
+const SORT_ORDER: AttendanceSort[] = ['horario', 'horario_desc', 'paciente', 'profissional', 'status'];
 
-type StatusTab = 'todos' | 'aguardando' | 'em_atendimento' | 'finalizados' | 'cancelados';
-
-const WAITING: AppointmentStatus[] = ['agendada', 'confirmada', 'reagendada'];
-
-const TAB_MATCH: Record<StatusTab, (s: AppointmentStatus) => boolean> = {
-  todos: () => true,
-  aguardando: (s) => WAITING.includes(s),
-  em_atendimento: (s) => s === 'em_atendimento',
-  finalizados: (s) => s === 'concluida',
-  cancelados: (s) => s === 'cancelada' || s === 'faltou',
-};
-
-const TAB_LABEL: Record<StatusTab, string> = {
-  todos: 'Todos',
-  aguardando: 'Aguardando',
-  em_atendimento: 'Em atendimento',
-  finalizados: 'Finalizados',
-  cancelados: 'Cancelados/faltas',
-};
-
-const TAB_ORDER: StatusTab[] = ['todos', 'aguardando', 'em_atendimento', 'finalizados', 'cancelados'];
-
-/** Marcos de horário (ISO local) por atendimento — estado em memória da demonstração. */
-interface Milestones {
-  checkIn?: string;
-  startedAt?: string;
-  finishedAt?: string;
+function dayLabel(dateKey: string): string {
+  const [y, m, d] = dateKey.split('-').map(Number);
+  const label = formatDate(new Date(y, m - 1, d), { weekday: 'long', day: '2-digit', month: '2-digit' });
+  return label.charAt(0).toUpperCase() + label.slice(1);
 }
 
-/** Estado inicial coerente com "agora" = 19/10/2026 09:10. */
-const INITIAL_MILESTONES: Record<string, Milestones> = {
-  'ag-101': { checkIn: '2026-10-19T07:52:00', startedAt: '2026-10-19T08:02:00', finishedAt: '2026-10-19T08:41:00' },
-  'ag-102': { checkIn: '2026-10-19T08:09:00', startedAt: '2026-10-19T08:15:00', finishedAt: '2026-10-19T08:58:00' },
-  'ag-103': { checkIn: '2026-10-19T08:51:00', startedAt: '2026-10-19T09:01:00' },
-  'ag-104': { checkIn: '2026-10-19T09:04:00' },
-  'ag-105': { checkIn: '2026-10-19T09:07:00' },
-};
-
-type ChecklistKey = 'cadastro' | 'lgpd' | 'pagamento' | 'retorno';
-
-const CHECKLIST: { key: ChecklistKey; label: string; description: string }[] = [
-  { key: 'cadastro', label: 'Cadastro conferido', description: 'Telefone, endereço e contato de emergência atualizados.' },
-  { key: 'lgpd', label: 'Termo de consentimento (LGPD) assinado', description: 'Autorização para tratamento de dados de saúde.' },
-  { key: 'pagamento', label: 'Pagamento registrado', description: 'Lançamento no financeiro (valores fictícios).' },
-  { key: 'retorno', label: 'Retorno agendado', description: 'Próxima sessão marcada na agenda, se indicada.' },
-];
-
-function initialChecklist(a: Appointment): Record<ChecklistKey, boolean> {
-  const done = a.status === 'concluida';
-  const patient = getPatientById(a.patientId);
-  return {
-    cadastro: Boolean(patient?.email) || done,
-    lgpd: patient ? !patient.tags.includes('Novo cadastro') : false,
-    pagamento: done && (patient?.balance ?? 0) === 0,
-    retorno: done && Boolean(patient?.nextVisit && patient.nextVisit > '2026-10-19'),
-  };
-}
+const csvCell = (s: string) => `"${s.replace(/"/g, '""')}"`;
 
 /* ------------------------------------------------------------------ */
-/* Histórico fictício da semana                                         */
+/* Checklist administrativo (derivado dos cadastros — sem estado próprio) */
 /* ------------------------------------------------------------------ */
 
-interface HistoryEntry {
-  appointment: Appointment;
-  finishedAt: string;
-  realMin: number;
-  waitMin: number;
-}
-
-function histEntry(
-  id: string,
-  date: string,
-  time: string,
-  patientId: string,
-  professionalId: string,
-  service: string,
-  realMin: number,
-  waitMin: number,
-  price: number,
-): HistoryEntry[] {
-  const patient = getPatientById(patientId);
-  const prof = getProfessionalById(professionalId);
-  if (!patient || !prof) return [];
-  const start = `${date}T${time}:00`;
-  return [
+function AdminChecklist({ view, views }: { view: AttendanceView; views: AttendanceView[] }) {
+  const patient = usePatient(view.patient.id);
+  const ctx = useAccessContext();
+  const overrides = useDb((s) => s.clinicSettings.permissionOverrides);
+  if (!patient) return null;
+  const seesPatientFinance = can(ctx, 'pacientes_financeiro', 'ver', overrides);
+  const items: { key: string; label: string; description: string; done: boolean }[] = [
+    { key: 'cadastro', label: 'Cadastro conferido', description: 'Telefone e e-mail preenchidos no cadastro.', done: Boolean(patient.phone && patient.email) },
     {
-      appointment: {
-        id,
-        patientId,
-        patientName: patient.name,
-        professionalId,
-        professionalName: prof.name,
-        specialty: prof.specialty,
-        service,
-        roomId: prof.roomId ?? 'sala-7',
-        start,
-        durationMin: realMin,
-        status: 'concluida',
-        price,
-        channel: 'whatsapp',
-      },
-      finishedAt: toLocalIso(addMinutes(start, realMin)),
-      realMin,
-      waitMin,
+      key: 'lgpd',
+      label: 'Termo de consentimento (LGPD) assinado',
+      description: 'Autorização para tratamento de dados de saúde.',
+      done: !patient.tags.includes('Novo cadastro'),
     },
   ];
-}
-
-/** Atendimentos finalizados nos últimos dias (fictícios). */
-const WEEK_HISTORY: HistoryEntry[] = [
-  ...histEntry('hist-01', '2026-10-17', '10:00', 'pac-09', 'prof-lauren', 'Profilaxia (limpeza)', 48, 4, 200),
-  ...histEntry('hist-02', '2026-10-17', '08:30', 'pac-05', 'prof-bianca', 'Drenagem linfática', 62, 7, 180),
-  ...histEntry('hist-03', '2026-10-16', '16:00', 'pac-04', 'prof-marina', 'Psicoterapia individual', 55, 3, 200),
-  ...histEntry('hist-04', '2026-10-16', '14:30', 'pac-11', 'prof-julia', 'Consulta nutricional', 58, 9, 230),
-  ...histEntry('hist-05', '2026-10-15', '10:00', 'pac-03', 'prof-rafael', 'Ajuste quiropráxico', 28, 5, 150),
-  ...histEntry('hist-06', '2026-10-15', '09:00', 'pac-06', 'prof-ana', 'Atendimento podológico', 41, 6, 140),
-  ...histEntry('hist-07', '2026-10-14', '15:30', 'pac-12', 'prof-gustavo', 'Sessão de fisioterapia', 50, 8, 160),
-  ...histEntry('hist-08', '2026-10-13', '09:30', 'pac-02', 'prof-helena', 'Terapia fonoaudiológica', 44, 2, 180),
-];
-
-/* ------------------------------------------------------------------ */
-/* Helpers                                                              */
-/* ------------------------------------------------------------------ */
-
-function minutesBetween(fromIso: string, to: Date): number {
-  return Math.max(0, Math.round((to.getTime() - new Date(fromIso).getTime()) / 60000));
-}
-
-function normalize(s: string): string {
-  return s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
-}
-
-function plural(n: number, one: string, many: string): string {
-  return `${n} ${n === 1 ? one : many}`;
-}
-
-/* ------------------------------------------------------------------ */
-/* Subcomponentes                                                       */
-/* ------------------------------------------------------------------ */
-
-interface TimelineStep {
-  id: string;
-  label: string;
-  meta: string;
-  icon: LucideIcon;
-  done: boolean;
-  tone?: 'danger' | 'warning';
-}
-
-function Timeline({ steps }: { steps: TimelineStep[] }) {
+  if (view.billing !== undefined || seesPatientFinance) {
+    items.push({
+      key: 'pagamento',
+      label: 'Pagamento registrado',
+      description: 'Lançamento no financeiro (valores fictícios).',
+      done: view.billing !== undefined ? view.billing?.status === 'pago' : view.stage === 'concluido' && patient.balance === 0,
+    });
+  }
+  items.push({
+    key: 'retorno',
+    label: 'Retorno agendado',
+    description: 'Próxima sessão marcada na agenda, se indicada.',
+    done: views.some(
+      (o) => o.patient.id === view.patient.id && o.id !== view.id && o.appointment.start > view.appointment.start && (o.stage === 'agendado' || o.stage === 'na_recepcao'),
+    ),
+  });
+  const done = items.filter((i) => i.done).length;
   return (
-    <ol className="flex flex-col">
-      {steps.map((s, i) => {
-        const Icon = s.icon;
-        const last = i === steps.length - 1;
-        return (
-          <li key={s.id} className="relative flex gap-3 pb-4 last:pb-0">
-            {!last && <span aria-hidden="true" className="absolute left-[15px] top-8 h-[calc(100%-2rem)] w-px bg-graphite-200" />}
-            <span
-              aria-hidden="true"
-              className={cn(
-                'relative z-[1] flex h-8 w-8 shrink-0 items-center justify-center rounded-full border',
-                s.tone === 'danger' && 'border-danger/30 bg-danger-bg text-danger',
-                s.tone === 'warning' && 'border-warning/30 bg-warning-bg text-warning',
-                !s.tone && s.done && 'border-gold-300 bg-gold-50 text-gold-600',
-                !s.tone && !s.done && 'border-dashed border-graphite-300 bg-white text-graphite-400',
-              )}
-            >
-              <Icon size={15} strokeWidth={1.75} />
-            </span>
-            <div className="min-w-0 pt-1">
-              <p className={cn('text-sm font-semibold', s.done || s.tone ? 'text-graphite-900' : 'text-graphite-500')}>
-                {s.label}
-                {!s.done && !s.tone && <span className="sr-only"> (pendente)</span>}
-              </p>
-              <p className="text-xs text-graphite-500">{s.meta}</p>
-            </div>
-          </li>
-        );
-      })}
-    </ol>
-  );
-}
-
-function StatBlock({ icon: Icon, label, value }: { icon: LucideIcon; label: string; value: string }) {
-  return (
-    <div className="flex items-center gap-3 rounded-md border border-graphite-200 p-3">
-      <span aria-hidden="true" className="flex h-9 w-9 shrink-0 items-center justify-center rounded-sm bg-gold-50 text-gold-600">
-        <Icon size={18} strokeWidth={1.75} />
-      </span>
-      <div className="min-w-0">
-        <p className="text-overline uppercase tracking-[0.08em] text-graphite-500">{label}</p>
-        <p className="font-display text-2xl leading-tight tabular-nums text-graphite-900">{value}</p>
+    <section aria-labelledby="att-checklist">
+      <div className="mb-1 flex items-center justify-between gap-3">
+        <h3 id="att-checklist" className="flex items-center gap-2 text-sm font-bold text-graphite-900">
+          <ClipboardCheck size={16} strokeWidth={1.75} aria-hidden="true" />
+          Checklist administrativo
+        </h3>
+        <Badge tone={done === items.length ? 'success' : 'neutral'} size="sm">
+          {done} de {items.length} concluídos
+        </Badge>
       </div>
-    </div>
+      <p className="text-xs text-graphite-500">Atualizado automaticamente a partir do cadastro, da agenda e do financeiro.</p>
+      <div className="flex flex-col">
+        {items.map((c) => (
+          <Checkbox key={c.key} id={`att-${view.id}-${c.key}`} label={c.label} description={c.description} checked={c.done} disabled readOnly />
+        ))}
+      </div>
+    </section>
   );
 }
 
@@ -280,265 +149,210 @@ function StatBlock({ icon: Icon, label, value }: { icon: LucideIcon; label: stri
 /* Tela                                                                 */
 /* ------------------------------------------------------------------ */
 
-export function AttendancesScreen({ onOpenPatient, onOpenAgenda }: AttendancesScreenProps) {
+export function AttendancesScreen({ onOpenPatient, onOpenAgenda, selectedId = null, onSelect }: AttendancesScreenProps) {
   const { toast } = useToast();
-  const [list, setList] = useState<Appointment[]>(() => getTodayAppointments().map((a) => ({ ...a })));
-  const [milestones, setMilestones] = useState<Record<string, Milestones>>(INITIAL_MILESTONES);
-  const [checklists, setChecklists] = useState<Record<string, Record<ChecklistKey, boolean>>>({});
-  const [now, setNow] = useState<Date>(DEMO_NOW);
+  const ctx = useAccessContext();
+  const canSeeAttendances = useCan('atendimentos', 'proprio');
+  const canOpenPatient = useCan('pacientes_cadastro', 'ver');
+  const views = useAttendanceViews();
+  const availability = useAttendanceAvailability(views);
+  const flow = useAttendanceFlow();
+  const professionals = useProfessionals();
+  const specialties = useSpecialties();
+  const rooms = useRooms();
+  const clinicName = useClinicSettings().info.name;
+  const today = todayKey();
+  const nowDate = now();
+  const isProfessional = ctx.role === 'profissional';
 
-  const [tab, setTab] = useState<StatusTab>('todos');
+  const [tab, setTab] = useState<StageGroup>('todos');
+  const [dateKey, setDateKey] = useState(today);
   const [professionalId, setProfessionalId] = useState('');
-  const [specialty, setSpecialty] = useState('');
+  const [specialty, setSpecialty] = useState<Specialty | ''>('');
   const [roomId, setRoomId] = useState('');
   const [query, setQuery] = useState('');
+  const [sort, setSort] = useState<AttendanceSort>('horario');
 
-  const [detailsId, setDetailsId] = useState<string | null>(null);
+  const [localSelected, setLocalSelected] = useState<string | null>(null);
+  const detailsId = onSelect ? selectedId : localSelected;
+  const select = (id: string | null) => (onSelect ? onSelect(id) : setLocalSelected(id));
   const [historyId, setHistoryId] = useState<string | null>(null);
-
-  /** Relógio da demonstração: avança 1 minuto a cada minuto real. */
-  useEffect(() => {
-    const t = window.setInterval(() => setNow((d) => new Date(d.getTime() + 60000)), 60000);
-    return () => window.clearInterval(t);
-  }, []);
+  const [finishId, setFinishId] = useState<string | null>(null);
+  const [noShowId, setNoShowId] = useState<string | null>(null);
+  const [pendingId, setPendingId] = useState<string | null>(null);
 
   /* ---------- derivados ---------- */
 
-  const baseFiltered = useMemo(() => {
-    const q = normalize(query.trim());
-    return list.filter(
-      (a) =>
-        (!professionalId || a.professionalId === professionalId) &&
-        (!specialty || a.specialty === specialty) &&
-        (!roomId || a.roomId === roomId) &&
-        (!q || normalize(`${a.patientName} ${a.service} ${a.professionalName}`).includes(q)),
-    );
-  }, [list, professionalId, specialty, roomId, query]);
-
+  const dayViews = useMemo(() => views.filter((v) => !dateKey || v.dateKey === dateKey), [views, dateKey]);
+  const baseFiltered = useMemo(
+    () => filterAttendances(dayViews, { professionalId, specialty, roomId, query }),
+    [dayViews, professionalId, specialty, roomId, query],
+  );
   const counts = useMemo(() => {
-    const c = {} as Record<StatusTab, number>;
-    TAB_ORDER.forEach((t) => {
-      c[t] = baseFiltered.filter((a) => TAB_MATCH[t](a.status)).length;
+    const c = {} as Record<StageGroup, number>;
+    STAGE_GROUP_ORDER.forEach((g) => {
+      c[g] = baseFiltered.filter((v) => matchesGroup(v, g)).length;
     });
     return c;
   }, [baseFiltered]);
+  const rows = useMemo(() => sortAttendances(baseFiltered.filter((v) => matchesGroup(v, tab)), sort), [baseFiltered, tab, sort]);
+  const indicators = useMemo(() => computeIndicators(dayViews), [dayViews]);
 
-  const rows = useMemo(() => baseFiltered.filter((a) => TAB_MATCH[tab](a.status)), [baseFiltered, tab]);
-
-  const inProgress = useMemo(() => list.filter((a) => a.status === 'em_atendimento'), [list]);
+  const isToday = dateKey === today;
+  const inProgress = useMemo(() => views.filter((v) => v.stage === 'em_andamento'), [views]);
   const queue = useMemo(
-    () =>
-      list
-        .filter((a) => WAITING.includes(a.status) && milestones[a.id]?.checkIn)
-        .sort((a, b) => (milestones[a.id]?.checkIn ?? '').localeCompare(milestones[b.id]?.checkIn ?? '')),
-    [list, milestones],
+    () => views.filter((v) => v.stage === 'na_recepcao' && v.dateKey === today).sort((a, b) => (a.checkInAt ?? '').localeCompare(b.checkInAt ?? '')),
+    [views, today],
   );
-  const occupiedRooms = new Set(inProgress.map((a) => a.roomId)).size;
+  const activeRooms = rooms.filter((r) => r.active);
+  const occupiedRooms = new Set(inProgress.map((v) => v.roomId)).size;
 
-  const history = useMemo<HistoryEntry[]>(() => {
-    const today = list
-      .filter((a) => a.status === 'concluida')
-      .flatMap((a) => {
-        const m = milestones[a.id];
-        if (!m?.startedAt || !m.finishedAt) return [];
-        return [
-          {
-            appointment: a,
-            finishedAt: m.finishedAt,
-            realMin: minutesBetween(m.startedAt, new Date(m.finishedAt)),
-            waitMin: m.checkIn ? minutesBetween(m.checkIn, new Date(m.startedAt)) : 0,
-          },
-        ];
-      });
-    return [...today, ...WEEK_HISTORY].sort((a, b) => b.finishedAt.localeCompare(a.finishedAt));
-  }, [list, milestones]);
+  const historyTo = dateKey && dateKey < today ? dateKey : today;
+  const historyFrom = shiftDateKey(historyTo, -6);
+  const history = useMemo(() => historyBetween(views, historyFrom, historyTo), [views, historyFrom, historyTo]);
+  const weekStats = useMemo(() => historyStats(views, historyFrom, historyTo), [views, historyFrom, historyTo]);
 
-  const weekStats = useMemo(() => {
-    const n = history.length;
-    const avg = (f: (h: HistoryEntry) => number) => (n ? Math.round(history.reduce((s, h) => s + f(h), 0) / n) : 0);
-    const pastNoShows = allAppointments.filter((a) => a.status === 'faltou' && a.start >= '2026-10-13' && a.start < '2026-10-19').length;
-    const noShows = pastNoShows + list.filter((a) => a.status === 'faltou').length;
-    return { finished: n, avgDuration: avg((h) => h.realMin), avgWait: avg((h) => h.waitMin), noShows };
-  }, [history, list]);
+  const details = views.find((v) => v.id === detailsId) ?? null;
+  const historyView = views.find((v) => v.id === historyId) ?? null;
+  const finishView = views.find((v) => v.id === finishId) ?? null;
+  const noShowView = views.find((v) => v.id === noShowId) ?? null;
+  const detailsRecord = useDemoRecord(details?.id);
+  const finishRecord = useDemoRecord(finishView?.id);
+  const filtersActive = Boolean(professionalId || specialty || roomId || query || dateKey !== today);
 
-  const details = list.find((a) => a.id === detailsId) ?? null;
-  const historyEntry = history.find((h) => h.appointment.id === historyId) ?? null;
-  const filtersActive = Boolean(professionalId || specialty || roomId || query);
+  /* ---------- ações (serviços do core via fluxo do módulo) ---------- */
 
-  /* ---------- ações (em memória) ---------- */
-
-  function setMilestone(id: string, patch: Milestones) {
-    setMilestones((m) => ({ ...m, [id]: { ...m[id], ...patch } }));
-  }
-
-  function setStatus(id: string, status: AppointmentStatus) {
-    setList((l) => l.map((a) => (a.id === id ? { ...a, status } : a)));
-  }
-
-  function handleCheckIn(a: Appointment) {
-    setMilestone(a.id, { checkIn: toLocalIso(now) });
-    toast({ tone: 'info', title: 'Chegada registrada', description: `${a.patientName} está na recepção (${formatTime(now)}).` });
-  }
-
-  function handleStart(a: Appointment) {
-    const busy = list.find((x) => x.status === 'em_atendimento' && x.professionalId === a.professionalId && x.id !== a.id);
-    if (busy) {
-      toast({
-        tone: 'warning',
-        title: 'Profissional em atendimento',
-        description: `${a.professionalName} está atendendo ${busy.patientName}. Finalize antes de iniciar o próximo.`,
-      });
-      return;
+  async function runFor<T>(v: AttendanceView, fn: () => Promise<T | undefined>): Promise<T | undefined> {
+    setPendingId(v.id);
+    try {
+      return await fn();
+    } finally {
+      setPendingId(null);
     }
-    const iso = toLocalIso(now);
-    setMilestone(a.id, { checkIn: milestones[a.id]?.checkIn ?? iso, startedAt: iso });
-    setStatus(a.id, 'em_atendimento');
-    toast({ tone: 'success', title: 'Atendimento iniciado', description: `${a.patientName} · ${getRoomName(a.roomId)} · ${formatTime(now)}` });
   }
 
-  function handleFinish(a: Appointment) {
-    const started = milestones[a.id]?.startedAt;
-    setMilestone(a.id, { finishedAt: toLocalIso(now) });
-    setStatus(a.id, 'concluida');
-    toast({
-      tone: 'success',
-      title: 'Atendimento finalizado',
-      description: `${a.patientName}${started ? ` · duração ${plural(minutesBetween(started, now), 'minuto', 'minutos')}` : ''}.`,
-    });
+  const handleCheckIn = (v: AttendanceView) => runFor(v, () => flow.checkIn.run(v.id));
+  const handleStart = (v: AttendanceView) => runFor(v, () => flow.start.run(v.id));
+  const handleFinish = (v: AttendanceView) => {
+    flow.finish.clearError();
+    setFinishId(v.id);
+  };
+  const handleNoShow = (v: AttendanceView) => setNoShowId(v.id);
+
+  async function confirmFinish(note: DemoNote, confirmed: boolean): Promise<boolean> {
+    if (!finishView) return false;
+    const result = await runFor(finishView, () => flow.finish.run(finishView.id, { note, fictitiousConfirmed: confirmed }));
+    return Boolean(result);
   }
 
-  function checklistFor(a: Appointment): Record<ChecklistKey, boolean> {
-    return checklists[a.id] ?? initialChecklist(a);
+  async function confirmNoShow() {
+    if (!noShowView) return;
+    await runFor(noShowView, () => flow.noShow.run(noShowView.id));
+    setNoShowId(null);
   }
 
-  function toggleChecklist(a: Appointment, key: ChecklistKey) {
-    const current = checklistFor(a);
-    setChecklists((c) => ({ ...c, [a.id]: { ...current, [key]: !current[key] } }));
+  async function saveRecord(note: DemoNote, confirmed: boolean): Promise<boolean> {
+    if (!details) return false;
+    return Boolean(await flow.record.run(details.id, note, confirmed));
   }
 
   function clearFilters() {
+    setDateKey(today);
     setProfessionalId('');
     setSpecialty('');
     setRoomId('');
     setQuery('');
   }
 
-  /* ---------- linha do tempo ---------- */
-
-  function timelineFor(a: Appointment): TimelineStep[] {
-    const m = milestones[a.id] ?? {};
-    const steps: TimelineStep[] = [
-      {
-        id: 'agendado',
-        label: 'Consulta agendada',
-        meta: a.channel ? `Origem: ${CHANNEL_NAMES[a.channel]} · ${formatTime(a.start)} reservado` : 'Origem não informada',
-        icon: CalendarCheck,
-        done: true,
-      },
-    ];
-    if (a.status === 'cancelada') {
-      steps.push({ id: 'cancelada', label: 'Consulta cancelada', meta: a.notes ?? 'Cancelamento registrado.', icon: XCircle, done: true, tone: 'danger' });
-      return steps;
+  function exportList() {
+    if (!rows.length) {
+      toast({ tone: 'warning', title: 'Nada para exportar', description: 'Ajuste os filtros para incluir atendimentos.' });
+      return;
     }
-    if (a.status === 'faltou') {
-      steps.push({ id: 'faltou', label: 'Paciente não compareceu', meta: 'Falta registrada pela recepção.', icon: UserX, done: true, tone: 'warning' });
-      return steps;
-    }
-    steps.push(
-      {
-        id: 'confirmada',
-        label: 'Presença confirmada',
-        meta:
-          a.status === 'agendada'
-            ? 'Aguardando confirmação do paciente'
-            : a.channel === 'assistente_ia'
-              ? 'Confirmada pelo Assistente IA'
-              : 'Confirmada pela recepção',
-        icon: CheckCheck,
-        done: a.status !== 'agendada',
-      },
-      {
-        id: 'checkin',
-        label: 'Chegada na recepção',
-        meta: m.checkIn ? `Check-in às ${formatTime(m.checkIn)}` : 'Pendente',
-        icon: LogIn,
-        done: Boolean(m.checkIn),
-      },
-      {
-        id: 'inicio',
-        label: 'Atendimento iniciado',
-        meta: m.startedAt
-          ? `${formatTime(m.startedAt)} · ${getRoomName(a.roomId)}${m.checkIn ? ` · espera de ${plural(minutesBetween(m.checkIn, new Date(m.startedAt)), 'minuto', 'minutos')}` : ''}`
-          : 'Pendente',
-        icon: Play,
-        done: Boolean(m.startedAt),
-      },
-      {
-        id: 'fim',
-        label: 'Atendimento finalizado',
-        meta:
-          m.finishedAt && m.startedAt
-            ? `${formatTime(m.finishedAt)} · duração de ${plural(minutesBetween(m.startedAt, new Date(m.finishedAt)), 'minuto', 'minutos')}`
-            : 'Pendente',
-        icon: CircleCheckBig,
-        done: Boolean(m.finishedAt),
-      },
+    const header = ['Data', 'Horário', 'Paciente', 'Profissional', 'Especialidade', 'Serviço', 'Sala', 'Etapa', 'Check-in', 'Início', 'Conclusão'];
+    const lines = rows.map((v) =>
+      [
+        v.dateKey,
+        formatTime(v.appointment.start),
+        v.patient.name,
+        v.professionalName,
+        v.specialtyName,
+        v.service,
+        v.roomName,
+        STAGE_GROUP_LABEL[STAGE_GROUP_ORDER.find((g) => g !== 'todos' && matchesGroup(v, g)) ?? 'todos'],
+        v.checkInAt ? formatTime(v.checkInAt) : '',
+        v.startedAt ? formatTime(v.startedAt) : '',
+        v.finishedAt ? formatTime(v.finishedAt) : '',
+      ]
+        .map(csvCell)
+        .join(';'),
     );
-    return steps;
+    const csv = `﻿# ${clinicName} — atendimentos (dados fictícios de demonstração) · gerado em ${nowIso()}\n${[header.map(csvCell).join(';'), ...lines].join('\n')}`;
+    const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `atendimentos-${dateKey || 'todas-as-datas'}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
+    toast({ tone: 'success', title: 'Lista exportada', description: `${plural(rows.length, 'atendimento', 'atendimentos')} em planilha (demonstração).` });
   }
 
   /* ---------- tabela ---------- */
 
-  function rowAction(a: Appointment) {
-    const m = milestones[a.id];
-    if (a.status === 'em_atendimento') {
+  function rowAction(v: AttendanceView) {
+    const av = availability(v);
+    const busy = pendingId === v.id;
+    if (av.finish) {
       return (
-        <Button size="sm" leftIcon={CircleCheckBig} onClick={() => handleFinish(a)} aria-label={`Finalizar atendimento de ${a.patientName}`}>
-          Finalizar
+        <Button size="sm" leftIcon={CircleCheckBig} onClick={() => handleFinish(v)} aria-label={`Concluir atendimento de ${v.patient.name}`}>
+          Concluir
         </Button>
       );
     }
-    if (WAITING.includes(a.status)) {
-      return m?.checkIn ? (
-        <Button size="sm" leftIcon={Play} onClick={() => handleStart(a)} aria-label={`Iniciar atendimento de ${a.patientName}`}>
+    if (av.start) {
+      return (
+        <Button size="sm" leftIcon={Play} loading={busy} onClick={() => handleStart(v)} aria-label={`Iniciar atendimento de ${v.patient.name}`}>
           Iniciar
         </Button>
-      ) : (
-        <Button size="sm" variant="secondary" leftIcon={LogIn} onClick={() => handleCheckIn(a)} aria-label={`Registrar chegada de ${a.patientName}`}>
+      );
+    }
+    if (av.checkIn) {
+      return (
+        <Button size="sm" variant="secondary" leftIcon={LogIn} loading={busy} onClick={() => handleCheckIn(v)} aria-label={`Registrar chegada de ${v.patient.name}`}>
           Check-in
         </Button>
       );
     }
     return (
-      <Button size="sm" variant="ghost" onClick={() => setDetailsId(a.id)} aria-label={`Ver detalhes do atendimento de ${a.patientName}`}>
+      <Button size="sm" variant="ghost" onClick={() => select(v.id)} aria-label={`Ver detalhes do atendimento de ${v.patient.name}`}>
         Detalhes
       </Button>
     );
   }
 
-  const columns: DataTableColumn<Appointment>[] = [
+  const columns: DataTableColumn<AttendanceView>[] = [
     {
       key: 'time',
       header: 'Horário',
       width: '96px',
-      render: (a) => (
+      render: (v) => (
         <div className="flex flex-col">
-          <span className="font-extrabold tabular-nums text-graphite-900">{formatTime(a.start)}</span>
-          <span className="text-xs text-graphite-500">{a.durationMin} min</span>
+          <span className="font-extrabold tabular-nums text-graphite-900">{formatTime(v.appointment.start)}</span>
+          <span className="text-xs text-graphite-500">{dateKey ? `${v.appointment.durationMin} min` : formatDate(v.appointment.start, { day: '2-digit', month: '2-digit' })}</span>
         </div>
       ),
     },
     {
       key: 'patient',
       header: 'Paciente',
-      render: (a) => (
+      render: (v) => (
         <div className="flex min-w-0 items-center gap-3">
-          <Avatar name={a.patientName} size="sm" tone="neutral" />
+          <Avatar name={v.patient.name} size="sm" tone="neutral" />
           <div className="min-w-0">
-            <div className={cn('truncate font-semibold text-graphite-900', a.status === 'cancelada' && 'line-through')}>{a.patientName}</div>
+            <div className={cn('truncate font-semibold text-graphite-900', v.stage === 'cancelado' && 'line-through')}>{v.patient.name}</div>
             <div className="flex min-w-0 items-center gap-2 text-xs text-graphite-500">
-              <SpecialtyTag specialty={a.specialty} variant="dot" />
-              <span className="truncate">{a.service}</span>
+              <SpecialtyTag specialty={v.specialty} variant="dot" />
+              <span className="truncate">{v.service}</span>
             </div>
           </div>
         </div>
@@ -548,30 +362,27 @@ export function AttendancesScreen({ onOpenPatient, onOpenAgenda }: AttendancesSc
       key: 'professional',
       header: 'Profissional',
       hideBelow: 'md',
-      render: (a) => <span className="text-graphite-700">{a.professionalName}</span>,
+      render: (v) => <span className="text-graphite-700">{v.professionalName}</span>,
     },
     {
       key: 'room',
       header: 'Sala',
       hideBelow: 'lg',
-      render: (a) => <span className="text-graphite-700">{getRoomName(a.roomId)}</span>,
+      render: (v) => <span className="text-graphite-700">{v.roomName}</span>,
     },
     {
       key: 'checkin',
       header: 'Check-in',
       hideBelow: 'lg',
-      render: (a) => {
-        const c = milestones[a.id]?.checkIn;
-        return c ? <span className="tabular-nums text-graphite-700">{formatTime(c)}</span> : <span className="text-graphite-400">—</span>;
-      },
+      render: (v) => (v.checkInAt ? <span className="tabular-nums text-graphite-700">{formatTime(v.checkInAt)}</span> : <span className="text-graphite-400">—</span>),
     },
     {
       key: 'status',
       header: 'Status',
-      render: (a) => (
+      render: (v) => (
         <div className="flex flex-wrap gap-1.5">
-          <StatusBadge status={a.status} />
-          {WAITING.includes(a.status) && milestones[a.id]?.checkIn && (
+          <StatusBadge status={v.appointment.status} />
+          {v.stage === 'na_recepcao' && (
             <Badge tone="gold" icon={LogIn} size="sm">
               Na recepção
             </Badge>
@@ -585,39 +396,41 @@ export function AttendancesScreen({ onOpenPatient, onOpenAgenda }: AttendancesSc
       align: 'right',
       srOnlyHeader: true,
       width: '132px',
-      render: (a) => (
+      render: (v) => (
         <div className="flex justify-end" onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()} role="presentation">
-          {rowAction(a)}
+          {rowAction(v)}
         </div>
       ),
     },
   ];
 
-  const tabItems = TAB_ORDER.map((t) => ({ id: t, label: TAB_LABEL[t], count: counts[t] }));
-
+  const tabItems = STAGE_GROUP_ORDER.map((g) => ({ id: g, label: STAGE_GROUP_LABEL[g], count: counts[g] }));
   const professionalOptions = professionals.map((p) => ({ value: p.id, label: p.name }));
-  const specialtyOptions = ALL_SPECIALTIES.map((s) => ({ value: s, label: SPECIALTY_NAMES[s] }));
-  const roomOptions = rooms.map((r) => ({ value: r.id, label: `${r.name} · ${ROOM_USAGE[r.id] ?? ''}` }));
+  const specialtyOptions = specialties.filter((s) => s.active).map((s) => ({ value: s.id, label: s.name }));
+  const roomOptions = rooms.map((r) => ({ value: r.id, label: `${r.name} · ${r.label}` }));
 
-  /* ---------- detalhes (drawer) ---------- */
+  if (!canSeeAttendances) {
+    return (
+      <EmptyState
+        icon={ShieldAlert}
+        title="Atendimentos fora do seu perfil"
+        description="Seu perfil de acesso não inclui o acompanhamento de atendimentos. Fale com a administração da clínica se precisar."
+      />
+    );
+  }
 
-  const detailsPatient = details ? getPatientById(details.patientId) : undefined;
-  const detailsChecklist = details ? checklistFor(details) : null;
-  const checklistDone = detailsChecklist ? CHECKLIST.filter((c) => detailsChecklist[c.key]).length : 0;
+  const detailsAvailability = details ? availability(details) : null;
+  const dayTitle = isToday ? 'Atendimentos de hoje' : dateKey ? `Atendimentos de ${formatDate(`${dateKey}T12:00:00`, { day: '2-digit', month: '2-digit' })}` : 'Todos os atendimentos';
 
   return (
     <div className="flex flex-col gap-6">
       <PageHeader
-        title="Atendimentos de hoje"
-        subtitle={`Segunda, 19/10 · agora ${formatTime(now)} · ${plural(list.length, 'atendimento programado', 'atendimentos programados')} · ${inProgress.length} em curso · ${queue.length} na fila`}
-        breadcrumb={['Operação', 'Atendimentos']}
+        title={dayTitle}
+        subtitle={`${dateKey ? dayLabel(dateKey) : 'Todas as datas'}${isToday ? ` · agora ${formatTime(nowDate)}` : ''} · ${plural(indicators.total, 'atendimento programado', 'atendimentos programados')} · ${indicators.inProgress} em curso · ${indicators.waiting} na fila`}
+        breadcrumb={isProfessional ? ['Portal', 'Atendimentos'] : ['Operação', 'Atendimentos']}
         actions={
           <>
-            <Button
-              variant="secondary"
-              leftIcon={Download}
-              onClick={() => toast({ tone: 'info', title: 'Lista exportada', description: 'Atendimentos do dia em planilha (demonstração).' })}
-            >
+            <Button variant="secondary" leftIcon={Download} onClick={exportList}>
               Exportar lista
             </Button>
             {onOpenAgenda && (
@@ -629,14 +442,34 @@ export function AttendancesScreen({ onOpenPatient, onOpenAgenda }: AttendancesSc
         }
       />
 
+      {/* Indicadores do dia selecionado */}
+      <section aria-label="Indicadores de atendimentos" className="grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-4">
+        <KpiCard label={isToday ? 'Atendimentos do dia' : 'Atendimentos na data'} value={String(indicators.total)} icon={ClipboardList} meta={dateKey ? undefined : 'todas as datas'} />
+        <KpiCard
+          label="Concluídos"
+          value={String(indicators.done)}
+          icon={CheckCheck}
+          tone="success"
+          progress={indicators.total ? Math.round((indicators.done / indicators.total) * 100) : 0}
+        />
+        <KpiCard label="Em andamento" value={String(indicators.inProgress)} icon={Stethoscope} />
+        <KpiCard
+          label="Pendentes"
+          value={String(indicators.pending)}
+          icon={Hourglass}
+          tone="warning"
+          footer={<span className="text-xs text-graphite-500">{plural(indicators.waiting, 'na recepção', 'na recepção')} · {plural(indicators.noShow, 'falta', 'faltas')}</span>}
+        />
+      </section>
+
       {/* Agora na clínica */}
       <Card
         as="section"
         aria-labelledby="now-title"
-        title={<span id="now-title">Agora na clínica</span>}
-        description={`Atualizado às ${formatTime(now)} · ${occupiedRooms} de ${rooms.length} salas ocupadas`}
+        title={<span id="now-title">{isProfessional ? 'Agora no consultório' : 'Agora na clínica'}</span>}
+        description={`Atualizado às ${formatTime(nowDate)}${isProfessional ? '' : ` · ${occupiedRooms} de ${activeRooms.length} salas ocupadas`}`}
       >
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
           <div className="flex flex-col gap-3">
             <h4 className="flex items-center gap-2 text-sm font-bold text-graphite-900">
               <Stethoscope size={16} strokeWidth={1.75} aria-hidden="true" className="text-gold-600" />
@@ -646,12 +479,13 @@ export function AttendancesScreen({ onOpenPatient, onOpenAgenda }: AttendancesSc
               <p className="rounded-md border border-dashed border-graphite-200 p-4 text-sm text-graphite-500">Nenhum atendimento em curso no momento.</p>
             ) : (
               <ul className="flex flex-col gap-3">
-                {inProgress.map((a) => {
-                  const startedAt = milestones[a.id]?.startedAt ?? a.start;
-                  const elapsed = minutesBetween(startedAt, now);
-                  const over = elapsed > a.durationMin;
+                {inProgress.map((v) => {
+                  const startedAt = v.startedAt ?? v.appointment.start;
+                  const elapsed = minutesBetween(startedAt, nowIso());
+                  const over = elapsed > v.appointment.durationMin;
+                  const av = availability(v);
                   return (
-                    <li key={a.id} className="flex flex-col gap-3 rounded-md border border-graphite-200 p-4 sm:flex-row sm:items-center">
+                    <li key={v.id} className="flex flex-col gap-3 rounded-md border border-graphite-200 p-4 sm:flex-row sm:items-center">
                       <div
                         className="flex h-16 w-16 shrink-0 flex-col items-center justify-center rounded-full border border-gold-300 bg-gold-50 text-gold-700"
                         aria-hidden="true"
@@ -662,27 +496,33 @@ export function AttendancesScreen({ onOpenPatient, onOpenAgenda }: AttendancesSc
                       <div className="flex min-w-0 flex-1 flex-col gap-1.5">
                         <button
                           type="button"
-                          onClick={() => setDetailsId(a.id)}
+                          onClick={() => select(v.id)}
                           className="truncate rounded-xs text-left font-bold text-graphite-900 hover:underline focus-visible:outline-none focus-visible:shadow-focus"
                         >
-                          {a.patientName}
+                          {v.patient.name}
                         </button>
                         <p className="truncate text-xs text-graphite-600">
-                          {a.service} · {a.professionalName}
+                          {v.service} · {v.professionalName}
                         </p>
                         <p className="text-xs text-graphite-500">
-                          {getRoomName(a.roomId)} · início {formatTime(startedAt)}
+                          {v.roomName} · início {formatTime(startedAt)}
                         </p>
                         <ProgressBar
-                          value={(elapsed / a.durationMin) * 100}
+                          value={(elapsed / v.appointment.durationMin) * 100}
                           tone={over ? 'warning' : 'gold'}
                           size="sm"
-                          label={`Em andamento há ${elapsed} min · previsto ${a.durationMin} min`}
+                          label={`Em andamento há ${elapsed} min · previsto ${v.appointment.durationMin} min`}
                         />
                       </div>
-                      <Button size="sm" leftIcon={CircleCheckBig} onClick={() => handleFinish(a)} aria-label={`Finalizar atendimento de ${a.patientName}`}>
-                        Finalizar atendimento
-                      </Button>
+                      {av.finish ? (
+                        <Button size="sm" leftIcon={CircleCheckBig} onClick={() => handleFinish(v)} aria-label={`Concluir atendimento de ${v.patient.name}`}>
+                          Concluir atendimento
+                        </Button>
+                      ) : (
+                        <Badge tone="gold" icon={Stethoscope} size="sm">
+                          Com o profissional
+                        </Badge>
+                      )}
                     </li>
                   );
                 })}
@@ -697,15 +537,16 @@ export function AttendancesScreen({ onOpenPatient, onOpenAgenda }: AttendancesSc
             </h4>
             {queue.length === 0 ? (
               <p className="rounded-md border border-dashed border-graphite-200 p-4 text-sm text-graphite-500">
-                Ninguém aguardando. Registre o check-in quando o paciente chegar.
+                {isProfessional ? 'Nenhum paciente aguardando por você.' : 'Ninguém aguardando. Registre o check-in quando o paciente chegar.'}
               </p>
             ) : (
               <ol className="flex flex-col gap-3" aria-label="Fila de espera">
-                {queue.map((a, i) => {
-                  const checkIn = milestones[a.id]?.checkIn ?? a.start;
-                  const wait = minutesBetween(checkIn, now);
+                {queue.map((v, i) => {
+                  const checkIn = v.checkInAt ?? v.appointment.start;
+                  const wait = minutesBetween(checkIn, nowIso());
+                  const av = availability(v);
                   return (
-                    <li key={a.id} className="flex flex-col gap-3 rounded-md border border-graphite-200 p-4 sm:flex-row sm:items-center">
+                    <li key={v.id} className="flex flex-col gap-3 rounded-md border border-graphite-200 p-4 sm:flex-row sm:items-center">
                       <span className="flex h-10 w-10 shrink-0 flex-col items-center justify-center rounded-full bg-graphite-100 text-graphite-700">
                         <span className="sr-only">Posição na fila: </span>
                         <span className="text-sm font-extrabold tabular-nums">{i + 1}º</span>
@@ -713,21 +554,35 @@ export function AttendancesScreen({ onOpenPatient, onOpenAgenda }: AttendancesSc
                       <div className="flex min-w-0 flex-1 flex-col gap-0.5">
                         <button
                           type="button"
-                          onClick={() => setDetailsId(a.id)}
+                          onClick={() => select(v.id)}
                           className="truncate rounded-xs text-left font-bold text-graphite-900 hover:underline focus-visible:outline-none focus-visible:shadow-focus"
                         >
-                          {a.patientName}
+                          {v.patient.name}
                         </button>
                         <p className="truncate text-xs text-graphite-600">
-                          {a.service} · {a.professionalName} · {getRoomName(a.roomId)}
+                          {v.service} · {v.professionalName} · {v.roomName}
                         </p>
                         <p className={cn('text-xs', wait >= 15 ? 'font-semibold text-warning' : 'text-graphite-500')}>
-                          Check-in às {formatTime(checkIn)} · aguardando há {wait} min · horário {formatTime(a.start)}
+                          Check-in às {formatTime(checkIn)} · aguardando há {wait} min · horário {formatTime(v.appointment.start)}
                         </p>
+                        {av.busyWith && <p className="text-xs text-graphite-500">Profissional em atendimento com {av.busyWith}.</p>}
                       </div>
-                      <Button size="sm" variant="secondary" leftIcon={Play} onClick={() => handleStart(a)} aria-label={`Iniciar atendimento de ${a.patientName}`}>
-                        Iniciar atendimento
-                      </Button>
+                      {av.start ? (
+                        <Button
+                          size="sm"
+                          variant="secondary"
+                          leftIcon={Play}
+                          loading={pendingId === v.id}
+                          onClick={() => handleStart(v)}
+                          aria-label={`Iniciar atendimento de ${v.patient.name}`}
+                        >
+                          Iniciar atendimento
+                        </Button>
+                      ) : (
+                        <Badge tone="neutral" icon={Clock} size="sm">
+                          Aguardando profissional
+                        </Badge>
+                      )}
                     </li>
                   );
                 })}
@@ -743,30 +598,33 @@ export function AttendancesScreen({ onOpenPatient, onOpenAgenda }: AttendancesSc
           <div className="flex flex-wrap items-end justify-between gap-3">
             <div>
               <h3 id="day-title" className="text-[15px] font-bold leading-6 text-graphite-900">
-                Atendimentos do dia
+                {isToday ? 'Atendimentos do dia' : 'Atendimentos'}
               </h3>
               <p className="text-body-sm text-graphite-500" aria-live="polite">
-                {plural(rows.length, 'atendimento exibido', 'atendimentos exibidos')} de {list.length}
+                {plural(rows.length, 'atendimento exibido', 'atendimentos exibidos')} de {dayViews.length}
                 {filtersActive ? ' · filtros ativos' : ''}
               </p>
             </div>
           </div>
 
-          <Tabs items={tabItems} value={tab} onChange={(id) => setTab(id as StatusTab)} ariaLabel="Filtrar por status" idPrefix="att" />
+          <Tabs items={tabItems} value={tab} onChange={(id) => setTab(id as StageGroup)} ariaLabel="Filtrar por status" idPrefix="att" />
 
-          <div className="grid grid-cols-1 gap-3 pb-4 sm:grid-cols-2 xl:grid-cols-[1fr_1fr_1fr_1.3fr_auto] xl:items-end">
-            <Select
-              label="Profissional"
-              controlSize="sm"
-              value={professionalId}
-              onChange={(e) => setProfessionalId(e.target.value)}
-              options={[{ value: '', label: 'Todos os profissionais' }, ...professionalOptions]}
-            />
+          <div className="grid grid-cols-1 gap-3 pb-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-[repeat(5,minmax(0,1fr))_1.3fr_auto] xl:items-end">
+            <Input id="att-date" label="Data" type="date" value={dateKey} onChange={(e) => setDateKey(e.target.value)} className="h-9" />
+            {!isProfessional && (
+              <Select
+                label="Profissional"
+                controlSize="sm"
+                value={professionalId}
+                onChange={(e) => setProfessionalId(e.target.value)}
+                options={[{ value: '', label: 'Todos os profissionais' }, ...professionalOptions]}
+              />
+            )}
             <Select
               label="Especialidade"
               controlSize="sm"
               value={specialty}
-              onChange={(e) => setSpecialty(e.target.value)}
+              onChange={(e) => setSpecialty(e.target.value as Specialty | '')}
               options={[{ value: '', label: 'Todas as especialidades' }, ...specialtyOptions]}
             />
             <Select
@@ -775,6 +633,13 @@ export function AttendancesScreen({ onOpenPatient, onOpenAgenda }: AttendancesSc
               value={roomId}
               onChange={(e) => setRoomId(e.target.value)}
               options={[{ value: '', label: 'Todas as salas' }, ...roomOptions]}
+            />
+            <Select
+              label="Ordenar por"
+              controlSize="sm"
+              value={sort}
+              onChange={(e) => setSort(e.target.value as AttendanceSort)}
+              options={SORT_ORDER.map((s) => ({ value: s, label: SORT_LABEL[s] }))}
             />
             <div className="flex flex-col gap-1.5">
               <label htmlFor="att-search" className="text-body-sm font-semibold text-graphite-800">
@@ -795,21 +660,26 @@ export function AttendancesScreen({ onOpenPatient, onOpenAgenda }: AttendancesSc
           </div>
         </div>
 
-        <div role="tabpanel" id={`att-panel-${tab}`} aria-labelledby={`att-tab-${tab}`}>
+        {/* relative + overflow-hidden: contém o cabeçalho sr-only da DataTable (evita rolagem horizontal da página). */}
+        <div role="tabpanel" id={`att-panel-${tab}`} aria-labelledby={`att-tab-${tab}`} className="relative overflow-hidden rounded-b-md">
           <DataTable
             columns={columns}
             rows={rows}
-            rowKey={(a) => a.id}
-            onRowClick={(a) => setDetailsId(a.id)}
-            isRowSelected={(a) => a.id === detailsId}
-            caption={`Atendimentos do dia — ${TAB_LABEL[tab]}`}
+            rowKey={(v) => v.id}
+            onRowClick={(v) => select(v.id)}
+            isRowSelected={(v) => v.id === detailsId}
+            caption={`${dayTitle} — ${STAGE_GROUP_LABEL[tab]}`}
             minWidth={560}
             empty={
               <EmptyState
                 compact
                 icon={ClipboardList}
                 title="Nenhum atendimento aqui"
-                description={filtersActive ? 'Nenhum resultado com os filtros atuais.' : `Não há atendimentos em “${TAB_LABEL[tab]}” hoje.`}
+                description={
+                  filtersActive && baseFiltered.length !== dayViews.length
+                    ? 'Nenhum resultado com os filtros atuais.'
+                    : `Não há atendimentos em “${STAGE_GROUP_LABEL[tab]}” ${isToday ? 'hoje' : 'nesta data'}.`
+                }
                 action={
                   filtersActive ? (
                     <Button variant="secondary" leftIcon={FilterX} onClick={clearFilters}>
@@ -826,184 +696,160 @@ export function AttendancesScreen({ onOpenPatient, onOpenAgenda }: AttendancesSc
       {/* Histórico da semana */}
       <Card
         as="section"
-        title="Histórico da semana"
-        description="Últimos atendimentos finalizados · valores fictícios"
+        title={isProfessional ? 'Meu histórico da semana' : 'Histórico da semana'}
+        description={`Últimos atendimentos concluídos${isProfessional ? '' : ' · valores fictícios'}`}
         action={
           <Badge tone="neutral" icon={History}>
-            13 a 19/10
+            {formatDate(`${historyFrom}T12:00:00`, { day: '2-digit' })} a {formatDate(`${historyTo}T12:00:00`, { day: '2-digit', month: '2-digit' })}
           </Badge>
         }
       >
         <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-          <StatBlock icon={CheckCheck} label="Finalizados" value={String(weekStats.finished)} />
+          <StatBlock icon={CheckCheck} label="Concluídos" value={String(weekStats.finished)} />
           <StatBlock icon={Timer} label="Tempo médio" value={`${weekStats.avgDuration} min`} />
           <StatBlock icon={Clock} label="Espera média" value={`${weekStats.avgWait} min`} />
           <StatBlock icon={UserX} label="Faltas" value={String(weekStats.noShows)} />
         </div>
-        <ul className="flex flex-col divide-y divide-graphite-100 rounded-md border border-graphite-200">
-          {history.map((h) => {
-            const a = h.appointment;
-            return (
-              <li key={a.id}>
+        {history.length === 0 ? (
+          <EmptyState compact icon={ListChecks} title="Nenhum atendimento concluído" description="Os atendimentos concluídos nos últimos 7 dias aparecem aqui." />
+        ) : (
+          <ul className="flex flex-col divide-y divide-graphite-100 rounded-md border border-graphite-200">
+            {history.map((v) => (
+              <li key={v.id}>
                 <button
                   type="button"
-                  onClick={() => setHistoryId(a.id)}
+                  onClick={() => setHistoryId(v.id)}
                   className="flex w-full flex-wrap items-center gap-x-4 gap-y-1 px-4 py-3 text-left transition-colors hover:bg-graphite-50 focus-visible:bg-gold-50 focus-visible:outline-none focus-visible:shadow-[inset_0_0_0_2px_#B5832F]"
                 >
                   <span className="flex w-20 shrink-0 flex-col">
-                    <span className="text-sm font-bold tabular-nums text-graphite-900">{formatDate(a.start, { day: '2-digit', month: '2-digit' })}</span>
-                    <span className="text-xs tabular-nums text-graphite-500">{formatTime(a.start)}</span>
+                    <span className="text-sm font-bold tabular-nums text-graphite-900">{formatDate(v.appointment.start, { day: '2-digit', month: '2-digit' })}</span>
+                    <span className="text-xs tabular-nums text-graphite-500">{formatTime(v.appointment.start)}</span>
                   </span>
                   <span className="flex min-w-0 flex-1 flex-col">
-                    <span className="truncate text-sm font-semibold text-graphite-900">{a.patientName}</span>
+                    <span className="truncate text-sm font-semibold text-graphite-900">{v.patient.name}</span>
                     <span className="truncate text-xs text-graphite-500">
-                      {a.service} · {a.professionalName}
+                      {v.service} · {v.professionalName}
                     </span>
                   </span>
-                  <span className="hidden text-xs tabular-nums text-graphite-600 sm:inline">{h.realMin} min</span>
-                  <span className="hidden w-24 text-right text-sm font-semibold tabular-nums text-graphite-800 md:inline">{formatCurrency(a.price)}</span>
+                  <span className="hidden text-xs tabular-nums text-graphite-600 sm:inline">
+                    {v.realDurationMin !== undefined ? durationLabel(v.realDurationMin).replace(' minutos', ' min').replace(' minuto', ' min') : `${v.appointment.durationMin} min`}
+                  </span>
+                  {v.price !== null && <span className="hidden w-24 text-right text-sm font-semibold tabular-nums text-graphite-800 md:inline">{formatCurrency(v.price)}</span>}
                   <StatusBadge status="concluida" size="sm" />
                 </button>
               </li>
-            );
-          })}
-        </ul>
+            ))}
+          </ul>
+        )}
       </Card>
 
       {/* Drawer de detalhes */}
       <Drawer
-        open={details !== null}
-        onClose={() => setDetailsId(null)}
+        open={detailsId !== null}
+        onClose={() => select(null)}
         title="Detalhes do atendimento"
-        description={details ? `${details.service} · ${formatTime(details.start)} · ${getRoomName(details.roomId)}` : undefined}
+        description={details ? `${details.service} · ${formatTime(details.appointment.start)} · ${details.roomName}` : undefined}
         width={520}
         footer={
-          details ? (
+          details && detailsAvailability ? (
             <>
-              {onOpenPatient && (
-                <Button variant="secondary" rightIcon={ExternalLink} onClick={() => onOpenPatient(details.patientId)}>
+              {onOpenPatient && canOpenPatient && (
+                <Button variant="secondary" rightIcon={ExternalLink} onClick={() => onOpenPatient(details.patient.id)}>
                   Abrir ficha do paciente
                 </Button>
               )}
               <AttendanceFooterActions
-                appointment={details}
-                checkedIn={Boolean(milestones[details.id]?.checkIn)}
+                view={details}
+                available={detailsAvailability}
+                loadingId={pendingId}
                 onCheckIn={handleCheckIn}
                 onStart={handleStart}
                 onFinish={handleFinish}
+                onNoShow={handleNoShow}
               />
             </>
           ) : undefined
         }
       >
-        {details && detailsChecklist && (
-          <div className="flex flex-col gap-6">
-            <div className="flex items-center gap-4">
-              <Avatar name={details.patientName} size="lg" ring />
-              <div className="min-w-0">
-                <p className="font-display text-2xl leading-tight text-graphite-900">{details.patientName}</p>
-                <p className="text-sm text-graphite-500">
-                  {detailsPatient ? `${ageFrom(detailsPatient.birthDate)} anos · ${detailsPatient.city}` : 'Paciente'}
-                </p>
-                <div className="mt-1.5 flex flex-wrap gap-1.5">
-                  <StatusBadge status={details.status} />
-                  <SpecialtyTag specialty={details.specialty} variant="chip" />
-                </div>
-              </div>
-            </div>
-
-            <dl className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              {(
-                [
-                  { icon: Clock, k: 'Horário', v: `${formatTime(details.start)}–${formatTime(addMinutes(details.start, details.durationMin))} · ${details.durationMin} min` },
-                  { icon: Stethoscope, k: 'Profissional', v: details.professionalName },
-                  { icon: DoorOpen, k: 'Sala', v: `${getRoomName(details.roomId)} · ${ROOM_USAGE[details.roomId] ?? ''}` },
-                  { icon: Wallet, k: 'Valor (demonstração)', v: formatCurrency(details.price) },
-                ] as { icon: LucideIcon; k: string; v: string }[]
-              ).map(({ icon: Icon, k, v }) => (
-                <div key={k} className="flex items-start gap-3">
-                  <Icon size={16} strokeWidth={1.75} aria-hidden="true" className="mt-0.5 shrink-0 text-graphite-500" />
-                  <div className="min-w-0">
-                    <dt className="text-xs font-semibold text-graphite-500">{k}</dt>
-                    <dd className="text-sm text-graphite-900">{v}</dd>
-                  </div>
-                </div>
-              ))}
-            </dl>
-
-            <section aria-labelledby="att-timeline">
-              <h3 id="att-timeline" className="mb-3 text-sm font-bold text-graphite-900">
-                Linha do tempo
-              </h3>
-              <Timeline steps={timelineFor(details)} />
-            </section>
-
-            <section aria-labelledby="att-checklist">
-              <div className="mb-1 flex items-center justify-between gap-3">
-                <h3 id="att-checklist" className="flex items-center gap-2 text-sm font-bold text-graphite-900">
-                  <ClipboardCheck size={16} strokeWidth={1.75} aria-hidden="true" />
-                  Checklist administrativo
-                </h3>
-                <Badge tone={checklistDone === CHECKLIST.length ? 'success' : 'neutral'} size="sm">
-                  {checklistDone} de {CHECKLIST.length} concluídos
-                </Badge>
-              </div>
-              <div className="flex flex-col">
-                {CHECKLIST.map((c) => (
-                  <Checkbox
-                    key={c.key}
-                    id={`att-${details.id}-${c.key}`}
-                    label={c.label}
-                    description={c.description}
-                    checked={detailsChecklist[c.key]}
-                    onChange={() => toggleChecklist(details, c.key)}
-                  />
-                ))}
-              </div>
-            </section>
-
-            <section aria-labelledby="att-clinical" aria-describedby="att-clinical-desc att-clinical-lgpd" className="rounded-md border border-graphite-200 bg-graphite-50 p-4">
-              <div className="mb-3 flex items-start gap-3">
-                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-gold-300 bg-white text-gold-600">
-                  <Lock size={16} strokeWidth={1.75} aria-hidden="true" />
-                </span>
-                <div>
-                  <h3 id="att-clinical" className="text-sm font-bold text-graphite-900">
-                    Registro clínico — acesso restrito a profissionais (demonstração)
-                  </h3>
-                  <p id="att-clinical-desc" className="text-xs text-graphite-500">
-                    Visível e editável somente por {details.professionalName}. A recepção não tem acesso ao conteúdo.
-                  </p>
-                </div>
-              </div>
-              <fieldset disabled className="flex flex-col gap-3">
-                <legend className="sr-only">Campos clínicos bloqueados para o seu perfil</legend>
-                <Textarea id={`att-${details.id}-complaint`} label="Queixa principal" rows={2} placeholder="Acesso restrito ao profissional responsável" disabled />
-                <Textarea id={`att-${details.id}-evolution`} label="Evolução do atendimento" rows={3} placeholder="Acesso restrito ao profissional responsável" disabled />
-                <Textarea id={`att-${details.id}-plan`} label="Conduta / plano terapêutico" rows={2} placeholder="Acesso restrito ao profissional responsável" disabled />
-              </fieldset>
-              <p id="att-clinical-lgpd" className="mt-3 flex items-start gap-2 text-xs text-graphite-600">
-                <ShieldCheck size={14} strokeWidth={1.75} aria-hidden="true" className="mt-px shrink-0 text-gold-600" />
+        {details && detailsAvailability ? (
+          <AttendanceDetailsContent view={details}>
+            {!detailsAvailability.start && !detailsAvailability.finish && (details.stage === 'na_recepcao' || details.stage === 'agendado' || details.stage === 'em_andamento') && (
+              <p className="flex items-start gap-2 rounded-md border border-graphite-200 bg-graphite-50 p-3 text-xs text-graphite-600">
+                <Stethoscope size={14} strokeWidth={1.75} aria-hidden="true" className="mt-px shrink-0 text-gold-600" />
                 <span>
-                  Dados de saúde são dados pessoais sensíveis (LGPD, Lei 13.709/2018, art. 11). O acesso é restrito ao profissional responsável e cada
-                  visualização fica registrada em log de auditoria. Nesta demonstração nenhum dado clínico real é exibido.
+                  {detailsAvailability.busyWith
+                    ? `O profissional está em atendimento com ${detailsAvailability.busyWith}. Conclua-o antes de iniciar o próximo.`
+                    : details.dateKey !== today && details.stage !== 'em_andamento'
+                      ? 'O início do atendimento só é possível no dia da consulta.'
+                      : detailsAvailability.conductHint}
                 </span>
               </p>
-            </section>
-          </div>
+            )}
+            {!isProfessional && <AdminChecklist view={details} views={views} />}
+            <DemoRecordPanel
+              view={details}
+              role={ctx.role}
+              canEdit={detailsAvailability.record}
+              record={detailsRecord}
+              saving={flow.record.loading}
+              errors={flow.record.error?.fields}
+              onSave={saveRecord}
+            />
+          </AttendanceDetailsContent>
+        ) : (
+          <EmptyState
+            compact
+            icon={ShieldAlert}
+            title="Atendimento não encontrado"
+            description="O atendimento não existe ou não está disponível para o seu perfil de acesso."
+          />
         )}
       </Drawer>
 
+      {/* Conclusão com confirmação */}
+      <FinishAttendanceDialog
+        view={finishView}
+        open={finishView !== null}
+        onClose={() => setFinishId(null)}
+        existingSummary={finishRecord?.summary}
+        loading={flow.finish.loading}
+        errors={flow.finish.error?.fields}
+        onConfirm={confirmFinish}
+      />
+
+      <ConfirmDialog
+        open={noShowView !== null}
+        onClose={() => setNoShowId(null)}
+        onConfirm={confirmNoShow}
+        tone="danger"
+        loading={flow.noShow.loading}
+        title="Registrar falta?"
+        description={
+          noShowView
+            ? `${noShowView.patient.name} não compareceu à consulta de ${formatTime(noShowView.appointment.start)} com ${noShowView.professionalName}. A consulta passa a "Faltou" na agenda.`
+            : ''
+        }
+        confirmLabel="Registrar falta"
+      />
+
       {/* Consulta rápida de um atendimento do histórico */}
       <AttendanceDetailsModal
-        appointment={historyEntry?.appointment ?? null}
-        open={historyEntry !== null}
+        view={historyView}
+        open={historyView !== null}
         onClose={() => setHistoryId(null)}
-        checkedIn
-        startedAt={historyEntry ? toLocalIso(addMinutes(historyEntry.finishedAt, -historyEntry.realMin)) : undefined}
-        onCheckIn={() => undefined}
-        onStart={() => undefined}
-        onFinish={() => undefined}
+        extraAction={
+          historyView ? (
+            <Button
+              variant="ghost"
+              onClick={() => {
+                setHistoryId(null);
+                select(historyView.id);
+              }}
+            >
+              Ver detalhes completos
+            </Button>
+          ) : undefined
+        }
       />
     </div>
   );
