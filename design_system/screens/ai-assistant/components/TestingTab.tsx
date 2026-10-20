@@ -1,16 +1,34 @@
 import { useEffect, useRef, useState } from 'react';
 import type { FormEvent } from 'react';
 import { ArrowRightLeft, Bot, RotateCcw, SendHorizontal, Sparkles } from 'lucide-react';
-import { Badge, Button, Card, IconButton, ProgressBar } from '@ds/components';
+import { Badge, Button, Card, IconButton, ProgressBar, Switch } from '@ds/components';
 import { cn } from '@ds/foundations/cn';
 import { AI_SAMPLE_PROMPTS } from '@ds/mocks/business';
-import type { AiAssistantConfig } from '@ds/mocks/business';
+import type { AiSettings } from '@modules/ai-assistant/settings';
 import { INTENT_LABEL, simulateReply } from './simulate';
-import type { SimulationResult } from './simulate';
+import type { SimulationContext, SimulationResult } from './simulate';
 
 export interface TestingTabProps {
-  config: AiAssistantConfig;
+  config: AiSettings;
+  /** Dados reais (somente leitura) usados pela simulação: horários livres e especialidades. */
+  context?: Pick<SimulationContext, 'findSlots' | 'specialties'>;
 }
+
+/** Cenários prontos para validar o comportamento configurado. */
+const SCENARIOS: { label: string; text: string; outOfHours?: boolean }[] = [
+  { label: 'Pergunta frequente', text: 'Qual o endereço de vocês?' },
+  { label: 'Fora do horário', text: 'Oi, boa noite!', outOfHours: true },
+  { label: 'Atendimento humano', text: 'Preciso falar com uma atendente' },
+  { label: 'Disponibilidade', text: 'Tem horário disponível para fisioterapia?' },
+  { label: 'Não reconhecida', text: 'Blá blá xyz' },
+];
+
+const SOURCE_LABEL: Record<SimulationResult['source'], string> = {
+  faq: 'Base de conhecimento (FAQ)',
+  personalizada: 'Resposta personalizada',
+  regra: 'Regra do assistente',
+  fallback: 'Mensagem padrão (não reconhecida)',
+};
 
 interface TestMessage {
   id: number;
@@ -19,11 +37,13 @@ interface TestMessage {
   transfer?: boolean;
 }
 
-export function TestingTab({ config }: TestingTabProps) {
+export function TestingTab({ config, context }: TestingTabProps) {
   const [messages, setMessages] = useState<TestMessage[]>(() => [{ id: 0, from: 'ia', text: config.greeting }]);
   const [input, setInput] = useState('');
   const [typing, setTyping] = useState(false);
   const [last, setLast] = useState<SimulationResult | null>(null);
+  const [outOfHours, setOutOfHours] = useState(false);
+  const failures = useRef(0);
   const counter = useRef(1);
   const endRef = useRef<HTMLDivElement>(null);
 
@@ -31,7 +51,7 @@ export function TestingTab({ config }: TestingTabProps) {
     endRef.current?.scrollIntoView({ block: 'end' });
   }, [messages.length, typing]);
 
-  const ask = (text: string) => {
+  const ask = (text: string, forceOutOfHours = outOfHours) => {
     const t = text.trim();
     if (!t || typing) return;
     const id = counter.current++;
@@ -40,8 +60,18 @@ export function TestingTab({ config }: TestingTabProps) {
     setTyping(true);
     window.setTimeout(() => {
       const result: SimulationResult = config.enabled
-        ? simulateReply(t, config)
-        : { intent: 'humano', confidence: 1, reply: 'Assistente desativado — a mensagem seria encaminhada direto para a equipe.', transfer: true, matchedKeywords: [], entities: [] };
+        ? simulateReply(t, config, { ...context, forceOutOfHours, previousFailures: failures.current })
+        : {
+            intent: 'humano',
+            confidence: 1,
+            reply: 'Assistente desativado — a mensagem seria encaminhada direto para a equipe.',
+            transfer: true,
+            outOfHours: forceOutOfHours,
+            source: 'regra',
+            matchedKeywords: [],
+            entities: [],
+          };
+      failures.current = result.source === 'fallback' && !result.transfer ? failures.current + 1 : 0;
       setMessages((m) => [...m, { id: counter.current++, from: 'ia', text: result.reply, transfer: result.transfer }]);
       setLast(result);
       setTyping(false);
@@ -55,6 +85,7 @@ export function TestingTab({ config }: TestingTabProps) {
 
   const reset = () => {
     counter.current = 1;
+    failures.current = 0;
     setMessages([{ id: 0, from: 'ia', text: config.greeting }]);
     setLast(null);
   };
@@ -106,6 +137,16 @@ export function TestingTab({ config }: TestingTabProps) {
             <div ref={endRef} />
           </div>
           <div className="border-t border-graphite-200 bg-white p-3">
+            <div className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+              <Switch checked={outOfHours} onChange={setOutOfHours} label="Simular fora do horário" />
+              <div className="flex flex-wrap gap-1.5" role="group" aria-label="Cenários de teste">
+                {SCENARIOS.map((s) => (
+                  <Button key={s.label} size="sm" variant="ghost" disabled={typing} onClick={() => ask(s.text, s.outOfHours ?? outOfHours)}>
+                    {s.label}
+                  </Button>
+                ))}
+              </div>
+            </div>
             <div className="mb-3 flex flex-wrap gap-2" role="group" aria-label="Exemplos de mensagens">
               {AI_SAMPLE_PROMPTS.map((p) => (
                 <button
@@ -157,6 +198,16 @@ export function TestingTab({ config }: TestingTabProps) {
                 />
               </dd>
             </div>
+            <div>
+              <dt className="text-graphite-500">Origem da resposta</dt>
+              <dd className="font-semibold text-graphite-900">{SOURCE_LABEL[last.source]}</dd>
+            </div>
+            {last.outOfHours && (
+              <div>
+                <dt className="text-graphite-500">Horário</dt>
+                <dd className="font-semibold text-warning">Fora do atendimento humano</dd>
+              </div>
+            )}
             <div>
               <dt className="text-graphite-500">Ação</dt>
               <dd className="font-semibold text-graphite-900">{last.transfer ? 'Transferir para a equipe' : 'Responder automaticamente'}</dd>

@@ -1,9 +1,9 @@
 import { Bot } from 'lucide-react';
 import { Badge } from '@ds/components';
-import type { AiAssistantConfig } from '@ds/mocks/business';
+import type { AiSettings } from '@modules/ai-assistant/settings';
 
 export interface ChatPreviewProps {
-  config: AiAssistantConfig;
+  config: AiSettings;
 }
 
 /** Prévia estática de como o paciente vê a primeira mensagem do assistente. */

@@ -9,4 +9,5 @@ export type { TestingTabProps } from './TestingTab';
 export { ChatPreview } from './ChatPreview';
 export type { ChatPreviewProps } from './ChatPreview';
 export { simulateReply, INTENT_LABEL } from './simulate';
-export type { SimulatedIntent, SimulationResult } from './simulate';
+export { isWithinHours, describeHours } from './simulate';
+export type { SimulatedIntent, SimulationResult, SimulationContext } from './simulate';
