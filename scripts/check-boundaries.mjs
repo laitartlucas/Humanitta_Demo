@@ -49,7 +49,7 @@ const allowed = [...agent.owns, 'docs/change-requests/**'].map(toRegex);
 const base = arg('base') ?? config.baseBranch;
 const mergeBase = sh(`git merge-base ${base} HEAD`);
 const committed = sh(`git diff --name-only ${mergeBase}...HEAD`);
-const working = execSync('git status --porcelain', { encoding: 'utf8' })
+const working = execSync('git status --porcelain --untracked-files=all', { encoding: 'utf8' })
   .split('\n')
   .filter(Boolean)
   .map((l) => l.slice(3).replace(/^"|"$/g, '').split(' -> ').pop());
