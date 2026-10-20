@@ -4,7 +4,7 @@
  */
 import type { AppointmentRecord, AppointmentStatus, ID } from '../domain';
 import { assertCan, type AccessContext } from '../access/accessContext';
-import { conflict, forbidden, validation } from '../errors/AppError';
+import { conflict, validation } from '../errors/AppError';
 import { newId, repositories as r } from '../repositories';
 import { nowIso } from '../clock';
 import { logActivity } from './activity';
@@ -148,7 +148,12 @@ export function cancelAppointment(ctx: AccessContext, id: ID, reason: string): A
   assertCan(ctx, 'agenda_clinica', 'editar', ov());
   const current = r.appointments.require(id);
   if (current.status === 'concluida') throw conflict('Atendimento já concluído não pode ser cancelado.');
+  if (current.status === 'cancelada') throw conflict('Esta consulta já está cancelada.');
+  if (current.status === 'em_atendimento') throw conflict('Atendimento em andamento não pode ser cancelado.');
   const updated = r.appointments.update(id, { status: 'cancelada', cancelReason: reason, updatedAt: nowIso() });
+  // Mantém o atendimento coerente com a agenda (CR 05 §1).
+  const at = r.attendances.getById(`at-${id}`);
+  if (at) r.attendances.update(at.id, { status: 'cancelado' });
   logActivity(ctx, `cancelou a consulta de ${current.patientName}.`, 'danger');
   return updated;
 }
@@ -157,6 +162,7 @@ export function cancelAppointment(ctx: AccessContext, id: ID, reason: string): A
 export function confirmAppointment(ctx: AccessContext, id: ID): AppointmentRecord {
   assertCan(ctx, 'agenda_clinica', 'editar', ov());
   const current = r.appointments.require(id);
-  if (current.status !== 'agendada' && current.status !== 'reagendada') throw forbidden('Somente consultas agendadas podem ser confirmadas.');
+  // 'reagendada' é o registro substituído; só o novo ('agendada') pode ser confirmado (CR 02 §3).
+  if (current.status !== 'agendada') throw conflict('Somente consultas agendadas podem ser confirmadas.');
   return r.appointments.update(id, { status: 'confirmada', updatedAt: nowIso() });
 }

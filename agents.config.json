@@ -136,6 +136,7 @@
       "branch": "integracao/agent-09",
       "owns": [
         "tests/e2e/**",
+        "tests/integration/**",
         "playwright.config.ts",
         ".github/**",
         "vercel.json",

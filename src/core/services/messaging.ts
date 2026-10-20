@@ -1,24 +1,41 @@
 /** Central WhatsApp (simulada) + Assistente IA. Nenhuma mensagem sai do navegador. */
 import type { AiConfig, ConversationRecord, ID, MessageRecord } from '../domain';
 import { assertCan, type AccessContext } from '../access/accessContext';
-import { validation } from '../errors/AppError';
+import { conflict, validation } from '../errors/AppError';
 import { newId, repositories as r } from '../repositories';
-import { nowIso } from '../clock';
+import { isoAfter } from '../clock';
 
 const ov = () => r.clinicSettings.get().permissionOverrides;
+
+/** Horário da próxima mensagem: nunca antes da última da conversa (a semente vai até 10:42). */
+function nextMessageAt(conversationId: ID): string {
+  const last = r.messages
+    .list()
+    .filter((m) => m.conversationId === conversationId)
+    .reduce<string | undefined>((max, m) => (!max || m.at > max ? m.at : max), undefined);
+  const conv = r.conversations.getById(conversationId);
+  return isoAfter(conv && (!last || conv.lastAt > last) ? conv.lastAt : last);
+}
 
 export function sendMessage(ctx: AccessContext, conversationId: ID, text: string): MessageRecord {
   assertCan(ctx, 'whatsapp', 'editar', ov());
   if (!text.trim()) throw validation({ text: 'Digite uma mensagem.' });
-  const at = nowIso();
+  r.conversations.require(conversationId);
+  const at = nextMessageAt(conversationId);
   const msg = r.messages.create({ id: newId('m'), conversationId, from: 'atendente', text: text.trim(), at, status: 'enviada' });
   r.conversations.update(conversationId, { lastMessage: msg.text, lastAt: at });
   return msg;
 }
 
-/** Mensagem gerada pelo Assistente IA (simulação local). */
+/**
+ * Mensagem gerada pelo Assistente IA (simulação local).
+ * Recusa (CONFLICT) se a conversa estiver em atendimento humano: depois da transferência,
+ * nenhuma resposta automática pode sair (CR 07 §5).
+ */
 export function appendAiMessage(conversationId: ID, text: string): MessageRecord {
-  const at = nowIso();
+  const conv = r.conversations.require(conversationId);
+  if (conv.mode !== 'ia') throw conflict('Conversa em atendimento humano: o Assistente IA não responde automaticamente.');
+  const at = nextMessageAt(conversationId);
   const msg = r.messages.create({ id: newId('m'), conversationId, from: 'ia', text, at, status: 'entregue' });
   r.conversations.update(conversationId, { lastMessage: text, lastAt: at });
   return msg;

@@ -17,6 +17,15 @@ export function createEntry(ctx: AccessContext, input: FinancialEntryInput): Fin
   if (!(input.amount > 0)) f.amount = 'Informe um valor maior que zero.';
   if (!/^\d{4}-\d{2}-\d{2}$/.test(input.date)) f.date = 'Data inválida.';
   if (Object.keys(f).length) throw validation(f);
+  if (input.type === 'receita' && input.appointmentId) {
+    // Uma única receita ativa por atendimento (evita cobrança duplicada; CR 06 §3).
+    const appt = r.appointments.require(input.appointmentId);
+    if (appt.status !== 'concluida') throw conflict('Só é possível lançar receita de atendimento concluído.');
+    const dup = r.financialEntries
+      .list()
+      .find((e) => e.type === 'receita' && e.appointmentId === input.appointmentId && e.status !== 'estornado');
+    if (dup) throw conflict('Este atendimento já possui uma receita lançada.');
+  }
   return r.financialEntries.create({
     ...input,
     id: newId('fe'),

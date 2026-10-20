@@ -3,7 +3,7 @@
  * ou cópia própria de entidades: leia via seletores/hooks e escreva via serviços.
  */
 import type { Database } from '../domain';
-import { createSeed, SCHEMA_VERSION } from '../data/seed';
+import { createSeed, SCHEMA_VERSION, type SeedOptions } from '../data/seed';
 import { createStore, type Store } from './createStore';
 import { clearPersisted, loadPersisted, persistStore, type PersistOptions } from './persistence';
 
@@ -33,7 +33,7 @@ export const db: Store<Database> = createStore<Database>(initialState());
 persistStore(db, persistOptions);
 
 /** Volta todos os dados para a semente original (botão "Restaurar demonstração" / testes). */
-export function resetDemoData(): void {
+export function resetDemoData(options?: SeedOptions): void {
   clearPersisted(DB_STORAGE_KEY);
-  db.setState(() => createSeed());
+  db.setState(() => createSeed(options));
 }

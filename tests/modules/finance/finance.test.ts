@@ -80,7 +80,8 @@ const despesa = (over: Partial<EntryDraft> = {}): EntryDraft => ({
 
 const rows = () => selectFinanceRows(db.getState(), fin());
 
-beforeEach(() => resetDemoData());
+// Integração (Agente 09): asserções exatas sobre a semente base (sem o histórico demonstrativo).
+beforeEach(() => resetDemoData({ history: false }));
 
 describe('receitas', () => {
   it('1. lista as receitas da semente para o financeiro', () => {

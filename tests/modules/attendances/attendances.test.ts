@@ -137,10 +137,12 @@ describe('fluxo de atendimento', () => {
       expect(codeOf(() => attendanceFlow.beginAttendance(helena(), future.id))).toBe('CONFLICT');
       expect(codeOf(() => attendanceFlow.registerNoShow(recepcao(), future.id))).toBe('CONFLICT');
     }
-    const at = attendanceFlow.registerNoShow(recepcao(), 'ag-106');
+    // Integração (Agente 09): falta só DEPOIS do horário da consulta (regra da Agenda, aplicada no core).
+    expect(codeOf(() => attendanceFlow.registerNoShow(recepcao(), 'ag-106'))).toBe('CONFLICT'); // 10:30 > agora (10:24)
+    const at = attendanceFlow.registerNoShow(recepcao(), 'ag-104'); // 09:30, confirmada
     expect(at.status).toBe('faltou');
-    expect(db.getState().appointments.find((a) => a.id === 'ag-106')?.status).toBe('faltou');
-    expect(codeOf(() => attendanceFlow.beginAttendance(ctxOf('u-prof-marina'), 'ag-106'))).toBe('CONFLICT');
+    expect(db.getState().appointments.find((a) => a.id === 'ag-104')?.status).toBe('faltou');
+    expect(codeOf(() => attendanceFlow.beginAttendance(ctxOf('u-prof-helena'), 'ag-104'))).toBe('CONFLICT');
   });
 
   it('financeiro não altera o fluxo', () => {

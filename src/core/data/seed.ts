@@ -6,7 +6,9 @@
  * - consultas extras da Dra. Lauren (portal) entram na agenda da clínica, com preço demonstrativo;
  * - o "agora" é único (clock.ts: 19/10/2026 10:24), então ag-103 já está concluída;
  * - lançamentos financeiros e conversas ganham `patientId`/`professionalId` reais (`pac-`, `prof-`);
- * - usuários: um por perfil administrativo + um por profissional (cada um com `professionalId`).
+ * - usuários: um por perfil administrativo + um por profissional (cada um com `professionalId`);
+ * - v2 (integração): histórico determinístico set–out/2026 + fechamentos nov/25–ago/26 (history.ts),
+ *   reagendamento ag-004 → ag-404 encadeado e mensagem m-0802 sem menção a prontuário.
  *
  * Todos os dados são FICTÍCIOS, exceto o nome/registro da Dra. Lauren Bertocchi (informação pública).
  */
@@ -56,9 +58,10 @@ import type {
   SpecialtyRecord,
   UserRecord,
 } from '../domain';
+import { buildHistory } from './history';
 
 /** Incrementar sempre que o formato do `Database` mudar (força nova semente no navegador). */
-export const SCHEMA_VERSION = 1;
+export const SCHEMA_VERSION = 2;
 
 /** Preço demonstrativo das consultas extras do portal (que nasceram sem valor). */
 const DEMO_PRICE_BY_SERVICE: Record<string, number> = {
@@ -89,7 +92,9 @@ function buildAppointments(): AppointmentRecord[] {
     ...clone(a),
     price: DEMO_PRICE_BY_SERVICE[a.service] ?? 0,
   }));
-  return [...clinic, ...extra].sort((a, b) => a.start.localeCompare(b.start));
+  // ag-004 foi substituído por ag-404 (reagendamento): o novo nasce "agendada" e aponta para o original.
+  const fixed = clinic.map((a) => (a.id === 'ag-404' ? { ...a, status: 'agendada' as const, rescheduledFrom: 'ag-004' } : a));
+  return [...fixed, ...extra].sort((a, b) => a.start.localeCompare(b.start));
 }
 
 const ATTENDANCE_BY_STATUS: Partial<Record<AppointmentRecord['status'], AttendanceStatus>> = {
@@ -191,14 +196,29 @@ function buildConversations(patients: PatientRecord[]): ConversationRecord[] {
   });
 }
 
-export function createSeed(): Database {
+/** Mensagens da semente. m-0802 deixa de citar o prontuário (texto administrativo; CR 07 §9). */
+function buildMessages() {
+  return clone(chatMessages).map((m) =>
+    m.id === 'm-0802' ? { ...m, text: 'Recebido, Beatriz! Nossa equipe vai encaminhar o documento à profissional responsável.' } : m,
+  );
+}
+
+export interface SeedOptions {
+  /** Inclui o histórico demonstrativo nov/25–out/26 (padrão true). `false` = semente base da Etapa 1 (testes de regra). */
+  history?: boolean;
+}
+
+export function createSeed(options: SeedOptions = {}): Database {
   const patients = buildPatients();
-  const appointments = buildAppointments();
+  const professionals = clone(clinicProfessionals);
+  const base = buildAppointments();
+  const history = options.history === false ? { appointments: [], financialEntries: [] } : buildHistory(professionals, patients, base);
+  const appointments = [...history.appointments, ...base].sort((a, b) => a.start.localeCompare(b.start));
   const attendances = buildAttendances(appointments);
   return {
     schemaVersion: SCHEMA_VERSION,
     patients,
-    professionals: clone(clinicProfessionals),
+    professionals,
     users: buildUsers(),
     specialties: buildSpecialties(),
     services: clone(serviceSettings),
@@ -206,9 +226,9 @@ export function createSeed(): Database {
     appointments,
     attendances,
     clinicalRecords: buildClinicalRecords(attendances, appointments),
-    financialEntries: buildFinancialEntries(patients),
+    financialEntries: [...buildFinancialEntries(patients), ...history.financialEntries],
     conversations: buildConversations(patients),
-    messages: clone(chatMessages),
+    messages: buildMessages(),
     blockRequests: clone(MY_BLOCK_REQUESTS),
     activity: clone(activityEvents),
     aiConfig: clone(defaultAiConfig),
