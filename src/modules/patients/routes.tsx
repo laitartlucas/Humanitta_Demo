@@ -6,7 +6,7 @@ import type { ModuleDefinition } from '@app/types';
 
 function PatientsPage() {
   const go = useAppNavigate();
-  return <PatientsScreen onOpenPatient={(id) => go('pacientes', id)} />;
+  return <PatientsScreen onOpenPatient={(id) => go('pacientes', id)} onOpenWhatsApp={() => go('whatsapp')} />;
 }
 
 function PatientProfilePage() {
@@ -17,7 +17,9 @@ function PatientProfilePage() {
       key={patientId}
       patientId={patientId}
       onBack={() => go('pacientes')}
+      // A Agenda ainda não recebe o paciente pré-selecionado (ver docs/change-requests/03-pacientes.md).
       onNewAppointment={() => go('agenda')}
+      onOpenWhatsApp={() => go('whatsapp')}
     />
   );
 }

@@ -1,11 +1,12 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { ShieldCheck } from 'lucide-react';
-import type { Patient } from '@ds/mocks/types';
+import { todayKey, useAction, type PatientRecord } from '@core';
 import { Button, Checkbox, Modal } from '@ds/components';
-import { toDateKey, DEMO_TODAY } from '@ds/mocks/clinical';
+import { registerPatient } from '../data/patientData';
 import {
   EMPTY_PATIENT_FORM,
   PatientFormFields,
+  formToInput,
   validatePatientForm,
   type PatientFormErrors,
   type PatientFormValues,
@@ -14,15 +15,16 @@ import {
 export interface NewPatientModalProps {
   open: boolean;
   onClose: () => void;
-  onCreate: (patient: Patient) => void;
+  /** Chamado com o paciente já gravado na base compartilhada. */
+  onCreated?: (patient: PatientRecord) => void;
 }
 
-export function NewPatientModal({ open, onClose, onCreate }: NewPatientModalProps) {
+export function NewPatientModal({ open, onClose, onCreated }: NewPatientModalProps) {
   const [values, setValues] = useState<PatientFormValues>(EMPTY_PATIENT_FORM);
   const [errors, setErrors] = useState<PatientFormErrors>({});
   const [consent, setConsent] = useState(false);
   const [consentError, setConsentError] = useState(false);
-  const [saving, setSaving] = useState(false);
+  const create = useAction(registerPatient, { success: 'Paciente cadastrado' });
 
   useEffect(() => {
     if (open) {
@@ -30,33 +32,23 @@ export function NewPatientModal({ open, onClose, onCreate }: NewPatientModalProp
       setErrors({});
       setConsent(false);
       setConsentError(false);
-      setSaving(false);
     }
   }, [open]);
 
-  function handleSubmit(e?: FormEvent) {
+  async function handleSubmit(e?: FormEvent) {
     e?.preventDefault();
-    const next = validatePatientForm(values);
+    const next = validatePatientForm(values, todayKey());
     setErrors(next);
     setConsentError(!consent);
     if (Object.keys(next).length > 0 || !consent) return;
-    setSaving(true);
-    window.setTimeout(() => {
-      onCreate({
-        id: `pac-${Date.now()}`,
-        name: values.name.trim(),
-        birthDate: values.birthDate,
-        phone: values.phone,
-        email: values.email || undefined,
-        city: values.city,
-        tags: values.tags.split(',').map((t) => t.trim()).filter(Boolean),
-        createdAt: toDateKey(DEMO_TODAY),
-        balance: 0,
-        status: values.status,
-      });
-      setSaving(false);
-    }, 600);
+    const created = await create.run(formToInput(values));
+    if (created) onCreated?.(created);
   }
+
+  // O erro do serviço (ex.: duplicidade) chega depois do run; reflete nos campos.
+  useEffect(() => {
+    if (create.error?.fields) setErrors((prev) => ({ ...prev, ...create.error?.fields }));
+  }, [create.error]);
 
   return (
     <Modal
@@ -67,17 +59,31 @@ export function NewPatientModal({ open, onClose, onCreate }: NewPatientModalProp
       description="Cadastro administrativo. Informações clínicas ficam no prontuário restrito."
       footer={
         <>
-          <Button variant="secondary" onClick={onClose} disabled={saving}>
+          <Button variant="secondary" onClick={onClose} disabled={create.loading}>
             Cancelar
           </Button>
-          <Button type="submit" form="new-patient-form" loading={saving}>
+          <Button type="submit" form="new-patient-form" loading={create.loading}>
             Cadastrar paciente
           </Button>
         </>
       }
     >
       <form id="new-patient-form" onSubmit={handleSubmit} noValidate className="flex flex-col gap-5">
-        <PatientFormFields idPrefix="np" values={values} errors={errors} onChange={setValues} disabled={saving} />
+        {create.error && !create.error.fields && (
+          <p role="alert" className="rounded-md border border-danger/30 bg-danger-bg p-3 text-sm text-danger">
+            {create.error.message}
+          </p>
+        )}
+        <PatientFormFields
+          idPrefix="np"
+          values={values}
+          errors={errors}
+          onChange={(v) => {
+            setValues(v);
+            if (create.error) create.clearError();
+          }}
+          disabled={create.loading}
+        />
         <div className="rounded-md border border-graphite-200 bg-graphite-50 p-3">
           <Checkbox
             id="np-consent"
@@ -97,6 +103,7 @@ export function NewPatientModal({ open, onClose, onCreate }: NewPatientModalProp
             </p>
           )}
         </div>
+        <p className="text-xs text-graphite-500">Demonstração: use apenas dados fictícios. Nunca cadastre dados reais de pacientes.</p>
       </form>
     </Modal>
   );
