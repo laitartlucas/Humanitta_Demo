@@ -1,0 +1,1104 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Portal · Minha Agenda — Humanittá Gestão</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&amp;family=Manrope:wght@400;500;600;700;800&amp;family=Josefin+Sans:wght@300;400&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#FAF8F4}
+a{color:#8F6425}a:hover{color:#6F4D1D}
+</style>
+</helmet>
+<div style="display: flex; flex-wrap: wrap; min-height: 100vh; background: #FAF8F4; font-family: Manrope, system-ui, sans-serif; color: #1E1D1B">
+
+  <!-- PORTAL:SIDEBAR START (sidebar exclusiva do Portal do Profissional — copiar; mudar só o item ativo) -->
+  <aside aria-label="Menu principal" style="flex: 1 1 264px; max-width: 264px; min-width: 220px; background: #1E1D1B; color: #E9E5DD; display: flex; flex-direction: column; gap: 24px; padding: 24px 16px">
+    <a href="PortalDashboard.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 4px 8px; text-decoration: none; color: #F5E9D0">
+      <svg width="40" height="40" viewBox="0 0 64 64" role="img" aria-label="Símbolo Humanittá">
+        <defs><linearGradient id="sg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#DDB872"></stop><stop offset=".55" stop-color="#CC9B47"></stop><stop offset="1" stop-color="#B5832F"></stop></linearGradient></defs>
+        <circle cx="32" cy="32" r="30" fill="none" stroke="#CC9B47" stroke-width="2"></circle>
+        <circle cx="24" cy="31" r="3.6" fill="url(#sg)"></circle>
+        <path d="M20 39.5c0-2.6 1.8-4.3 4-4.3s4 1.7 4 4.3V47c-4.4 0-8-3.2-8-7.5z" fill="url(#sg)"></path>
+        <circle cx="38.5" cy="19.5" r="4.6" fill="url(#sg)"></circle>
+        <path d="M31.5 31c0-3.3 2.7-5.6 6-5.6h6.5V40c0 4.6-3.7 8-8.3 8h-4.2z" fill="url(#sg)"></path>
+      </svg>
+      <span style="display: flex; flex-direction: column; gap: 2px">
+        <span style="font-family: 'Josefin Sans', Manrope, sans-serif; font-weight: 300; font-size: 22px; letter-spacing: .08em; color: #F3EFE8; line-height: 1">Humanittá</span>
+        <span style="font-size: 10px; font-weight: 700; letter-spacing: .24em; text-transform: uppercase; color: #DDB872">Gestão</span>
+      </span>
+    </a>
+    <span style="align-self: flex-start; margin-top: -12px; display: inline-flex; align-items: center; height: 24px; padding: 0 12px; border-radius: 999px; background: rgba(221,184,114,.12); color: #DDB872; font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase">Portal do Profissional</span>
+    <nav aria-label="Seções do portal" style="display: flex; flex-direction: column; gap: 2px">
+      <a href="PortalDashboard.dc.html" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 10px; color: #D6D1C7; text-decoration: none; font-size: 14px; font-weight: 600">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"></path><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+        <span style="flex: 1">Meu Dashboard</span>
+      </a>
+      <a href="PortalAgenda.dc.html" aria-current="page" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 10px; background: rgba(221,184,114,.12); color: #F5E9D0; text-decoration: none; font-size: 14px; font-weight: 700">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#DDB872" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 7.5V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h3.5"></path><path d="M16 2v4"></path><path d="M8 2v4"></path><path d="M3 10h5"></path><path d="M17.5 17.5 16 16.3V14"></path><circle cx="16" cy="16" r="6"></circle></svg>
+        <span style="flex: 1">Minha Agenda</span><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 999px; background: #DDB872"></span>
+      </a>
+      <a href="PortalPacientes.dc.html" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 10px; color: #D6D1C7; text-decoration: none; font-size: 14px; font-weight: 600">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+        <span style="flex: 1">Meus Pacientes</span>
+      </a>
+      <a href="PortalAtendimentos.dc.html" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 10px; color: #D6D1C7; text-decoration: none; font-size: 14px; font-weight: 600">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="8" height="4" x="8" y="2" rx="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><path d="m9 14 2 2 4-4"></path></svg>
+        <span style="flex: 1">Meus Atendimentos</span>
+      </a>
+      <a href="PortalPerfil.dc.html" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 10px; color: #D6D1C7; text-decoration: none; font-size: 14px; font-weight: 600">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 20a6 6 0 0 0-12 0"></path><circle cx="12" cy="10" r="4"></circle><circle cx="12" cy="12" r="10"></circle></svg>
+        <span style="flex: 1">Meu Perfil</span>
+      </a>
+    </nav>
+    <div style="margin-top: auto; display: flex; flex-direction: column; gap: 12px">
+      <div style="display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 12px; background: rgba(255,255,255,.05)">
+        <span style="width: 36px; height: 36px; border-radius: 999px; background: #43413C; color: #F5E9D0; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800">LB</span>
+        <span style="display: flex; flex-direction: column; min-width: 0">
+          <span style="font-size: 13px; font-weight: 700; color: #F3EFE8">Dra. Lauren Bertocchi</span>
+          <span style="font-size: 12px; color: #B9B3A8">Ortodontista</span>
+        </span>
+      </div>
+      <button type="button" style="display: flex; align-items: center; gap: 10px; height: 40px; padding: 0 12px; border: 0; border-radius: 10px; background: transparent; color: #B9B3A8; font: 600 13px Manrope, sans-serif; cursor: pointer">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="18" x="3" y="3" rx="2"></rect><path d="M9 3v18"></path><path d="m16 15-3-3 3-3"></path></svg>
+        Recolher menu
+      </button>
+    </div>
+  </aside>
+  <!-- PORTAL:SIDEBAR END -->
+
+  <div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
+    <!-- PORTAL:HEADER START (copiar; mudar título e breadcrumb) -->
+    <header style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px; min-height: 72px; padding: 12px 32px; box-sizing: border-box; background: #FFFFFF; border-bottom: 1px solid #DFDBD3">
+      <div style="display: flex; flex-direction: column; gap: 2px; margin-right: auto">
+        <span style="font-size: 12px; font-weight: 600; color: #77736B">Portal do Profissional / Agenda</span>
+        <h1 style="margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 28px; line-height: 1.1">Minha Agenda</h1>
+      </div>
+      <label style="display: flex; align-items: center; gap: 10px; flex: 0 1 360px; min-width: 200px; height: 40px; padding: 0 12px; box-sizing: border-box; border: 1px solid #DFDBD3; border-radius: 8px; background: #FAF8F4; color: #77736B">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+        <span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Busca global</span>
+        <input type="search" placeholder="Buscar nos meus pacientes e consultas…" style="flex: 1; min-width: 0; border: 0; background: transparent; font: 500 14px Manrope, sans-serif; color: #1E1D1B; outline: none">
+        <span style="font-size: 11px; font-weight: 700; color: #77736B; border: 1px solid #DFDBD3; border-radius: 6px; padding: 2px 6px; background: #FFFFFF">⌘K</span>
+      </label>
+      <span style="display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 10px; border-radius: 999px; background: #FBF0DA; color: #9A5F0E; font-size: 12px; font-weight: 700">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 2v7.31"></path><path d="M14 9.3V1.99"></path><path d="M8.5 2h7"></path><path d="M14 9.3a6.5 6.5 0 1 1-4 0"></path></svg>
+        Ambiente de demonstração
+      </span>
+      <span style="display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: #43413C">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#77736B" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path></svg>
+        Segunda, 19 de outubro de 2026
+      </span>
+      <button type="button" aria-label="Notificações (3 novas)" style="position: relative; width: 40px; height: 40px; border: 1px solid #DFDBD3; border-radius: 10px; background: #FFFFFF; color: #43413C; display: inline-flex; align-items: center; justify-content: center; cursor: pointer">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path></svg>
+        <span aria-hidden="true" style="position: absolute; top: 8px; right: 9px; width: 8px; height: 8px; border-radius: 999px; background: #A93B30; border: 2px solid #FFFFFF"></span>
+      </button>
+      <button type="button" aria-label="Menu do usuário" style="display: flex; align-items: center; gap: 10px; height: 44px; padding: 0 8px 0 4px; border: 0; background: transparent; cursor: pointer; font-family: Manrope, sans-serif">
+        <span style="width: 36px; height: 36px; border-radius: 999px; background: #F5E9D0; color: #6F4D1D; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; box-shadow: 0 0 0 2px #FFFFFF, 0 0 0 3px #DDB872">LB</span>
+        <span style="display: flex; flex-direction: column; align-items: flex-start">
+          <span style="font-size: 13px; font-weight: 700; color: #1E1D1B">Dra. Lauren Bertocchi</span>
+          <span style="font-size: 12px; color: #77736B">Ortodontista · Portal do Profissional</span>
+        </span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#77736B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
+      </button>
+    </header>
+    <!-- PORTAL:HEADER END -->
+
+    <main style="flex: 1; padding: 32px; box-sizing: border-box; display: flex; flex-direction: column; gap: 20px; max-width: 1440px; width: 100%">
+
+      <!-- Barra de controles -->
+      <section aria-label="Controles da agenda" style="background: #FFFFFF; border: 1px solid #DFDBD3; border-radius: 12px; box-shadow: 0 1px 2px rgba(30,29,27,.06); padding: 16px 20px; display: flex; flex-direction: column; gap: 14px">
+        <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px">
+          <div style="display: inline-flex; align-items: center; gap: 6px">
+            <button type="button" aria-label="Período anterior" onClick="{{onPrev}}" style="width: 40px; height: 40px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; color: #2E2C29; display: inline-flex; align-items: center; justify-content: center; cursor: pointer">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg>
+            </button>
+            <button type="button" onClick="{{onToday}}" style="height: 40px; padding: 0 16px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; color: #2E2C29; font: 700 14px Manrope, sans-serif; cursor: pointer">Hoje</button>
+            <button type="button" aria-label="Próximo período" onClick="{{onNext}}" style="width: 40px; height: 40px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; color: #2E2C29; display: inline-flex; align-items: center; justify-content: center; cursor: pointer">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg>
+            </button>
+          </div>
+          <div style="display: flex; flex-direction: column; margin-right: auto; min-width: 0">
+            <span style="font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: #8F6425">{{periodOver}}</span>
+            <h2 style="margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 28px; line-height: 1.1; color: #1E1D1B">{{periodLabel}}</h2>
+          </div>
+          <div role="group" aria-label="Modo de visualização" style="display: inline-flex; padding: 3px; border-radius: 10px; background: #F5F3EF; gap: 2px">
+            <sc-for list="{{segs}}" as="sg" hint-placeholder-count="3">
+              <button type="button" aria-pressed="{{sg.pressed}}" onClick="{{sg.onClick}}" style="height: 34px; padding: 0 16px; border: 0; border-radius: 8px; background: {{sg.bg}}; color: {{sg.fg}}; box-shadow: {{sg.shadow}}; font: 700 13px Manrope, sans-serif; cursor: pointer">{{sg.label}}</button>
+            </sc-for>
+          </div>
+          <button type="button" onClick="{{onRequest}}" style="display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; color: #2E2C29; font: 700 14px Manrope, sans-serif; cursor: pointer">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M8 2v4"></path><path d="M16 2v4"></path><path d="M3 10h18"></path><path d="m14 14-4 4"></path><path d="m10 14 4 4"></path></svg>
+            Solicitar bloqueio de horário
+          </button>
+          <a href="PortalPerfil.dc.html" style="display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 12px; border-radius: 8px; color: #43413C; font: 700 14px Manrope, sans-serif; text-decoration: none">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 7h-9"></path><path d="M14 17H5"></path><circle cx="17" cy="17" r="3"></circle><circle cx="7" cy="7" r="3"></circle></svg>
+            Alterar disponibilidade
+          </a>
+        </div>
+
+        <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; padding-top: 14px; border-top: 1px solid #ECE9E3">
+          <label style="display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: #43413C">
+            Data
+            <input type="date" value="{{dateVal}}" min="2026-10-19" max="2026-10-24" onInput="{{onDate}}" style="height: 36px; box-sizing: border-box; padding: 0 10px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 600 13px Manrope, sans-serif; color: #1E1D1B; font-variant-numeric: tabular-nums">
+          </label>
+          <div role="group" aria-label="Atalhos de data" style="display: inline-flex; gap: 6px">
+            <sc-for list="{{quicks}}" as="q" hint-placeholder-count="3">
+              <button type="button" aria-pressed="{{q.pressed}}" onClick="{{q.onClick}}" style="height: 32px; padding: 0 12px; border: 1px solid {{q.border}}; border-radius: 999px; background: {{q.bg}}; color: {{q.fg}}; font: 700 12px Manrope, sans-serif; cursor: pointer">{{q.label}}</button>
+            </sc-for>
+          </div>
+          <span aria-hidden="true" style="width: 1px; height: 24px; background: #ECE9E3"></span>
+          <div role="group" aria-label="Filtrar por status" style="display: inline-flex; flex-wrap: wrap; align-items: center; gap: 6px">
+            <span style="font-size: 12px; font-weight: 700; color: #5B5852; margin-right: 2px">Status</span>
+            <sc-for list="{{chips}}" as="c" hint-placeholder-count="7">
+              <button type="button" aria-pressed="{{c.pressed}}" onClick="{{c.onClick}}" style="display: inline-flex; align-items: center; gap: 5px; height: 28px; padding: 0 10px; border: 1px solid {{c.border}}; border-radius: 999px; background: {{c.bg}}; color: {{c.fg}}; font: 700 12px Manrope, sans-serif; cursor: pointer">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{c.d1}}"></path><path d="{{c.d2}}"></path></svg>
+                {{c.label}}
+                <span style="font-variant-numeric: tabular-nums; opacity: .8">{{c.count}}</span>
+              </button>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px">
+          <span title="Acesso validado no servidor por profissional" style="display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; background: #F5F3EF; color: #43413C; font-size: 12px; font-weight: 700">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2E7351" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg>
+            Somente seus agendamentos
+          </span>
+          <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: #5B5852">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2D5F88" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
+            Novos agendamentos são feitos pela recepção · Sala 1 · Odontologia
+          </span>
+          <div aria-label="Legenda" style="margin-left: auto; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; font-size: 12px; font-weight: 600; color: #43413C">
+            <span style="display: inline-flex; align-items: center; gap: 6px"><span aria-hidden="true" style="width: 18px; height: 12px; box-sizing: border-box; border: 1.5px dashed #9E998F; border-radius: 4px; background: #FFFFFF"></span>Livre</span>
+            <span style="display: inline-flex; align-items: center; gap: 6px"><span aria-hidden="true" style="width: 18px; height: 12px; box-sizing: border-box; border: 1px solid #DFDBD3; border-radius: 4px; background: #FFFFFF; box-shadow: inset 0 3px 0 #2E7351"></span>Ocupado</span>
+            <span style="display: inline-flex; align-items: center; gap: 6px"><span aria-hidden="true" style="width: 18px; height: 12px; border-radius: 4px; background: repeating-linear-gradient(135deg, #ECE9E3 0 3px, #C7C2B9 3px 4px)"></span>Almoço / bloqueado</span>
+            <span style="display: inline-flex; align-items: center; gap: 6px"><span aria-hidden="true" style="width: 18px; height: 12px; box-sizing: border-box; border: 1px dashed #9A5F0E; border-radius: 4px; background: repeating-linear-gradient(135deg, #FBF0DA 0 3px, #EBD4A6 3px 4px)"></span>Aguardando aprovação</span>
+            <span style="display: inline-flex; align-items: center; gap: 6px"><span aria-hidden="true" style="width: 18px; height: 2px; background: #B5832F"></span>Agora</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Toast: solicitação enviada -->
+      <sc-if value="{{showToast}}" hint-placeholder-val="{{ false }}">
+        <div style="display: flex; justify-content: flex-end">
+          <div role="status" style="display: flex; align-items: flex-start; gap: 12px; width: 100%; max-width: 440px; box-sizing: border-box; padding: 14px 16px; background: #FFFFFF; border: 1px solid #DFDBD3; border-radius: 12px; box-shadow: 0 6px 20px rgba(30,29,27,.07)">
+            <span style="width: 32px; height: 32px; border-radius: 999px; background: #FBF0DA; color: #9A5F0E; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>
+            </span>
+            <span style="display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0">
+              <span style="font-size: 14px; font-weight: 800; color: #1E1D1B">Solicitação enviada — aguardando aprovação</span>
+              <span style="font-size: 13px; color: #5B5852; line-height: 20px">Sex, 23/10 · 14:00 – 18:00 · Congresso/curso. Você será avisada aqui e no sino quando a administração responder.</span>
+            </span>
+            <button type="button" aria-label="Fechar aviso" onClick="{{onCloseToast}}" style="width: 32px; height: 32px; border: 0; border-radius: 8px; background: transparent; color: #5B5852; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; padding: 0; flex-shrink: 0">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+            </button>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- Modal: solicitar bloqueio de horário (overlay simulado) -->
+      <sc-if value="{{isForm}}" hint-placeholder-val="{{ false }}">
+        <section aria-label="Solicitar bloqueio de horário" style="display: flex; flex-direction: column; gap: 10px">
+          <span style="font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: #8F6425">Fluxo · Solicitar bloqueio de horário</span>
+          <div style="background: rgba(30,29,27,.45); border-radius: 16px; padding: 40px 16px; display: flex; justify-content: center">
+            <div role="dialog" aria-modal="true" aria-labelledby="sb-title" style="width: 100%; max-width: 640px; box-sizing: border-box; background: #FFFFFF; border-radius: 16px; box-shadow: 0 18px 50px rgba(30,29,27,.14); display: flex; flex-direction: column">
+              <div style="display: flex; align-items: flex-start; gap: 12px; padding: 20px 24px; border-bottom: 1px solid #ECE9E3">
+                <div style="display: flex; flex-direction: column; gap: 4px; flex: 1">
+                  <h3 id="sb-title" style="margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 24px; line-height: 1.15">Solicitar bloqueio de horário</h3>
+                  <span style="font-size: 13px; color: #5B5852">Sua agenda · Sala 1 · Odontologia</span>
+                </div>
+                <button type="button" aria-label="Fechar" onClick="{{onCancelReq}}" style="width: 36px; height: 36px; border: 0; border-radius: 8px; background: transparent; color: #43413C; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; padding: 0">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+                </button>
+              </div>
+              <div style="padding: 20px 24px; display: flex; flex-direction: column; gap: 16px">
+                <fieldset style="margin: 0; padding: 0; border: 0; display: flex; flex-direction: column; gap: 10px">
+                  <legend style="padding: 0; margin-bottom: 10px; font-size: 13px; font-weight: 700; color: #1E1D1B">Período</legend>
+                  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(130px, 100%), 1fr)); gap: 12px">
+                    <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #43413C">Data de início
+                      <input type="date" value="2026-10-23" style="height: 40px; box-sizing: border-box; padding: 0 10px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 600 14px Manrope, sans-serif; color: #1E1D1B">
+                    </label>
+                    <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #43413C">Data de fim
+                      <input type="date" value="2026-10-23" style="height: 40px; box-sizing: border-box; padding: 0 10px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 600 14px Manrope, sans-serif; color: #1E1D1B">
+                    </label>
+                    <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #43413C">Das
+                      <input type="time" value="14:00" step="900" style="height: 40px; box-sizing: border-box; padding: 0 10px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 600 14px Manrope, sans-serif; color: #1E1D1B">
+                    </label>
+                    <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #43413C">Até
+                      <input type="time" value="18:00" step="900" style="height: 40px; box-sizing: border-box; padding: 0 10px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 600 14px Manrope, sans-serif; color: #1E1D1B">
+                    </label>
+                  </div>
+                  <label style="display: inline-flex; align-items: center; gap: 8px; min-height: 32px; font-size: 13px; font-weight: 600; color: #43413C">
+                    <input type="checkbox" style="width: 18px; height: 18px; margin: 0; accent-color: #8F6425">
+                    Dia inteiro
+                  </label>
+                </fieldset>
+                <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #43413C">Motivo
+                  <span style="position: relative; display: flex; align-items: center">
+                    <select style="appearance: none; -webkit-appearance: none; height: 40px; width: 100%; box-sizing: border-box; padding: 0 36px 0 12px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 500 14px Manrope, sans-serif; color: #1E1D1B">
+                      <option selected>Congresso/curso</option>
+                      <option>Compromisso pessoal</option>
+                      <option>Férias</option>
+                      <option>Outro</option>
+                    </select>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5B5852" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="position: absolute; right: 12px; pointer-events: none"><path d="m6 9 6 6 6-6"></path></svg>
+                  </span>
+                </label>
+                <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #43413C">Observação <span style="font-weight: 500; color: #77736B">(opcional, visível para a administração)</span>
+                  <textarea rows="2" style="width: 100%; box-sizing: border-box; padding: 10px 12px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 500 14px/22px Manrope, sans-serif; color: #1E1D1B; resize: vertical">Curso de atualização em alinhadores ortodônticos em Passo Fundo, saída às 13:30.</textarea>
+                </label>
+                <div role="alert" style="display: flex; flex-direction: column; gap: 10px; padding: 12px 14px; border-radius: 10px; background: #FBF0DA; color: #9A5F0E">
+                  <span style="display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 800">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>
+                    Conflito detectado: 2 consultas agendadas neste período
+                  </span>
+                  <sc-for list="{{conflicts}}" as="cf" hint-placeholder-count="2">
+                    <span style="display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 8px; background: #FFFFFF; color: #2E2C29; font-size: 13px">
+                      <span style="font-weight: 800; font-variant-numeric: tabular-nums">{{cf.time}}</span>
+                      <span style="font-weight: 700; flex: 1; min-width: 0">{{cf.patient}} <span style="font-weight: 500; color: #5B5852">· {{cf.service}}</span></span>
+                      <span style="display: inline-flex; align-items: center; gap: 5px; height: 22px; padding: 0 8px; border-radius: 999px; background: {{cf.stBg}}; color: {{cf.stFg}}; font-size: 11px; font-weight: 700">
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{cf.d1}}"></path><path d="{{cf.d2}}"></path></svg>
+                        {{cf.status}}
+                      </span>
+                    </span>
+                  </sc-for>
+                </div>
+                <div style="display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px; border-radius: 10px; background: #E5EEF6; color: #2D5F88; font-size: 13px; font-weight: 600; line-height: 20px">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0; margin-top: 2px"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
+                  A solicitação será analisada pela administração. Consultas já agendadas no período serão tratadas pela recepção.
+                </div>
+              </div>
+              <div style="display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px; padding: 16px 24px; border-top: 1px solid #ECE9E3">
+                <button type="button" onClick="{{onCancelReq}}" style="height: 40px; padding: 0 18px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; color: #2E2C29; font: 700 14px Manrope, sans-serif; cursor: pointer">Cancelar</button>
+                <button type="button" onClick="{{onSend}}" style="display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 18px; border: 0; border-radius: 8px; background: #8F6425; color: #FFFFFF; font: 700 14px Manrope, sans-serif; cursor: pointer">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"></path><path d="m21.854 2.147-10.94 10.939"></path></svg>
+                  Enviar solicitação
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </sc-if>
+
+      <!-- Agenda + painel de detalhes -->
+      <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start">
+        <section aria-label="{{calAria}}" style="flex: 2 1 600px; min-width: 0; background: #FFFFFF; border: 1px solid #DFDBD3; border-radius: 12px; box-shadow: 0 1px 2px rgba(30,29,27,.06); overflow: hidden">
+
+          <!-- VISÃO DIA -->
+          <sc-if value="{{isDay}}" hint-placeholder-val="{{ true }}">
+            <div style="display: flex; flex-wrap: wrap; gap: 16px; padding: 16px">
+              <div style="flex: 3 1 360px; min-width: 0; display: flex; flex-direction: column; gap: 12px">
+                <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px">
+                  <span style="width: 40px; height: 40px; border-radius: 999px; background: {{dayNumBg}}; color: {{dayNumFg}}; display: inline-flex; align-items: center; justify-content: center; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 700; font-size: 22px">{{dayNum}}</span>
+                  <span style="display: flex; flex-direction: column; margin-right: auto">
+                    <span style="font-size: 15px; font-weight: 800">{{dayTitle}}</span>
+                    <span style="font-size: 12px; font-weight: 600; color: #5B5852">{{daySub}}</span>
+                  </span>
+                  <span style="display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; background: #FBF6EC; color: #6F4D1D; font-size: 12px; font-weight: 700">
+                    <span aria-hidden="true" style="width: 7px; height: 7px; border-radius: 999px; background: #B5832F"></span>
+                    Odontologia · Ortodontia
+                  </span>
+                </div>
+                <div style="position: relative; display: flex; height: {{dayGridH}}; margin-top: 6px">
+                  <div aria-hidden="true" style="position: absolute; left: 56px; right: 0; top: 0; height: {{dayGridH}}; display: flex; flex-direction: column; pointer-events: none">
+                    <sc-for list="{{dayRows}}" as="r" hint-placeholder-count="20">
+                      <div style="height: {{r.h}}; box-sizing: border-box; border-top: {{r.border}}"></div>
+                    </sc-for>
+                  </div>
+                  <div aria-hidden="true" style="position: relative; width: 56px; flex-shrink: 0">
+                    <sc-for list="{{dayHours}}" as="h" hint-placeholder-count="11">
+                      <span style="position: absolute; top: {{h.top}}; right: 10px; font-size: 11px; font-weight: 700; color: #77736B; font-variant-numeric: tabular-nums">{{h.label}}</span>
+                    </sc-for>
+                    <sc-if value="{{dayIsToday}}" hint-placeholder-val="{{ true }}">
+                      <span style="position: absolute; top: {{dayNowLabelTop}}; right: 2px; height: 18px; padding: 0 6px; border-radius: 999px; background: #8F6425; color: #FFFFFF; font-size: 11px; font-weight: 800; display: inline-flex; align-items: center; font-variant-numeric: tabular-nums">10:24</span>
+                    </sc-if>
+                  </div>
+                  <div style="position: relative; flex: 1; min-width: 0; height: {{dayGridH}}; border-left: 1px solid #ECE9E3">
+                    <sc-for list="{{dayBlocks}}" as="b" hint-placeholder-count="1">
+                      <div style="position: absolute; top: {{b.top}}; height: {{b.height}}; left: 0; right: 0; box-sizing: border-box; padding: 8px 12px; background: repeating-linear-gradient(135deg, #F5F3EF 0 6px, #ECE9E3 6px 7px); display: flex; align-items: flex-start; gap: 6px; font-size: 12px; font-weight: 700; color: #5B5852; overflow: hidden">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0; margin-top: 1px"><path d="{{b.d1}}"></path><path d="{{b.d2}}"></path></svg>
+                        <span>{{b.label}} · {{b.range}}</span>
+                      </div>
+                    </sc-for>
+                    <sc-for list="{{dayPending}}" as="p" hint-placeholder-count="1">
+                      <div style="position: absolute; top: {{p.top}}; height: {{p.height}}; left: 0; right: 0; box-sizing: border-box; padding: 6px 10px; border: 1.5px dashed #9A5F0E; background: repeating-linear-gradient(135deg, #FBF0DA 0 6px, #F5E9D0 6px 8px); z-index: 1">
+                        <span style="display: inline-flex; align-items: center; gap: 5px; height: 22px; padding: 0 8px; border-radius: 999px; background: #FFFFFF; color: #9A5F0E; font-size: 11px; font-weight: 800">
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>
+                          Aguardando aprovação · {{p.label}}
+                        </span>
+                      </div>
+                    </sc-for>
+                    <sc-for list="{{dayFree}}" as="f" hint-placeholder-count="3">
+                      <div aria-label="{{f.aria}}" style="position: absolute; top: {{f.top}}; height: {{f.height}}; left: 6px; right: 6px; box-sizing: border-box; border: 1.5px dashed #C7C2B9; border-radius: 8px; background: #FFFFFF; color: #5B5852; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 6px; z-index: 1; font-variant-numeric: tabular-nums">{{f.label}}</div>
+                    </sc-for>
+                    <sc-for list="{{dayAppts}}" as="a" hint-placeholder-count="7">
+                      <div style="position: absolute; top: {{a.top}}; height: {{a.height}}; left: 6px; right: 6px; z-index: {{a.z}}">
+                        <button type="button" aria-pressed="{{a.selStr}}" aria-label="{{a.aria}}" onClick="{{a.onSel}}" style="width: 100%; height: 100%; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; gap: 3px; padding: 5px 12px; border: 1px solid {{a.border}}; border-radius: 10px; background: {{a.bg}}; box-shadow: {{a.shadow}}; overflow: hidden; text-align: left; cursor: pointer; opacity: {{a.opacity}}; font-family: Manrope, sans-serif; color: #1E1D1B">
+                          <span style="display: flex; align-items: center; gap: 8px; min-width: 0; width: 100%">
+                            <span style="font-size: 12px; font-weight: 800; color: #43413C; white-space: nowrap; font-variant-numeric: tabular-nums">{{a.range}}</span>
+                            <sc-if value="{{a.tiny}}" hint-placeholder-val="{{ false }}">
+                              <span style="flex: 1; min-width: 0; font-size: 13px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-decoration: {{a.deco}}">{{a.patient}} <span style="font-weight: 600; color: #5B5852">· {{a.service}}</span></span>
+                            </sc-if>
+                            <sc-if value="{{a.notTiny}}" hint-placeholder-val="{{ true }}">
+                              <span style="flex: 1; min-width: 0; font-size: 12px; font-weight: 600; color: #77736B; white-space: nowrap">{{a.dur}}</span>
+                            </sc-if>
+                            <span style="display: inline-flex; align-items: center; gap: 5px; height: 20px; padding: 0 8px; border-radius: 999px; background: {{a.stBg}}; color: {{a.stFg}}; font-size: 11px; font-weight: 700; white-space: nowrap; flex-shrink: 0">
+                              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{a.d1}}"></path><path d="{{a.d2}}"></path></svg>
+                              {{a.status}}
+                            </span>
+                          </span>
+                          <sc-if value="{{a.notTiny}}" hint-placeholder-val="{{ true }}">
+                            <span style="display: block; width: 100%; font-size: 14px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-decoration: {{a.deco}}">{{a.patient}} <span style="font-weight: 600; color: #5B5852">· {{a.service}}</span></span>
+                          </sc-if>
+                          <sc-if value="{{a.dayMeta}}" hint-placeholder-val="{{ false }}">
+                            <span style="display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: #5B5852; white-space: nowrap; overflow: hidden">
+                              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0"><path d="M13 4h3a2 2 0 0 1 2 2v14"></path><path d="M2 20h3"></path><path d="M13 20h9"></path><path d="M10 12v.01"></path><path d="M13 4.562v16.157a1 1 0 0 1-1.242.97L5 20V5.562a2 2 0 0 1 1.515-1.94l4-1A2 2 0 0 1 13 4.561Z"></path></svg>
+                              Sala 1 · Odontologia
+                              <sc-if value="{{a.hasAlert}}" hint-placeholder-val="{{ false }}">
+                                <span style="display: inline-flex; align-items: center; gap: 4px; color: #9A5F0E; font-weight: 700">
+                                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>
+                                  {{a.alertShort}}
+                                </span>
+                              </sc-if>
+                            </span>
+                          </sc-if>
+                        </button>
+                      </div>
+                    </sc-for>
+                    <sc-if value="{{dayIsToday}}" hint-placeholder-val="{{ true }}">
+                      <div aria-hidden="true" style="position: absolute; left: 0; right: 0; top: {{dayNowTop}}; height: 2px; background: #B5832F; z-index: 8; pointer-events: none">
+                        <span style="position: absolute; left: -6px; top: -4px; width: 10px; height: 10px; border-radius: 999px; background: #B5832F; box-shadow: 0 0 0 2px #FFFFFF"></span>
+                      </div>
+                    </sc-if>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Resumo do dia -->
+              <aside aria-label="Resumo do dia" style="flex: 1 1 220px; min-width: 0; display: flex; flex-direction: column; gap: 16px; padding: 16px; border-radius: 12px; background: #FAF8F4; border: 1px solid #ECE9E3; align-self: flex-start">
+                <div style="display: flex; flex-direction: column; gap: 2px">
+                  <span style="font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: #77736B">Resumo do dia</span>
+                  <span style="font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 22px; line-height: 1.15">{{dayShort}}</span>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+                  <sc-for list="{{daySum}}" as="s" hint-placeholder-count="4">
+                    <div style="display: flex; flex-direction: column; gap: 2px; padding: 10px 12px; border-radius: 10px; background: #FFFFFF; border: 1px solid #ECE9E3">
+                      <span style="font-size: 11px; font-weight: 700; color: #5B5852">{{s.label}}</span>
+                      <span style="font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 30px; line-height: 1">{{s.value}}</span>
+                      <span style="font-size: 11px; font-weight: 600; color: #77736B">{{s.sub}}</span>
+                    </div>
+                  </sc-for>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 6px">
+                  <span style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; color: #43413C"><span>Ocupação do dia</span><span style="font-variant-numeric: tabular-nums">{{dayOcc}}</span></span>
+                  <div role="img" aria-label="{{dayOccAria}}" style="height: 8px; border-radius: 999px; background: #ECE9E3; overflow: hidden"><div style="width: {{dayOcc}}; height: 100%; border-radius: 999px; background: #B5832F"></div></div>
+                </div>
+                <sc-if value="{{hasNext}}" hint-placeholder-val="{{ true }}">
+                  <div style="display: flex; flex-direction: column; gap: 4px; padding: 12px; border-radius: 10px; background: #FFFFFF; border: 1px solid #EBD4A6">
+                    <span style="font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: #8F6425">{{nextOver}}</span>
+                    <span style="font-size: 14px; font-weight: 800">{{nextTime}} · {{nextPatient}}</span>
+                    <span style="font-size: 12px; font-weight: 600; color: #5B5852">{{nextService}}</span>
+                  </div>
+                </sc-if>
+                <div style="display: flex; flex-direction: column; gap: 6px">
+                  <span style="font-size: 12px; font-weight: 800; color: #43413C">Por status</span>
+                  <sc-for list="{{dayStatus}}" as="s" hint-placeholder-count="5">
+                    <span style="display: flex; align-items: center; gap: 8px; font-size: 12px">
+                      <span style="display: inline-flex; align-items: center; gap: 5px; height: 22px; padding: 0 8px; border-radius: 999px; background: {{s.bg}}; color: {{s.fg}}; font-weight: 700">
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{s.d1}}"></path><path d="{{s.d2}}"></path></svg>
+                        {{s.label}}
+                      </span>
+                      <span style="margin-left: auto; font-weight: 800; font-variant-numeric: tabular-nums">{{s.count}}</span>
+                    </span>
+                  </sc-for>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 6px">
+                  <span style="font-size: 12px; font-weight: 800; color: #43413C">Horários livres</span>
+                  <sc-for list="{{dayFreeList}}" as="f" hint-placeholder-count="3">
+                    <span style="display: flex; align-items: center; gap: 8px; height: 30px; padding: 0 10px; box-sizing: border-box; border: 1.5px dashed #C7C2B9; border-radius: 8px; background: #FFFFFF; font-size: 12px; font-weight: 700; color: #43413C; font-variant-numeric: tabular-nums">
+                      {{f.range}}<span style="margin-left: auto; font-weight: 600; color: #77736B">{{f.dur}}</span>
+                    </span>
+                  </sc-for>
+                  <span style="font-size: 12px; color: #5B5852; line-height: 18px">Encaixes nos horários livres são marcados pela recepção.</span>
+                </div>
+              </aside>
+            </div>
+          </sc-if>
+
+          <!-- VISÃO SEMANA -->
+          <sc-if value="{{isWeek}}" hint-placeholder-val="{{ false }}">
+            <div style="overflow-x: auto">
+              <div style="min-width: 760px">
+                <div style="display: flex; border-bottom: 1px solid #DFDBD3">
+                  <div style="width: 56px; flex-shrink: 0; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 10px; font-size: 11px; font-weight: 700; color: #77736B">GMT-3</div>
+                  <sc-for list="{{weekDays}}" as="d" hint-placeholder-count="6">
+                    <button type="button" aria-label="{{d.aria}}" onClick="{{d.onOpen}}" style="flex: 1 1 0; min-width: 0; display: flex; align-items: center; gap: 10px; padding: 12px 10px; border: 0; border-left: 1px solid #ECE9E3; background: {{d.headBg}}; box-shadow: inset 0 -2px 0 {{d.headLine}}; cursor: pointer; text-align: left; font-family: Manrope, sans-serif">
+                      <span style="width: 36px; height: 36px; border-radius: 999px; background: {{d.numBg}}; color: {{d.numFg}}; display: inline-flex; align-items: center; justify-content: center; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 700; font-size: 21px; flex-shrink: 0">{{d.num}}</span>
+                      <span style="display: flex; flex-direction: column; min-width: 0">
+                        <span style="font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: {{d.dowFg}}">{{d.dow}}</span>
+                        <span style="font-size: 12px; font-weight: 600; color: #5B5852; white-space: nowrap">{{d.countLabel}}</span>
+                      </span>
+                    </button>
+                  </sc-for>
+                </div>
+                <div style="position: relative; display: flex; height: {{weekGridHPad}}; padding-top: 8px">
+                  <div aria-hidden="true" style="position: absolute; left: 56px; right: 0; top: 8px; height: {{weekGridH}}; display: flex; flex-direction: column; pointer-events: none">
+                    <sc-for list="{{weekRows}}" as="r" hint-placeholder-count="20">
+                      <div style="height: {{r.h}}; box-sizing: border-box; border-top: {{r.border}}"></div>
+                    </sc-for>
+                  </div>
+                  <div aria-hidden="true" style="position: relative; width: 56px; flex-shrink: 0">
+                    <sc-for list="{{weekHours}}" as="h" hint-placeholder-count="11">
+                      <span style="position: absolute; top: {{h.top}}; right: 10px; font-size: 11px; font-weight: 700; color: #77736B; font-variant-numeric: tabular-nums">{{h.label}}</span>
+                    </sc-for>
+                    <span style="position: absolute; top: {{weekNowLabelTop}}; right: 2px; height: 18px; padding: 0 6px; border-radius: 999px; background: #8F6425; color: #FFFFFF; font-size: 11px; font-weight: 800; display: inline-flex; align-items: center; font-variant-numeric: tabular-nums">10:24</span>
+                  </div>
+                  <sc-for list="{{weekDays}}" as="d" hint-placeholder-count="6">
+                    <div style="position: relative; flex: 1 1 0; min-width: 0; height: {{weekGridH}}; border-left: 1px solid #ECE9E3; background: {{d.colBg}}">
+                      <sc-for list="{{d.blocks}}" as="b" hint-placeholder-count="1">
+                        <div style="position: absolute; top: {{b.top}}; height: {{b.height}}; left: 0; right: 0; box-sizing: border-box; padding: 6px 8px; background: repeating-linear-gradient(135deg, #F5F3EF 0 6px, #ECE9E3 6px 7px); display: flex; align-items: flex-start; gap: 5px; font-size: 11px; font-weight: 700; color: #5B5852; overflow: hidden">
+                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0; margin-top: 1px"><path d="{{b.d1}}"></path><path d="{{b.d2}}"></path></svg>
+                          <span>{{b.label}}</span>
+                        </div>
+                      </sc-for>
+                      <sc-for list="{{d.pending}}" as="p" hint-placeholder-count="1">
+                        <div style="position: absolute; top: {{p.top}}; height: {{p.height}}; left: 0; right: 0; box-sizing: border-box; padding: 4px; border: 1.5px dashed #9A5F0E; background: repeating-linear-gradient(135deg, #FBF0DA 0 6px, #F5E9D0 6px 8px); z-index: 1">
+                          <span style="display: inline-flex; align-items: center; gap: 4px; height: 20px; padding: 0 6px; border-radius: 999px; background: #FFFFFF; color: #9A5F0E; font-size: 10px; font-weight: 800; white-space: nowrap">
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>
+                            Aguardando aprovação
+                          </span>
+                        </div>
+                      </sc-for>
+                      <sc-for list="{{d.free}}" as="f" hint-placeholder-count="2">
+                        <div aria-label="{{f.aria}}" style="position: absolute; top: {{f.top}}; height: {{f.height}}; left: 4px; right: 4px; box-sizing: border-box; border: 1.5px dashed #C7C2B9; border-radius: 8px; background: #FFFFFF; color: #5B5852; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; z-index: 1">{{f.label}}</div>
+                      </sc-for>
+                      <sc-for list="{{d.appts}}" as="a" hint-placeholder-count="5">
+                        <div style="position: absolute; top: {{a.top}}; height: {{a.height}}; left: 4px; right: 4px; z-index: {{a.z}}">
+                          <button type="button" aria-pressed="{{a.selStr}}" aria-label="{{a.aria}}" onClick="{{a.onSel}}" style="width: 100%; height: 100%; box-sizing: border-box; display: flex; flex-direction: column; gap: 1px; padding: 4px 7px; border: 1px solid {{a.border}}; border-radius: 8px; background: {{a.bg}}; box-shadow: {{a.shadow}}, inset 0 3px 0 {{a.stFg}}; overflow: hidden; text-align: left; cursor: pointer; opacity: {{a.opacity}}; font-family: Manrope, sans-serif; color: #1E1D1B">
+                            <span style="display: flex; align-items: center; gap: 4px; min-width: 0; width: 100%; font-size: 11px; font-weight: 800; font-variant-numeric: tabular-nums; margin-top: 1px">
+                              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="{{a.stFg}}" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0"><path d="{{a.d1}}"></path><path d="{{a.d2}}"></path></svg>
+                              <span style="flex-shrink: 0">{{a.start}}</span>
+                              <sc-if value="{{a.tiny}}" hint-placeholder-val="{{ false }}">
+                                <span style="min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-decoration: {{a.deco}}">{{a.patient}}</span>
+                              </sc-if>
+                              <sc-if value="{{a.notTiny}}" hint-placeholder-val="{{ true }}">
+                                <span style="min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: {{a.stFg}}">{{a.status}}</span>
+                              </sc-if>
+                            </span>
+                            <sc-if value="{{a.notTiny}}" hint-placeholder-val="{{ true }}">
+                              <span style="display: block; width: 100%; font-size: 12px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-decoration: {{a.deco}}">{{a.patient}}</span>
+                            </sc-if>
+                            <sc-if value="{{a.showService}}" hint-placeholder-val="{{ true }}">
+                              <span style="display: block; width: 100%; font-size: 11px; font-weight: 600; color: #5B5852; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{a.service}}</span>
+                            </sc-if>
+                          </button>
+                        </div>
+                      </sc-for>
+                      <sc-if value="{{d.isToday}}" hint-placeholder-val="{{ false }}">
+                        <div aria-hidden="true" style="position: absolute; left: 0; right: 0; top: {{weekNowTop}}; height: 2px; background: #B5832F; z-index: 8; pointer-events: none">
+                          <span style="position: absolute; left: -6px; top: -4px; width: 10px; height: 10px; border-radius: 999px; background: #B5832F; box-shadow: 0 0 0 2px #FFFFFF"></span>
+                        </div>
+                      </sc-if>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </div>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px 20px; padding: 12px 20px; border-top: 1px solid #ECE9E3; font-size: 12px; font-weight: 600; color: #5B5852">
+              <span>{{weekSummary}}</span>
+              <span style="margin-left: auto">Clique em um dia para abrir a visão diária · em uma consulta para ver os detalhes</span>
+            </div>
+          </sc-if>
+
+          <!-- VISÃO MÊS -->
+          <sc-if value="{{isMonth}}" hint-placeholder-val="{{ false }}">
+            <div style="overflow-x: auto">
+              <div style="min-width: 720px">
+                <div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); border-bottom: 1px solid #DFDBD3">
+                  <sc-for list="{{monthDow}}" as="w" hint-placeholder-count="7">
+                    <span style="padding: 10px 12px; font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: #5B5852">{{w}}</span>
+                  </sc-for>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr))">
+                  <sc-for list="{{monthCells}}" as="c" hint-placeholder-count="42">
+                    <div aria-label="{{c.aria}}" style="min-height: 112px; box-sizing: border-box; padding: 8px; border-top: 1px solid #ECE9E3; border-left: {{c.borderL}}; background: {{c.bg}}; display: flex; flex-direction: column; gap: 6px; min-width: 0">
+                      <div style="display: flex; align-items: center; gap: 6px">
+                        <sc-if value="{{c.canOpen}}" hint-placeholder-val="{{ false }}">
+                          <button type="button" aria-label="{{c.openAria}}" onClick="{{c.onOpen}}" style="width: 30px; height: 30px; padding: 0; border: 1px solid {{c.numBorder}}; border-radius: 999px; background: {{c.numBg}}; color: {{c.numFg}}; display: inline-flex; align-items: center; justify-content: center; font: 800 13px Manrope, sans-serif; font-variant-numeric: tabular-nums; cursor: pointer">{{c.num}}</button>
+                        </sc-if>
+                        <sc-if value="{{c.noOpen}}" hint-placeholder-val="{{ true }}">
+                          <span style="width: 30px; height: 30px; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: {{c.numFg}}; font-variant-numeric: tabular-nums">{{c.num}}</span>
+                        </sc-if>
+                        <span style="margin-left: auto; font-size: 11px; font-weight: 700; color: #43413C; font-variant-numeric: tabular-nums; text-align: right">{{c.countLabel}}</span>
+                      </div>
+                      <sc-if value="{{c.hasBar}}" hint-placeholder-val="{{ true }}">
+                        <div role="img" aria-label="{{c.occAria}}" style="height: 6px; border-radius: 999px; background: #ECE9E3; overflow: hidden"><div style="height: 100%; width: {{c.occ}}; border-radius: 999px; background: {{c.occColor}}"></div></div>
+                        <span style="font-size: 11px; font-weight: 600; color: #5B5852">{{c.freeLabel}}</span>
+                      </sc-if>
+                      <sc-if value="{{c.hasNote}}" hint-placeholder-val="{{ false }}">
+                        <span style="display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 700; color: {{c.noteFg}}">
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0"><path d="M5 11h14a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2z"></path><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                          {{c.note}}
+                        </span>
+                      </sc-if>
+                      <sc-if value="{{c.pend}}" hint-placeholder-val="{{ false }}">
+                        <span style="display: flex; flex-direction: column; gap: 2px; padding: 4px 6px; border: 1px dashed #9A5F0E; border-radius: 6px; background: repeating-linear-gradient(135deg, #FBF0DA 0 5px, #F5E9D0 5px 7px); color: #9A5F0E; font-size: 10px; font-weight: 800">
+                          <span>Aguardando aprovação</span>
+                          <span style="font-weight: 700; color: #6F4D1D">{{c.pendLabel}}</span>
+                        </span>
+                      </sc-if>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </div>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px 20px; padding: 12px 20px; border-top: 1px solid #ECE9E3; font-size: 12px; font-weight: 600; color: #5B5852">
+              <span>{{monthSummary}}</span>
+              <span style="margin-left: auto">Barra = ocupação do dia · cinza = dias já realizados</span>
+            </div>
+          </sc-if>
+        </section>
+
+        <!-- Painel de detalhes da consulta -->
+        <sc-if value="{{hasSel}}" hint-placeholder-val="{{ true }}">
+          <aside aria-label="Detalhes da consulta" style="flex: 1 1 340px; max-width: 420px; min-width: 0; box-sizing: border-box; background: #FFFFFF; border: 1px solid #DFDBD3; border-radius: 16px; box-shadow: 0 6px 20px rgba(30,29,27,.07); display: flex; flex-direction: column">
+            <div style="display: flex; align-items: center; gap: 8px; padding: 16px 20px; border-bottom: 1px solid #ECE9E3">
+              <span style="font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: #8F6425; margin-right: auto">Detalhes da consulta</span>
+              <button type="button" aria-label="Fechar detalhes" onClick="{{onCloseSel}}" style="width: 36px; height: 36px; border: 0; border-radius: 8px; background: transparent; color: #43413C; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; padding: 0">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+              </button>
+            </div>
+            <div style="padding: 20px; display: flex; flex-direction: column; gap: 18px">
+              <div style="display: flex; align-items: center; gap: 14px">
+                <span style="width: 52px; height: 52px; border-radius: 999px; background: #F5E9D0; color: #6F4D1D; display: inline-flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 800; flex-shrink: 0; box-shadow: 0 0 0 2px #FFFFFF, 0 0 0 3.5px #DDB872">{{det.initials}}</span>
+                <span style="display: flex; flex-direction: column; gap: 3px; min-width: 0">
+                  <span style="font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 24px; line-height: 1.1">{{det.patient}}</span>
+                  <span style="display: inline-flex; flex-wrap: wrap; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: #5B5852">
+                    {{det.age}}
+                    <span aria-hidden="true">·</span>
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                    <span style="font-variant-numeric: tabular-nums">{{det.phone}}</span>
+                  </span>
+                </span>
+              </div>
+              <div style="display: flex; flex-wrap: wrap; gap: 6px">
+                <span style="display: inline-flex; align-items: center; gap: 5px; height: 24px; padding: 0 10px; border-radius: 999px; background: {{det.stBg}}; color: {{det.stFg}}; font-size: 12px; font-weight: 700">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{det.d1}}"></path><path d="{{det.d2}}"></path></svg>
+                  {{det.status}}
+                </span>
+                <span style="display: inline-flex; align-items: center; gap: 6px; height: 24px; padding: 0 10px; border-radius: 999px; background: #F5F3EF; color: #43413C; font-size: 12px; font-weight: 700"><span aria-hidden="true" style="width: 7px; height: 7px; border-radius: 999px; background: #B5832F"></span>Odontologia</span>
+              </div>
+              <dl style="margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 10px 16px; font-size: 13px">
+                <dt style="color: #77736B; font-weight: 600">Serviço</dt><dd style="margin: 0; font-weight: 700">{{det.service}}</dd>
+                <dt style="color: #77736B; font-weight: 600">Data</dt><dd style="margin: 0; font-weight: 700">{{det.date}}</dd>
+                <dt style="color: #77736B; font-weight: 600">Horário</dt><dd style="margin: 0; font-weight: 700; font-variant-numeric: tabular-nums">{{det.time}}</dd>
+                <dt style="color: #77736B; font-weight: 600">Sala</dt><dd style="margin: 0; font-weight: 700">Sala 1 · Odontologia</dd>
+                <dt style="color: #77736B; font-weight: 600">Profissional</dt><dd style="margin: 0; font-weight: 700">Você · Dra. Lauren Bertocchi</dd>
+              </dl>
+              <sc-if value="{{det.hasAlert}}" hint-placeholder-val="{{ true }}">
+                <div style="display: flex; align-items: flex-start; gap: 8px; padding: 10px 12px; border-radius: 10px; background: #FBF0DA; color: #9A5F0E; font-size: 13px; font-weight: 700">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0; margin-top: 1px"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>
+                  <span>Alerta de atendimento: {{det.alert}}</span>
+                </div>
+              </sc-if>
+              <div style="display: flex; flex-direction: column; gap: 6px; padding: 12px 14px; border-radius: 10px; background: #F5F3EF">
+                <span style="font-size: 12px; font-weight: 800; color: #43413C">Observações administrativas</span>
+                <span style="font-size: 13px; line-height: 20px; color: #2E2C29">{{det.obs}}</span>
+                <span style="font-size: 11px; font-weight: 600; color: #77736B">Registrada pela recepção · Juliana P.</span>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 8px">
+                <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 800; color: #1E1D1B">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#77736B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path><path d="M12 7v5l4 2"></path></svg>
+                  Histórico de consultas com você
+                </span>
+                <sc-for list="{{det.history}}" as="h" hint-placeholder-count="3">
+                  <span style="display: flex; align-items: center; gap: 10px; min-height: 40px; padding: 0 2px; border-bottom: 1px solid #ECE9E3; font-size: 13px">
+                    <span style="font-weight: 800; font-variant-numeric: tabular-nums; color: #43413C; width: 78px; flex-shrink: 0">{{h.date}}</span>
+                    <span style="flex: 1; min-width: 0; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{h.service}}</span>
+                    <span style="display: inline-flex; align-items: center; gap: 4px; height: 22px; padding: 0 8px; border-radius: 999px; background: {{h.bg}}; color: {{h.fg}}; font-size: 11px; font-weight: 700; flex-shrink: 0">
+                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{h.d1}}"></path><path d="{{h.d2}}"></path></svg>
+                      {{h.status}}
+                    </span>
+                  </span>
+                </sc-for>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 10px">
+                <sc-if value="{{det.startOn}}" hint-placeholder-val="{{ true }}">
+                  <a href="PortalAtendimentos.dc.html" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; border-radius: 8px; background: #8F6425; color: #FFFFFF; font: 700 14px Manrope, sans-serif; text-decoration: none">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg>
+                    {{det.startLabel}}
+                  </a>
+                </sc-if>
+                <sc-if value="{{det.startOff}}" hint-placeholder-val="{{ false }}">
+                  <button type="button" disabled aria-describedby="start-off" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; border: 1px solid #DFDBD3; border-radius: 8px; background: #F5F3EF; color: #77736B; font: 700 14px Manrope, sans-serif; cursor: not-allowed">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 11h14a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2z"></path><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                    Iniciar atendimento
+                  </button>
+                  <span id="start-off" style="font-size: 12px; font-weight: 600; color: #5B5852; line-height: 18px">{{det.offReason}}</span>
+                </sc-if>
+                <a href="PortalPacientes.dc.html" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; box-sizing: border-box; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; color: #2E2C29; font: 700 14px Manrope, sans-serif; text-decoration: none">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 20a6 6 0 0 0-12 0"></path><circle cx="12" cy="10" r="4"></circle><circle cx="12" cy="12" r="10"></circle></svg>
+                  Ver paciente
+                </a>
+              </div>
+              <span style="display: inline-flex; align-items: flex-start; gap: 6px; font-size: 12px; font-weight: 600; color: #77736B; line-height: 18px">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0; margin-top: 2px"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path></svg>
+                Dados mínimos do paciente, sem CPF, endereço ou informações financeiras.
+              </span>
+            </div>
+          </aside>
+        </sc-if>
+      </div>
+
+      <!-- Minhas solicitações -->
+      <section aria-labelledby="ms-title" style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start">
+        <div style="flex: 2 1 560px; min-width: 0; background: #FFFFFF; border: 1px solid #DFDBD3; border-radius: 12px; box-shadow: 0 1px 2px rgba(30,29,27,.06); padding: 20px 24px; display: flex; flex-direction: column; gap: 4px">
+          <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin-bottom: 8px">
+            <h3 id="ms-title" style="margin: 0 auto 0 0; font-size: 15px; font-weight: 700">Minhas solicitações</h3>
+            <span style="display: inline-flex; align-items: center; gap: 6px; height: 24px; padding: 0 10px; border-radius: 999px; background: #F5F3EF; color: #43413C; font-size: 12px; font-weight: 700">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#2E7351" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg>
+              Somente seus registros
+            </span>
+            <span style="font-size: 12px; font-weight: 600; color: #77736B">Bloqueios e alterações de horário · aprovados pela administração</span>
+          </div>
+          <sc-for list="{{reqs}}" as="r" hint-placeholder-count="3">
+            <div style="display: flex; flex-wrap: wrap; align-items: flex-start; gap: 10px 14px; padding: 14px 0; border-top: 1px solid #ECE9E3">
+              <span style="width: 36px; height: 36px; border-radius: 10px; background: {{r.bg}}; color: {{r.fg}}; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M8 2v4"></path><path d="M16 2v4"></path><path d="M3 10h18"></path><path d="m14 14-4 4"></path><path d="m10 14 4 4"></path></svg>
+              </span>
+              <div style="flex: 1 1 260px; min-width: 0; display: flex; flex-direction: column; gap: 2px">
+                <span style="font-size: 14px; font-weight: 800; font-variant-numeric: tabular-nums">{{r.period}}</span>
+                <span style="font-size: 13px; font-weight: 600; color: #5B5852">{{r.reason}} · {{r.meta}}</span>
+                <sc-if value="{{r.hasNote}}" hint-placeholder-val="{{ false }}">
+                  <span style="margin-top: 6px; padding: 8px 10px; border-radius: 8px; background: {{r.noteBg}}; color: {{r.noteFg}}; font-size: 12px; font-weight: 600; line-height: 18px">{{r.note}}</span>
+                </sc-if>
+              </div>
+              <span style="display: inline-flex; align-items: center; gap: 5px; height: 24px; padding: 0 10px; border-radius: 999px; background: {{r.bg}}; color: {{r.fg}}; font-size: 12px; font-weight: 700; flex-shrink: 0">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{r.d1}}"></path><path d="{{r.d2}}"></path></svg>
+                {{r.label}}
+              </span>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="flex: 1 1 300px; min-width: 0; background: #FFFFFF; border: 1px solid #DFDBD3; border-radius: 12px; box-shadow: 0 1px 2px rgba(30,29,27,.06); padding: 20px 24px; display: flex; flex-direction: column; gap: 12px">
+          <span style="font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: #77736B">Permissão desativada</span>
+          <h3 style="margin: 0; font-size: 15px; font-weight: 700">Disponibilidade semanal</h3>
+          <span style="font-size: 13px; line-height: 20px; color: #43413C">Seg a Sex 08:00 – 18:00 · Sáb 08:00 – 12:00 · intervalo 12:00 – 13:00</span>
+          <button type="button" disabled aria-describedby="disp-ajuda" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; padding: 0 16px; border: 1px solid #DFDBD3; border-radius: 8px; background: #F5F3EF; color: #77736B; font: 700 14px Manrope, sans-serif; cursor: not-allowed">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 11h14a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2z"></path><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+            Solicitar alteração de disponibilidade
+          </button>
+          <span id="disp-ajuda" style="display: flex; align-items: flex-start; gap: 8px; padding: 10px 12px; border-radius: 8px; background: #F5F3EF; font-size: 12px; font-weight: 600; line-height: 18px; color: #43413C">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2D5F88" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0; margin-top: 2px"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
+            A administração desativou a solicitação de alteração de disponibilidade para o seu perfil. Para ajustes permanentes, fale com Camila S. (Administradora).
+          </span>
+          <span style="font-size: 11px; font-weight: 600; color: #77736B; line-height: 16px">Ocultar um botão não é a proteção: cada ação é validada no servidor pelo seu perfil e pelo seu cadastro profissional.</span>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2000}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { view: 'dia', dayIdx: 0, selected: 'a1', request: 'none', hasSent: false, toast: true, stHide: {}, quick: 'hoje' };
+  }
+  renderVals() {
+    const S = this.state || {};
+    const view = S.view || 'dia';
+    const dayIdx = Math.max(0, Math.min(5, S.dayIdx ?? 0));
+    const selected = S.selected ?? '';
+    const request = S.request || 'none';
+    const sent = request === 'sent' || !!S.hasSent;
+    const stHide = S.stHide || {};
+    const quick = S.quick ?? 'hoje';
+    const START = 480, END = 1080, NOW = 624;
+    const HD = 80, HW = 72;
+
+    const CIRCLE = 'M2 12a10 10 0 1 0 20 0a10 10 0 1 0 -20 0';
+    const ST = {
+      'Agendada': { fg: '#2D5F88', bg: '#E5EEF6', d1: CIRCLE, d2: 'M12 6v6l4 2' },
+      'Confirmada': { fg: '#2E7351', bg: '#E6F2EB', d1: CIRCLE, d2: 'm9 12 2 2 4-4' },
+      'Em atendimento': { fg: '#8F6425', bg: '#FBF6EC', d1: CIRCLE, d2: 'm10 8 6 4-6 4z' },
+      'Concluída': { fg: '#5B5852', bg: '#ECE9E3', d1: 'M18 6 7 17l-5-5', d2: 'm22 10-7.5 7.5L13 16' },
+      'Cancelada': { fg: '#A93B30', bg: '#FAE7E4', d1: CIRCLE, d2: 'm15 9-6 6M9 9l6 6' },
+      'Faltou': { fg: '#9A5F0E', bg: '#FBF0DA', d1: 'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M5 7a4 4 0 1 0 8 0a4 4 0 1 0 -8 0', d2: 'm17 8 5 5m0-5-5 5' },
+      'Reagendada': { fg: '#5B4E8C', bg: '#EEEBF6', d1: 'M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8', d2: 'M3 3v5h5' }
+    };
+    const STATUSES = ['Agendada', 'Confirmada', 'Em atendimento', 'Concluída', 'Cancelada', 'Faltou', 'Reagendada'];
+    const ICON = {
+      food: ['M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2M7 2v20', 'M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7'],
+      lock: ['M5 11h14a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2z', 'M7 11V7a5 5 0 0 1 10 0v4']
+    };
+    const pad = n => String(n).padStart(2, '0');
+    const toMin = t => parseInt(t.slice(0, 2), 10) * 60 + parseInt(t.slice(3), 10);
+    const fmt = m => pad(Math.floor(m / 60)) + ':' + pad(m % 60);
+    const hm = m => Math.floor(m / 60) + 'h' + (m % 60 ? pad(m % 60) : '');
+
+    const DAYS = [
+      ['Seg', 19, 'Segunda, 19 de outubro', 'Seg, 19/10/2026'],
+      ['Ter', 20, 'Terça, 20 de outubro', 'Ter, 20/10/2026'],
+      ['Qua', 21, 'Quarta, 21 de outubro', 'Qua, 21/10/2026'],
+      ['Qui', 22, 'Quinta, 22 de outubro', 'Qui, 22/10/2026'],
+      ['Sex', 23, 'Sexta, 23 de outubro', 'Sex, 23/10/2026'],
+      ['Sáb', 24, 'Sábado, 24 de outubro', 'Sáb, 24/10/2026']
+    ];
+    const A = [
+      ['a0', 0, '08:00', 45, 'Paulo Brum', 'Limpeza/profilaxia', 'Concluída'],
+      ['a2', 0, '08:50', 40, 'Marcos Webber', 'Consulta de retorno', 'Faltou'],
+      ['a1', 0, '09:45', 75, 'Carla Menegatti', 'Manutenção ortodôntica', 'Em atendimento'],
+      ['a3', 0, '11:15', 45, 'Fernanda Lise', 'Avaliação ortodôntica', 'Confirmada'],
+      ['a4', 0, '14:00', 60, 'Beatriz Fiorentin', 'Clareamento', 'Confirmada'],
+      ['a5', 0, '15:00', 30, 'Renato Spanholi', 'Consulta de retorno', 'Cancelada'],
+      ['a6', 0, '16:30', 45, 'Luíza Bortolini', 'Manutenção ortodôntica', 'Agendada'],
+      ['b0', 1, '08:30', 60, 'João Pedro Basso', 'Manutenção ortodôntica', 'Confirmada'],
+      ['b1', 1, '10:00', 45, 'Sofia Cavalheiro', 'Avaliação ortodôntica', 'Agendada'],
+      ['b2', 1, '11:00', 30, 'Marcos Webber', 'Consulta de retorno', 'Reagendada'],
+      ['b3', 1, '14:00', 60, 'Patrícia Golin', 'Clareamento', 'Agendada'],
+      ['b4', 1, '17:00', 60, 'Eduardo Rech', 'Limpeza/profilaxia', 'Confirmada'],
+      ['c0', 2, '09:00', 60, 'Tiago Zortéa', 'Manutenção ortodôntica', 'Confirmada'],
+      ['c1', 2, '10:30', 45, 'Renato Spanholi', 'Limpeza/profilaxia', 'Agendada'],
+      ['c2', 2, '14:00', 60, 'Paulo Brum', 'Clareamento', 'Agendada'],
+      ['c3', 2, '16:00', 45, 'Fernanda Lise', 'Consulta de retorno', 'Confirmada'],
+      ['d0', 3, '08:00', 45, 'Patrícia Golin', 'Consulta de retorno', 'Confirmada'],
+      ['d1', 3, '09:30', 60, 'Marcos Webber', 'Manutenção ortodôntica', 'Agendada'],
+      ['d2', 3, '11:00', 45, 'Eduardo Rech', 'Avaliação ortodôntica', 'Agendada'],
+      ['d3', 3, '15:00', 60, 'Sofia Cavalheiro', 'Manutenção ortodôntica', 'Agendada'],
+      ['e0', 4, '08:00', 60, 'Carla Menegatti', 'Manutenção ortodôntica', 'Confirmada'],
+      ['e1', 4, '09:30', 45, 'Beatriz Fiorentin', 'Avaliação ortodôntica', 'Agendada'],
+      ['e2', 4, '11:00', 30, 'João Pedro Basso', 'Consulta de retorno', 'Agendada'],
+      ['e3', 4, '14:30', 60, 'Luíza Bortolini', 'Clareamento', 'Agendada'],
+      ['e4', 4, '16:00', 45, 'Tiago Zortéa', 'Limpeza/profilaxia', 'Agendada'],
+      ['f0', 5, '08:00', 45, 'Renato Spanholi', 'Manutenção ortodôntica', 'Confirmada'],
+      ['f1', 5, '09:00', 60, 'Paulo Brum', 'Consulta de retorno', 'Agendada'],
+      ['f2', 5, '10:30', 45, 'Sofia Cavalheiro', 'Limpeza/profilaxia', 'Agendada']
+    ];
+    const BL = [
+      [0, '12:00', '13:00', 'Almoço', 'food'], [1, '12:00', '13:00', 'Almoço', 'food'], [2, '12:00', '13:00', 'Almoço', 'food'],
+      [2, '17:00', '18:00', 'Bloqueado · Reunião clínica', 'lock'], [3, '12:00', '13:00', 'Almoço', 'food'], [4, '12:00', '13:00', 'Almoço', 'food'],
+      [5, '12:00', '18:00', 'Fechado · sábado à tarde', 'lock']
+    ];
+    const PAT = {
+      'Carla Menegatti': [34, '2034', 'alergia a látex (informada no cadastro)', 'Alergia a látex'],
+      'João Pedro Basso': [16, '4471', 'menor de idade, comparece com a mãe (responsável)', 'Menor · responsável'],
+      'Luíza Bortolini': [27, '8812', '', ''],
+      'Eduardo Rech': [41, '1907', '', ''],
+      'Sofia Cavalheiro': [19, '6620', '', ''],
+      'Marcos Webber': [38, '3158', '', ''],
+      'Patrícia Golin': [45, '7203', 'hipertensão controlada (informada no cadastro)', 'Hipertensão'],
+      'Renato Spanholi': [52, '0946', '', ''],
+      'Beatriz Fiorentin': [23, '5581', '', ''],
+      'Tiago Zortéa': [14, '2297', 'menor de idade, comparece com o pai (responsável)', 'Menor · responsável'],
+      'Fernanda Lise': [31, '6034', '', ''],
+      'Paulo Brum': [47, '1189', '', '']
+    };
+    const OBS = {
+      'Manutenção ortodôntica': 'Ajuste mensal do aparelho fixo. Paciente prefere lembrete por WhatsApp na véspera.',
+      'Avaliação ortodôntica': 'Avaliação para início de alinhadores. A recepção pediu que traga radiografia panorâmica recente.',
+      'Clareamento': 'Sessão 2 de 3 do clareamento. Chegar 10 minutos antes para o check-in.',
+      'Limpeza/profilaxia': 'Retorno semestral. Atualização de cadastro pendente na recepção.',
+      'Consulta de retorno': 'Retorno marcado pela recepção após a última manutenção.'
+    };
+    const OBS_ST = {
+      'Cancelada': 'Cancelada pelo paciente em 16/10 via WhatsApp. Horário liberado pela recepção.',
+      'Faltou': 'Paciente não compareceu. A recepção fará contato para reagendar.',
+      'Reagendada': 'Remarcada a pedido do paciente (estava em 16/10 às 15:00).'
+    };
+    const SV = ['Manutenção ortodôntica', 'Consulta de retorno', 'Limpeza/profilaxia', 'Avaliação ortodôntica', 'Clareamento'];
+    const history = name => {
+      let h = 7; for (const ch of name) h = (h * 31 + ch.charCodeAt(0)) % 9973;
+      const d0 = 2 + h % 24;
+      const dates = [pad(d0) + '/09/2026', pad(1 + (d0 + 6) % 27) + '/08/2026', pad(1 + (d0 + 13) % 27) + '/07/2026'];
+      return dates.map((dt, k) => {
+        const status = (name === 'Marcos Webber' && k === 1) ? 'Faltou' : 'Concluída';
+        const st = ST[status];
+        return { date: dt, service: SV[(h + k * 2) % 5], status, fg: st.fg, bg: st.bg, d1: st.d1, d2: st.d2 };
+      });
+    };
+
+    const ALL = A.map(r => ({ id: r[0], day: r[1], start: r[2], dur: r[3], patient: r[4], service: r[5], status: r[6] }));
+    const pos = (s, e, H) => ({ top: Math.round((s - START) / 60 * H) + 'px', height: Math.round((e - s) / 60 * H) + 'px' });
+    const mkBlock = (b, H) => Object.assign(pos(toMin(b[1]), toMin(b[2]), H), { label: b[3], range: b[1] + ' – ' + b[2], d1: ICON[b[4]][0], d2: ICON[b[4]][1] });
+    const pendFor = (i, H) => (sent && i === 4) ? [Object.assign(pos(840, 1080, H), { label: '14:00 – 18:00 · Congresso/curso' })] : [];
+    const freeFor = i => {
+      const occ = ALL.filter(a => a.day === i).map(a => [toMin(a.start), toMin(a.start) + a.dur])
+        .concat(BL.filter(b => b[0] === i).map(b => [toMin(b[1]), toMin(b[2])]))
+        .concat(sent && i === 4 ? [[840, 1080]] : [])
+        .sort((x, y) => x[0] - y[0]);
+      const out = []; let cur = START;
+      occ.forEach(o => { if (o[0] - cur >= 30) out.push([cur, o[0]]); cur = Math.max(cur, o[1]); });
+      if (END - cur >= 30) out.push([cur, END]);
+      return out;
+    };
+    const mkFree = (f, H, long) => ({
+      top: Math.round((f[0] - START) / 60 * H + 2) + 'px', height: Math.round((f[1] - f[0]) / 60 * H - 4) + 'px',
+      label: long ? 'Livre · ' + fmt(f[0]) + ' – ' + fmt(f[1]) : 'Livre',
+      aria: 'Horário livre das ' + fmt(f[0]) + ' às ' + fmt(f[1])
+    });
+    const mkCard = (a, H) => {
+      const st = ST[a.status];
+      const s0 = toMin(a.start), s1 = s0 + a.dur;
+      const h = Math.round(a.dur / 60 * H) - 4;
+      const isSel = selected === a.id;
+      const canc = a.status === 'Cancelada';
+      const muted = canc || a.status === 'Concluída' || a.status === 'Faltou';
+      const tiny = h < 46;
+      const p = PAT[a.patient];
+      return {
+        id: a.id, patient: a.patient, service: a.service, status: a.status,
+        start: fmt(s0), range: fmt(s0) + ' – ' + fmt(s1), dur: a.dur + ' min',
+        top: (Math.round((s0 - START) / 60 * H) + 2) + 'px', height: h + 'px',
+        stFg: st.fg, stBg: st.bg, d1: st.d1, d2: st.d2,
+        bg: muted ? '#FAF8F4' : (a.status === 'Em atendimento' ? '#FFFDF8' : '#FFFFFF'),
+        border: isSel ? '#B5832F' : (a.status === 'Em atendimento' ? '#DDB872' : '#DFDBD3'),
+        shadow: isSel ? '0 0 0 3px rgba(181,131,47,.35)' : '0 1px 2px rgba(30,29,27,.06)',
+        deco: canc ? 'line-through' : 'none', opacity: canc ? '.78' : '1',
+        tiny, notTiny: !tiny, showService: h >= 64, dayMeta: h >= 70,
+        hasAlert: !!p[3], alertShort: p[3],
+        z: isSel ? 5 : 2, selStr: isSel ? 'true' : 'false',
+        aria: a.patient + ', ' + fmt(s0) + ' às ' + fmt(s1) + ', ' + a.service + ', ' + a.status + '. Abrir detalhes',
+        onSel: () => this.setState({ selected: isSel ? '' : a.id })
+      };
+    };
+
+    // ---------- SEMANA ----------
+    const weekDays = DAYS.map((d, i) => {
+      const mine = ALL.filter(a => a.day === i);
+      const n = mine.filter(a => a.status !== 'Cancelada').length;
+      const isToday = i === 0;
+      return {
+        dow: d[0], num: d[1], isToday,
+        countLabel: n + (n === 1 ? ' consulta' : ' consultas'),
+        aria: 'Abrir ' + d[2] + ', ' + n + ' consultas',
+        onOpen: () => this.setState({ view: 'dia', dayIdx: i, quick: i === 0 ? 'hoje' : (i === 1 ? 'amanha' : '') }),
+        headBg: isToday ? '#FBF6EC' : '#FFFFFF', headLine: isToday ? '#B5832F' : 'transparent',
+        numBg: isToday ? '#8F6425' : 'transparent', numFg: isToday ? '#FFFFFF' : '#1E1D1B', dowFg: isToday ? '#6F4D1D' : '#5B5852',
+        colBg: isToday ? 'rgba(251,246,236,.55)' : 'transparent',
+        appts: mine.filter(a => !stHide[a.status]).map(a => mkCard(a, HW)),
+        blocks: BL.filter(b => b[0] === i).map(b => mkBlock(b, HW)),
+        pending: pendFor(i, HW),
+        free: freeFor(i).map(f => mkFree(f, HW, false))
+      };
+    });
+    const weekActive = ALL.filter(a => a.status !== 'Cancelada').length;
+    const weekFree = DAYS.reduce((t, d, i) => t + freeFor(i).length, 0);
+
+    // ---------- DIA ----------
+    const dMine = ALL.filter(a => a.day === dayIdx);
+    const dFree = freeFor(dayIdx);
+    const dayIsToday = dayIdx === 0;
+    const cnt = s => dMine.filter(a => a.status === s).length;
+    const dActive = dMine.filter(a => a.status !== 'Cancelada');
+    const freeMin = dFree.reduce((t, f) => t + f[1] - f[0], 0);
+    const blockedMin = BL.filter(b => b[0] === dayIdx).reduce((t, b) => t + toMin(b[2]) - toMin(b[1]), 0);
+    const bookedMin = dActive.reduce((t, a) => t + a.dur, 0);
+    const dayCap = Math.max(1, 600 - blockedMin);
+    const dayOccN = Math.min(100, Math.round(bookedMin / dayCap * 100));
+    const nextA = dActive.filter(a => a.status !== 'Concluída' && a.status !== 'Faltou' && (!dayIsToday || toMin(a.start) > NOW))[0];
+    const daySum = [
+      { label: 'Consultas', value: String(dActive.length), sub: cnt('Cancelada') + (cnt('Cancelada') === 1 ? ' cancelada' : ' canceladas') },
+      { label: 'Confirmadas', value: String(cnt('Confirmada')), sub: (cnt('Agendada') + cnt('Reagendada')) + ' a confirmar' },
+      { label: 'Concluídas', value: String(cnt('Concluída')), sub: cnt('Faltou') + (cnt('Faltou') === 1 ? ' falta' : ' faltas') },
+      { label: 'Horários livres', value: String(dFree.length), sub: hm(freeMin) + ' disponíveis' }
+    ];
+
+    // ---------- MÊS ----------
+    const monthCells = [];
+    let monthCount = 0, monthFree = 0;
+    for (let i = 0; i < 42; i++) {
+      const wd = i % 7;
+      const d = i - 3;
+      const isSep = d < 1, isNov = d > 31, inOct = !isSep && !isNov;
+      const num = isSep ? 30 + d : (isNov ? d - 31 : d);
+      const nd = isNov ? d - 31 : 0;
+      let count = 0, note = '', noteFg = '#5B5852', blocked = false, closed = false, pend = false, pendLabel = '';
+      const cap = wd === 6 ? 4 : 9;
+      if (!isSep) {
+        if (wd === 0) { closed = true; note = 'Clínica fechada'; }
+        else if (inOct && d === 12) { closed = true; note = 'Feriado · N. Sra. Aparecida'; noteFg = '#9A5F0E'; }
+        else if (nd === 2) { closed = true; note = 'Feriado · Finados'; noteFg = '#9A5F0E'; }
+        else if (nd === 6 || nd === 7) { blocked = true; note = 'Bloqueado · Congresso'; noteFg = '#43413C'; }
+        else if (inOct && d >= 19 && d <= 24) count = ALL.filter(a => a.day === d - 19 && a.status !== 'Cancelada').length;
+        else if (isNov) count = 2 + (nd % 3);
+        else if (wd === 6) count = 2 + (d % 3);
+        else count = 4 + ((d * 7 + 3) % 4);
+        if (inOct && d === 29) { pend = true; pendLabel = '08:00 – 10:00 · Compromisso'; }
+        if (inOct && d === 23 && sent) { pend = true; pendLabel = '14:00 – 18:00 · Congresso'; }
+      }
+      const past = inOct && d < 19;
+      const isToday = inOct && d === 19;
+      const inWeek = inOct && d >= 19 && d <= 24;
+      const occN = Math.min(100, Math.round(count / cap * 100));
+      const free = Math.max(0, cap - count);
+      if (inOct) { monthCount += count; if (!past) monthFree += free; }
+      const dateTxt = num + (isSep ? ' de setembro' : (isNov ? ' de novembro' : ' de outubro'));
+      monthCells.push({
+        num, canOpen: inWeek, noOpen: !inWeek,
+        openAria: 'Abrir ' + dateTxt + ' na visão diária',
+        onOpen: () => this.setState({ view: 'dia', dayIdx: d - 19, quick: d === 19 ? 'hoje' : (d === 20 ? 'amanha' : '') }),
+        aria: dateTxt + (count > 0 ? ', ' + count + ' consultas' : '') + (note ? ', ' + note : '') + (pend ? ', bloqueio aguardando aprovação' : ''),
+        countLabel: count > 0 ? count + (count === 1 ? ' consulta' : ' consultas') : '',
+        hasBar: count > 0, occ: occN + '%', occAria: 'Ocupação de ' + occN + '%',
+        occColor: past ? '#9E998F' : '#B5832F',
+        freeLabel: past ? 'Realizado' : (free > 0 ? free + (free === 1 ? ' horário livre' : ' horários livres') : 'Dia completo'),
+        hasNote: note !== '', note, noteFg,
+        pend, pendLabel,
+        borderL: wd === 0 ? '0' : '1px solid #ECE9E3',
+        bg: blocked ? 'repeating-linear-gradient(135deg, #F5F3EF 0 6px, #ECE9E3 6px 7px)' : (isToday ? '#FBF6EC' : (inWeek ? '#FFFDF8' : ((isSep || closed) ? '#FAF8F4' : '#FFFFFF'))),
+        numBg: isToday ? '#8F6425' : '#FFFFFF', numFg: isToday ? '#FFFFFF' : ((isSep || isNov) ? '#77736B' : '#1E1D1B'),
+        numBorder: isToday ? '#8F6425' : '#DDB872'
+      });
+    }
+
+    // ---------- Detalhes ----------
+    const selA = ALL.find(a => a.id === selected);
+    let det = { history: [] };
+    if (selA) {
+      const p = PAT[selA.patient];
+      const st = ST[selA.status];
+      const parts = selA.patient.split(' ');
+      const s0 = toMin(selA.start);
+      const isToday = selA.day === 0;
+      const live = ['Agendada', 'Confirmada', 'Em atendimento', 'Reagendada'].indexOf(selA.status) >= 0;
+      const startOn = (isToday && live) || selA.status === 'Concluída';
+      let offReason = '';
+      if (selA.status === 'Cancelada') offReason = 'Consulta cancelada: não há atendimento a iniciar.';
+      else if (selA.status === 'Faltou') offReason = 'Paciente não compareceu. A recepção fará o reagendamento.';
+      else if (!isToday) offReason = 'Disponível no dia da consulta (' + DAYS[selA.day][3].slice(0, 10) + ').';
+      det = {
+        initials: (parts[0][0] + parts[parts.length - 1][0]).toUpperCase(),
+        patient: selA.patient, age: p[0] + ' anos', phone: '(54) 9••••-' + p[1],
+        status: selA.status, stFg: st.fg, stBg: st.bg, d1: st.d1, d2: st.d2,
+        service: selA.service, date: DAYS[selA.day][3],
+        time: fmt(s0) + ' – ' + fmt(s0 + selA.dur) + ' · ' + selA.dur + ' min',
+        hasAlert: !!p[2], alert: p[2],
+        obs: OBS_ST[selA.status] || OBS[selA.service],
+        history: history(selA.patient),
+        startOn, startOff: !startOn, offReason,
+        startLabel: selA.status === 'Em atendimento' ? 'Continuar atendimento' : (selA.status === 'Concluída' ? 'Ver atendimento' : 'Iniciar atendimento')
+      };
+    }
+
+    // ---------- Solicitações ----------
+    const RS = {
+      wait: { label: 'Aguardando aprovação', fg: '#9A5F0E', bg: '#FBF0DA', d1: CIRCLE, d2: 'M12 6v6l4 2' },
+      ok: { label: 'Aprovada', fg: '#2E7351', bg: '#E6F2EB', d1: CIRCLE, d2: 'm9 12 2 2 4-4' },
+      no: { label: 'Recusada', fg: '#A93B30', bg: '#FAE7E4', d1: CIRCLE, d2: 'm15 9-6 6M9 9l6 6' }
+    };
+    const REQ = [
+      ['Qui, 29/10/2026 · 08:00 – 10:00', 'Compromisso pessoal', 'enviada em 15/10 às 17:42', 'wait', ''],
+      ['Sex e Sáb, 06 e 07/11/2026 · dia inteiro', 'Congresso/curso', 'aprovada por Camila S. em 09/10', 'ok', 'As consultas do período foram remanejadas pela recepção.'],
+      ['Sáb, 31/10/2026 · 08:00 – 12:00', 'Outro · folga', 'recusada por Camila S. em 14/10', 'no', 'Motivo da recusa: o sábado já tem 4 consultas confirmadas. Sugestão: solicitar com pelo menos 15 dias de antecedência ou combinar a troca com a recepção.']
+    ];
+    if (sent) REQ.unshift(['Sex, 23/10/2026 · 14:00 – 18:00', 'Congresso/curso', 'enviada hoje às 10:24', 'wait', '2 consultas no período (14:30 e 16:00) serão tratadas pela recepção após a aprovação.']);
+    const reqs = REQ.map(r => {
+      const s = RS[r[3]];
+      return {
+        period: r[0], reason: r[1], meta: r[2], label: s.label, fg: s.fg, bg: s.bg, d1: s.d1, d2: s.d2,
+        hasNote: r[4] !== '', note: r[4],
+        noteBg: r[3] === 'no' ? '#FAE7E4' : '#F5F3EF', noteFg: r[3] === 'no' ? '#A93B30' : '#43413C'
+      };
+    });
+    const conflicts = ALL.filter(a => a.day === 4 && toMin(a.start) >= 840).map(a => {
+      const st = ST[a.status];
+      return { time: 'Sex 23/10 · ' + a.start, patient: a.patient, service: a.service, status: a.status, stFg: st.fg, stBg: st.bg, d1: st.d1, d2: st.d2 };
+    });
+
+    // ---------- Controles ----------
+    const VIEWS = [['dia', 'Dia'], ['semana', 'Semana'], ['mes', 'Mês']];
+    const segs = VIEWS.map(v => ({
+      label: v[1], pressed: view === v[0] ? 'true' : 'false',
+      bg: view === v[0] ? '#FFFFFF' : 'transparent', fg: view === v[0] ? '#1E1D1B' : '#5B5852',
+      shadow: view === v[0] ? '0 1px 2px rgba(30,29,27,.08)' : 'none',
+      onClick: () => this.setState({ view: v[0], quick: v[0] === 'semana' ? 'semana' : (v[0] === 'dia' ? (dayIdx === 0 ? 'hoje' : (dayIdx === 1 ? 'amanha' : '')) : '') })
+    }));
+    const QUICK = [['hoje', 'Hoje', { view: 'dia', dayIdx: 0 }], ['amanha', 'Amanhã', { view: 'dia', dayIdx: 1 }], ['semana', 'Esta semana', { view: 'semana' }]];
+    const quicks = QUICK.map(q => {
+      const on = quick === q[0];
+      return {
+        label: q[1], pressed: on ? 'true' : 'false',
+        bg: on ? '#FBF6EC' : '#FFFFFF', fg: on ? '#6F4D1D' : '#43413C', border: on ? '#DDB872' : '#DFDBD3',
+        onClick: () => this.setState(Object.assign({ quick: q[0] }, q[2]))
+      };
+    });
+    const chips = STATUSES.map(s => {
+      const on = !stHide[s];
+      const st = ST[s];
+      return {
+        label: s, pressed: on ? 'true' : 'false', count: ALL.filter(a => a.status === s).length,
+        d1: st.d1, d2: st.d2,
+        bg: on ? st.bg : '#FFFFFF', fg: on ? st.fg : '#77736B', border: on ? 'transparent' : '#DFDBD3',
+        onClick: () => this.setState({ stHide: Object.assign({}, stHide, { [s]: on }) })
+      };
+    });
+    const PERIOD = {
+      dia: [dayIsToday ? 'Hoje' : 'Semana 43 · 2026', DAYS[dayIdx][2]],
+      semana: ['Semana 43 · 2026', '19 – 24 de outubro'],
+      mes: ['2026', 'Outubro de 2026']
+    };
+    const rows = H => Array.from({ length: 20 }, (_, i) => ({ h: (H / 2) + 'px', border: i % 2 === 0 ? '1px solid #ECE9E3' : '1px dashed #F5F3EF' }));
+    const hours = H => Array.from({ length: 11 }, (_, i) => ({ label: pad(8 + i) + ':00', top: (i === 0 ? 0 : (i === 10 ? i * H - 14 : i * H - 8)) + 'px' }));
+
+    return {
+      isDay: view === 'dia', isWeek: view === 'semana', isMonth: view === 'mes',
+      calAria: view === 'dia' ? 'Minha agenda do dia' : (view === 'mes' ? 'Minha agenda do mês' : 'Minha agenda da semana'),
+      periodOver: PERIOD[view][0], periodLabel: PERIOD[view][1],
+      segs, quicks, chips,
+      dateVal: '2026-10-' + (19 + (view === 'dia' ? dayIdx : 0)),
+      onDate: e => {
+        const v = (e && e.target && e.target.value) || '';
+        const dd = parseInt(v.slice(8, 10), 10);
+        if (v.slice(0, 7) === '2026-10' && dd >= 19 && dd <= 24) this.setState({ view: 'dia', dayIdx: dd - 19, quick: dd === 19 ? 'hoje' : (dd === 20 ? 'amanha' : '') });
+      },
+      onPrev: () => { if (view === 'dia' && dayIdx > 0) this.setState({ dayIdx: dayIdx - 1, quick: dayIdx - 1 === 0 ? 'hoje' : (dayIdx - 1 === 1 ? 'amanha' : '') }); },
+      onNext: () => { if (view === 'dia' && dayIdx < 5) this.setState({ dayIdx: dayIdx + 1, quick: dayIdx + 1 === 1 ? 'amanha' : '' }); },
+      onToday: () => this.setState({ view: 'dia', dayIdx: 0, quick: 'hoje' }),
+      onRequest: () => this.setState({ request: 'form' }),
+      onCancelReq: () => this.setState({ request: sent ? 'sent' : 'none' }),
+      onSend: () => this.setState({ request: 'sent', hasSent: true, toast: true, view: 'semana', quick: 'semana' }),
+      isForm: request === 'form',
+      showToast: request === 'sent' && S.toast !== false,
+      onCloseToast: () => this.setState({ toast: false }),
+      conflicts,
+
+      dayNum: DAYS[dayIdx][1], dayTitle: DAYS[dayIdx][2],
+      daySub: dActive.length + ' consultas · ' + dFree.length + ' horários livres · Sala 1',
+      dayNumBg: dayIsToday ? '#8F6425' : '#F5F3EF', dayNumFg: dayIsToday ? '#FFFFFF' : '#1E1D1B',
+      dayGridH: (10 * HD) + 'px', dayRows: rows(HD), dayHours: hours(HD),
+      dayIsToday, dayNowTop: Math.round((NOW - START) / 60 * HD) + 'px', dayNowLabelTop: (Math.round((NOW - START) / 60 * HD) - 9) + 'px',
+      dayAppts: dMine.filter(a => !stHide[a.status]).map(a => mkCard(a, HD)),
+      dayBlocks: BL.filter(b => b[0] === dayIdx).map(b => mkBlock(b, HD)),
+      dayPending: pendFor(dayIdx, HD),
+      dayFree: dFree.map(f => mkFree(f, HD, true)),
+      dayShort: DAYS[dayIdx][3].slice(0, 10),
+      daySum, dayOcc: dayOccN + '%', dayOccAria: 'Ocupação do dia: ' + dayOccN + '%',
+      dayStatus: STATUSES.filter(s => cnt(s) > 0).map(s => ({ label: s, count: cnt(s), fg: ST[s].fg, bg: ST[s].bg, d1: ST[s].d1, d2: ST[s].d2 })),
+      hasNext: !!nextA,
+      nextOver: dayIsToday && nextA ? 'Próxima · em ' + (toMin(nextA.start) - NOW) + ' min' : 'Primeira consulta',
+      nextTime: nextA ? nextA.start : '', nextPatient: nextA ? nextA.patient : '', nextService: nextA ? nextA.service : '',
+      dayFreeList: dFree.map(f => ({ range: fmt(f[0]) + ' – ' + fmt(f[1]), dur: (f[1] - f[0]) + ' min' })),
+
+      weekDays, weekGridH: (10 * HW) + 'px', weekGridHPad: (10 * HW + 16) + 'px',
+      weekRows: rows(HW), weekHours: hours(HW),
+      weekNowTop: Math.round((NOW - START) / 60 * HW) + 'px', weekNowLabelTop: (Math.round((NOW - START) / 60 * HW) - 9) + 'px',
+      weekSummary: weekActive + ' consultas na semana · ' + weekFree + ' horários livres' + (sent ? ' · 1 bloqueio aguardando aprovação' : ''),
+
+      monthDow: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
+      monthCells,
+      monthSummary: 'Outubro: ' + monthCount + ' consultas · ' + monthFree + ' horários livres até 31/10 · ' + (sent ? '2 bloqueios' : '1 bloqueio') + ' aguardando aprovação',
+
+      hasSel: !!selA, det, onCloseSel: () => this.setState({ selected: '' }),
+      reqs
+    };
+  }
+}
+</script>
+</body>
+</html>

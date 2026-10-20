@@ -1,0 +1,86 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&family=Josefin+Sans:wght@300;400&display=swap');
+@import './tokens.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    @apply bg-ivory font-sans text-body text-graphite-900;
+    margin: 0;
+    min-height: 100vh;
+  }
+
+  /* Foco visível padrão (anel dourado). Componentes podem sobrescrever com shadow-focus. */
+  :focus-visible {
+    outline: 2px solid #B5832F;
+    outline-offset: 2px;
+  }
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  a {
+    @apply text-gold-600;
+  }
+  a:hover {
+    @apply text-gold-700;
+  }
+
+  ::selection {
+    background: #F5E9D0;
+    color: #1E1D1B;
+  }
+
+  input[type='search']::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+  }
+
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@layer utilities {
+  /* Skeleton com brilho */
+  .hm-shimmer {
+    background-color: #ECE9E3;
+    background-image: linear-gradient(90deg, #ECE9E3 0px, #F5F3EF 120px, #ECE9E3 240px);
+    background-size: 800px 100%;
+    background-repeat: no-repeat;
+    animation: shimmer 1.4s linear infinite;
+  }
+  .hm-striped {
+    background-image: repeating-linear-gradient(-45deg, #F5F3EF 0 6px, #ECE9E3 6px 12px);
+  }
+  .hm-safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -400px 0;
+  }
+  100% {
+    background-position: 400px 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

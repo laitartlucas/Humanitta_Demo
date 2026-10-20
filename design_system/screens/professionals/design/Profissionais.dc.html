@@ -1,0 +1,664 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Profissionais — Humanittá Gestão</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&amp;family=Manrope:wght@400;500;600;700;800&amp;family=Josefin+Sans:wght@300;400&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#FAF8F4}
+a{color:#8F6425}a:hover{color:#6F4D1D}
+</style>
+</helmet>
+<div style="display: flex; flex-wrap: wrap; min-height: 100vh; background: #FAF8F4; font-family: Manrope, system-ui, sans-serif; color: #1E1D1B">
+
+  <!-- SHELL:SIDEBAR START (copiar igual em todas as telas; mudar apenas o item ativo) -->
+  <aside aria-label="Menu principal" style="flex: 1 1 264px; max-width: 264px; min-width: 220px; background: #1E1D1B; color: #E9E5DD; display: flex; flex-direction: column; gap: 24px; padding: 24px 16px">
+    <a href="Dashboard.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 4px 8px; text-decoration: none; color: #F5E9D0">
+      <svg width="40" height="40" viewBox="0 0 64 64" role="img" aria-label="Símbolo Humanittá">
+        <defs><linearGradient id="sg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#DDB872"></stop><stop offset=".55" stop-color="#CC9B47"></stop><stop offset="1" stop-color="#B5832F"></stop></linearGradient></defs>
+        <circle cx="32" cy="32" r="30" fill="none" stroke="#CC9B47" stroke-width="2"></circle>
+        <circle cx="24" cy="31" r="3.6" fill="url(#sg)"></circle>
+        <path d="M20 39.5c0-2.6 1.8-4.3 4-4.3s4 1.7 4 4.3V47c-4.4 0-8-3.2-8-7.5z" fill="url(#sg)"></path>
+        <circle cx="38.5" cy="19.5" r="4.6" fill="url(#sg)"></circle>
+        <path d="M31.5 31c0-3.3 2.7-5.6 6-5.6h6.5V40c0 4.6-3.7 8-8.3 8h-4.2z" fill="url(#sg)"></path>
+      </svg>
+      <span style="display: flex; flex-direction: column; gap: 2px">
+        <span style="font-family: 'Josefin Sans', Manrope, sans-serif; font-weight: 300; font-size: 22px; letter-spacing: .08em; color: #F3EFE8; line-height: 1">Humanittá</span>
+        <span style="font-size: 10px; font-weight: 700; letter-spacing: .24em; text-transform: uppercase; color: #DDB872">Gestão</span>
+      </span>
+    </a>
+    <nav style="display: flex; flex-direction: column; gap: 2px">
+      <a href="Dashboard.dc.html" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 10px; color: #D6D1C7; text-decoration: none; font-size: 14px; font-weight: 600">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="7" height="9" x="3" y="3" rx="1"></rect><rect width="7" height="5" x="14" y="3" rx="1"></rect><rect width="7" height="9" x="14" y="12" rx="1"></rect><rect width="7" height="5" x="3" y="16" rx="1"></rect></svg>
+        <span style="flex: 1">Dashboard</span>
+      </a>
+      <a href="Agenda.dc.html" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 10px; color: #D6D1C7; text-decoration: none; font-size: 14px; font-weight: 600">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path><path d="M8 14h.01"></path><path d="M12 14h.01"></path><path d="M16 14h.01"></path><path d="M8 18h.01"></path><path d="M12 18h.01"></path><path d="M16 18h.01"></path></svg>
+        <span style="flex: 1">Agenda</span>
+      </a>
+      <a href="Pacientes.dc.html" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 10px; color: #D6D1C7; text-decoration: none; font-size: 14px; font-weight: 600">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+        <span style="flex: 1">Pacientes</span>
+      </a>
+      <a href="Profissionais.dc.html" aria-current="page" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 10px; background: rgba(221,184,114,.12); color: #F5E9D0; text-decoration: none; font-size: 14px; font-weight: 700">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#DDB872" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2"></path><path d="M5 2v2"></path><path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1"></path><path d="M8 15a6 6 0 0 0 12 0v-3"></path><circle cx="20" cy="10" r="2"></circle></svg>
+        <span style="flex: 1">Profissionais</span><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 999px; background: #DDB872"></span>
+      </a>
+      <a href="Atendimentos.dc.html" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 10px; color: #D6D1C7; text-decoration: none; font-size: 14px; font-weight: 600">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="8" height="4" x="8" y="2" rx="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><path d="M12 11h4"></path><path d="M12 16h4"></path><path d="M8 11h.01"></path><path d="M8 16h.01"></path></svg>
+        <span style="flex: 1">Atendimentos</span>
+      </a>
+      <a href="Financeiro.dc.html" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 10px; color: #D6D1C7; text-decoration: none; font-size: 14px; font-weight: 600">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"></path><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"></path></svg>
+        <span style="flex: 1">Financeiro</span>
+      </a>
+      <a href="WhatsApp.dc.html" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 10px; color: #D6D1C7; text-decoration: none; font-size: 14px; font-weight: 600">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path></svg>
+        <span style="flex: 1">WhatsApp</span>
+        <span style="min-width: 22px; height: 20px; padding: 0 6px; box-sizing: border-box; border-radius: 999px; background: #DDB872; color: #1E1D1B; font-size: 11px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center">4</span>
+      </a>
+      <a href="AssistenteIA.dc.html" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 10px; color: #D6D1C7; text-decoration: none; font-size: 14px; font-weight: 600">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 8V4H8"></path><rect width="16" height="12" x="4" y="8" rx="2"></rect><path d="M2 14h2"></path><path d="M20 14h2"></path><path d="M15 13v2"></path><path d="M9 13v2"></path></svg>
+        <span style="flex: 1">Assistente IA</span>
+      </a>
+      <a href="Relatorios.dc.html" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 10px; color: #D6D1C7; text-decoration: none; font-size: 14px; font-weight: 600">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"></path><path d="M18 17V9"></path><path d="M13 17V5"></path><path d="M8 17v-3"></path></svg>
+        <span style="flex: 1">Relatórios</span>
+      </a>
+      <a href="Configuracoes.dc.html" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 10px; color: #D6D1C7; text-decoration: none; font-size: 14px; font-weight: 600">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+        <span style="flex: 1">Configurações</span>
+      </a>
+    </nav>
+    <div style="margin-top: auto; display: flex; flex-direction: column; gap: 12px">
+      <div style="display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 12px; background: rgba(255,255,255,.05)">
+        <span style="width: 36px; height: 36px; border-radius: 999px; background: #43413C; color: #F5E9D0; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800">CS</span>
+        <span style="display: flex; flex-direction: column; min-width: 0">
+          <span style="font-size: 13px; font-weight: 700; color: #F3EFE8">Camila S.</span>
+          <span style="font-size: 12px; color: #B9B3A8">Administradora</span>
+        </span>
+      </div>
+      <button type="button" style="display: flex; align-items: center; gap: 10px; height: 40px; padding: 0 12px; border: 0; border-radius: 10px; background: transparent; color: #B9B3A8; font: 600 13px Manrope, sans-serif; cursor: pointer">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="18" x="3" y="3" rx="2"></rect><path d="M9 3v18"></path><path d="m16 15-3-3 3-3"></path></svg>
+        Recolher menu
+      </button>
+    </div>
+  </aside>
+  <!-- SHELL:SIDEBAR END -->
+
+  <div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
+    <!-- SHELL:HEADER START (copiar; mudar título e breadcrumb) -->
+    <header style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px; min-height: 72px; padding: 12px 32px; box-sizing: border-box; background: #FFFFFF; border-bottom: 1px solid #DFDBD3">
+      <div style="display: flex; flex-direction: column; gap: 2px; margin-right: auto">
+        <span style="font-size: 12px; font-weight: 600; color: #77736B">Equipe</span>
+        <h1 style="margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 28px; line-height: 1.1">Profissionais</h1>
+      </div>
+      <label style="display: flex; align-items: center; gap: 10px; flex: 0 1 360px; min-width: 200px; height: 40px; padding: 0 12px; box-sizing: border-box; border: 1px solid #DFDBD3; border-radius: 8px; background: #FAF8F4; color: #77736B">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+        <span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Busca global</span>
+        <input type="search" placeholder="Buscar pacientes, consultas, profissionais…" style="flex: 1; min-width: 0; border: 0; background: transparent; font: 500 14px Manrope, sans-serif; color: #1E1D1B; outline: none">
+        <span style="font-size: 11px; font-weight: 700; color: #77736B; border: 1px solid #DFDBD3; border-radius: 6px; padding: 2px 6px; background: #FFFFFF">⌘K</span>
+      </label>
+      <span style="display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 10px; border-radius: 999px; background: #FBF0DA; color: #9A5F0E; font-size: 12px; font-weight: 700">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 2v7.31"></path><path d="M14 9.3V1.99"></path><path d="M8.5 2h7"></path><path d="M14 9.3a6.5 6.5 0 1 1-4 0"></path></svg>
+        Ambiente de demonstração
+      </span>
+      <span style="display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: #43413C">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#77736B" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path></svg>
+        Segunda, 19 de outubro de 2026
+      </span>
+      <button type="button" aria-label="Notificações (3 novas)" style="position: relative; width: 40px; height: 40px; border: 1px solid #DFDBD3; border-radius: 10px; background: #FFFFFF; color: #43413C; display: inline-flex; align-items: center; justify-content: center; cursor: pointer">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path></svg>
+        <span aria-hidden="true" style="position: absolute; top: 8px; right: 9px; width: 8px; height: 8px; border-radius: 999px; background: #A93B30; border: 2px solid #FFFFFF"></span>
+      </button>
+      <button type="button" aria-label="Menu do usuário" style="display: flex; align-items: center; gap: 10px; height: 44px; padding: 0 8px 0 4px; border: 0; background: transparent; cursor: pointer; font-family: Manrope, sans-serif">
+        <span style="width: 36px; height: 36px; border-radius: 999px; background: #F5E9D0; color: #6F4D1D; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; box-shadow: 0 0 0 2px #FFFFFF, 0 0 0 3px #DDB872">CS</span>
+        <span style="display: flex; flex-direction: column; align-items: flex-start">
+          <span style="font-size: 13px; font-weight: 700; color: #1E1D1B">Camila S.</span>
+          <span style="font-size: 12px; color: #77736B">Administradora</span>
+        </span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#77736B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
+      </button>
+    </header>
+    <!-- SHELL:HEADER END -->
+
+    <main style="flex: 1; padding: 32px; box-sizing: border-box; display: flex; flex-direction: column; gap: 24px; max-width: 1440px; width: 100%">
+
+      <!-- Topo -->
+      <section style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 16px">
+        <div style="display: flex; flex-direction: column; gap: 4px; margin-right: auto">
+          <span style="font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #8F6425">Equipe clínica</span>
+          <h2 style="margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 36px; line-height: 1.1">Profissionais</h2>
+          <p style="margin: 0; font-size: 14px; color: #5B5852">8 profissionais · 8 especialidades · 3 em atendimento agora · 1 ausente hoje</p>
+        </div>
+        <div style="display: flex; flex-wrap: wrap; gap: 10px">
+          <a href="Agenda.dc.html" style="display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; color: #2E2C29; font: 700 14px Manrope, sans-serif; text-decoration: none; box-sizing: border-box">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path></svg>
+            Escala da semana
+          </a>
+          <a href="Modais.dc.html" style="display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 18px; border-radius: 8px; background: #8F6425; color: #FFFFFF; font: 700 14px Manrope, sans-serif; text-decoration: none">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>
+            Novo profissional
+          </a>
+        </div>
+      </section>
+
+      <!-- Filtros -->
+      <section aria-label="Filtros de profissionais" style="background: #FFFFFF; border: 1px solid #DFDBD3; border-radius: 12px; box-shadow: 0 1px 2px rgba(30,29,27,.06); padding: 16px 20px; display: flex; flex-direction: column; gap: 14px">
+        <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px">
+          <label style="display: flex; align-items: center; gap: 10px; flex: 1 1 320px; max-width: 420px; height: 40px; padding: 0 12px; box-sizing: border-box; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; color: #77736B">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+            <span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Buscar profissional</span>
+            <input type="search" placeholder="Buscar por nome ou especialidade" onInput="{{ onSearch }}" style="flex: 1; min-width: 0; border: 0; background: transparent; font: 500 14px Manrope, sans-serif; color: #1E1D1B; outline: none">
+          </label>
+          <span style="font-size: 13px; font-weight: 600; color: #5B5852; margin-right: auto">{{resultLabel}}</span>
+          <div role="group" aria-label="Modo de exibição" style="display: inline-flex; padding: 3px; border-radius: 10px; background: #F5F3EF; gap: 2px">
+            <button type="button" aria-pressed="{{viewCards.pressed}}" onClick="{{ viewCards.onClick }}" style="display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 12px; border: 0; border-radius: 8px; background: {{viewCards.bg}}; color: {{viewCards.fg}}; box-shadow: {{viewCards.shadow}}; font: 700 13px Manrope, sans-serif; cursor: pointer">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="7" height="7" x="3" y="3" rx="1"></rect><rect width="7" height="7" x="14" y="3" rx="1"></rect><rect width="7" height="7" x="14" y="14" rx="1"></rect><rect width="7" height="7" x="3" y="14" rx="1"></rect></svg>
+              Cartões
+            </button>
+            <button type="button" aria-pressed="{{viewList.pressed}}" onClick="{{ viewList.onClick }}" style="display: inline-flex; align-items: center; gap: 6px; height: 34px; padding: 0 12px; border: 0; border-radius: 8px; background: {{viewList.bg}}; color: {{viewList.fg}}; box-shadow: {{viewList.shadow}}; font: 700 13px Manrope, sans-serif; cursor: pointer">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h.01"></path><path d="M3 18h.01"></path><path d="M3 6h.01"></path><path d="M8 12h13"></path><path d="M8 18h13"></path><path d="M8 6h13"></path></svg>
+              Lista
+            </button>
+          </div>
+        </div>
+        <div role="group" aria-label="Filtrar por especialidade" style="display: flex; flex-wrap: wrap; gap: 8px">
+          <sc-for list="{{chips}}" as="c" hint-placeholder-count="9">
+            <button type="button" aria-pressed="{{c.pressed}}" onClick="{{ c.onClick }}" style="display: inline-flex; align-items: center; gap: 8px; height: 36px; padding: 0 14px; border: 1px solid {{c.border}}; border-radius: 999px; background: {{c.bg}}; color: {{c.fg}}; font: 700 13px Manrope, sans-serif; cursor: pointer">
+              <span aria-hidden="true" style="width: 8px; height: 8px; border-radius: 999px; background: {{c.color}}; display: {{c.dotDisplay}}"></span>
+              {{c.label}}
+            </button>
+          </sc-for>
+        </div>
+      </section>
+
+      <!-- Grade de cartões -->
+      <sc-if value="{{isCards}}" hint-placeholder-val="{{ true }}">
+        <section aria-label="Profissionais em cartões" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 16px">
+          <sc-for list="{{cards}}" as="p" hint-placeholder-count="8">
+            <article style="background: #FFFFFF; border: 1px solid {{p.border}}; border-radius: 12px; box-shadow: {{p.shadow}}; padding: 20px; display: flex; flex-direction: column; gap: 16px">
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 26px">
+                <span style="display: inline-flex; align-items: center; gap: 6px; height: 24px; padding: 0 10px; border-radius: 999px; background: {{p.stBg}}; color: {{p.stFg}}; font-size: 12px; font-weight: 700; white-space: nowrap"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 999px; background: {{p.stFg}}"></span>{{p.stLabel}}</span>
+                <sc-if value="{{p.real}}" hint-placeholder-val="{{ true }}">
+                  <span style="display: inline-flex; align-items: center; gap: 5px; height: 24px; padding: 0 10px; border-radius: 999px; background: #FBF6EC; border: 1px solid #EBD4A6; color: #6F4D1D; font-size: 11px; font-weight: 800; white-space: nowrap">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526"></path><circle cx="12" cy="8" r="6"></circle></svg>
+                    Responsável técnica
+                  </span>
+                </sc-if>
+                <sc-if value="{{p.demo}}" hint-placeholder-val="{{ false }}">
+                  <span title="Profissional fictício para demonstração" style="display: inline-flex; align-items: center; height: 20px; padding: 0 8px; border-radius: 6px; background: #F5F3EF; border: 1px solid #ECE9E3; color: #5B5852; font-size: 11px; font-weight: 700; letter-spacing: .04em">Demo</span>
+                </sc-if>
+              </div>
+              <div style="display: flex; flex-direction: column; align-items: center; text-align: center; gap: 4px">
+                <span aria-hidden="true" style="width: 88px; height: 88px; margin: 6px 0 10px; border-radius: 999px; background: #ECE9E3; color: #43413C; display: inline-flex; align-items: center; justify-content: center; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 32px; letter-spacing: .02em; box-shadow: 0 0 0 4px #FFFFFF, 0 0 0 5.5px #CC9B47">{{p.initials}}</span>
+                <h3 style="margin: 0; font-size: 16px; font-weight: 700; line-height: 1.4">{{p.name}}</h3>
+                <span style="font-size: 13px; font-weight: 600; color: #43413C">{{p.title}}</span>
+                <span style="font-size: 12px; color: #77736B">{{p.reg}}</span>
+                <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-top: 8px">
+                  <span style="display: inline-flex; align-items: center; gap: 6px; height: 24px; padding: 0 10px; border-radius: 999px; background: #F5F3EF; color: #2E2C29; font-size: 12px; font-weight: 700"><span aria-hidden="true" style="width: 7px; height: 7px; border-radius: 999px; background: {{p.color}}"></span>{{p.spec}}</span>
+                  <span style="display: inline-flex; align-items: center; gap: 5px; height: 24px; padding: 0 10px; border-radius: 999px; background: #FFFFFF; border: 1px solid #DFDBD3; color: #43413C; font-size: 12px; font-weight: 700">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 4h3a2 2 0 0 1 2 2v14"></path><path d="M2 20h3"></path><path d="M13 20h9"></path><path d="M10 12v.01"></path><path d="M13 4.562v16.157a1 1 0 0 1-1.242.97L5 20V5.562a2 2 0 0 1 1.515-1.94l4-1A2 2 0 0 1 13 4.561Z"></path></svg>
+                    {{p.room}}
+                  </span>
+                </div>
+              </div>
+              <div style="border-top: 1px solid #ECE9E3; padding-top: 14px; display: flex; flex-direction: column; gap: 14px">
+                <div style="display: flex; flex-direction: column; gap: 8px">
+                  <span style="font-size: 12px; font-weight: 700; color: #5B5852">Disponível hoje</span>
+                  <sc-if value="{{p.hasSlots}}" hint-placeholder-val="{{ true }}">
+                    <div style="display: flex; flex-wrap: wrap; gap: 6px">
+                      <sc-for list="{{p.slots}}" as="s" hint-placeholder-count="3">
+                        <a href="Agenda.dc.html" style="display: inline-flex; align-items: center; height: 30px; padding: 0 12px; border-radius: 6px; border: 1px solid #EBD4A6; background: #FBF6EC; color: #6F4D1D; font-size: 12px; font-weight: 800; font-variant-numeric: tabular-nums; text-decoration: none">{{s}}</a>
+                      </sc-for>
+                    </div>
+                  </sc-if>
+                  <sc-if value="{{p.noSlots}}" hint-placeholder-val="{{ false }}">
+                    <span style="display: inline-flex; align-items: center; gap: 6px; height: 30px; font-size: 12px; font-weight: 600; color: #5B5852">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path><path d="m14 14-4 4"></path><path d="m10 14 4 4"></path></svg>
+                      {{p.awayNote}}
+                    </span>
+                  </sc-if>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 6px">
+                  <div style="display: flex; align-items: center; font-size: 12px"><span style="font-weight: 700; color: #5B5852; margin-right: auto">Ocupação semanal</span><span style="font-weight: 800; font-variant-numeric: tabular-nums; color: #2E2C29">{{p.occPct}}</span></div>
+                  <div role="img" aria-label="{{p.occAria}}" style="height: 6px; border-radius: 999px; background: #F5F3EF; overflow: hidden"><div style="height: 100%; border-radius: 999px; background: #B5832F; width: {{p.occPct}}"></div></div>
+                </div>
+              </div>
+              <div style="display: flex; gap: 8px; margin-top: auto">
+                <a href="Agenda.dc.html" style="flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 40px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; color: #2E2C29; font: 700 13px Manrope, sans-serif; text-decoration: none; box-sizing: border-box">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path></svg>
+                  Ver agenda
+                </a>
+                <button type="button" aria-pressed="{{p.selected}}" onClick="{{ p.open }}" style="flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 40px; border: 1px solid {{p.btnBorder}}; border-radius: 8px; background: {{p.btnBg}}; color: {{p.btnFg}}; font: 700 13px Manrope, sans-serif; cursor: pointer">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="5"></circle><path d="M20 21a8 8 0 0 0-16 0"></path></svg>
+                  {{p.btnLabel}}
+                </button>
+              </div>
+            </article>
+          </sc-for>
+        </section>
+      </sc-if>
+
+      <!-- Lista -->
+      <sc-if value="{{isList}}" hint-placeholder-val="{{ false }}">
+        <section aria-label="Profissionais em lista" style="background: #FFFFFF; border: 1px solid #DFDBD3; border-radius: 12px; box-shadow: 0 1px 2px rgba(30,29,27,.06)">
+          <div style="overflow-x: auto">
+            <table style="width: 100%; min-width: 900px; border-collapse: collapse; font-size: 14px">
+              <thead>
+                <tr style="background: #F5F3EF">
+                  <th scope="col" style="text-align: left; padding: 10px 24px; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #5B5852">Profissional</th>
+                  <th scope="col" style="text-align: left; padding: 10px 12px; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #5B5852">Especialidade</th>
+                  <th scope="col" style="text-align: left; padding: 10px 12px; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #5B5852">Sala</th>
+                  <th scope="col" style="text-align: left; padding: 10px 12px; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #5B5852">Status</th>
+                  <th scope="col" style="text-align: left; padding: 10px 12px; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #5B5852">Próximo livre</th>
+                  <th scope="col" style="text-align: left; padding: 10px 12px; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #5B5852">Ocupação</th>
+                  <th scope="col" style="padding: 10px 24px"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Ações</span></th>
+                </tr>
+              </thead>
+              <tbody>
+                <sc-for list="{{cards}}" as="p" hint-placeholder-count="8">
+                  <tr style="border-top: 1px solid #ECE9E3; height: 60px; background: {{p.rowBg}}">
+                    <td style="padding: 0 24px">
+                      <span style="display: flex; align-items: center; gap: 12px">
+                        <span aria-hidden="true" style="width: 36px; height: 36px; border-radius: 999px; background: #ECE9E3; color: #43413C; display: inline-flex; align-items: center; justify-content: center; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 16px; flex-shrink: 0; box-shadow: 0 0 0 2px #FFFFFF, 0 0 0 3.5px #CC9B47">{{p.initials}}</span>
+                        <span style="display: flex; flex-direction: column"><span style="font-weight: 700">{{p.name}}</span><span style="font-size: 12px; color: #77736B">{{p.listSub}}</span></span>
+                      </span>
+                    </td>
+                    <td style="padding: 0 12px"><span style="display: inline-flex; align-items: center; gap: 6px; font-weight: 600; color: #43413C"><span aria-hidden="true" style="width: 7px; height: 7px; border-radius: 999px; background: {{p.color}}"></span>{{p.spec}}</span></td>
+                    <td style="padding: 0 12px; color: #43413C; white-space: nowrap">{{p.room}}</td>
+                    <td style="padding: 0 12px"><span style="display: inline-flex; align-items: center; gap: 6px; height: 24px; padding: 0 10px; border-radius: 999px; background: {{p.stBg}}; color: {{p.stFg}}; font-size: 12px; font-weight: 700; white-space: nowrap"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 999px; background: {{p.stFg}}"></span>{{p.stLabel}}</span></td>
+                    <td style="padding: 0 12px; font-weight: 700; font-variant-numeric: tabular-nums; color: #2E2C29">{{p.nextFree}}</td>
+                    <td style="padding: 0 12px"><span style="display: flex; align-items: center; gap: 8px"><span style="width: 90px; height: 6px; border-radius: 999px; background: #F5F3EF; overflow: hidden"><span style="display: block; height: 100%; border-radius: 999px; background: #B5832F; width: {{p.occPct}}"></span></span><span style="font-size: 12px; font-weight: 800; font-variant-numeric: tabular-nums">{{p.occPct}}</span></span></td>
+                    <td style="padding: 0 24px; text-align: right; white-space: nowrap">
+                      <button type="button" onClick="{{ p.open }}" style="height: 36px; padding: 0 12px; border: 0; border-radius: 8px; background: transparent; color: #8F6425; font: 700 13px Manrope, sans-serif; cursor: pointer">Perfil</button>
+                    </td>
+                  </tr>
+                </sc-for>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </sc-if>
+
+      <!-- PERFIL INDIVIDUAL -->
+      <section aria-label="Perfil do profissional" style="display: flex; flex-direction: column; gap: 16px; margin-top: 8px">
+        <div style="display: flex; align-items: center; gap: 12px">
+          <span style="font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #77736B">Perfil individual</span>
+          <span style="flex: 1; border-top: 1px solid #DFDBD3"></span>
+        </div>
+
+        <!-- Cabeçalho do perfil -->
+        <div style="position: relative; overflow: hidden; background: #FFFFFF; border: 1px solid #DFDBD3; border-radius: 16px; box-shadow: 0 1px 2px rgba(30,29,27,.06); padding: 28px; display: flex; flex-wrap: wrap; align-items: center; gap: 28px">
+          <span aria-hidden="true" style="position: absolute; top: 0; right: 0; width: 120px; height: 120px; border-bottom-left-radius: 120px; background: #F5E9D0"></span>
+          <span aria-hidden="true" style="position: relative; width: 128px; height: 128px; flex-shrink: 0; border-radius: 999px; background: #ECE9E3; color: #43413C; display: inline-flex; align-items: center; justify-content: center; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 46px; box-shadow: 0 0 0 6px #FFFFFF, 0 0 0 7.5px #CC9B47">{{prof.initials}}</span>
+          <div style="position: relative; flex: 1 1 360px; min-width: 0; display: flex; flex-direction: column; gap: 8px">
+            <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px">
+              <h3 style="margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 34px; line-height: 1.1">{{prof.name}}</h3>
+              <sc-if value="{{prof.real}}" hint-placeholder-val="{{ true }}">
+                <span style="display: inline-flex; align-items: center; gap: 5px; height: 26px; padding: 0 10px; border-radius: 999px; background: #FBF6EC; border: 1px solid #EBD4A6; color: #6F4D1D; font-size: 12px; font-weight: 800">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526"></path><circle cx="12" cy="8" r="6"></circle></svg>
+                  Responsável técnica
+                </span>
+              </sc-if>
+              <sc-if value="{{prof.demo}}" hint-placeholder-val="{{ false }}">
+                <span style="display: inline-flex; align-items: center; height: 22px; padding: 0 8px; border-radius: 6px; background: #F5F3EF; border: 1px solid #ECE9E3; color: #5B5852; font-size: 11px; font-weight: 700; letter-spacing: .04em">Demo</span>
+              </sc-if>
+            </div>
+            <span style="font-size: 15px; font-weight: 600; color: #2E2C29">{{prof.title}}</span>
+            <span style="font-size: 13px; color: #5B5852">{{prof.reg}}</span>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 6px; font-size: 13px; color: #43413C">
+              <span style="display: inline-flex; align-items: center; gap: 6px"><span aria-hidden="true" style="width: 8px; height: 8px; border-radius: 999px; background: {{prof.color}}"></span><strong style="font-weight: 700">{{prof.spec}}</strong></span>
+              <span style="display: inline-flex; align-items: center; gap: 6px">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#77736B" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 4h3a2 2 0 0 1 2 2v14"></path><path d="M2 20h3"></path><path d="M13 20h9"></path><path d="M10 12v.01"></path><path d="M13 4.562v16.157a1 1 0 0 1-1.242.97L5 20V5.562a2 2 0 0 1 1.515-1.94l4-1A2 2 0 0 1 13 4.561Z"></path></svg>
+                {{prof.room}}
+              </span>
+              <span style="display: inline-flex; align-items: center; gap: 6px">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#77736B" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>
+                {{prof.hoursText}}
+              </span>
+              <span style="display: inline-flex; align-items: center; gap: 6px; height: 24px; padding: 0 10px; border-radius: 999px; background: {{prof.stBg}}; color: {{prof.stFg}}; font-size: 12px; font-weight: 700"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 999px; background: {{prof.stFg}}"></span>{{prof.stLabel}}</span>
+            </div>
+          </div>
+          <div style="position: relative; display: flex; flex-wrap: wrap; gap: 10px">
+            <a href="Modais.dc.html" style="display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; color: #2E2C29; font: 700 14px Manrope, sans-serif; text-decoration: none; box-sizing: border-box">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"></path><path d="m15 5 4 4"></path></svg>
+              Editar cadastro
+            </a>
+            <a href="Agenda.dc.html" style="display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 18px; border-radius: 8px; background: #8F6425; color: #FFFFFF; font: 700 14px Manrope, sans-serif; text-decoration: none">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path></svg>
+              Agendar com profissional
+            </a>
+          </div>
+        </div>
+
+        <!-- KPIs do mês -->
+        <div aria-label="Indicadores do mês" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)); gap: 16px">
+          <sc-for list="{{kpis}}" as="k" hint-placeholder-count="4">
+            <div style="background: #FFFFFF; border: 1px solid #DFDBD3; border-radius: 12px; box-shadow: 0 1px 2px rgba(30,29,27,.06); padding: 20px; display: flex; flex-direction: column; gap: 10px">
+              <span style="font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #77736B">{{k.label}}</span>
+              <span style="font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 34px; line-height: 1">{{k.value}}</span>
+              <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: #5B5852">
+                <span style="display: inline-flex; align-items: center; gap: 2px; color: {{k.deltaColor}}; font-weight: 700">
+                  <sc-if value="{{k.up}}" hint-placeholder-val="{{ true }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m22 7-8.5 8.5-5-5L2 17"></path><path d="M16 7h6v6"></path></svg></sc-if>
+                  <sc-if value="{{k.down}}" hint-placeholder-val="{{ false }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m22 17-8.5-8.5-5 5L2 7"></path><path d="M16 17h6v-6"></path></svg></sc-if>
+                  {{k.delta}}
+                </span>
+                {{k.note}}
+              </span>
+            </div>
+          </sc-for>
+        </div>
+
+        <!-- Serviços + agenda individual -->
+        <div style="display: flex; flex-wrap: wrap; gap: 16px">
+          <div style="flex: 1 1 340px; min-width: 0; background: #FFFFFF; border: 1px solid #DFDBD3; border-radius: 12px; box-shadow: 0 1px 2px rgba(30,29,27,.06); padding: 24px; display: flex; flex-direction: column; gap: 16px">
+            <div style="display: flex; align-items: center; gap: 12px">
+              <div style="display: flex; flex-direction: column; gap: 2px; margin-right: auto">
+                <h4 style="margin: 0; font-size: 16px; font-weight: 700">Serviços oferecidos</h4>
+                <span style="font-size: 13px; color: #77736B">Duração padrão · valores fictícios</span>
+              </div>
+              <a href="Configuracoes.dc.html" style="font-size: 13px; font-weight: 700; color: #8F6425; text-decoration: none">Gerenciar</a>
+            </div>
+            <ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column">
+              <sc-for list="{{services}}" as="s" hint-placeholder-count="4">
+                <li style="display: flex; align-items: center; gap: 12px; padding: 12px 0; border-top: 1px solid #ECE9E3">
+                  <span aria-hidden="true" style="width: 36px; height: 36px; border-radius: 10px; background: #FBF6EC; color: #8F6425; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path><path d="M14 2v4a2 2 0 0 0 2 2h4"></path><path d="M16 13H8"></path><path d="M16 17H8"></path></svg></span>
+                  <span style="display: flex; flex-direction: column; margin-right: auto; min-width: 0"><span style="font-size: 14px; font-weight: 700">{{s.name}}</span><span style="display: inline-flex; align-items: center; gap: 4px; font-size: 12px; color: #77736B"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>{{s.dur}}</span></span>
+                  <span style="font-size: 14px; font-weight: 800; font-variant-numeric: tabular-nums; white-space: nowrap">{{s.price}}</span>
+                </li>
+              </sc-for>
+            </ul>
+          </div>
+
+          <div style="flex: 2 1 560px; min-width: 0; background: #FFFFFF; border: 1px solid #DFDBD3; border-radius: 12px; box-shadow: 0 1px 2px rgba(30,29,27,.06); padding: 24px; display: flex; flex-direction: column; gap: 16px">
+            <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px">
+              <div style="display: flex; flex-direction: column; gap: 2px; margin-right: auto">
+                <h4 style="margin: 0; font-size: 16px; font-weight: 700">Agenda individual</h4>
+                <span style="font-size: 13px; color: #77736B">Semana de 19 a 24 de outubro · {{weekSummary}}</span>
+              </div>
+              <div style="display: inline-flex; gap: 4px">
+                <button type="button" aria-label="Semana anterior" style="width: 36px; height: 36px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; color: #43413C; display: inline-flex; align-items: center; justify-content: center; cursor: pointer"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></button>
+                <button type="button" aria-label="Próxima semana" style="width: 36px; height: 36px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; color: #43413C; display: inline-flex; align-items: center; justify-content: center; cursor: pointer"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg></button>
+              </div>
+            </div>
+            <div role="img" aria-label="{{weekAria}}" style="display: flex; flex-direction: column; gap: 4px">
+              <div style="display: grid; grid-template-columns: 48px repeat(6, minmax(0, 1fr)); gap: 4px; margin-bottom: 4px">
+                <span></span>
+                <sc-for list="{{dayHeads}}" as="d" hint-placeholder-count="6">
+                  <span style="display: flex; flex-direction: column; align-items: center; gap: 1px; padding: 6px 0; border-radius: 8px; background: {{d.bg}}">
+                    <span style="font-size: 12px; font-weight: 800; color: {{d.fg}}">{{d.label}}</span>
+                    <span style="font-size: 11px; font-weight: 600; color: #5B5852; font-variant-numeric: tabular-nums">{{d.count}}</span>
+                  </span>
+                </sc-for>
+              </div>
+              <sc-for list="{{weekRows}}" as="r" hint-placeholder-count="10">
+                <div style="display: grid; grid-template-columns: 48px repeat(6, minmax(0, 1fr)); gap: 4px; align-items: center">
+                  <span style="font-size: 11px; font-weight: 700; color: #77736B; font-variant-numeric: tabular-nums">{{r.hour}}</span>
+                  <sc-for list="{{r.cells}}" as="c" hint-placeholder-count="6">
+                    <span style="height: 20px; border-radius: 4px; box-sizing: border-box; background: {{c.bg}}; border: 1px {{c.borderStyle}} {{c.border}}"></span>
+                  </sc-for>
+                </div>
+              </sc-for>
+            </div>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 12px; font-weight: 600; color: #5B5852">
+              <span style="display: inline-flex; align-items: center; gap: 6px"><span aria-hidden="true" style="width: 14px; height: 10px; border-radius: 3px; background: {{prof.color}}"></span>Ocupado</span>
+              <span style="display: inline-flex; align-items: center; gap: 6px"><span aria-hidden="true" style="width: 14px; height: 10px; border-radius: 3px; box-sizing: border-box; border: 1px dashed #9E998F; background: #FFFFFF"></span>Livre</span>
+              <span style="display: inline-flex; align-items: center; gap: 6px"><span aria-hidden="true" style="width: 14px; height: 10px; border-radius: 3px; background: #ECE9E3"></span>Intervalo</span>
+              <span style="display: inline-flex; align-items: center; gap: 6px"><span aria-hidden="true" style="width: 14px; height: 10px; border-radius: 3px; box-sizing: border-box; border: 1px solid #ECE9E3; background: #FAF8F4"></span>Fora do expediente</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Configuração de horários + bloqueios -->
+        <div style="display: flex; flex-wrap: wrap; gap: 16px">
+          <div style="flex: 2 1 560px; min-width: 0; background: #FFFFFF; border: 1px solid #DFDBD3; border-radius: 12px; box-shadow: 0 1px 2px rgba(30,29,27,.06); display: flex; flex-direction: column">
+            <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 20px 24px">
+              <div style="display: flex; flex-direction: column; gap: 2px; margin-right: auto">
+                <h4 style="margin: 0; font-size: 16px; font-weight: 700">Configuração de horários</h4>
+                <span style="font-size: 13px; color: #77736B">Expediente padrão usado pela agenda e pelo agendamento via WhatsApp · {{weeklyLoad}}</span>
+              </div>
+              <button type="button" style="display: inline-flex; align-items: center; gap: 8px; height: 36px; padding: 0 14px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; color: #2E2C29; font: 700 13px Manrope, sans-serif; cursor: pointer">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"></path><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"></path><path d="M7 3v4a1 1 0 0 0 1 1h7"></path></svg>
+                Salvar horários
+              </button>
+            </div>
+            <div style="overflow-x: auto">
+              <table style="width: 100%; min-width: 720px; border-collapse: collapse; font-size: 14px">
+                <thead>
+                  <tr style="background: #F5F3EF">
+                    <th scope="col" style="text-align: left; padding: 10px 24px; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #5B5852">Dia</th>
+                    <th scope="col" style="text-align: left; padding: 10px 12px; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #5B5852">Ativo</th>
+                    <th scope="col" style="text-align: left; padding: 10px 12px; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #5B5852">Início</th>
+                    <th scope="col" style="text-align: left; padding: 10px 12px; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #5B5852">Fim</th>
+                    <th scope="col" style="text-align: left; padding: 10px 12px; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #5B5852">Intervalo</th>
+                    <th scope="col" style="text-align: left; padding: 10px 24px 10px 12px; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #5B5852">Sala</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <sc-for list="{{schedule}}" as="d" hint-placeholder-count="7">
+                    <tr style="border-top: 1px solid #ECE9E3; height: 56px">
+                      <th scope="row" style="text-align: left; padding: 0 24px; font-weight: 700; color: {{d.dayColor}}">{{d.day}}</th>
+                      <td style="padding: 0 12px">
+                        <button type="button" role="switch" aria-checked="{{d.aria}}" aria-label="{{d.switchLabel}}" onClick="{{ d.toggle }}" style="display: inline-flex; align-items: center; width: 48px; height: 40px; padding: 0; border: 0; background: transparent; cursor: pointer">
+                          <span style="display: inline-flex; align-items: center; width: 40px; height: 24px; padding: 0 3px; box-sizing: border-box; border-radius: 999px; background: {{d.track}}">
+                            <span style="width: 18px; height: 18px; border-radius: 999px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(30,29,27,.2); margin-left: {{d.knob}}"></span>
+                          </span>
+                        </button>
+                      </td>
+                      <td style="padding: 0 12px">
+                        <sc-if value="{{d.on}}" hint-placeholder-val="{{ true }}"><input type="time" value="{{d.start}}" aria-label="{{d.startLabel}}" style="height: 36px; width: 108px; padding: 0 10px; box-sizing: border-box; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 600 13px Manrope, sans-serif; color: #1E1D1B; font-variant-numeric: tabular-nums"></sc-if>
+                        <sc-if value="{{d.off}}" hint-placeholder-val="{{ false }}"><span style="font-size: 13px; font-weight: 600; color: #77736B">Não atende</span></sc-if>
+                      </td>
+                      <td style="padding: 0 12px">
+                        <sc-if value="{{d.on}}" hint-placeholder-val="{{ true }}"><input type="time" value="{{d.end}}" aria-label="{{d.endLabel}}" style="height: 36px; width: 108px; padding: 0 10px; box-sizing: border-box; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 600 13px Manrope, sans-serif; color: #1E1D1B; font-variant-numeric: tabular-nums"></sc-if>
+                        <sc-if value="{{d.off}}" hint-placeholder-val="{{ false }}"><span style="font-size: 13px; color: #77736B">—</span></sc-if>
+                      </td>
+                      <td style="padding: 0 12px; white-space: nowrap">
+                        <sc-if value="{{d.on}}" hint-placeholder-val="{{ true }}"><span style="display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 10px; border-radius: 6px; background: #F5F3EF; font-size: 13px; font-weight: 600; color: #43413C; font-variant-numeric: tabular-nums">{{d.brk}}</span></sc-if>
+                        <sc-if value="{{d.off}}" hint-placeholder-val="{{ false }}"><span style="font-size: 13px; color: #77736B">—</span></sc-if>
+                      </td>
+                      <td style="padding: 0 24px 0 12px">
+                        <sc-if value="{{d.on}}" hint-placeholder-val="{{ true }}">
+                          <select aria-label="{{d.roomLabel}}" style="height: 36px; min-width: 140px; padding: 0 10px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 600 13px Manrope, sans-serif; color: #1E1D1B">
+                            <option>{{d.room}}</option>
+                            <option>Sala 1 · Odontologia</option>
+                            <option>Sala 2 · Fonoaudiologia</option>
+                            <option>Sala 3 · Podologia/Quiropraxia</option>
+                            <option>Sala 4 · Fonoaudiologia</option>
+                            <option>Sala 5 · Estética Avançada</option>
+                            <option>Sala 6 · Psicologia</option>
+                            <option>Sala 7</option>
+                          </select>
+                        </sc-if>
+                        <sc-if value="{{d.off}}" hint-placeholder-val="{{ false }}"><span style="font-size: 13px; color: #77736B">—</span></sc-if>
+                      </td>
+                    </tr>
+                  </sc-for>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div style="flex: 1 1 320px; min-width: 0; background: #FFFFFF; border: 1px solid #DFDBD3; border-radius: 12px; box-shadow: 0 1px 2px rgba(30,29,27,.06); padding: 24px; display: flex; flex-direction: column; gap: 16px">
+            <div style="display: flex; flex-direction: column; gap: 2px">
+              <h4 style="margin: 0; font-size: 16px; font-weight: 700">Exceções e folgas</h4>
+              <span style="font-size: 13px; color: #77736B">Bloqueios futuros na agenda</span>
+            </div>
+            <a href="Modais.dc.html" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; padding: 0 16px; border: 1px dashed #CC9B47; border-radius: 8px; background: #FBF6EC; color: #6F4D1D; font: 700 14px Manrope, sans-serif; text-decoration: none; box-sizing: border-box">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>
+              Adicionar exceção/folga
+            </a>
+            <ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px">
+              <sc-for list="{{blocks}}" as="b" hint-placeholder-count="4">
+                <li style="display: flex; align-items: flex-start; gap: 12px; padding: 12px; border: 1px solid #ECE9E3; border-radius: 10px">
+                  <span aria-hidden="true" style="width: 48px; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; padding: 6px 0; border-radius: 8px; background: {{b.bg}}; color: {{b.fg}}">
+                    <span style="font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 700; font-size: 20px; line-height: 1">{{b.day}}</span>
+                    <span style="font-size: 10px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase">{{b.month}}</span>
+                  </span>
+                  <span style="display: flex; flex-direction: column; gap: 2px; margin-right: auto; min-width: 0">
+                    <span style="font-size: 14px; font-weight: 700">{{b.title}}</span>
+                    <span style="font-size: 12px; font-weight: 600; color: #43413C">{{b.when}}</span>
+                    <span style="font-size: 12px; color: #77736B">{{b.note}}</span>
+                  </span>
+                  <button type="button" aria-label="{{b.removeLabel}}" style="width: 36px; height: 36px; flex-shrink: 0; border: 0; border-radius: 8px; background: transparent; color: #5B5852; display: inline-flex; align-items: center; justify-content: center; cursor: pointer"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button>
+                </li>
+              </sc-for>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":3150}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const sel = this.state?.sel ?? 'lauren';
+    const spec = this.state?.spec ?? 'Todas';
+    const view = this.state?.view ?? 'cards';
+    const q = (this.state?.q ?? '').trim().toLowerCase();
+    const offMap = this.state?.offMap ?? {};
+    const SP = { 'Odontologia': '#B5832F', 'Fonoaudiologia': '#3E7CA8', 'Estética Avançada': '#B0607A', 'Psicologia': '#6E62A6', 'Quiropraxia': '#3F8A72', 'Podologia': '#8A7A3F', 'Fisioterapia': '#C0703A', 'Nutrição': '#5E8A3A' };
+    const ST = { now: ['Em atendimento agora', '#8F6425', '#FBF6EC'], free: ['Disponível', '#2E7351', '#E6F2EB'], away: ['Ausente hoje', '#5B5852', '#ECE9E3'] };
+    const DEMO_REG = 'Registro profissional demonstrativo';
+    const PROS = [
+      { id: 'lauren', name: 'Dra. Lauren Bertocchi', initials: 'LB', title: 'Ortodontista · Clínica Geral', reg: 'Responsável Técnica · CRO/RS 15630', spec: 'Odontologia', room: 'Sala 1', status: 'now', slots: ['14:00', '15:30', '17:00'], occ: 86, real: true, k: [112, '18.640', 96, '+9'] },
+      { id: 'helena', name: 'Dra. Helena Marchetti', initials: 'HM', title: 'Fonoaudióloga clínica', reg: DEMO_REG, spec: 'Fonoaudiologia', room: 'Salas 2 e 4', status: 'now', slots: ['11:00', '14:30', '16:00'], occ: 78, k: [98, '14.210', 94, '+6'] },
+      { id: 'rafael', name: 'Dr. Rafael Zanella', initials: 'RZ', title: 'Quiropraxista', reg: DEMO_REG, spec: 'Quiropraxia', room: 'Sala 3', status: 'now', slots: ['10:30', '13:30', '16:30'], occ: 64, k: [76, '11.380', 97, '+4'] },
+      { id: 'bianca', name: 'Dra. Bianca Toniolo', initials: 'BT', title: 'Estética Avançada', reg: DEMO_REG, spec: 'Estética Avançada', room: 'Sala 5', status: 'free', slots: ['13:00', '15:00', '17:30'], occ: 72, k: [64, '16.920', 92, '+11'] },
+      { id: 'marina', name: 'Dra. Marina Lazzari', initials: 'ML', title: 'Psicóloga clínica', reg: DEMO_REG, spec: 'Psicologia', room: 'Sala 6', status: 'free', slots: ['11:00', '15:00', '18:00'], occ: 91, k: [88, '15.840', 99, '+3'] },
+      { id: 'gustavo', name: 'Dr. Gustavo Pagnussat', initials: 'GP', title: 'Fisioterapeuta', reg: DEMO_REG, spec: 'Fisioterapia', room: 'Sala 7', status: 'free', slots: ['10:45', '14:00', '16:15'], occ: 58, k: [70, '9.450', 95, '-2'] },
+      { id: 'julia', name: 'Dra. Júlia Dalmolin', initials: 'JD', title: 'Nutricionista', reg: DEMO_REG, spec: 'Nutrição', room: 'Sala 7 · tardes', status: 'away', slots: [], occ: 44, awayNote: 'Sem horários hoje · retorna amanhã, 13:00', start: '13:00', end: '19:00', brk: '16:00 – 16:15', k: [41, '7.380', 93, '+5'] },
+      { id: 'ana', name: 'Ana Paula Schmitt', initials: 'AS', title: 'Podóloga', reg: DEMO_REG, spec: 'Podologia', room: 'Sala 3', status: 'free', slots: ['13:00', '14:00', '17:00'], occ: 67, k: [59, '8.260', 96, '+7'] }
+    ];
+    const visible = PROS.filter(p => (spec === 'Todas' || p.spec === spec) && (!q || (p.name + ' ' + p.spec + ' ' + p.title).toLowerCase().includes(q)));
+    const decorate = p => {
+      const isSel = p.id === sel;
+      return {
+        ...p,
+        color: SP[p.spec], stLabel: ST[p.status][0], stFg: ST[p.status][1], stBg: ST[p.status][2],
+        real: !!p.real, demo: !p.real,
+        hasSlots: p.slots.length > 0, noSlots: p.slots.length === 0,
+        occPct: p.occ + '%', occAria: 'Ocupação semanal de ' + p.occ + '%',
+        nextFree: p.slots.length ? 'Hoje, ' + p.slots[0] : 'Amanhã, 13:00',
+        listSub: p.real ? 'Responsável técnica · CRO/RS 15630' : p.title + ' · Demo',
+        border: isSel ? '#CC9B47' : '#DFDBD3',
+        shadow: isSel ? '0 0 0 3px rgba(181,131,47,.18), 0 6px 20px rgba(30,29,27,.07)' : '0 1px 2px rgba(30,29,27,.06)',
+        rowBg: isSel ? '#FBF6EC' : '#FFFFFF',
+        selected: isSel ? 'true' : 'false',
+        btnLabel: isSel ? 'Perfil aberto' : 'Perfil',
+        btnBg: isSel ? '#FBF6EC' : '#FFFFFF', btnFg: isSel ? '#6F4D1D' : '#2E2C29', btnBorder: isSel ? '#CC9B47' : '#DFDBD3',
+        open: () => this.setState({ sel: p.id, offMap: {} })
+      };
+    };
+    const P = decorate(PROS.find(p => p.id === sel) || PROS[0]);
+    const chipNames = ['Todas', 'Odontologia', 'Fonoaudiologia', 'Estética Avançada', 'Psicologia', 'Quiropraxia', 'Podologia', 'Fisioterapia', 'Nutrição'];
+    const seg = on => ({ pressed: on ? 'true' : 'false', bg: on ? '#FFFFFF' : 'transparent', fg: on ? '#1E1D1B' : '#5B5852', shadow: on ? '0 1px 2px rgba(30,29,27,.08)' : 'none' });
+
+    const SERV = {
+      'Odontologia': [['Avaliação odontológica', 40, 150], ['Manutenção ortodôntica', 30, 220], ['Profilaxia e limpeza', 50, 260], ['Restauração em resina', 60, 340]],
+      'Fonoaudiologia': [['Avaliação fonoaudiológica', 60, 220], ['Terapia de linguagem', 45, 160], ['Terapia de voz', 45, 170], ['Reavaliação', 40, 140]],
+      'Quiropraxia': [['Avaliação quiroprática', 50, 200], ['Ajuste quiroprático', 30, 150], ['Liberação miofascial', 40, 170], ['Reavaliação postural', 40, 160]],
+      'Estética Avançada': [['Avaliação estética', 30, 120], ['Limpeza de pele profunda', 60, 240], ['Peeling químico', 45, 320], ['Microagulhamento', 60, 450]],
+      'Psicologia': [['Primeira consulta', 60, 220], ['Sessão de psicoterapia', 50, 180], ['Orientação a pais', 50, 180], ['Avaliação psicológica', 90, 380]],
+      'Fisioterapia': [['Avaliação fisioterapêutica', 50, 180], ['Sessão de fisioterapia', 45, 130], ['Pilates clínico', 50, 120], ['Drenagem linfática', 60, 160]],
+      'Nutrição': [['Consulta nutricional', 60, 240], ['Retorno', 40, 150], ['Bioimpedância', 20, 80], ['Plano alimentar esportivo', 60, 280]],
+      'Podologia': [['Avaliação podológica', 40, 120], ['Unha encravada', 50, 180], ['Podoprofilaxia', 45, 140], ['Órtese ungueal', 40, 160]]
+    };
+
+    const start = P.start || '08:00', end = P.end || '18:00', brk = P.brk || '12:00 – 13:00';
+    const days = [['Seg', '19'], ['Ter', '20'], ['Qua', '21'], ['Qui', '22'], ['Sex', '23'], ['Sáb', '24']];
+    const hours = ['08', '09', '10', '11', '12', '13', '14', '15', '16', '17'];
+    const seed = P.name.charCodeAt(6) + P.name.length * 7;
+    const startH = parseInt(start, 10);
+    const counts = days.map(() => [0, 0]);
+    const weekRows = hours.map((h, hi) => ({
+      hour: h + ':00',
+      cells: days.map((d, di) => {
+        const hn = parseInt(h, 10);
+        let kind;
+        if (P.status === 'away' && di === 0) kind = 'off';
+        else if (startH >= 13 && hn < 13) kind = 'off';
+        else if (startH < 13 && h === '12') kind = 'break';
+        else if (di === 5 && (hn >= 12 || startH >= 13)) kind = 'off';
+        else kind = ((di * 37 + hi * 53 + seed * 11) % 100) < P.occ ? 'busy' : 'free';
+        if (kind === 'busy' || kind === 'free') { counts[di][1]++; if (kind === 'busy') counts[di][0]++; }
+        const S = { busy: [P.color, P.color, 'solid'], free: ['#FFFFFF', '#9E998F', 'dashed'], break: ['#ECE9E3', '#ECE9E3', 'solid'], off: ['#FAF8F4', '#ECE9E3', 'solid'] }[kind];
+        return { bg: S[0], border: S[1], borderStyle: S[2] };
+      })
+    }));
+    const totalBusy = counts.reduce((a, c) => a + c[0], 0), totalSlots = counts.reduce((a, c) => a + c[1], 0);
+    const dayHeads = days.map((d, i) => ({
+      label: d[0] + ' ' + d[1],
+      count: counts[i][1] ? counts[i][0] + '/' + counts[i][1] + ' ocupados' : 'Sem expediente',
+      bg: i === 0 ? '#FBF6EC' : 'transparent', fg: i === 0 ? '#6F4D1D' : '#2E2C29'
+    }));
+
+    const DAYS = [['seg', 'Segunda'], ['ter', 'Terça'], ['qua', 'Quarta'], ['qui', 'Quinta'], ['sex', 'Sexta'], ['sab', 'Sábado'], ['dom', 'Domingo']];
+    const roomLabel = P.room.startsWith('Salas') ? 'Sala 2 · Fonoaudiologia' : P.room;
+    let load = 0;
+    const schedule = DAYS.map(([key, name]) => {
+      const off = key in offMap ? offMap[key] : (key === 'dom' || (key === 'sab' && startH >= 13));
+      const isSat = key === 'sab';
+      const s = isSat ? '08:00' : start, e = isSat ? '12:00' : end;
+      if (!off) load += parseInt(e, 10) - parseInt(s, 10) - (isSat ? 0 : (startH >= 13 ? 0 : 1));
+      return {
+        day: name, on: !off, off: off, aria: off ? 'false' : 'true',
+        switchLabel: (key === 'sab' || key === 'dom') ? 'Atende aos ' + name.toLowerCase() + 's' : 'Atende às ' + name.toLowerCase() + 's-feiras',
+        track: off ? '#C7C2B9' : '#8F6425', knob: off ? '0px' : '16px', dayColor: off ? '#77736B' : '#1E1D1B',
+        start: s, end: e, brk: isSat ? 'Sem intervalo' : brk, room: roomLabel,
+        startLabel: 'Início ' + name, endLabel: 'Fim ' + name, roomLabel: 'Sala de ' + name,
+        toggle: () => this.setState({ offMap: { ...offMap, [key]: !off } })
+      };
+    });
+
+    const up = !String(P.k[3]).startsWith('-');
+    return {
+      resultLabel: visible.length === 8 ? 'Exibindo 8 de 8 profissionais' : 'Exibindo ' + visible.length + ' de 8 profissionais',
+      onSearch: e => this.setState({ q: e.target.value }),
+      isCards: view === 'cards', isList: view === 'list',
+      viewCards: { ...seg(view === 'cards'), onClick: () => this.setState({ view: 'cards' }) },
+      viewList: { ...seg(view === 'list'), onClick: () => this.setState({ view: 'list' }) },
+      chips: chipNames.map(n => {
+        const on = n === spec;
+        return {
+          label: n, color: SP[n] || 'transparent', dotDisplay: SP[n] ? 'inline-block' : 'none',
+          pressed: on ? 'true' : 'false',
+          bg: on ? '#FBF6EC' : '#FFFFFF', fg: on ? '#6F4D1D' : '#43413C', border: on ? '#CC9B47' : '#DFDBD3',
+          onClick: () => this.setState({ spec: n })
+        };
+      }),
+      cards: visible.map(decorate),
+      prof: { ...P, hoursText: startH >= 13 ? 'Seg a sex · 13:00–19:00' : 'Seg a sex · 08:00–18:00 · Sáb 08:00–12:00' },
+      kpis: [
+        { label: 'Atendimentos · out', value: String(P.k[0]), delta: P.k[3], note: 'vs. setembro', up: up, down: !up, deltaColor: up ? '#2E7351' : '#A93B30' },
+        { label: 'Ocupação', value: P.occ + '%', delta: up ? '+4 p.p.' : '-3 p.p.', note: 'da capacidade semanal', up: up, down: !up, deltaColor: up ? '#2E7351' : '#A93B30' },
+        { label: 'Faturamento gerado', value: 'R$ ' + P.k[1], delta: up ? '+8,2%' : '-3,1%', note: 'valor fictício', up: up, down: !up, deltaColor: up ? '#2E7351' : '#A93B30' },
+        { label: 'Pontualidade', value: P.k[2] + '%', delta: '+1 p.p.', note: 'inícios em até 5 min', up: true, down: false, deltaColor: '#2E7351' }
+      ],
+      services: (SERV[P.spec] || []).map(([n, d, v]) => ({ name: n, dur: d + ' min', price: 'R$ ' + v + ',00' })),
+      weekRows: weekRows,
+      dayHeads: dayHeads,
+      weekSummary: totalBusy + ' de ' + totalSlots + ' horários ocupados',
+      weekAria: 'Agenda semanal de ' + P.name + ': ' + totalBusy + ' de ' + totalSlots + ' horários ocupados entre 19 e 24 de outubro',
+      weeklyLoad: 'carga semanal de ' + load + ' h',
+      schedule: schedule,
+      blocks: [
+        { day: '02', month: 'nov', title: 'Feriado de Finados', when: 'Segunda, 02/11 · dia inteiro', note: 'Clínica fechada', bg: '#ECE9E3', fg: '#43413C', removeLabel: 'Remover bloqueio Feriado de Finados' },
+        { day: '06', month: 'nov', title: 'Congresso', when: 'Sexta e sábado, 06–07/11 · dia inteiro', note: '5 pacientes reagendados via WhatsApp', bg: '#FBF6EC', fg: '#6F4D1D', removeLabel: 'Remover bloqueio Congresso' },
+        { day: '21', month: 'nov', title: 'Curso de atualização', when: 'Sábado, 21/11 · 08:00–12:00', note: 'Agenda bloqueada para novos horários', bg: '#E5EEF6', fg: '#2D5F88', removeLabel: 'Remover bloqueio Curso de atualização' },
+        { day: '21', month: 'dez', title: 'Férias', when: '21/12 a 04/01', note: 'Retorno previsto em 05/01/2027', bg: '#E6F2EB', fg: '#2E7351', removeLabel: 'Remover bloqueio Férias' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

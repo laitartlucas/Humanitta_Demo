@@ -1,0 +1,737 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Responsivo — Humanittá Gestão</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&amp;family=Manrope:wght@400;500;600;700;800&amp;family=Josefin+Sans:wght@300;400&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#FAF8F4}
+a{color:#8F6425}a:hover{color:#6F4D1D}
+</style>
+</helmet>
+<div style="min-height: 100vh; background: #F5F3EF; font-family: Manrope, system-ui, sans-serif; color: #1E1D1B">
+  <div style="max-width: 1360px; margin: 0 auto; padding: 56px 32px 96px; box-sizing: border-box; display: flex; flex-direction: column; gap: 72px">
+
+    <!-- CABEÇALHO -->
+    <header style="display: flex; flex-direction: column; gap: 16px">
+      <span style="font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: #77736B">Humanittá Gestão · Design System v1.0</span>
+      <h1 style="margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 56px; line-height: 1.04">Responsivo · Tablet &amp; Smartphone</h1>
+      <p style="margin: 0; font-size: 16px; line-height: 1.6; color: #5B5852; max-width: 760px">A recepção trabalha no desktop; profissionais consultam a agenda no tablet entre atendimentos; a gestora acompanha o dia pelo celular. As mesmas peças, reorganizadas para cada contexto.</p>
+      <div style="display: flex; flex-wrap: wrap; gap: 8px">
+        <sc-for list="{{breakpoints}}" as="b" hint-placeholder-count="4">
+          <span style="display: inline-flex; align-items: center; gap: 8px; height: 30px; padding: 0 12px; border-radius: 999px; background: #FFFFFF; border: 1px solid #DFDBD3; font-size: 12px; font-weight: 600; color: #43413C"><strong style="color: #1E1D1B">{{b.name}}</strong>{{b.range}}</span>
+        </sc-for>
+      </div>
+    </header>
+
+    <!-- ================= TABLET ================= -->
+    <section style="display: flex; flex-direction: column; gap: 24px">
+      <div style="display: flex; flex-direction: column; gap: 6px">
+        <span style="font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: #8F6425">01 · Tablet · 834 × 1112</span>
+        <h2 style="margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 40px; line-height: 1.1">Dashboard com menu em drawer</h2>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 32px; align-items: flex-start">
+
+        <!-- Moldura tablet -->
+        <div role="img" aria-label="Mockup do Dashboard em tablet retrato" style="flex: 0 0 auto; border: 10px solid #2E2C29; border-radius: 32px; overflow: hidden; background: #FAF8F4; box-shadow: 0 18px 50px rgba(30,29,27,.14)">
+          <div style="width: 834px; height: 1112px; overflow: hidden; display: flex; flex-direction: column; background: #FAF8F4">
+            <header style="height: 64px; flex-shrink: 0; display: flex; align-items: center; gap: 12px; padding: 0 20px; box-sizing: border-box; background: #FFFFFF; border-bottom: 1px solid #DFDBD3">
+              <button type="button" aria-label="Abrir menu" style="width: 44px; height: 44px; border: 1px solid #DFDBD3; border-radius: 10px; background: #FFFFFF; color: #1E1D1B; display: inline-flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h16"></path><path d="M4 6h16"></path><path d="M4 18h16"></path></svg></button>
+              <svg width="32" height="32" viewBox="0 0 64 64" aria-hidden="true">
+                <defs><linearGradient id="rsT" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#DDB872"></stop><stop offset=".55" stop-color="#B5832F"></stop><stop offset="1" stop-color="#7A5220"></stop></linearGradient></defs>
+                <circle cx="32" cy="32" r="30" fill="none" stroke="#B5832F" stroke-width="2"></circle>
+                <circle cx="24" cy="31" r="3.6" fill="url(#rsT)"></circle>
+                <path d="M20 39.5c0-2.6 1.8-4.3 4-4.3s4 1.7 4 4.3V47c-4.4 0-8-3.2-8-7.5z" fill="url(#rsT)"></path>
+                <circle cx="38.5" cy="19.5" r="4.6" fill="url(#rsT)"></circle>
+                <path d="M31.5 31c0-3.3 2.7-5.6 6-5.6h6.5V40c0 4.6-3.7 8-8.3 8h-4.2z" fill="url(#rsT)"></path>
+              </svg>
+              <span style="display: flex; flex-direction: column; margin-right: auto">
+                <span style="font-size: 11px; font-weight: 600; color: #77736B">Início</span>
+                <span style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 24px; font-weight: 600; line-height: 1.1">Dashboard</span>
+              </span>
+              <span style="display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; background: #FBF0DA; color: #9A5F0E; font-size: 11px; font-weight: 700">Ambiente de demonstração</span>
+              <button type="button" aria-label="Buscar" style="width: 44px; height: 44px; border: 1px solid #DFDBD3; border-radius: 10px; background: #FFFFFF; color: #43413C; display: inline-flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg></button>
+              <button type="button" aria-label="Notificações (3 novas)" style="position: relative; width: 44px; height: 44px; border: 1px solid #DFDBD3; border-radius: 10px; background: #FFFFFF; color: #43413C; display: inline-flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path></svg><span aria-hidden="true" style="position: absolute; top: 9px; right: 10px; width: 8px; height: 8px; border-radius: 999px; background: #A93B30; border: 2px solid #FFFFFF"></span></button>
+              <span role="img" aria-label="Camila S., Administradora" style="width: 36px; height: 36px; border-radius: 999px; background: #F5E9D0; color: #6F4D1D; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; box-shadow: 0 0 0 2px #FFFFFF, 0 0 0 3px #DDB872">CS</span>
+            </header>
+            <main style="flex: 1; padding: 24px; display: flex; flex-direction: column; gap: 20px; overflow: hidden">
+              <div style="display: flex; align-items: flex-end; gap: 16px">
+                <span style="display: flex; flex-direction: column; gap: 4px; margin-right: auto">
+                  <span style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 32px; font-weight: 600; line-height: 1.1">Bom dia, Camila</span>
+                  <span style="font-size: 13px; color: #5B5852">Segunda, 19 de outubro · 24 consultas · 7 a confirmar</span>
+                </span>
+                <a href="AgendaModais.dc.html" style="display: inline-flex; align-items: center; gap: 8px; height: 44px; padding: 0 18px; border-radius: 8px; background: #8F6425; color: #FFFFFF; font-size: 14px; font-weight: 700; text-decoration: none"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>Novo agendamento</a>
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px">
+                <sc-for list="{{kpis}}" as="k" hint-placeholder-count="4">
+                  <div style="background: #FFFFFF; border: 1px solid #DFDBD3; border-radius: 12px; box-shadow: 0 1px 2px rgba(30,29,27,.06); padding: 18px 20px; display: flex; flex-direction: column; gap: 10px">
+                    <span style="font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #77736B">{{k.label}}</span>
+                    <span style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 36px; font-weight: 600; line-height: 1">{{k.value}}</span>
+                    <span style="font-size: 12px; font-weight: 600; color: #5B5852"><span style="color: {{k.deltaColor}}; font-weight: 700">{{k.delta}}</span> {{k.note}}</span>
+                  </div>
+                </sc-for>
+              </div>
+              <div style="background: #FFFFFF; border: 1px solid #DFDBD3; border-radius: 12px; box-shadow: 0 1px 2px rgba(30,29,27,.06); padding: 20px; display: flex; flex-direction: column; gap: 16px">
+                <div style="display: flex; align-items: center; gap: 12px">
+                  <span style="display: flex; flex-direction: column; margin-right: auto"><span style="font-size: 15px; font-weight: 700">Faturamento</span><span style="font-size: 12px; color: #77736B">Últimos 6 meses</span></span>
+                  <span style="display: inline-flex; padding: 3px; border-radius: 10px; background: #F5F3EF; gap: 2px">
+                    <span style="height: 32px; padding: 0 12px; display: inline-flex; align-items: center; border-radius: 8px; color: #5B5852; font-size: 12px; font-weight: 700">3M</span>
+                    <span style="height: 32px; padding: 0 12px; display: inline-flex; align-items: center; border-radius: 8px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(30,29,27,.08); font-size: 12px; font-weight: 700">6M</span>
+                  </span>
+                </div>
+                <div style="display: flex; align-items: flex-end; gap: 14px; height: 200px; border-bottom: 1px solid #ECE9E3">
+                  <sc-for list="{{revenue}}" as="m" hint-placeholder-count="6">
+                    <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 6px; height: 100%">
+                      <span style="font-size: 11px; font-weight: 700; color: {{m.labelColor}}">{{m.label}}</span>
+                      <span style="width: 64%; border-radius: 6px 6px 2px 2px; background: {{m.color}}; height: {{m.h}}"></span>
+                    </div>
+                  </sc-for>
+                </div>
+                <div style="display: flex; gap: 14px; margin-top: -8px">
+                  <sc-for list="{{revenue}}" as="m" hint-placeholder-count="6">
+                    <span style="flex: 1; text-align: center; font-size: 12px; font-weight: 600; color: #5B5852">{{m.month}}</span>
+                  </sc-for>
+                </div>
+              </div>
+              <div style="background: #FFFFFF; border: 1px solid #DFDBD3; border-radius: 12px; box-shadow: 0 1px 2px rgba(30,29,27,.06); display: flex; flex-direction: column">
+                <div style="display: flex; align-items: center; padding: 16px 20px">
+                  <span style="font-size: 15px; font-weight: 700; margin-right: auto">Próximos atendimentos</span>
+                  <a href="Agenda.dc.html" style="font-size: 13px; font-weight: 700; color: #8F6425; text-decoration: none">Abrir agenda →</a>
+                </div>
+                <sc-for list="{{upcoming}}" as="a" hint-placeholder-count="4">
+                  <div style="display: flex; align-items: center; gap: 14px; min-height: 64px; padding: 0 20px; border-top: 1px solid #ECE9E3">
+                    <span style="width: 52px; display: flex; flex-direction: column"><span style="font-weight: 800; font-size: 14px; font-variant-numeric: tabular-nums">{{a.time}}</span><span style="font-size: 11px; color: #77736B">{{a.room}}</span></span>
+                    <span style="width: 34px; height: 34px; border-radius: 999px; background: #F5F3EF; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; color: #43413C">{{a.ini}}</span>
+                    <span style="flex: 1; display: flex; flex-direction: column; min-width: 0"><span style="font-size: 14px; font-weight: 700">{{a.patient}}</span><span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #5B5852"><span style="width: 7px; height: 7px; border-radius: 999px; background: {{a.specColor}}"></span>{{a.specialty}} · {{a.pro}}</span></span>
+                    <span style="display: inline-flex; align-items: center; gap: 6px; height: 24px; padding: 0 10px; border-radius: 999px; background: {{a.stBg}}; color: {{a.stFg}}; font-size: 12px; font-weight: 700"><span style="width: 6px; height: 6px; border-radius: 999px; background: {{a.stFg}}"></span>{{a.status}}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </main>
+          </div>
+        </div>
+
+        <!-- Notas tablet -->
+        <div style="flex: 1 1 300px; min-width: 0; display: flex; flex-direction: column; gap: 20px">
+          <div style="display: flex; flex-direction: column; gap: 12px">
+            <h3 style="margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 26px; font-weight: 600">O que muda</h3>
+            <ul style="margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 10px; font-size: 14px; line-height: 1.55; color: #43413C">
+              <li>Sidebar sai da tela e vira drawer acionado pelo botão de menu (44 × 44).</li>
+              <li>Busca global vira ícone; abre em tela cheia com o teclado.</li>
+              <li>KPIs em 2 colunas; gráfico ocupa a largura toda.</li>
+              <li>Tabela de próximos vira lista de linhas com status à direita.</li>
+              <li>Padding de página 24 px; alvos de toque ≥ 44 px.</li>
+            </ul>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px">
+            <span style="font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #5B5852">Drawer aberto · miniatura</span>
+            <div role="img" aria-label="Miniatura do menu em drawer sobre o dashboard no tablet" style="position: relative; width: 280px; max-width: 100%; height: 372px; border: 6px solid #2E2C29; border-radius: 20px; overflow: hidden; background: #FAF8F4">
+              <div aria-hidden="true" style="position: absolute; inset: 0; padding: 48px 14px 14px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; align-content: start">
+                <span style="height: 60px; border-radius: 8px; background: #FFFFFF; border: 1px solid #ECE9E3"></span>
+                <span style="height: 60px; border-radius: 8px; background: #FFFFFF; border: 1px solid #ECE9E3"></span>
+                <span style="height: 60px; border-radius: 8px; background: #FFFFFF; border: 1px solid #ECE9E3"></span>
+                <span style="height: 60px; border-radius: 8px; background: #FFFFFF; border: 1px solid #ECE9E3"></span>
+              </div>
+              <div aria-hidden="true" style="position: absolute; inset: 0; background: rgba(30,29,27,.45)"></div>
+              <div style="position: absolute; top: 0; left: 0; bottom: 0; width: 72%; background: #1E1D1B; padding: 16px 10px; box-sizing: border-box; display: flex; flex-direction: column; gap: 4px">
+                <span style="display: flex; align-items: center; justify-content: space-between; padding: 0 6px 10px">
+                  <span style="font-family: 'Josefin Sans', Manrope, sans-serif; font-weight: 300; font-size: 16px; letter-spacing: .08em; color: #F3EFE8">Humanittá</span>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#B9B3A8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+                </span>
+                <sc-for list="{{drawerItems}}" as="d" hint-placeholder-count="8">
+                  <span style="display: flex; align-items: center; justify-content: space-between; height: 30px; padding: 0 8px; border-radius: 8px; background: {{d.bg}}; color: {{d.fg}}; font-size: 12px; font-weight: {{d.weight}}">{{d.name}}<span style="width: 5px; height: 5px; border-radius: 999px; background: {{d.dot}}"></span></span>
+                </sc-for>
+              </div>
+            </div>
+            <span style="font-size: 12px; color: #5B5852">Drawer de 320 px com overlay; fecha no X, no overlay ou com Esc. Foco preso dentro enquanto aberto.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= NOTEBOOK ================= -->
+    <section style="display: flex; flex-direction: column; gap: 24px">
+      <div style="display: flex; flex-direction: column; gap: 6px">
+        <span style="font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: #8F6425">02 · Notebook · 1024 × 640</span>
+        <h2 style="margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 40px; line-height: 1.1">Agenda semanal com sidebar recolhida</h2>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start">
+        <div role="img" aria-label="Mockup da Agenda semanal em notebook" style="flex: 0 0 auto; border: 10px solid #2E2C29; border-radius: 18px; overflow: hidden; background: #FAF8F4; box-shadow: 0 18px 50px rgba(30,29,27,.14)">
+          <div style="width: 1024px; height: 640px; overflow: hidden; display: flex; background: #FAF8F4">
+            <!-- Sidebar recolhida -->
+            <aside aria-label="Menu principal (recolhido)" style="width: 76px; flex-shrink: 0; background: #1E1D1B; display: flex; flex-direction: column; align-items: center; gap: 18px; padding: 18px 0">
+              <svg width="36" height="36" viewBox="0 0 64 64" aria-hidden="true">
+                <defs><linearGradient id="rsN" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#DDB872"></stop><stop offset=".55" stop-color="#CC9B47"></stop><stop offset="1" stop-color="#B5832F"></stop></linearGradient></defs>
+                <circle cx="32" cy="32" r="30" fill="none" stroke="#CC9B47" stroke-width="2"></circle>
+                <circle cx="24" cy="31" r="3.6" fill="url(#rsN)"></circle>
+                <path d="M20 39.5c0-2.6 1.8-4.3 4-4.3s4 1.7 4 4.3V47c-4.4 0-8-3.2-8-7.5z" fill="url(#rsN)"></path>
+                <circle cx="38.5" cy="19.5" r="4.6" fill="url(#rsN)"></circle>
+                <path d="M31.5 31c0-3.3 2.7-5.6 6-5.6h6.5V40c0 4.6-3.7 8-8.3 8h-4.2z" fill="url(#rsN)"></path>
+              </svg>
+              <nav style="display: flex; flex-direction: column; align-items: center; gap: 2px">
+                <a href="Dashboard.dc.html" aria-label="Dashboard" style="width: 44px; height: 40px; border-radius: 10px; color: #D6D1C7; display: inline-flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="7" height="9" x="3" y="3" rx="1"></rect><rect width="7" height="5" x="14" y="3" rx="1"></rect><rect width="7" height="9" x="14" y="12" rx="1"></rect><rect width="7" height="5" x="3" y="16" rx="1"></rect></svg></a>
+                <a href="Agenda.dc.html" aria-current="page" aria-label="Agenda" style="position: relative; width: 44px; height: 40px; border-radius: 10px; background: rgba(221,184,114,.12); color: #DDB872; display: inline-flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path><path d="M8 14h.01"></path><path d="M12 14h.01"></path><path d="M16 14h.01"></path><path d="M8 18h.01"></path><path d="M12 18h.01"></path><path d="M16 18h.01"></path></svg><span aria-hidden="true" style="position: absolute; right: 4px; top: 17px; width: 5px; height: 5px; border-radius: 999px; background: #DDB872"></span></a>
+                <a href="Pacientes.dc.html" aria-label="Pacientes" style="width: 44px; height: 40px; border-radius: 10px; color: #D6D1C7; display: inline-flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></a>
+                <a href="Profissionais.dc.html" aria-label="Profissionais" style="width: 44px; height: 40px; border-radius: 10px; color: #D6D1C7; display: inline-flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2"></path><path d="M5 2v2"></path><path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1"></path><path d="M8 15a6 6 0 0 0 12 0v-3"></path><circle cx="20" cy="10" r="2"></circle></svg></a>
+                <a href="Atendimentos.dc.html" aria-label="Atendimentos" style="width: 44px; height: 40px; border-radius: 10px; color: #D6D1C7; display: inline-flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="8" height="4" x="8" y="2" rx="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><path d="M12 11h4"></path><path d="M12 16h4"></path><path d="M8 11h.01"></path><path d="M8 16h.01"></path></svg></a>
+                <a href="Financeiro.dc.html" aria-label="Financeiro" style="width: 44px; height: 40px; border-radius: 10px; color: #D6D1C7; display: inline-flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"></path><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"></path></svg></a>
+                <a href="WhatsApp.dc.html" aria-label="WhatsApp, 4 conversas não lidas" style="position: relative; width: 44px; height: 40px; border-radius: 10px; color: #D6D1C7; display: inline-flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path></svg><span aria-hidden="true" style="position: absolute; top: 3px; right: 3px; min-width: 16px; height: 16px; padding: 0 4px; box-sizing: border-box; border-radius: 999px; background: #DDB872; color: #1E1D1B; font-size: 10px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center">4</span></a>
+                <a href="AssistenteIA.dc.html" aria-label="Assistente IA" style="width: 44px; height: 40px; border-radius: 10px; color: #D6D1C7; display: inline-flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 8V4H8"></path><rect width="16" height="12" x="4" y="8" rx="2"></rect><path d="M2 14h2"></path><path d="M20 14h2"></path><path d="M15 13v2"></path><path d="M9 13v2"></path></svg></a>
+                <a href="Relatorios.dc.html" aria-label="Relatórios" style="width: 44px; height: 40px; border-radius: 10px; color: #D6D1C7; display: inline-flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"></path><path d="M18 17V9"></path><path d="M13 17V5"></path><path d="M8 17v-3"></path></svg></a>
+                <a href="Configuracoes.dc.html" aria-label="Configurações" style="width: 44px; height: 40px; border-radius: 10px; color: #D6D1C7; display: inline-flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg></a>
+              </nav>
+              <span role="img" aria-label="Camila S., Administradora" style="margin-top: auto; width: 34px; height: 34px; border-radius: 999px; background: #43413C; color: #F5E9D0; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800">CS</span>
+            </aside>
+            <!-- Conteúdo -->
+            <div style="flex: 1; min-width: 0; display: flex; flex-direction: column">
+              <header style="height: 64px; flex-shrink: 0; display: flex; align-items: center; gap: 10px; padding: 0 20px; box-sizing: border-box; background: #FFFFFF; border-bottom: 1px solid #DFDBD3">
+                <span style="display: flex; flex-direction: column; margin-right: auto">
+                  <span style="font-size: 11px; font-weight: 600; color: #77736B">Semana de 19 a 24 de outubro</span>
+                  <span style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 24px; font-weight: 600; line-height: 1.1">Agenda</span>
+                </span>
+                <span style="display: inline-flex; align-items: center; height: 24px; padding: 0 9px; border-radius: 999px; background: #FBF0DA; color: #9A5F0E; font-size: 11px; font-weight: 700">Demo</span>
+                <button type="button" aria-label="Semana anterior" style="width: 40px; height: 40px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; color: #43413C; display: inline-flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></button>
+                <button type="button" style="height: 40px; padding: 0 12px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; color: #2E2C29; font: 700 13px Manrope, sans-serif">Hoje</button>
+                <button type="button" aria-label="Próxima semana" style="width: 40px; height: 40px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; color: #43413C; display: inline-flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg></button>
+                <span role="group" aria-label="Visualização" style="display: inline-flex; padding: 3px; border-radius: 10px; background: #F5F3EF; gap: 2px">
+                  <button type="button" aria-pressed="false" style="height: 34px; padding: 0 12px; border: 0; border-radius: 8px; background: transparent; color: #5B5852; font: 700 12px Manrope, sans-serif">Dia</button>
+                  <button type="button" aria-pressed="true" style="height: 34px; padding: 0 12px; border: 0; border-radius: 8px; background: #FFFFFF; color: #1E1D1B; box-shadow: 0 1px 2px rgba(30,29,27,.08); font: 700 12px Manrope, sans-serif">Semana</button>
+                  <button type="button" aria-pressed="false" style="height: 34px; padding: 0 12px; border: 0; border-radius: 8px; background: transparent; color: #5B5852; font: 700 12px Manrope, sans-serif">Mês</button>
+                </span>
+                <a href="AgendaModais.dc.html" style="display: inline-flex; align-items: center; gap: 6px; height: 40px; padding: 0 14px; border-radius: 8px; background: #8F6425; color: #FFFFFF; font-size: 13px; font-weight: 700; text-decoration: none"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>Novo</a>
+              </header>
+              <!-- Cabeçalho de dias -->
+              <div style="display: flex; height: 52px; flex-shrink: 0; background: #FFFFFF; border-bottom: 1px solid #DFDBD3">
+                <span style="width: 52px; flex-shrink: 0"></span>
+                <sc-for list="{{week}}" as="d" hint-placeholder-count="6">
+                  <span style="flex: 1; min-width: 0; display: flex; align-items: center; justify-content: center; gap: 8px; border-left: 1px solid #ECE9E3; background: {{d.headBg}}">
+                    <span style="font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: {{d.labelFg}}">{{d.label}}</span>
+                    <span style="width: 30px; height: 30px; border-radius: 999px; background: {{d.numBg}}; color: {{d.numFg}}; display: inline-flex; align-items: center; justify-content: center; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 18px; font-weight: 700">{{d.num}}</span>
+                  </span>
+                </sc-for>
+              </div>
+              <!-- Grade -->
+              <div style="position: relative; flex: 1; overflow: hidden; display: flex">
+                <div aria-hidden="true" style="position: absolute; inset: 0">
+                  <sc-for list="{{hours}}" as="h" hint-placeholder-count="6">
+                    <span style="position: absolute; left: 0; right: 0; top: {{h.top}}; display: flex; align-items: flex-start">
+                      <span style="width: 44px; padding-right: 8px; text-align: right; font-size: 11px; font-weight: 600; color: #77736B; transform: translateY(-7px); font-variant-numeric: tabular-nums">{{h.label}}</span>
+                      <span style="flex: 1; border-top: 1px solid #ECE9E3"></span>
+                    </span>
+                  </sc-for>
+                </div>
+                <span style="width: 52px; flex-shrink: 0"></span>
+                <sc-for list="{{week}}" as="d" hint-placeholder-count="6">
+                  <div style="position: relative; flex: 1; min-width: 0; border-left: 1px solid #ECE9E3; background: {{d.colBg}}">
+                    <sc-for list="{{d.events}}" as="e" hint-placeholder-count="3">
+                      <span style="position: absolute; left: 4px; right: 4px; top: {{e.top}}; height: {{e.h}}; box-sizing: border-box; overflow: hidden; padding: 8px 7px 4px; border: 1px solid #DFDBD3; border-radius: 6px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(30,29,27,.06); display: flex; flex-direction: column; gap: 1px">
+                        <span style="position: absolute; top: 0; left: 0; right: 0; height: 3px; background: {{e.color}}"></span>
+                        <span style="font-size: 10px; font-weight: 700; color: #5B5852; font-variant-numeric: tabular-nums">{{e.time}}</span>
+                        <span style="font-size: 12px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{e.name}}</span>
+                        <span style="display: inline-flex; align-items: center; gap: 4px; font-size: 10px; color: #5B5852; white-space: nowrap; overflow: hidden"><span style="width: 6px; height: 6px; flex-shrink: 0; border-radius: 999px; background: {{e.stFg}}"></span>{{e.status}}</span>
+                      </span>
+                    </sc-for>
+                    <sc-if value="{{d.isToday}}" hint-placeholder-val="{{ false }}">
+                      <span aria-hidden="true" style="position: absolute; left: -4px; right: 0; top: {{nowTop}}; display: flex; align-items: center; z-index: 2"><span style="width: 8px; height: 8px; border-radius: 999px; background: #B5832F"></span><span style="flex: 1; height: 2px; background: #B5832F"></span></span>
+                    </sc-if>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="flex: 1 1 200px; min-width: 0; display: flex; flex-direction: column; gap: 12px">
+          <h3 style="margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 26px; font-weight: 600">1024 – 1279 px</h3>
+          <ul style="margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 10px; font-size: 14px; line-height: 1.55; color: #43413C">
+            <li>Sidebar recolhida em 76 px; tooltip e aria-label em cada ícone.</li>
+            <li>Semana de 6 dias sem coluna de profissionais; filtro vai para o menu.</li>
+            <li>Bloco mostra horário, paciente e status; especialidade na faixa do topo.</li>
+            <li>Linha dourada marca o horário atual.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= SMARTPHONE ================= -->
+    <section style="display: flex; flex-direction: column; gap: 24px">
+      <div style="display: flex; flex-direction: column; gap: 6px">
+        <span style="font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: #8F6425">03 · Smartphone · 390 × 844</span>
+        <h2 style="margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 40px; line-height: 1.1">O dia da clínica na palma da mão</h2>
+        <p style="margin: 0; font-size: 14px; line-height: 1.6; color: #5B5852; max-width: 760px">Barra inferior com 5 destinos, alvos de 44 px ou mais, conteúdo em cards empilhados e ações principais ao alcance do polegar.</p>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 40px 24px">
+
+        <!-- PHONE 1 · INÍCIO -->
+        <div style="flex: 0 0 auto; display: flex; flex-direction: column; gap: 10px">
+          <span style="font-size: 12px; font-weight: 700; color: #43413C">1 · Início</span>
+          <div role="img" aria-label="Mockup do Dashboard no smartphone" style="border: 10px solid #2E2C29; border-radius: 48px; overflow: hidden; background: #FAF8F4; box-shadow: 0 18px 50px rgba(30,29,27,.14)">
+            <div style="position: relative; width: 390px; height: 844px; overflow: hidden; display: flex; flex-direction: column; background: #FAF8F4">
+              <header style="height: 64px; flex-shrink: 0; display: flex; align-items: center; gap: 10px; padding: 8px 16px 0; box-sizing: border-box">
+                <svg width="34" height="34" viewBox="0 0 64 64" aria-hidden="true">
+                  <defs><linearGradient id="rsP1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#DDB872"></stop><stop offset=".55" stop-color="#B5832F"></stop><stop offset="1" stop-color="#7A5220"></stop></linearGradient></defs>
+                  <circle cx="32" cy="32" r="30" fill="none" stroke="#B5832F" stroke-width="2"></circle>
+                  <circle cx="24" cy="31" r="3.6" fill="url(#rsP1)"></circle>
+                  <path d="M20 39.5c0-2.6 1.8-4.3 4-4.3s4 1.7 4 4.3V47c-4.4 0-8-3.2-8-7.5z" fill="url(#rsP1)"></path>
+                  <circle cx="38.5" cy="19.5" r="4.6" fill="url(#rsP1)"></circle>
+                  <path d="M31.5 31c0-3.3 2.7-5.6 6-5.6h6.5V40c0 4.6-3.7 8-8.3 8h-4.2z" fill="url(#rsP1)"></path>
+                </svg>
+                <span style="display: inline-flex; align-items: center; height: 24px; padding: 0 9px; border-radius: 999px; background: #FBF0DA; color: #9A5F0E; font-size: 11px; font-weight: 700; margin-right: auto">Demo</span>
+                <button type="button" aria-label="Notificações (3 novas)" style="position: relative; width: 44px; height: 44px; border: 1px solid #DFDBD3; border-radius: 12px; background: #FFFFFF; color: #43413C; display: inline-flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path></svg><span aria-hidden="true" style="position: absolute; top: 9px; right: 10px; width: 8px; height: 8px; border-radius: 999px; background: #A93B30; border: 2px solid #FFFFFF"></span></button>
+                <span role="img" aria-label="Camila S." style="width: 40px; height: 40px; border-radius: 999px; background: #F5E9D0; color: #6F4D1D; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; box-shadow: 0 0 0 2px #FAF8F4, 0 0 0 3px #DDB872">CS</span>
+              </header>
+              <main style="flex: 1; overflow: hidden; display: flex; flex-direction: column; gap: 18px; padding: 14px 0 0">
+                <div style="padding: 0 16px; display: flex; flex-direction: column; gap: 4px">
+                  <span style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 32px; font-weight: 600; line-height: 1.05">Bom dia, Camila</span>
+                  <span style="font-size: 13px; color: #5B5852">Segunda, 19 de outubro de 2026</span>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 10px">
+                  <div style="display: flex; gap: 10px; overflow-x: auto; padding: 0 16px">
+                    <sc-for list="{{kpis}}" as="k" hint-placeholder-count="4">
+                      <div style="flex: 0 0 150px; background: #FFFFFF; border: 1px solid #DFDBD3; border-radius: 12px; box-shadow: 0 1px 2px rgba(30,29,27,.06); padding: 14px; display: flex; flex-direction: column; gap: 8px">
+                        <span style="font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #77736B">{{k.label}}</span>
+                        <span style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 30px; font-weight: 600; line-height: 1">{{k.value}}</span>
+                        <span style="font-size: 11px; font-weight: 600; color: #5B5852"><span style="color: {{k.deltaColor}}; font-weight: 700">{{k.delta}}</span> {{k.noteShort}}</span>
+                      </div>
+                    </sc-for>
+                  </div>
+                  <span aria-hidden="true" style="display: flex; justify-content: center; gap: 6px">
+                    <span style="width: 18px; height: 6px; border-radius: 999px; background: #B5832F"></span>
+                    <span style="width: 6px; height: 6px; border-radius: 999px; background: #DFDBD3"></span>
+                  </span>
+                </div>
+                <div style="padding: 0 16px; display: flex; flex-direction: column; gap: 10px">
+                  <div style="display: flex; align-items: center">
+                    <span style="font-size: 16px; font-weight: 700; margin-right: auto">Próximos atendimentos</span>
+                    <a href="Agenda.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; font-size: 13px; font-weight: 700; color: #8F6425; text-decoration: none">Ver agenda</a>
+                  </div>
+                  <sc-for list="{{upcoming}}" as="a" hint-placeholder-count="4">
+                    <div style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; background: #FFFFFF; border: 1px solid #DFDBD3; border-radius: 12px">
+                      <span style="width: 50px; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; padding-right: 12px; border-right: 1px solid #ECE9E3"><span style="font-size: 15px; font-weight: 800; font-variant-numeric: tabular-nums">{{a.time}}</span><span style="font-size: 10px; color: #77736B">{{a.dur}}</span></span>
+                      <span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px">
+                        <span style="font-size: 14px; font-weight: 700">{{a.patient}}</span>
+                        <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #5B5852"><span style="width: 7px; height: 7px; border-radius: 999px; background: {{a.specColor}}"></span>{{a.specialty}} · {{a.room}}</span>
+                      </span>
+                      <span style="display: inline-flex; align-items: center; gap: 5px; height: 22px; padding: 0 8px; border-radius: 999px; background: {{a.stBg}}; color: {{a.stFg}}; font-size: 11px; font-weight: 700; white-space: nowrap"><span style="width: 6px; height: 6px; border-radius: 999px; background: {{a.stFg}}"></span>{{a.statusShort}}</span>
+                    </div>
+                  </sc-for>
+                </div>
+              </main>
+              <nav aria-label="Navegação principal" style="height: 76px; flex-shrink: 0; display: flex; padding: 6px 6px 12px; box-sizing: border-box; background: #FFFFFF; border-top: 1px solid #DFDBD3">
+                <a href="Dashboard.dc.html" aria-current="page" style="flex: 1; min-height: 56px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; text-decoration: none; color: #8F6425; font-size: 11px; font-weight: 800"><span style="width: 56px; height: 30px; border-radius: 999px; background: #F5E9D0; display: inline-flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"></path><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg></span>Início</a>
+                <a href="Agenda.dc.html" style="flex: 1; min-height: 56px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; text-decoration: none; color: #5B5852; font-size: 11px; font-weight: 600"><span style="width: 56px; height: 30px; display: inline-flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path></svg></span>Agenda</a>
+                <a href="Pacientes.dc.html" style="flex: 1; min-height: 56px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; text-decoration: none; color: #5B5852; font-size: 11px; font-weight: 600"><span style="width: 56px; height: 30px; display: inline-flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></span>Pacientes</a>
+                <a href="WhatsApp.dc.html" aria-label="WhatsApp, 4 não lidas" style="flex: 1; min-height: 56px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; text-decoration: none; color: #5B5852; font-size: 11px; font-weight: 600"><span style="position: relative; width: 56px; height: 30px; display: inline-flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path></svg><span aria-hidden="true" style="position: absolute; top: 0; right: 10px; min-width: 16px; height: 16px; padding: 0 4px; box-sizing: border-box; border-radius: 999px; background: #B5832F; color: #1E1D1B; font-size: 10px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center">4</span></span>WhatsApp</a>
+                <a href="#menu" style="flex: 1; min-height: 56px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; text-decoration: none; color: #5B5852; font-size: 11px; font-weight: 600"><span style="width: 56px; height: 30px; display: inline-flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h16"></path><path d="M4 6h16"></path><path d="M4 18h16"></path></svg></span>Menu</a>
+              </nav>
+            </div>
+          </div>
+        </div>
+
+        <!-- PHONE 2 · AGENDA -->
+        <div style="flex: 0 0 auto; display: flex; flex-direction: column; gap: 10px">
+          <span style="font-size: 12px; font-weight: 700; color: #43413C">2 · Agenda do dia</span>
+          <div role="img" aria-label="Mockup da agenda diária no smartphone" style="border: 10px solid #2E2C29; border-radius: 48px; overflow: hidden; background: #FAF8F4; box-shadow: 0 18px 50px rgba(30,29,27,.14)">
+            <div style="position: relative; width: 390px; height: 844px; overflow: hidden; display: flex; flex-direction: column; background: #FAF8F4">
+              <header style="flex-shrink: 0; display: flex; flex-direction: column; gap: 12px; padding: 18px 16px 12px; background: #FFFFFF; border-bottom: 1px solid #DFDBD3">
+                <div style="display: flex; align-items: center; gap: 8px">
+                  <span style="display: flex; flex-direction: column; margin-right: auto">
+                    <span style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 28px; font-weight: 600; line-height: 1.05">Agenda</span>
+                    <span style="font-size: 12px; font-weight: 600; color: #77736B">Outubro 2026 · todos os profissionais</span>
+                  </span>
+                  <button type="button" aria-label="Buscar na agenda" style="width: 44px; height: 44px; border: 1px solid #DFDBD3; border-radius: 12px; background: #FFFFFF; color: #43413C; display: inline-flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg></button>
+                  <button type="button" aria-label="Filtrar" style="width: 44px; height: 44px; border: 1px solid #DFDBD3; border-radius: 12px; background: #FFFFFF; color: #43413C; display: inline-flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z"></path></svg></button>
+                </div>
+                <div role="group" aria-label="Escolher dia" style="display: flex; gap: 8px; overflow-x: auto; margin: 0 -16px; padding: 0 16px">
+                  <sc-for list="{{days}}" as="d" hint-placeholder-count="7">
+                    <button type="button" aria-pressed="{{d.pressed}}" aria-label="{{d.aria}}" style="flex: 0 0 50px; height: 66px; border: 1px solid {{d.border}}; border-radius: 14px; background: {{d.bg}}; color: {{d.fg}}; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; font-family: Manrope, sans-serif">
+                      <span style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; opacity: .9">{{d.wd}}</span>
+                      <span style="font-size: 18px; font-weight: 800">{{d.num}}</span>
+                      <span style="width: 4px; height: 4px; border-radius: 999px; background: {{d.dot}}"></span>
+                    </button>
+                  </sc-for>
+                </div>
+              </header>
+              <main style="flex: 1; overflow: hidden; padding: 14px 16px 0; display: flex; flex-direction: column; gap: 10px">
+                <span style="font-size: 12px; font-weight: 600; color: #5B5852">Segunda, 19 · 24 consultas · 7 a confirmar</span>
+                <sc-for list="{{dayList}}" as="a" hint-placeholder-count="6">
+                  <div style="display: flex; gap: 10px">
+                    <span style="width: 44px; flex-shrink: 0; padding-top: 12px; font-size: 13px; font-weight: 800; font-variant-numeric: tabular-nums; color: #43413C">{{a.time}}</span>
+                    <sc-if value="{{a.isFree}}" hint-placeholder-val="{{ false }}">
+                      <span style="flex: 1; min-height: 52px; display: flex; align-items: center; justify-content: center; gap: 6px; border: 1px dashed #C7C2B9; border-radius: 12px; font-size: 13px; font-weight: 700; color: #8F6425"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>{{a.patient}}</span>
+                    </sc-if>
+                    <sc-if value="{{a.isBusy}}" hint-placeholder-val="{{ true }}">
+                      <span style="position: relative; overflow: hidden; flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; padding: 13px 12px 10px; background: #FFFFFF; border: 1px solid #DFDBD3; border-radius: 12px">
+                        <span aria-hidden="true" style="position: absolute; top: 0; left: 0; right: 0; height: 4px; background: {{a.specColor}}"></span>
+                        <span style="display: flex; align-items: center; gap: 8px"><span style="font-size: 14px; font-weight: 700; margin-right: auto">{{a.patient}}</span><span style="display: inline-flex; align-items: center; gap: 5px; height: 22px; padding: 0 8px; border-radius: 999px; background: {{a.stBg}}; color: {{a.stFg}}; font-size: 11px; font-weight: 700"><span style="width: 6px; height: 6px; border-radius: 999px; background: {{a.stFg}}"></span>{{a.statusShort}}</span></span>
+                        <span style="font-size: 12px; color: #5B5852">{{a.specialty}} · {{a.pro}}</span>
+                        <span style="font-size: 11px; color: #77736B">{{a.room}} · {{a.dur}}</span>
+                      </span>
+                    </sc-if>
+                  </div>
+                </sc-for>
+              </main>
+              <a href="AgendaModais.dc.html" aria-label="Novo agendamento" style="position: absolute; right: 18px; bottom: 94px; width: 58px; height: 58px; border-radius: 999px; background: #8F6425; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; box-shadow: 0 6px 20px rgba(30,29,27,.25)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg></a>
+              <nav aria-label="Navegação principal" style="height: 76px; flex-shrink: 0; display: flex; padding: 6px 6px 12px; box-sizing: border-box; background: #FFFFFF; border-top: 1px solid #DFDBD3">
+                <a href="Dashboard.dc.html" style="flex: 1; min-height: 56px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; text-decoration: none; color: #5B5852; font-size: 11px; font-weight: 600"><span style="width: 56px; height: 30px; display: inline-flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"></path><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg></span>Início</a>
+                <a href="Agenda.dc.html" aria-current="page" style="flex: 1; min-height: 56px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; text-decoration: none; color: #8F6425; font-size: 11px; font-weight: 800"><span style="width: 56px; height: 30px; border-radius: 999px; background: #F5E9D0; display: inline-flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path></svg></span>Agenda</a>
+                <a href="Pacientes.dc.html" style="flex: 1; min-height: 56px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; text-decoration: none; color: #5B5852; font-size: 11px; font-weight: 600"><span style="width: 56px; height: 30px; display: inline-flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></span>Pacientes</a>
+                <a href="WhatsApp.dc.html" aria-label="WhatsApp, 4 não lidas" style="flex: 1; min-height: 56px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; text-decoration: none; color: #5B5852; font-size: 11px; font-weight: 600"><span style="position: relative; width: 56px; height: 30px; display: inline-flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path></svg><span aria-hidden="true" style="position: absolute; top: 0; right: 10px; min-width: 16px; height: 16px; padding: 0 4px; box-sizing: border-box; border-radius: 999px; background: #B5832F; color: #1E1D1B; font-size: 10px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center">4</span></span>WhatsApp</a>
+                <a href="#menu" style="flex: 1; min-height: 56px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; text-decoration: none; color: #5B5852; font-size: 11px; font-weight: 600"><span style="width: 56px; height: 30px; display: inline-flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h16"></path><path d="M4 6h16"></path><path d="M4 18h16"></path></svg></span>Menu</a>
+              </nav>
+            </div>
+          </div>
+        </div>
+
+        <!-- PHONE 3 · PACIENTE -->
+        <div style="flex: 0 0 auto; display: flex; flex-direction: column; gap: 10px">
+          <span style="font-size: 12px; font-weight: 700; color: #43413C">3 · Perfil do paciente</span>
+          <div role="img" aria-label="Mockup do perfil do paciente no smartphone" style="border: 10px solid #2E2C29; border-radius: 48px; overflow: hidden; background: #FAF8F4; box-shadow: 0 18px 50px rgba(30,29,27,.14)">
+            <div style="position: relative; width: 390px; height: 844px; overflow: hidden; display: flex; flex-direction: column; background: #FAF8F4">
+              <div style="position: relative; overflow: hidden; flex-shrink: 0; background: #FFFFFF; border-bottom: 1px solid #DFDBD3">
+                <div aria-hidden="true" style="position: absolute; top: -90px; right: -90px; width: 190px; height: 190px; border-radius: 999px; background: #B5832F"></div>
+                <div style="position: relative; display: flex; align-items: center; padding: 10px 8px 0">
+                  <a href="Pacientes.dc.html" aria-label="Voltar para pacientes" style="width: 44px; height: 44px; border-radius: 12px; color: #1E1D1B; display: inline-flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg></a>
+                  <span style="flex: 1; font-size: 14px; font-weight: 700">Paciente</span>
+                  <button type="button" aria-label="Mais ações" style="width: 44px; height: 44px; border: 0; border-radius: 12px; background: #FFFFFF; color: #1E1D1B; display: inline-flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg></button>
+                </div>
+                <div style="position: relative; display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 8px 16px 16px; text-align: center">
+                  <span style="width: 80px; height: 80px; border-radius: 999px; background: #ECE9E3; color: #43413C; display: inline-flex; align-items: center; justify-content: center; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 30px; font-weight: 600; box-shadow: 0 0 0 3px #FFFFFF, 0 0 0 4.5px #CC9B47">CM</span>
+                  <span style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 28px; font-weight: 600; line-height: 1.05">Carla Menegatti</span>
+                  <span style="font-size: 12px; color: #5B5852">38 anos · paciente desde mar/2021 · 18 consultas</span>
+                  <span style="display: flex; flex-wrap: wrap; justify-content: center; gap: 6px">
+                    <span style="display: inline-flex; align-items: center; height: 24px; padding: 0 8px; border-radius: 6px; background: #F5F3EF; color: #43413C; font-size: 11px; font-weight: 600">Retorno</span>
+                    <span style="display: inline-flex; align-items: center; height: 24px; padding: 0 8px; border-radius: 6px; background: #F5F3EF; color: #43413C; font-size: 11px; font-weight: 600">Prefere manhã</span>
+                    <span style="display: inline-flex; align-items: center; gap: 5px; height: 24px; padding: 0 8px; border-radius: 999px; background: #E6F2EB; color: #2E7351; font-size: 11px; font-weight: 700"><span style="width: 6px; height: 6px; border-radius: 999px; background: #2E7351"></span>Em dia</span>
+                  </span>
+                  <span style="width: 100%; display: flex; gap: 8px; margin-top: 6px">
+                    <a href="#ligar" style="flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 44px; border: 1px solid #DFDBD3; border-radius: 10px; color: #2E2C29; text-decoration: none; font-size: 13px; font-weight: 700"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>Ligar</a>
+                    <a href="WhatsApp.dc.html" style="flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 44px; border: 1px solid #DFDBD3; border-radius: 10px; color: #2E2C29; text-decoration: none; font-size: 13px; font-weight: 700"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path></svg>WhatsApp</a>
+                    <a href="AgendaModais.dc.html" style="flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 44px; border-radius: 10px; background: #8F6425; color: #FFFFFF; text-decoration: none; font-size: 13px; font-weight: 700">Agendar</a>
+                  </span>
+                </div>
+                <div role="tablist" aria-label="Seções do paciente" style="position: relative; display: flex; gap: 22px; padding: 0 16px; overflow-x: auto">
+                  <sc-for list="{{profileTabs}}" as="t" hint-placeholder-count="5">
+                    <button type="button" role="tab" aria-selected="{{t.selected}}" style="flex-shrink: 0; height: 46px; padding: 0 2px; border: 0; border-bottom: 2px solid {{t.border}}; background: transparent; color: {{t.fg}}; font: {{t.weight}} 14px Manrope, sans-serif; white-space: nowrap">{{t.name}}</button>
+                  </sc-for>
+                </div>
+              </div>
+              <main style="flex: 1; overflow: hidden; padding: 14px 16px 0; display: flex; flex-direction: column; gap: 12px">
+                <div style="background: #FFFFFF; border: 1px solid #DFDBD3; border-radius: 12px; padding: 14px 16px; display: flex; flex-direction: column; gap: 8px">
+                  <span style="font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #77736B">Próxima consulta</span>
+                  <span style="display: flex; align-items: center; gap: 8px"><span style="font-size: 15px; font-weight: 700; margin-right: auto">Qui, 22/10 · 09:30</span><span style="display: inline-flex; align-items: center; gap: 5px; height: 22px; padding: 0 8px; border-radius: 999px; background: #E5EEF6; color: #2D5F88; font-size: 11px; font-weight: 700"><span style="width: 6px; height: 6px; border-radius: 999px; background: #2D5F88"></span>Agendada</span></span>
+                  <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: #43413C"><span style="width: 7px; height: 7px; border-radius: 999px; background: #B5832F"></span>Odontologia · Dra. Lauren Bertocchi · Sala 1</span>
+                </div>
+                <div style="background: #FFFFFF; border: 1px solid #DFDBD3; border-radius: 12px; padding: 14px 16px; display: flex; flex-direction: column; gap: 10px">
+                  <span style="font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #77736B">Contato</span>
+                  <span style="display: flex; justify-content: space-between; gap: 12px; font-size: 13px"><span style="color: #5B5852">Celular</span><span style="font-weight: 700; font-variant-numeric: tabular-nums">(54) 99812-4410</span></span>
+                  <span style="display: flex; justify-content: space-between; gap: 12px; font-size: 13px"><span style="color: #5B5852">E-mail</span><span style="font-weight: 700">carla.menegatti@email.com</span></span>
+                  <span style="display: flex; justify-content: space-between; gap: 12px; font-size: 13px"><span style="color: #5B5852">Cidade</span><span style="font-weight: 700">Ronda Alta/RS</span></span>
+                </div>
+                <div style="background: #FFFFFF; border: 1px solid #DFDBD3; border-radius: 12px; padding: 14px 16px; display: flex; flex-direction: column; gap: 10px">
+                  <span style="font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #77736B">Financeiro</span>
+                  <span style="display: flex; align-items: flex-end; justify-content: space-between; gap: 12px">
+                    <span style="display: flex; flex-direction: column"><span style="font-size: 12px; color: #5B5852">Último pagamento</span><span style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 26px; font-weight: 600; line-height: 1.1">R$ 380,00</span></span>
+                    <span style="display: inline-flex; align-items: center; gap: 5px; height: 22px; padding: 0 8px; border-radius: 999px; background: #E6F2EB; color: #2E7351; font-size: 11px; font-weight: 700"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>Pago · Pix</span>
+                  </span>
+                  <span style="font-size: 12px; color: #77736B">12/10/2026 · nenhuma pendência</span>
+                </div>
+              </main>
+              <nav aria-label="Navegação principal" style="height: 76px; flex-shrink: 0; display: flex; padding: 6px 6px 12px; box-sizing: border-box; background: #FFFFFF; border-top: 1px solid #DFDBD3">
+                <a href="Dashboard.dc.html" style="flex: 1; min-height: 56px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; text-decoration: none; color: #5B5852; font-size: 11px; font-weight: 600"><span style="width: 56px; height: 30px; display: inline-flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"></path><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg></span>Início</a>
+                <a href="Agenda.dc.html" style="flex: 1; min-height: 56px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; text-decoration: none; color: #5B5852; font-size: 11px; font-weight: 600"><span style="width: 56px; height: 30px; display: inline-flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path></svg></span>Agenda</a>
+                <a href="Pacientes.dc.html" aria-current="page" style="flex: 1; min-height: 56px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; text-decoration: none; color: #8F6425; font-size: 11px; font-weight: 800"><span style="width: 56px; height: 30px; border-radius: 999px; background: #F5E9D0; display: inline-flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></span>Pacientes</a>
+                <a href="WhatsApp.dc.html" aria-label="WhatsApp, 4 não lidas" style="flex: 1; min-height: 56px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; text-decoration: none; color: #5B5852; font-size: 11px; font-weight: 600"><span style="position: relative; width: 56px; height: 30px; display: inline-flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path></svg><span aria-hidden="true" style="position: absolute; top: 0; right: 10px; min-width: 16px; height: 16px; padding: 0 4px; box-sizing: border-box; border-radius: 999px; background: #B5832F; color: #1E1D1B; font-size: 10px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center">4</span></span>WhatsApp</a>
+                <a href="#menu" style="flex: 1; min-height: 56px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; text-decoration: none; color: #5B5852; font-size: 11px; font-weight: 600"><span style="width: 56px; height: 30px; display: inline-flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h16"></path><path d="M4 6h16"></path><path d="M4 18h16"></path></svg></span>Menu</a>
+              </nav>
+            </div>
+          </div>
+        </div>
+
+        <!-- PHONE 4 · WHATSAPP LISTA -->
+        <div style="flex: 0 0 auto; display: flex; flex-direction: column; gap: 10px">
+          <span style="font-size: 12px; font-weight: 700; color: #43413C">4a · WhatsApp · conversas</span>
+          <div role="img" aria-label="Mockup da lista de conversas do WhatsApp no smartphone" style="border: 10px solid #2E2C29; border-radius: 48px; overflow: hidden; background: #FAF8F4; box-shadow: 0 18px 50px rgba(30,29,27,.14)">
+            <div style="position: relative; width: 390px; height: 844px; overflow: hidden; display: flex; flex-direction: column; background: #FFFFFF">
+              <header style="flex-shrink: 0; display: flex; flex-direction: column; gap: 12px; padding: 18px 16px 12px; border-bottom: 1px solid #ECE9E3">
+                <div style="display: flex; align-items: center; gap: 10px">
+                  <span style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 28px; font-weight: 600; line-height: 1.05; margin-right: auto">WhatsApp</span>
+                  <span style="display: inline-flex; align-items: center; gap: 6px; height: 24px; padding: 0 10px; border-radius: 999px; background: #E3F0EE; color: #2F6F68; font-size: 11px; font-weight: 700"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 8V4H8"></path><rect width="16" height="12" x="4" y="8" rx="2"></rect><path d="M2 14h2"></path><path d="M20 14h2"></path><path d="M15 13v2"></path><path d="M9 13v2"></path></svg>IA ativa</span>
+                </div>
+                <label style="display: flex; align-items: center; gap: 10px; height: 44px; padding: 0 12px; box-sizing: border-box; border: 1px solid #DFDBD3; border-radius: 12px; background: #FAF8F4; color: #77736B">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+                  <span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Buscar conversa</span>
+                  <input type="search" placeholder="Buscar conversa" style="flex: 1; min-width: 0; border: 0; background: transparent; font: 500 15px Manrope, sans-serif; color: #1E1D1B; outline: none">
+                </label>
+                <div role="group" aria-label="Filtrar conversas" style="display: flex; gap: 8px; overflow-x: auto">
+                  <button type="button" aria-pressed="true" style="flex-shrink: 0; height: 36px; padding: 0 14px; border: 1px solid #DDB872; border-radius: 999px; background: #F5E9D0; color: #4E3615; font: 700 13px Manrope, sans-serif">Todas</button>
+                  <button type="button" aria-pressed="false" style="flex-shrink: 0; height: 36px; padding: 0 14px; border: 1px solid #DFDBD3; border-radius: 999px; background: #FFFFFF; color: #43413C; font: 600 13px Manrope, sans-serif">Não lidas · 4</button>
+                  <button type="button" aria-pressed="false" style="flex-shrink: 0; height: 36px; padding: 0 14px; border: 1px solid #DFDBD3; border-radius: 999px; background: #FFFFFF; color: #43413C; font: 600 13px Manrope, sans-serif">Com IA</button>
+                  <button type="button" aria-pressed="false" style="flex-shrink: 0; height: 36px; padding: 0 14px; border: 1px solid #DFDBD3; border-radius: 999px; background: #FFFFFF; color: #43413C; font: 600 13px Manrope, sans-serif">Humano</button>
+                </div>
+              </header>
+              <main style="flex: 1; overflow: hidden">
+                <sc-for list="{{chats}}" as="c" hint-placeholder-count="7">
+                  <a href="WhatsApp.dc.html" style="display: flex; align-items: center; gap: 12px; min-height: 76px; padding: 0 16px; border-bottom: 1px solid #F5F3EF; text-decoration: none; color: #1E1D1B; background: {{c.bg}}">
+                    <span style="width: 46px; height: 46px; flex-shrink: 0; border-radius: 999px; background: #F5F3EF; color: #43413C; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800">{{c.ini}}</span>
+                    <span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px">
+                      <span style="display: flex; align-items: center; gap: 8px"><span style="font-size: 14px; font-weight: {{c.nameWeight}}; margin-right: auto; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{c.name}}</span><span style="font-size: 11px; font-weight: 600; color: {{c.timeColor}}">{{c.time}}</span></span>
+                      <span style="display: flex; align-items: center; gap: 8px"><span style="flex: 1; min-width: 0; font-size: 13px; color: #5B5852; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{c.msg}}</span><sc-if value="{{c.hasUnread}}" hint-placeholder-val="{{ true }}"><span style="min-width: 20px; height: 20px; padding: 0 6px; box-sizing: border-box; border-radius: 999px; background: #B5832F; color: #1E1D1B; font-size: 11px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center">{{c.unread}}</span></sc-if></span>
+                      <span style="display: inline-flex; align-self: flex-start; align-items: center; gap: 5px; height: 20px; padding: 0 7px; border-radius: 999px; background: {{c.tagBg}}; color: {{c.tagFg}}; font-size: 10px; font-weight: 700">{{c.tag}}</span>
+                    </span>
+                  </a>
+                </sc-for>
+              </main>
+              <nav aria-label="Navegação principal" style="height: 76px; flex-shrink: 0; display: flex; padding: 6px 6px 12px; box-sizing: border-box; background: #FFFFFF; border-top: 1px solid #DFDBD3">
+                <a href="Dashboard.dc.html" style="flex: 1; min-height: 56px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; text-decoration: none; color: #5B5852; font-size: 11px; font-weight: 600"><span style="width: 56px; height: 30px; display: inline-flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"></path><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg></span>Início</a>
+                <a href="Agenda.dc.html" style="flex: 1; min-height: 56px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; text-decoration: none; color: #5B5852; font-size: 11px; font-weight: 600"><span style="width: 56px; height: 30px; display: inline-flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path></svg></span>Agenda</a>
+                <a href="Pacientes.dc.html" style="flex: 1; min-height: 56px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; text-decoration: none; color: #5B5852; font-size: 11px; font-weight: 600"><span style="width: 56px; height: 30px; display: inline-flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></span>Pacientes</a>
+                <a href="WhatsApp.dc.html" aria-current="page" aria-label="WhatsApp, 4 não lidas" style="flex: 1; min-height: 56px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; text-decoration: none; color: #8F6425; font-size: 11px; font-weight: 800"><span style="position: relative; width: 56px; height: 30px; border-radius: 999px; background: #F5E9D0; display: inline-flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path></svg><span aria-hidden="true" style="position: absolute; top: -2px; right: 6px; min-width: 16px; height: 16px; padding: 0 4px; box-sizing: border-box; border-radius: 999px; background: #B5832F; color: #1E1D1B; font-size: 10px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center">4</span></span>WhatsApp</a>
+                <a href="#menu" style="flex: 1; min-height: 56px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; text-decoration: none; color: #5B5852; font-size: 11px; font-weight: 600"><span style="width: 56px; height: 30px; display: inline-flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h16"></path><path d="M4 6h16"></path><path d="M4 18h16"></path></svg></span>Menu</a>
+              </nav>
+            </div>
+          </div>
+        </div>
+
+        <!-- PHONE 5 · CONVERSA -->
+        <div style="flex: 0 0 auto; display: flex; flex-direction: column; gap: 10px">
+          <span style="font-size: 12px; font-weight: 700; color: #43413C">4b · WhatsApp · conversa aberta</span>
+          <div role="img" aria-label="Mockup de conversa aberta no WhatsApp no smartphone" style="border: 10px solid #2E2C29; border-radius: 48px; overflow: hidden; background: #FAF8F4; box-shadow: 0 18px 50px rgba(30,29,27,.14)">
+            <div style="position: relative; width: 390px; height: 844px; overflow: hidden; display: flex; flex-direction: column; background: #F5F3EF">
+              <header style="flex-shrink: 0; display: flex; align-items: center; gap: 8px; padding: 14px 10px 10px 6px; background: #FFFFFF; border-bottom: 1px solid #DFDBD3">
+                <a href="WhatsApp.dc.html" aria-label="Voltar para conversas" style="width: 44px; height: 44px; border-radius: 12px; color: #1E1D1B; display: inline-flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg></a>
+                <span style="width: 38px; height: 38px; border-radius: 999px; background: #F5F3EF; color: #43413C; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800">AB</span>
+                <span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px">
+                  <span style="font-size: 14px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Ana Basso</span>
+                  <span style="font-size: 11px; color: #5B5852">Responsável por João Pedro Basso</span>
+                </span>
+                <button type="button" style="height: 44px; padding: 0 12px; border: 1px solid #DFDBD3; border-radius: 10px; background: #FFFFFF; color: #2E2C29; font: 700 12px Manrope, sans-serif; display: inline-flex; align-items: center; gap: 6px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path></svg>Agendar</button>
+              </header>
+              <div style="flex-shrink: 0; display: flex; align-items: center; gap: 8px; padding: 8px 16px; background: #F5E9D0; color: #4E3615; font-size: 12px; font-weight: 600">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3"></path></svg>
+                Atendimento humano · Camila S. assumiu às 08:46
+              </div>
+              <main style="flex: 1; overflow: hidden; padding: 12px 12px 8px; display: flex; flex-direction: column; justify-content: flex-end; gap: 8px">
+                <span style="align-self: center; height: 24px; padding: 0 10px; display: inline-flex; align-items: center; border-radius: 999px; background: #FFFFFF; font-size: 11px; font-weight: 700; color: #5B5852">Hoje</span>
+                <sc-for list="{{messages}}" as="m" hint-placeholder-count="7">
+                  <sc-if value="{{m.isSystem}}" hint-placeholder-val="{{ false }}">
+                    <span style="align-self: center; max-width: 90%; display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 999px; background: {{m.bg}}; color: {{m.fg}}; font-size: 11px; font-weight: 700; text-align: center">{{m.text}}</span>
+                  </sc-if>
+                  <sc-if value="{{m.isBubble}}" hint-placeholder-val="{{ true }}">
+                    <div style="align-self: {{m.align}}; max-width: 82%; display: flex; flex-direction: column; gap: 3px; padding: 9px 12px 6px; border-radius: {{m.radius}}; background: {{m.bg}}; box-shadow: 0 1px 2px rgba(30,29,27,.06)">
+                      <sc-if value="{{m.hasSender}}" hint-placeholder-val="{{ false }}"><span style="font-size: 11px; font-weight: 800; color: {{m.senderColor}}">{{m.sender}}</span></sc-if>
+                      <span style="font-size: 14px; line-height: 1.45; color: #1E1D1B">{{m.text}}</span>
+                      <span style="align-self: flex-end; font-size: 10px; font-weight: 600; color: #5B5852">{{m.time}}</span>
+                    </div>
+                  </sc-if>
+                </sc-for>
+              </main>
+              <div style="flex-shrink: 0; display: flex; align-items: center; gap: 8px; padding: 10px 10px 18px; background: #FFFFFF; border-top: 1px solid #DFDBD3">
+                <button type="button" aria-label="Anexar arquivo" style="width: 44px; height: 44px; flex-shrink: 0; border: 0; border-radius: 12px; background: transparent; color: #5B5852; display: inline-flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg></button>
+                <label style="flex: 1; min-width: 0; display: flex; align-items: center; height: 44px; padding: 0 14px; box-sizing: border-box; border: 1px solid #DFDBD3; border-radius: 999px; background: #FAF8F4">
+                  <span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Mensagem</span>
+                  <input type="text" placeholder="Escreva uma mensagem" style="flex: 1; min-width: 0; border: 0; background: transparent; font: 500 15px Manrope, sans-serif; color: #1E1D1B; outline: none">
+                </label>
+                <button type="button" aria-label="Enviar mensagem" style="width: 44px; height: 44px; flex-shrink: 0; border: 0; border-radius: 999px; background: #8F6425; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"></path><path d="m21.854 2.147-10.94 10.939"></path></svg></button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Nota ao lado do último par -->
+        <div style="flex: 1 1 300px; min-width: 0; align-self: center; display: flex; flex-direction: column; gap: 12px; padding: 24px; background: #FFFFFF; border: 1px solid #DFDBD3; border-radius: 16px">
+          <h3 style="margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 26px; font-weight: 600">Padrões do celular</h3>
+          <ul style="margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 10px; font-size: 14px; line-height: 1.55; color: #43413C">
+            <li>Barra inferior fixa com 5 destinos; o ativo ganha pílula dourada e rótulo em negrito.</li>
+            <li>“Novo agendamento” vira botão flutuante de 56 px acima da barra.</li>
+            <li>Abas roláveis na horizontal; o corte do último item indica que há mais.</li>
+            <li>A conversa abre em tela cheia, sem barra inferior, com voltar à esquerda.</li>
+            <li>Mensagens da IA em verde-petróleo; humanas em dourado claro — sempre com o nome de quem enviou.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= REGRAS ================= -->
+    <section style="display: flex; flex-direction: column; gap: 24px">
+      <div style="display: flex; flex-direction: column; gap: 6px">
+        <span style="font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: #8F6425">04 · Referência</span>
+        <h2 style="margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 40px; line-height: 1.1">Regras de adaptação</h2>
+      </div>
+      <div style="background: #FFFFFF; border: 1px solid #DFDBD3; border-radius: 12px; box-shadow: 0 1px 2px rgba(30,29,27,.06); overflow-x: auto">
+        <table style="width: 100%; min-width: 960px; border-collapse: collapse; font-size: 14px">
+          <thead>
+            <tr style="background: #F5F3EF">
+              <th scope="col" style="width: 160px; text-align: left; padding: 12px 20px; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #5B5852">Componente</th>
+              <th scope="col" style="text-align: left; padding: 12px 20px; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #5B5852">Desktop · ≥ 1024</th>
+              <th scope="col" style="text-align: left; padding: 12px 20px; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #5B5852">Tablet · 768 – 1023</th>
+              <th scope="col" style="text-align: left; padding: 12px 20px; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #5B5852">Smartphone · &lt; 768</th>
+            </tr>
+          </thead>
+          <tbody>
+            <sc-for list="{{rules}}" as="r" hint-placeholder-count="10">
+              <tr style="border-top: 1px solid #ECE9E3; vertical-align: top">
+                <th scope="row" style="text-align: left; padding: 16px 20px; font-weight: 700; color: #1E1D1B">{{r.name}}</th>
+                <td style="padding: 16px 20px; line-height: 1.5; color: #43413C">{{r.desktop}}</td>
+                <td style="padding: 16px 20px; line-height: 1.5; color: #43413C">{{r.tablet}}</td>
+                <td style="padding: 16px 20px; line-height: 1.5; color: #43413C">{{r.phone}}</td>
+              </tr>
+            </sc-for>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":5900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const ST = {
+      'Confirmada': ['#2E7351', '#E6F2EB'], 'Agendada': ['#2D5F88', '#E5EEF6'], 'Em atendimento': ['#8F6425', '#FBF6EC'],
+      'Concluída': ['#5B5852', '#ECE9E3'], 'Cancelada': ['#A93B30', '#FAE7E4'], 'Faltou': ['#9A5F0E', '#FBF0DA'], 'Reagendada': ['#5B4E8C', '#EEEBF6']
+    };
+    const SHORT = { 'Em atendimento': 'Em sala' };
+    const SP = { 'Odontologia': '#B5832F', 'Fonoaudiologia': '#3E7CA8', 'Estética Avançada': '#B0607A', 'Psicologia': '#6E62A6', 'Quiropraxia': '#3F8A72', 'Podologia': '#8A7A3F', 'Fisioterapia': '#C0703A', 'Nutrição': '#5E8A3A' };
+    const ini = n => n.split(' ').map(p => p[0]).slice(0, 2).join('');
+
+    const up = [
+      ['09:00', '50 min', 'Carla Menegatti', 'Odontologia', 'Dra. Lauren', 'Sala 1', 'Em atendimento'],
+      ['09:30', '45 min', 'João Pedro Basso', 'Fonoaudiologia', 'Dra. Helena', 'Sala 2', 'Confirmada'],
+      ['10:00', '30 min', 'Luíza Bortolini', 'Quiropraxia', 'Dr. Rafael', 'Sala 3', 'Confirmada'],
+      ['10:30', '60 min', 'Eduardo Rech', 'Psicologia', 'Dra. Marina', 'Sala 6', 'Agendada']
+    ];
+    const upcoming = up.map(([time, dur, patient, specialty, pro, room, status]) => ({
+      time, dur, patient, specialty, pro, room, status, statusShort: SHORT[status] || status,
+      ini: ini(patient), specColor: SP[specialty], stFg: ST[status][0], stBg: ST[status][1]
+    }));
+
+    const months = [['mai', 36.2], ['jun', 38.9], ['jul', 41.5], ['ago', 40.1], ['set', 43.5], ['out', 48.9]];
+
+    // Semana do notebook: 08:00–13:00, 104 px por hora
+    const HH = 104;
+    const toMin = t => { const [h, m] = t.split(':').map(Number); return h * 60 + m; };
+    const ev = (start, end, name, spec, status) => ({
+      top: Math.round((toMin(start) - 480) / 60 * HH + 2) + 'px',
+      h: Math.round((toMin(end) - toMin(start)) / 60 * HH - 4) + 'px',
+      time: start + ' – ' + end, name, color: SP[spec], status, stFg: ST[status][0]
+    });
+    const weekRaw = [
+      ['Seg', 19, true, [ev('08:00', '08:50', 'Carla Menegatti', 'Odontologia', 'Concluída'), ev('09:30', '10:15', 'João Pedro Basso', 'Fonoaudiologia', 'Em atendimento'), ev('11:00', '12:30', 'Sofia Cavalheiro', 'Estética Avançada', 'Confirmada')]],
+      ['Ter', 20, false, [ev('08:30', '09:30', 'Eduardo Rech', 'Psicologia', 'Confirmada'), ev('10:00', '10:30', 'Luíza Bortolini', 'Quiropraxia', 'Agendada'), ev('11:30', '12:10', 'Marcos Webber', 'Podologia', 'Agendada')]],
+      ['Qua', 21, false, [ev('09:00', '09:50', 'Patrícia Golin', 'Fonoaudiologia', 'Confirmada'), ev('10:30', '11:30', 'Renato Spanholi', 'Fisioterapia', 'Reagendada'), ev('12:00', '12:45', 'Beatriz Fiorentin', 'Nutrição', 'Agendada')]],
+      ['Qui', 22, false, [ev('08:00', '09:00', 'Tiago Zortéa', 'Psicologia', 'Cancelada'), ev('09:30', '10:20', 'Carla Menegatti', 'Odontologia', 'Agendada'), ev('11:00', '11:45', 'Paulo Brum', 'Fisioterapia', 'Agendada')]],
+      ['Sex', 23, false, [ev('08:30', '09:15', 'Fernanda Lise', 'Quiropraxia', 'Agendada'), ev('10:00', '11:30', 'Sofia Cavalheiro', 'Estética Avançada', 'Agendada')]],
+      ['Sáb', 24, false, [ev('08:00', '09:00', 'Marcos Webber', 'Podologia', 'Agendada')]]
+    ];
+    const week = weekRaw.map(([label, num, today, events]) => ({
+      label, num, isToday: today, events,
+      headBg: today ? '#FBF6EC' : '#FFFFFF', labelFg: today ? '#6F4D1D' : '#5B5852',
+      numBg: today ? '#8F6425' : 'transparent', numFg: today ? '#FFFFFF' : '#1E1D1B',
+      colBg: today ? 'rgba(251,246,236,.6)' : 'transparent'
+    }));
+    const hours = ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00'].map((label, i) => ({ label, top: (i * HH) + 'px' }));
+
+    const daysRaw = [['Sáb', 17, false, false], ['Dom', 18, false, false], ['Seg', 19, true, true], ['Ter', 20, false, true], ['Qua', 21, false, true], ['Qui', 22, false, true], ['Sex', 23, false, true]];
+    const days = daysRaw.map(([wd, num, sel, has]) => ({
+      wd, num, pressed: sel ? 'true' : 'false', aria: wd + ', ' + num + ' de outubro' + (has ? ', com consultas' : ''),
+      bg: sel ? '#8F6425' : '#FFFFFF', fg: sel ? '#FFFFFF' : '#1E1D1B', border: sel ? '#8F6425' : '#DFDBD3',
+      dot: sel ? '#F5E9D0' : (has ? '#B5832F' : 'transparent')
+    }));
+
+    const dl = [
+      ['09:00', 'Carla Menegatti', 'Odontologia', 'Dra. Lauren Bertocchi', 'Sala 1', '50 min', 'Em atendimento'],
+      ['09:30', 'João Pedro Basso', 'Fonoaudiologia', 'Dra. Helena Marchetti', 'Sala 2', '45 min', 'Confirmada'],
+      ['10:00', 'Luíza Bortolini', 'Quiropraxia', 'Dr. Rafael Zanella', 'Sala 3', '30 min', 'Confirmada'],
+      ['10:30', 'Eduardo Rech', 'Psicologia', 'Dra. Marina Lazzari', 'Sala 6', '60 min', 'Agendada'],
+      ['11:00', 'Sofia Cavalheiro', 'Estética Avançada', 'Dra. Bianca Toniolo', 'Sala 5', '90 min', 'Agendada'],
+      ['12:30', 'Horário livre · agendar', '', '', '', '', null]
+    ];
+    const dayList = dl.map(([time, patient, specialty, pro, room, dur, status]) => status ? ({
+      time, patient, specialty, pro, room, dur, isFree: false, isBusy: true,
+      statusShort: SHORT[status] || status, specColor: SP[specialty], stFg: ST[status][0], stBg: ST[status][1]
+    }) : ({ time, patient, isFree: true, isBusy: false, specialty: '', pro: '', room: '', dur: '', statusShort: '', specColor: 'transparent', stFg: 'transparent', stBg: 'transparent' }));
+
+    const tabs = [['Resumo', true], ['Consultas · 18', false], ['Financeiro', false], ['Documentos', false], ['Anotações', false]];
+
+    const IA = ['IA ativa', '#E3F0EE', '#2F6F68'];
+    const HU = ['Atendimento humano', '#F5E9D0', '#6F4D1D'];
+    const chatsRaw = [
+      ['Ana Basso', 'Camila: Temos quarta, 28/10, às 14h com a…', '08:47', 0, HU],
+      ['Fernanda Lise', 'Consigo remarcar para a tarde?', '08:31', 2, HU],
+      ['Marcos Webber', 'Assistente IA: Sua consulta de podologia…', '08:12', 1, IA],
+      ['Beatriz Fiorentin', 'Obrigada! Até quarta.', 'ontem', 0, IA],
+      ['Renato Spanholi', 'Vou fazer o Pix ainda hoje.', 'ontem', 1, HU],
+      ['Patrícia Golin', 'Assistente IA: Confirmado para 21/10…', 'dom', 0, IA],
+      ['Paulo Brum', 'Qual o endereço da clínica?', 'sáb', 0, IA]
+    ];
+    const chats = chatsRaw.map(([name, msg, time, unread, tag], i) => ({
+      name, msg, time, unread, ini: ini(name), hasUnread: unread > 0,
+      nameWeight: unread > 0 ? '800' : '700', timeColor: unread > 0 ? '#8F6425' : '#77736B',
+      tag: tag[0], tagBg: tag[1], tagFg: tag[2], bg: i === 0 ? '#FBF6EC' : '#FFFFFF'
+    }));
+
+    const IN = { align: 'flex-start', bg: '#FFFFFF', radius: '4px 14px 14px 14px', hasSender: false, sender: '', senderColor: '#1E1D1B' };
+    const OUT_IA = { align: 'flex-end', bg: '#E3F0EE', radius: '14px 4px 14px 14px', hasSender: true, sender: 'Assistente IA', senderColor: '#2F6F68' };
+    const OUT_HU = { align: 'flex-end', bg: '#F5E9D0', radius: '14px 4px 14px 14px', hasSender: true, sender: 'Camila · Recepção', senderColor: '#6F4D1D' };
+    const bubble = (o, text, time) => Object.assign({ isBubble: true, isSystem: false, text, time, fg: '#1E1D1B' }, o);
+    const sys = (text, bg, fg) => ({ isBubble: false, isSystem: true, text, bg, fg, align: 'center', radius: '999px', hasSender: false, sender: '', senderColor: fg, time: '' });
+    const messages = [
+      bubble(IN, 'Bom dia! A consulta do João na quinta continua às 9h30?', '08:40'),
+      bubble(OUT_IA, 'Bom dia, Ana! Sim: quinta, 22/10, às 09:30 com a Dra. Helena Marchetti, Sala 2. Posso confirmar a presença?', '08:40'),
+      bubble(IN, 'Pode confirmar, obrigada!', '08:42'),
+      sys('Consulta confirmada pelo Assistente IA · 08:42', '#E6F2EB', '#2E7351'),
+      bubble(IN, 'Ah, e teria horário pra Nutrição também? Pra mim.', '08:45'),
+      sys('Transferido para atendimento humano · 08:46', '#FFFFFF', '#5B5852'),
+      bubble(OUT_HU, 'Oi, Ana! Aqui é a Camila. Temos quarta, 28/10, às 14h com a Dra. Júlia Dalmolin. Pode ser?', '08:47')
+    ];
+
+    return {
+      breakpoints: [
+        { name: 'Desktop', range: '≥ 1280' }, { name: 'Notebook', range: '1024 – 1279' },
+        { name: 'Tablet', range: '768 – 1023' }, { name: 'Smartphone', range: '< 768' }
+      ],
+      kpis: [
+        { label: 'Consultas hoje', value: '24', delta: '+3', deltaColor: '#2E7351', note: 'vs. segunda passada', noteShort: 'vs. seg.' },
+        { label: 'Faturamento · out', value: 'R$ 48,9 mil', delta: '+12,4%', deltaColor: '#2E7351', note: 'vs. set/2026', noteShort: 'vs. set' },
+        { label: 'Taxa de ocupação', value: '82%', delta: 'Meta 85%', deltaColor: '#8F6425', note: '· 7 salas', noteShort: '' },
+        { label: 'A confirmar', value: '7', delta: '3', deltaColor: '#9A5F0E', note: 'sem resposta há 24 h', noteShort: 'sem resposta' }
+      ],
+      revenue: months.map(([m, v], i) => ({
+        month: m, label: 'R$ ' + v.toFixed(1).replace('.', ',') + 'k',
+        h: Math.round(v / 60 * 160) + 'px',
+        color: i === months.length - 1 ? '#B5832F' : '#EBD4A6',
+        labelColor: i === months.length - 1 ? '#6F4D1D' : '#5B5852'
+      })),
+      upcoming,
+      drawerItems: ['Dashboard', 'Agenda', 'Pacientes', 'Profissionais', 'Atendimentos', 'Financeiro', 'WhatsApp', 'Assistente IA', 'Relatórios'].map((n, i) => ({
+        name: n, bg: i === 0 ? 'rgba(221,184,114,.12)' : 'transparent', fg: i === 0 ? '#F5E9D0' : '#D6D1C7', weight: i === 0 ? 700 : 600, dot: i === 0 ? '#DDB872' : 'transparent'
+      })),
+      week, hours,
+      nowTop: Math.round((toMin('10:40') - 480) / 60 * HH - 4) + 'px',
+      days, dayList,
+      profileTabs: tabs.map(([name, sel]) => ({ name, selected: sel ? 'true' : 'false', border: sel ? '#B5832F' : 'transparent', fg: sel ? '#1E1D1B' : '#5B5852', weight: sel ? 700 : 600 })),
+      chats, messages,
+      rules: [
+        { name: 'Sidebar', desktop: 'Expandida 264 px; recolhível pelo usuário.', tablet: 'Notebook: recolhida 76 px. Tablet: some e vira drawer pelo botão de menu.', phone: 'Barra inferior com 5 destinos; demais itens no “Menu”.' },
+        { name: 'Header', desktop: '72 px com busca 360 px, data, selo demo, notificações e usuário.', tablet: '64 px; busca vira ícone; data some.', phone: 'Compacto: símbolo, selo “Demo”, sino e avatar.' },
+        { name: 'Tabelas', desktop: 'Tabela completa, linhas de 56 px, ações no fim.', tablet: 'Colunas secundárias ocultas; rolagem horizontal quando necessário.', phone: 'Abaixo de 768 viram cards empilhados com o status no topo.' },
+        { name: 'Calendário', desktop: 'Semana com colunas por profissional ou sala.', tablet: 'Semana compacta de 6 dias; detalhe em drawer.', phone: 'Dia único com seletor de dias horizontal e lista por horário.' },
+        { name: 'Formulários', desktop: '2 colunas (rótulo acima), ações à direita.', tablet: '2 colunas acima de 900 px; 1 coluna abaixo.', phone: '1 coluna; botão primário em largura total, fixo no rodapé.' },
+        { name: 'Modais', desktop: 'Centralizados: sm 440, md 640, lg 880.', tablet: 'Centralizados, até 90% da largura.', phone: 'Bottom sheet em largura total, alça de arrasto e cantos superiores 16 px.' },
+        { name: 'Drawers', desktop: 'Lateral direita de 480 px sobre overlay.', tablet: '480 px ou 70% da largura, o que for menor.', phone: 'Tela cheia com botão Voltar no topo.' },
+        { name: 'Gráficos', desktop: 'Legenda à direita ou no topo; tooltip no hover.', tablet: 'Largura total; legenda abaixo.', phone: 'Rolagem horizontal para séries longas; legenda abaixo; valor no toque.' },
+        { name: 'KPIs', desktop: '5 por linha (auto-fit 210 px).', tablet: '2 colunas.', phone: 'Carrossel horizontal com indicador de página.' },
+        { name: 'Alvos de toque', desktop: '≥ 40 px; foco com anel dourado.', tablet: '≥ 44 px.', phone: '≥ 44 px; FAB de 56 px; espaçamento mínimo de 8 px entre alvos.' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

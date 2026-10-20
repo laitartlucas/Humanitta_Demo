@@ -1,0 +1,108 @@
+/* Humanittá Gestão — variáveis CSS (espelho de tokens.ts / tailwind.config.ts) */
+:root {
+  /* Ground */
+  --hm-ivory: #FAF8F4;
+  --hm-white: #FFFFFF;
+
+  /* Grafite quente */
+  --hm-graphite-50: #F5F3EF;
+  --hm-graphite-100: #ECE9E3;
+  --hm-graphite-200: #DFDBD3;
+  --hm-graphite-300: #C7C2B9;
+  --hm-graphite-400: #9E998F;
+  --hm-graphite-500: #77736B;
+  --hm-graphite-600: #5B5852;
+  --hm-graphite-700: #43413C;
+  --hm-graphite-800: #2E2C29;
+  --hm-graphite-900: #1E1D1B;
+
+  /* Dourado */
+  --hm-gold-50: #FBF6EC;
+  --hm-gold-100: #F5E9D0;
+  --hm-gold-200: #EBD4A6;
+  --hm-gold-300: #DDB872;
+  --hm-gold-400: #CC9B47;
+  --hm-gold-500: #B5832F;
+  --hm-gold-600: #8F6425;
+  --hm-gold-700: #6F4D1D;
+  --hm-gold-800: #4E3615;
+  --hm-gradient-brand: linear-gradient(135deg, #DDB872 0%, #B5832F 55%, #7A5220 100%);
+
+  /* Estados */
+  --hm-success: #2E7351;
+  --hm-success-bg: #E6F2EB;
+  --hm-warning: #9A5F0E;
+  --hm-warning-bg: #FBF0DA;
+  --hm-danger: #A93B30;
+  --hm-danger-bg: #FAE7E4;
+  --hm-info: #2D5F88;
+  --hm-info-bg: #E5EEF6;
+  --hm-ai: #2F6F68;
+  --hm-ai-bg: #E3F0EE;
+  --hm-violet: #5B4E8C;
+  --hm-violet-bg: #EEEBF6;
+
+  /* Especialidades */
+  --hm-spec-odontologia: #B5832F;
+  --hm-spec-fonoaudiologia: #3E7CA8;
+  --hm-spec-estetica: #B0607A;
+  --hm-spec-psicologia: #6E62A6;
+  --hm-spec-quiropraxia: #3F8A72;
+  --hm-spec-podologia: #8A7A3F;
+  --hm-spec-fisioterapia: #C0703A;
+  --hm-spec-nutricao: #5E8A3A;
+
+  /* Sidebar */
+  --hm-sidebar-bg: #1E1D1B;
+  --hm-sidebar-text: #E9E5DD;
+  --hm-sidebar-icon: #B9B3A8;
+  --hm-sidebar-active-bg: rgba(221, 184, 114, 0.12);
+  --hm-sidebar-active-text: #F5E9D0;
+  --hm-overlay: rgba(30, 29, 27, 0.45);
+
+  /* Tipografia */
+  --hm-font-display: 'Cormorant Garamond', Georgia, serif;
+  --hm-font-sans: Manrope, system-ui, sans-serif;
+  --hm-font-brand: 'Josefin Sans', Manrope, sans-serif;
+  --hm-text-display-xl: 48px;
+  --hm-text-display-lg: 36px;
+  --hm-text-display-md: 28px;
+  --hm-text-h3: 20px;
+  --hm-text-h4: 16px;
+  --hm-text-body: 14px;
+  --hm-text-body-sm: 13px;
+  --hm-text-caption: 12px;
+  --hm-text-kpi: 34px;
+
+  /* Espaço (base 4) */
+  --hm-space-1: 4px;
+  --hm-space-2: 8px;
+  --hm-space-3: 12px;
+  --hm-space-4: 16px;
+  --hm-space-5: 20px;
+  --hm-space-6: 24px;
+  --hm-space-8: 32px;
+  --hm-space-10: 40px;
+  --hm-space-12: 48px;
+  --hm-space-16: 64px;
+
+  /* Raios */
+  --hm-radius-xs: 6px;
+  --hm-radius-sm: 8px;
+  --hm-radius-md: 12px;
+  --hm-radius-lg: 16px;
+  --hm-radius-xl: 24px;
+  --hm-radius-full: 999px;
+
+  /* Sombras */
+  --hm-shadow-sm: 0 1px 2px rgba(30, 29, 27, 0.06);
+  --hm-shadow-md: 0 6px 20px rgba(30, 29, 27, 0.07);
+  --hm-shadow-lg: 0 18px 50px rgba(30, 29, 27, 0.14);
+  --hm-shadow-focus: 0 0 0 3px rgba(181, 131, 47, 0.35);
+
+  /* Layout */
+  --hm-sidebar-width: 264px;
+  --hm-sidebar-collapsed: 76px;
+  --hm-header-height: 72px;
+  --hm-content-max: 1440px;
+}

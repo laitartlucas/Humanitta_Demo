@@ -1,0 +1,12 @@
+export { IdentityTab } from './IdentityTab';
+export type { AiTabProps } from './IdentityTab';
+export { BehaviorTab } from './BehaviorTab';
+export { KnowledgeTab } from './KnowledgeTab';
+export { HoursTab } from './HoursTab';
+export { TransferTab } from './TransferTab';
+export { TestingTab } from './TestingTab';
+export type { TestingTabProps } from './TestingTab';
+export { ChatPreview } from './ChatPreview';
+export type { ChatPreviewProps } from './ChatPreview';
+export { simulateReply, INTENT_LABEL } from './simulate';
+export type { SimulatedIntent, SimulationResult } from './simulate';

@@ -1,0 +1,1013 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Agenda — Humanittá Gestão</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&amp;family=Manrope:wght@400;500;600;700;800&amp;family=Josefin+Sans:wght@300;400&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#FAF8F4}
+a{color:#8F6425}a:hover{color:#6F4D1D}
+</style>
+</helmet>
+<div style="display: flex; flex-wrap: wrap; min-height: 100vh; background: #FAF8F4; font-family: Manrope, system-ui, sans-serif; color: #1E1D1B">
+
+  <!-- SHELL:SIDEBAR START (copiar igual em todas as telas; mudar apenas o item ativo) -->
+  <aside aria-label="Menu principal" style="flex: 1 1 264px; max-width: 264px; min-width: 220px; background: #1E1D1B; color: #E9E5DD; display: flex; flex-direction: column; gap: 24px; padding: 24px 16px">
+    <a href="Dashboard.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 4px 8px; text-decoration: none; color: #F5E9D0">
+      <svg width="40" height="40" viewBox="0 0 64 64" role="img" aria-label="Símbolo Humanittá">
+        <defs><linearGradient id="sg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#DDB872"></stop><stop offset=".55" stop-color="#CC9B47"></stop><stop offset="1" stop-color="#B5832F"></stop></linearGradient></defs>
+        <circle cx="32" cy="32" r="30" fill="none" stroke="#CC9B47" stroke-width="2"></circle>
+        <circle cx="24" cy="31" r="3.6" fill="url(#sg)"></circle>
+        <path d="M20 39.5c0-2.6 1.8-4.3 4-4.3s4 1.7 4 4.3V47c-4.4 0-8-3.2-8-7.5z" fill="url(#sg)"></path>
+        <circle cx="38.5" cy="19.5" r="4.6" fill="url(#sg)"></circle>
+        <path d="M31.5 31c0-3.3 2.7-5.6 6-5.6h6.5V40c0 4.6-3.7 8-8.3 8h-4.2z" fill="url(#sg)"></path>
+      </svg>
+      <span style="display: flex; flex-direction: column; gap: 2px">
+        <span style="font-family: 'Josefin Sans', Manrope, sans-serif; font-weight: 300; font-size: 22px; letter-spacing: .08em; color: #F3EFE8; line-height: 1">Humanittá</span>
+        <span style="font-size: 10px; font-weight: 700; letter-spacing: .24em; text-transform: uppercase; color: #DDB872">Gestão</span>
+      </span>
+    </a>
+    <nav style="display: flex; flex-direction: column; gap: 2px">
+      <a href="Dashboard.dc.html" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 10px; color: #D6D1C7; text-decoration: none; font-size: 14px; font-weight: 600">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="7" height="9" x="3" y="3" rx="1"></rect><rect width="7" height="5" x="14" y="3" rx="1"></rect><rect width="7" height="9" x="14" y="12" rx="1"></rect><rect width="7" height="5" x="3" y="16" rx="1"></rect></svg>
+        <span style="flex: 1">Dashboard</span>
+      </a>
+      <a href="Agenda.dc.html" aria-current="page" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 10px; background: rgba(221,184,114,.12); color: #F5E9D0; text-decoration: none; font-size: 14px; font-weight: 700">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#DDB872" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path><path d="M8 14h.01"></path><path d="M12 14h.01"></path><path d="M16 14h.01"></path><path d="M8 18h.01"></path><path d="M12 18h.01"></path><path d="M16 18h.01"></path></svg>
+        <span style="flex: 1">Agenda</span><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 999px; background: #DDB872"></span>
+      </a>
+      <a href="Pacientes.dc.html" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 10px; color: #D6D1C7; text-decoration: none; font-size: 14px; font-weight: 600">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+        <span style="flex: 1">Pacientes</span>
+      </a>
+      <a href="Profissionais.dc.html" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 10px; color: #D6D1C7; text-decoration: none; font-size: 14px; font-weight: 600">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2"></path><path d="M5 2v2"></path><path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1"></path><path d="M8 15a6 6 0 0 0 12 0v-3"></path><circle cx="20" cy="10" r="2"></circle></svg>
+        <span style="flex: 1">Profissionais</span>
+      </a>
+      <a href="Atendimentos.dc.html" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 10px; color: #D6D1C7; text-decoration: none; font-size: 14px; font-weight: 600">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="8" height="4" x="8" y="2" rx="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><path d="M12 11h4"></path><path d="M12 16h4"></path><path d="M8 11h.01"></path><path d="M8 16h.01"></path></svg>
+        <span style="flex: 1">Atendimentos</span>
+      </a>
+      <a href="Financeiro.dc.html" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 10px; color: #D6D1C7; text-decoration: none; font-size: 14px; font-weight: 600">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"></path><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"></path></svg>
+        <span style="flex: 1">Financeiro</span>
+      </a>
+      <a href="WhatsApp.dc.html" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 10px; color: #D6D1C7; text-decoration: none; font-size: 14px; font-weight: 600">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path></svg>
+        <span style="flex: 1">WhatsApp</span>
+        <span style="min-width: 22px; height: 20px; padding: 0 6px; box-sizing: border-box; border-radius: 999px; background: #DDB872; color: #1E1D1B; font-size: 11px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center">4</span>
+      </a>
+      <a href="AssistenteIA.dc.html" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 10px; color: #D6D1C7; text-decoration: none; font-size: 14px; font-weight: 600">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 8V4H8"></path><rect width="16" height="12" x="4" y="8" rx="2"></rect><path d="M2 14h2"></path><path d="M20 14h2"></path><path d="M15 13v2"></path><path d="M9 13v2"></path></svg>
+        <span style="flex: 1">Assistente IA</span>
+      </a>
+      <a href="Relatorios.dc.html" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 10px; color: #D6D1C7; text-decoration: none; font-size: 14px; font-weight: 600">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"></path><path d="M18 17V9"></path><path d="M13 17V5"></path><path d="M8 17v-3"></path></svg>
+        <span style="flex: 1">Relatórios</span>
+      </a>
+      <a href="Configuracoes.dc.html" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 10px; color: #D6D1C7; text-decoration: none; font-size: 14px; font-weight: 600">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+        <span style="flex: 1">Configurações</span>
+      </a>
+    </nav>
+    <div style="margin-top: auto; display: flex; flex-direction: column; gap: 12px">
+      <div style="display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 12px; background: rgba(255,255,255,.05)">
+        <span style="width: 36px; height: 36px; border-radius: 999px; background: #43413C; color: #F5E9D0; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800">CS</span>
+        <span style="display: flex; flex-direction: column; min-width: 0">
+          <span style="font-size: 13px; font-weight: 700; color: #F3EFE8">Camila S.</span>
+          <span style="font-size: 12px; color: #B9B3A8">Administradora</span>
+        </span>
+      </div>
+      <button type="button" style="display: flex; align-items: center; gap: 10px; height: 40px; padding: 0 12px; border: 0; border-radius: 10px; background: transparent; color: #B9B3A8; font: 600 13px Manrope, sans-serif; cursor: pointer">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="18" x="3" y="3" rx="2"></rect><path d="M9 3v18"></path><path d="m16 15-3-3 3-3"></path></svg>
+        Recolher menu
+      </button>
+    </div>
+  </aside>
+  <!-- SHELL:SIDEBAR END -->
+
+  <div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
+    <!-- SHELL:HEADER START (copiar; mudar título e breadcrumb) -->
+    <header style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px; min-height: 72px; padding: 12px 32px; box-sizing: border-box; background: #FFFFFF; border-bottom: 1px solid #DFDBD3">
+      <div style="display: flex; flex-direction: column; gap: 2px; margin-right: auto">
+        <span style="font-size: 12px; font-weight: 600; color: #77736B">Operação</span>
+        <h1 style="margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 28px; line-height: 1.1">Agenda</h1>
+      </div>
+      <label style="display: flex; align-items: center; gap: 10px; flex: 0 1 360px; min-width: 200px; height: 40px; padding: 0 12px; box-sizing: border-box; border: 1px solid #DFDBD3; border-radius: 8px; background: #FAF8F4; color: #77736B">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+        <span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Busca global</span>
+        <input type="search" placeholder="Buscar pacientes, consultas, profissionais…" style="flex: 1; min-width: 0; border: 0; background: transparent; font: 500 14px Manrope, sans-serif; color: #1E1D1B; outline: none">
+        <span style="font-size: 11px; font-weight: 700; color: #77736B; border: 1px solid #DFDBD3; border-radius: 6px; padding: 2px 6px; background: #FFFFFF">⌘K</span>
+      </label>
+      <span style="display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 10px; border-radius: 999px; background: #FBF0DA; color: #9A5F0E; font-size: 12px; font-weight: 700">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 2v7.31"></path><path d="M14 9.3V1.99"></path><path d="M8.5 2h7"></path><path d="M14 9.3a6.5 6.5 0 1 1-4 0"></path></svg>
+        Ambiente de demonstração
+      </span>
+      <span style="display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: #43413C">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#77736B" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path></svg>
+        Segunda, 19 de outubro de 2026
+      </span>
+      <button type="button" aria-label="Notificações (3 novas)" style="position: relative; width: 40px; height: 40px; border: 1px solid #DFDBD3; border-radius: 10px; background: #FFFFFF; color: #43413C; display: inline-flex; align-items: center; justify-content: center; cursor: pointer">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path></svg>
+        <span aria-hidden="true" style="position: absolute; top: 8px; right: 9px; width: 8px; height: 8px; border-radius: 999px; background: #A93B30; border: 2px solid #FFFFFF"></span>
+      </button>
+      <button type="button" aria-label="Menu do usuário" style="display: flex; align-items: center; gap: 10px; height: 44px; padding: 0 8px 0 4px; border: 0; background: transparent; cursor: pointer; font-family: Manrope, sans-serif">
+        <span style="width: 36px; height: 36px; border-radius: 999px; background: #F5E9D0; color: #6F4D1D; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; box-shadow: 0 0 0 2px #FFFFFF, 0 0 0 3px #DDB872">CS</span>
+        <span style="display: flex; flex-direction: column; align-items: flex-start">
+          <span style="font-size: 13px; font-weight: 700; color: #1E1D1B">Camila S.</span>
+          <span style="font-size: 12px; color: #77736B">Administradora</span>
+        </span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#77736B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
+      </button>
+    </header>
+    <!-- SHELL:HEADER END -->
+
+    <main style="flex: 1; padding: 32px; box-sizing: border-box; display: flex; flex-direction: column; gap: 20px; max-width: 1440px; width: 100%">
+
+      <!-- Barra de ferramentas -->
+      <section aria-label="Controles da agenda" style="background: #FFFFFF; border: 1px solid #DFDBD3; border-radius: 12px; box-shadow: 0 1px 2px rgba(30,29,27,.06); padding: 16px 20px; display: flex; flex-direction: column; gap: 14px">
+        <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px">
+          <div style="display: inline-flex; align-items: center; gap: 6px">
+            <button type="button" aria-label="Período anterior" style="width: 40px; height: 40px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; color: #2E2C29; display: inline-flex; align-items: center; justify-content: center; cursor: pointer">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg>
+            </button>
+            <button type="button" style="height: 40px; padding: 0 16px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; color: #2E2C29; font: 700 14px Manrope, sans-serif; cursor: pointer">Hoje</button>
+            <button type="button" aria-label="Próximo período" style="width: 40px; height: 40px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; color: #2E2C29; display: inline-flex; align-items: center; justify-content: center; cursor: pointer">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg>
+            </button>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 0; margin-right: auto; min-width: 0">
+            <span style="font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: #8F6425">{{periodOver}}</span>
+            <h2 style="margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 28px; line-height: 1.1; color: #1E1D1B">{{periodLabel}}</h2>
+          </div>
+          <div role="group" aria-label="Modo de visualização" style="display: inline-flex; padding: 3px; border-radius: 10px; background: #F5F3EF; gap: 2px">
+            <sc-for list="{{segs}}" as="sg" hint-placeholder-count="3">
+              <button type="button" aria-pressed="{{sg.pressed}}" onClick="{{sg.onClick}}" style="height: 34px; padding: 0 16px; border: 0; border-radius: 8px; background: {{sg.bg}}; color: {{sg.fg}}; box-shadow: {{sg.shadow}}; font: 700 13px Manrope, sans-serif; cursor: pointer">{{sg.label}}</button>
+            </sc-for>
+          </div>
+          <a href="AgendaModais.dc.html" style="display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 18px; border-radius: 8px; background: #8F6425; color: #FFFFFF; font: 700 14px Manrope, sans-serif; text-decoration: none">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>
+            Novo agendamento
+          </a>
+        </div>
+        <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding-top: 14px; border-top: 1px solid #ECE9E3">
+          <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; color: #43413C">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z"></path></svg>
+            Filtros
+          </span>
+          <label style="position: relative; display: inline-flex; align-items: center; flex: 1 1 200px; max-width: 250px">
+            <span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Profissional</span>
+            <select style="width: 100%; height: 40px; padding: 0 36px 0 12px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; color: #2E2C29; font: 600 13px Manrope, sans-serif; appearance: none; -webkit-appearance: none; cursor: pointer">
+              <option>Profissional: Todos</option>
+              <option>Dra. Lauren Bertocchi</option>
+              <option>Dra. Helena Marchetti</option>
+              <option>Dr. Rafael Zanella</option>
+              <option>Dra. Bianca Toniolo</option>
+              <option>Dra. Marina Lazzari</option>
+              <option>Dr. Gustavo Pagnussat</option>
+              <option>Dra. Júlia Dalmolin</option>
+              <option>Ana Paula Schmitt</option>
+            </select>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5B5852" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="position: absolute; right: 12px; pointer-events: none"><path d="m6 9 6 6 6-6"></path></svg>
+          </label>
+          <label style="position: relative; display: inline-flex; align-items: center; flex: 1 1 200px; max-width: 250px">
+            <span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Especialidade</span>
+            <select style="width: 100%; height: 40px; padding: 0 36px 0 12px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; color: #2E2C29; font: 600 13px Manrope, sans-serif; appearance: none; -webkit-appearance: none; cursor: pointer">
+              <option>Especialidade: Todas</option>
+              <option>Odontologia</option>
+              <option>Fonoaudiologia</option>
+              <option>Estética Avançada</option>
+              <option>Psicologia</option>
+              <option>Quiropraxia</option>
+              <option>Podologia</option>
+              <option>Fisioterapia</option>
+              <option>Nutrição</option>
+            </select>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5B5852" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="position: absolute; right: 12px; pointer-events: none"><path d="m6 9 6 6 6-6"></path></svg>
+          </label>
+          <label style="position: relative; display: inline-flex; align-items: center; flex: 1 1 160px; max-width: 200px">
+            <span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Sala</span>
+            <select style="width: 100%; height: 40px; padding: 0 36px 0 12px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; color: #2E2C29; font: 600 13px Manrope, sans-serif; appearance: none; -webkit-appearance: none; cursor: pointer">
+              <option>Sala: Todas</option>
+              <option>Sala 1 · Odontologia</option>
+              <option>Sala 2 · Fonoaudiologia</option>
+              <option>Sala 3 · Podologia/Quiropraxia</option>
+              <option>Sala 4 · Fonoaudiologia</option>
+              <option>Sala 5 · Estética Avançada</option>
+              <option>Sala 6 · Psicologia</option>
+              <option>Sala 7 · Multiuso</option>
+            </select>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5B5852" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="position: absolute; right: 12px; pointer-events: none"><path d="m6 9 6 6 6-6"></path></svg>
+          </label>
+          <span aria-hidden="true" style="width: 1px; height: 24px; background: #DFDBD3"></span>
+          <sc-for list="{{chips}}" as="c" hint-placeholder-count="2">
+            <span style="display: inline-flex; align-items: center; gap: 4px; height: 30px; padding: 0 4px 0 12px; box-sizing: border-box; border-radius: 999px; background: #FBF6EC; border: 1px solid #EBD4A6; color: #6F4D1D; font-size: 12px; font-weight: 700; white-space: nowrap">
+              {{c.label}}
+              <button type="button" aria-label="{{c.aria}}" onClick="{{c.onRemove}}" style="width: 24px; height: 24px; border: 0; border-radius: 999px; background: transparent; color: #6F4D1D; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; padding: 0">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+              </button>
+            </span>
+          </sc-for>
+          <sc-if value="{{hasChips}}" hint-placeholder-val="{{ true }}">
+            <button type="button" onClick="{{onClear}}" style="height: 32px; padding: 0 10px; border: 0; border-radius: 8px; background: transparent; color: #8F6425; font: 700 12px Manrope, sans-serif; cursor: pointer">Limpar filtros</button>
+          </sc-if>
+          <sc-if value="{{noChips}}" hint-placeholder-val="{{ false }}">
+            <span style="font-size: 12px; font-weight: 600; color: #77736B">Nenhum filtro ativo</span>
+          </sc-if>
+        </div>
+      </section>
+
+      <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start">
+
+        <!-- Coluna lateral -->
+        <aside aria-label="Painel lateral da agenda" style="flex: 1 1 280px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+
+          <!-- Mini calendário -->
+          <div style="background: #FFFFFF; border: 1px solid #DFDBD3; border-radius: 12px; box-shadow: 0 1px 2px rgba(30,29,27,.06); padding: 18px; display: flex; flex-direction: column; gap: 12px">
+            <div style="display: flex; align-items: center; gap: 8px">
+              <h3 style="margin: 0 auto 0 0; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 22px; line-height: 1.1">Outubro 2026</h3>
+              <button type="button" aria-label="Mês anterior" style="width: 32px; height: 32px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; color: #43413C; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; padding: 0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></button>
+              <button type="button" aria-label="Próximo mês" style="width: 32px; height: 32px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; color: #43413C; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; padding: 0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg></button>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 2px; text-align: center">
+              <sc-for list="{{calDow}}" as="w" hint-placeholder-count="7">
+                <span aria-hidden="true" style="height: 24px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; color: #77736B">{{w}}</span>
+              </sc-for>
+              <sc-for list="{{calCells}}" as="c" hint-placeholder-count="35">
+                <button type="button" aria-label="{{c.aria}}" onClick="{{c.onPick}}" style="height: 38px; padding: 0; border: 0; border-radius: 8px; background: {{c.bg}}; color: {{c.fg}}; font: {{c.weight}} 13px Manrope, sans-serif; font-variant-numeric: tabular-nums; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px">
+                  <span>{{c.num}}</span>
+                  <span aria-hidden="true" style="width: 4px; height: 4px; border-radius: 999px; background: {{c.dot}}"></span>
+                </button>
+              </sc-for>
+            </div>
+            <div style="display: flex; align-items: center; gap: 14px; font-size: 12px; color: #5B5852; padding-top: 10px; border-top: 1px solid #ECE9E3">
+              <span style="display: inline-flex; align-items: center; gap: 6px"><span style="width: 6px; height: 6px; border-radius: 999px; background: #B5832F"></span>Com consultas</span>
+              <span style="display: inline-flex; align-items: center; gap: 6px"><span style="width: 14px; height: 10px; border-radius: 3px; background: #FBF6EC; border: 1px solid #EBD4A6"></span>Semana em exibição</span>
+            </div>
+          </div>
+
+          <!-- Especialidades -->
+          <div style="background: #FFFFFF; border: 1px solid #DFDBD3; border-radius: 12px; box-shadow: 0 1px 2px rgba(30,29,27,.06); padding: 18px; display: flex; flex-direction: column; gap: 10px">
+            <div style="display: flex; align-items: baseline; gap: 8px">
+              <h3 style="margin: 0 auto 0 0; font-size: 15px; font-weight: 700">Especialidades</h3>
+              <span style="font-size: 12px; font-weight: 600; color: #77736B">na semana</span>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 2px">
+              <sc-for list="{{legend}}" as="l" hint-placeholder-count="8">
+                <button type="button" role="checkbox" aria-checked="{{l.checked}}" onClick="{{l.onToggle}}" style="display: flex; align-items: center; gap: 10px; height: 40px; padding: 0 8px; border: 0; border-radius: 8px; background: transparent; cursor: pointer; font: 600 13px Manrope, sans-serif; color: {{l.fg}}; text-align: left">
+                  <span style="width: 18px; height: 18px; box-sizing: border-box; border-radius: 5px; border: 1.5px solid {{l.boxBorder}}; background: {{l.boxBg}}; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0">
+                    <sc-if value="{{l.on}}" hint-placeholder-val="{{ true }}">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>
+                    </sc-if>
+                  </span>
+                  <span style="flex: 1; min-width: 0">{{l.name}}</span>
+                  <span style="min-width: 26px; height: 22px; padding: 0 7px; box-sizing: border-box; border-radius: 999px; background: #F5F3EF; color: #43413C; font-size: 12px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; font-variant-numeric: tabular-nums">{{l.count}}</span>
+                </button>
+              </sc-for>
+            </div>
+          </div>
+
+          <!-- Disponibilidade hoje -->
+          <div style="background: #FFFFFF; border: 1px solid #DFDBD3; border-radius: 12px; box-shadow: 0 1px 2px rgba(30,29,27,.06); padding: 18px; display: flex; flex-direction: column; gap: 14px">
+            <div style="display: flex; flex-direction: column; gap: 2px">
+              <h3 style="margin: 0; font-size: 15px; font-weight: 700">Disponibilidade hoje</h3>
+              <span style="font-size: 12px; color: #77736B">Ocupação da agenda de cada profissional · 08h–18h</span>
+            </div>
+            <sc-for list="{{avail}}" as="p" hint-placeholder-count="6">
+              <div style="display: flex; flex-direction: column; gap: 7px">
+                <div style="display: flex; align-items: center; gap: 10px">
+                  <span style="position: relative; width: 32px; height: 32px; border-radius: 999px; background: #F5F3EF; color: #43413C; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; flex-shrink: 0">{{p.initials}}<span aria-hidden="true" style="position: absolute; right: -1px; bottom: -1px; width: 10px; height: 10px; border-radius: 999px; background: {{p.color}}; border: 2px solid #FFFFFF"></span></span>
+                  <span style="display: flex; flex-direction: column; min-width: 0; flex: 1">
+                    <span style="font-size: 13px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{p.name}}</span>
+                    <span style="font-size: 12px; color: #5B5852">{{p.spec}}</span>
+                  </span>
+                  <span style="font-size: 13px; font-weight: 800; font-variant-numeric: tabular-nums">{{p.pctLabel}}</span>
+                </div>
+                <div role="img" aria-label="{{p.aria}}" style="height: 6px; border-radius: 999px; background: #F5F3EF; overflow: hidden"><div style="height: 100%; width: {{p.pct}}; border-radius: 999px; background: #B5832F"></div></div>
+                <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: #2E7351">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>
+                  {{p.freeLabel}}
+                </span>
+              </div>
+            </sc-for>
+          </div>
+
+          <!-- Salas -->
+          <div style="background: #FFFFFF; border: 1px solid #DFDBD3; border-radius: 12px; box-shadow: 0 1px 2px rgba(30,29,27,.06); padding: 18px; display: flex; flex-direction: column; gap: 4px">
+            <div style="display: flex; align-items: baseline; gap: 8px; padding-bottom: 8px">
+              <h3 style="margin: 0 auto 0 0; font-size: 15px; font-weight: 700">Salas agora</h3>
+              <span style="font-size: 12px; font-weight: 700; color: #5B5852">{{roomsBusy}}</span>
+            </div>
+            <sc-for list="{{rooms}}" as="r" hint-placeholder-count="7">
+              <div style="display: flex; align-items: center; gap: 10px; padding: 8px 0; border-top: 1px solid #ECE9E3">
+                <span style="width: 34px; height: 34px; border-radius: 8px; background: {{r.iconBg}}; color: {{r.fg}}; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; flex-shrink: 0">{{r.num}}</span>
+                <span style="display: flex; flex-direction: column; min-width: 0; flex: 1">
+                  <span style="font-size: 13px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{r.use}}</span>
+                  <span style="font-size: 12px; color: #5B5852; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{r.detail}}</span>
+                </span>
+                <span style="display: inline-flex; align-items: center; gap: 6px; height: 24px; padding: 0 9px; border-radius: 999px; background: {{r.bg}}; color: {{r.fg}}; font-size: 12px; font-weight: 700; white-space: nowrap"><span style="width: 6px; height: 6px; border-radius: 999px; background: {{r.fg}}"></span>{{r.state}}</span>
+              </div>
+            </sc-for>
+          </div>
+        </aside>
+
+        <!-- Calendário -->
+        <div style="flex: 3 1 640px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+          <section aria-label="{{calAria}}" style="background: #FFFFFF; border: 1px solid #DFDBD3; border-radius: 12px; box-shadow: 0 1px 2px rgba(30,29,27,.06); display: flex; flex-direction: column; overflow: hidden">
+
+            <!-- Legenda de status -->
+            <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; padding: 12px 16px; border-bottom: 1px solid #DFDBD3; background: #FAF8F4">
+              <span style="font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: #5B5852">Status</span>
+              <sc-for list="{{statusLegend}}" as="s" hint-placeholder-count="7">
+                <span style="display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 700; color: {{s.fg}}">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{s.d1}}"></path><path d="{{s.d2}}"></path></svg>
+                  {{s.label}}
+                </span>
+              </sc-for>
+            </div>
+
+            <!-- VISÃO SEMANA -->
+            <sc-if value="{{isWeek}}" hint-placeholder-val="{{ true }}">
+              <div style="overflow-x: auto">
+                <div style="min-width: 860px">
+                  <div style="display: flex; border-bottom: 1px solid #DFDBD3">
+                    <div style="width: 60px; flex-shrink: 0; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 10px; font-size: 11px; font-weight: 700; color: #77736B">GMT-3</div>
+                    <sc-for list="{{weekDays}}" as="d" hint-placeholder-count="6">
+                      <div style="flex: 1 1 0; min-width: 0; display: flex; align-items: center; gap: 10px; padding: 12px 10px; border-left: 1px solid #ECE9E3; background: {{d.headBg}}; box-shadow: inset 0 -2px 0 {{d.headLine}}">
+                        <span style="width: 38px; height: 38px; border-radius: 999px; background: {{d.numBg}}; color: {{d.numFg}}; display: inline-flex; align-items: center; justify-content: center; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 700; font-size: 22px; flex-shrink: 0">{{d.num}}</span>
+                        <span style="display: flex; flex-direction: column; min-width: 0">
+                          <span style="font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: {{d.dowFg}}">{{d.dow}}</span>
+                          <span style="font-size: 12px; font-weight: 600; color: #5B5852; white-space: nowrap">{{d.countLabel}}</span>
+                        </span>
+                      </div>
+                    </sc-for>
+                  </div>
+                  <div style="position: relative; display: flex; height: 804px">
+                    <div aria-hidden="true" style="position: absolute; left: 60px; right: 0; top: 0; height: 792px; display: flex; flex-direction: column; pointer-events: none">
+                      <sc-for list="{{gridRows}}" as="r" hint-placeholder-count="22">
+                        <div style="height: 36px; box-sizing: border-box; border-top: {{r.border}}"></div>
+                      </sc-for>
+                    </div>
+                    <div aria-hidden="true" style="position: relative; width: 60px; flex-shrink: 0">
+                      <sc-for list="{{hours}}" as="h" hint-placeholder-count="12">
+                        <span style="position: absolute; top: {{h.top}}; right: 10px; font-size: 11px; font-weight: 700; color: #77736B; font-variant-numeric: tabular-nums">{{h.label}}</span>
+                      </sc-for>
+                      <span style="position: absolute; top: {{nowLabelTop}}; right: 4px; height: 18px; padding: 0 6px; border-radius: 999px; background: #8F6425; color: #FFFFFF; font-size: 11px; font-weight: 800; display: inline-flex; align-items: center; font-variant-numeric: tabular-nums">10:24</span>
+                    </div>
+                    <sc-for list="{{weekDays}}" as="d" hint-placeholder-count="6">
+                      <div style="position: relative; flex: 1 1 0; min-width: 0; height: 792px; border-left: 1px solid #ECE9E3; background: {{d.colBg}}">
+                        <sc-for list="{{d.blocks}}" as="b" hint-placeholder-count="1">
+                          <div style="position: absolute; top: {{b.top}}; height: {{b.height}}; left: 0; right: 0; box-sizing: border-box; padding: 6px 8px; background: repeating-linear-gradient(135deg, #F5F3EF 0 6px, #ECE9E3 6px 7px); display: flex; align-items: flex-start; gap: 6px; font-size: 11px; font-weight: 700; color: #5B5852; overflow: hidden">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0; margin-top: 1px"><path d="{{b.d1}}"></path><path d="{{b.d2}}"></path></svg>
+                            <span>{{b.label}}</span>
+                          </div>
+                        </sc-for>
+                        <sc-for list="{{d.free}}" as="f" hint-placeholder-count="1">
+                          <a href="AgendaModais.dc.html" aria-label="{{f.aria}}" style="position: absolute; top: {{f.top}}; height: {{f.height}}; left: 4px; right: 4px; box-sizing: border-box; border: 1.5px dashed #DDB872; border-radius: 8px; background: rgba(251,246,236,.75); color: #6F4D1D; font-size: 11px; font-weight: 800; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 4px; z-index: 1">
+                            Horário livre
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>
+                          </a>
+                        </sc-for>
+                        <sc-for list="{{d.appts}}" as="a" hint-placeholder-count="6">
+                          <div style="position: absolute; top: {{a.top}}; height: {{a.height}}; left: {{a.left}}; width: {{a.width}}; z-index: {{a.z}}">
+                            <button type="button" aria-pressed="{{a.selStr}}" aria-label="{{a.aria}}" onClick="{{a.onSel}}" style="display: flex; flex-direction: column; width: 100%; height: 100%; padding: 0; box-sizing: border-box; border: 1px solid {{a.border}}; border-radius: 8px; background: {{a.bg}}; box-shadow: {{a.shadow}}; overflow: hidden; text-align: left; cursor: pointer; opacity: {{a.opacity}}; font-family: Manrope, sans-serif; color: #1E1D1B">
+                              <span aria-hidden="true" style="display: block; height: 3px; flex-shrink: 0; background: {{a.color}}"></span>
+                              <sc-if value="{{a.isShort}}" hint-placeholder-val="{{ false }}">
+                                <span style="display: flex; align-items: center; gap: 4px; flex: 1; min-width: 0; padding: 0 6px">
+                                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="{{a.stFg}}" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0"><path d="{{a.d1}}"></path><path d="{{a.d2}}"></path></svg>
+                                  <span style="font-size: 11px; font-weight: 800; font-variant-numeric: tabular-nums; flex-shrink: 0">{{a.start}}</span>
+                                  <span style="font-size: 11px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-decoration: {{a.deco}}">{{a.patient}}</span>
+                                </span>
+                              </sc-if>
+                              <sc-if value="{{a.notShort}}" hint-placeholder-val="{{ true }}">
+                                <span style="display: flex; flex-direction: column; gap: 1px; padding: 4px 7px; min-width: 0">
+                                  <span style="display: flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 700; color: #5B5852; font-variant-numeric: tabular-nums">
+                                    <span style="flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{a.rangeShow}}</span>
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="{{a.stFg}}" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0"><path d="{{a.d1}}"></path><path d="{{a.d2}}"></path></svg>
+                                  </span>
+                                  <span style="font-size: 12px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-decoration: {{a.deco}}">{{a.patient}}</span>
+                                  <sc-if value="{{a.showMeta}}" hint-placeholder-val="{{ true }}">
+                                    <span style="font-size: 11px; font-weight: 600; color: #5B5852; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{a.meta}}</span>
+                                  </sc-if>
+                                  <sc-if value="{{a.showStatus}}" hint-placeholder-val="{{ false }}">
+                                    <span style="font-size: 11px; font-weight: 800; color: {{a.stFg}}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{a.status}}</span>
+                                  </sc-if>
+                                </span>
+                              </sc-if>
+                            </button>
+                            <sc-if value="{{a.isSel}}" hint-placeholder-val="{{ false }}">
+                              <div role="dialog" aria-label="Detalhes rápidos da consulta" style="position: absolute; top: {{a.popTop}}; left: {{a.popL}}; right: {{a.popR}}; width: 316px; box-sizing: border-box; background: #FFFFFF; border: 1px solid #DFDBD3; border-radius: 12px; box-shadow: 0 18px 50px rgba(30,29,27,.14); padding: 16px; display: flex; flex-direction: column; gap: 14px; text-align: left; cursor: default">
+                                <div style="display: flex; align-items: flex-start; gap: 12px">
+                                  <span style="width: 40px; height: 40px; border-radius: 999px; background: #F5E9D0; color: #6F4D1D; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; flex-shrink: 0; box-shadow: 0 0 0 2px #FFFFFF, 0 0 0 3px #DDB872">{{a.initials}}</span>
+                                  <span style="display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1">
+                                    <span style="font-size: 15px; font-weight: 800; color: #1E1D1B">{{a.fullPatient}}</span>
+                                    <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: #5B5852">
+                                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                                      {{a.phone}}
+                                    </span>
+                                  </span>
+                                  <button type="button" aria-label="Fechar detalhes" onClick="{{a.onClose}}" style="width: 32px; height: 32px; border: 0; border-radius: 8px; background: transparent; color: #5B5852; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; padding: 0; flex-shrink: 0">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+                                  </button>
+                                </div>
+                                <div style="display: flex; flex-wrap: wrap; gap: 6px">
+                                  <span style="display: inline-flex; align-items: center; gap: 5px; height: 24px; padding: 0 9px; border-radius: 999px; background: {{a.stBg}}; color: {{a.stFg}}; font-size: 12px; font-weight: 700">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{a.d1}}"></path><path d="{{a.d2}}"></path></svg>
+                                    {{a.status}}
+                                  </span>
+                                  <span style="display: inline-flex; align-items: center; gap: 6px; height: 24px; padding: 0 9px; border-radius: 999px; background: #F5F3EF; color: #43413C; font-size: 12px; font-weight: 700"><span style="width: 7px; height: 7px; border-radius: 999px; background: {{a.color}}"></span>{{a.spec}}</span>
+                                </div>
+                                <dl style="margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 8px 14px; font-size: 13px">
+                                  <dt style="color: #77736B; font-weight: 600">Serviço</dt><dd style="margin: 0; font-weight: 700">{{a.service}}</dd>
+                                  <dt style="color: #77736B; font-weight: 600">Profissional</dt><dd style="margin: 0; font-weight: 700">{{a.prof}}</dd>
+                                  <dt style="color: #77736B; font-weight: 600">Sala</dt><dd style="margin: 0; font-weight: 700">{{a.room}}</dd>
+                                  <dt style="color: #77736B; font-weight: 600">Quando</dt><dd style="margin: 0; font-weight: 700">{{a.when}}</dd>
+                                  <dt style="color: #77736B; font-weight: 600">Valor</dt><dd style="margin: 0; font-weight: 800; font-variant-numeric: tabular-nums">{{a.value}}</dd>
+                                </dl>
+                                <div style="display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 8px; background: #E3F0EE; color: #2F6F68; font-size: 12px; font-weight: 700">
+                                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0"><path d="M12 8V4H8"></path><rect width="16" height="12" x="4" y="8" rx="2"></rect><path d="M2 14h2"></path><path d="M20 14h2"></path><path d="M15 13v2"></path><path d="M9 13v2"></path></svg>
+                                  {{a.iaNote}}
+                                </div>
+                                <div style="display: flex; gap: 8px">
+                                  <sc-if value="{{a.canConfirm}}" hint-placeholder-val="{{ true }}">
+                                    <button type="button" onClick="{{a.onConfirm}}" style="flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 36px; padding: 0 12px; border: 0; border-radius: 8px; background: #8F6425; color: #FFFFFF; font: 700 13px Manrope, sans-serif; cursor: pointer">
+                                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>
+                                      Confirmar
+                                    </button>
+                                  </sc-if>
+                                  <sc-if value="{{a.isConfirmed}}" hint-placeholder-val="{{ false }}">
+                                    <span style="flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 36px; padding: 0 12px; border-radius: 8px; background: #E6F2EB; color: #2E7351; font-size: 13px; font-weight: 700">
+                                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>
+                                      Confirmada
+                                    </span>
+                                  </sc-if>
+                                  <a href="AgendaModais.dc.html" style="flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 36px; padding: 0 12px; box-sizing: border-box; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; color: #2E2C29; font: 700 13px Manrope, sans-serif; text-decoration: none">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+                                    Reagendar
+                                  </a>
+                                </div>
+                                <a href="AgendaModais.dc.html" style="display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 36px; border-radius: 8px; color: #8F6425; font: 700 13px Manrope, sans-serif; text-decoration: none; background: #FBF6EC">
+                                  Detalhes da consulta
+                                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                                </a>
+                              </div>
+                            </sc-if>
+                          </div>
+                        </sc-for>
+                        <sc-if value="{{d.isToday}}" hint-placeholder-val="{{ false }}">
+                          <div aria-hidden="true" style="position: absolute; left: 0; right: 0; top: {{d.nowTop}}; height: 2px; background: #B5832F; z-index: 6; pointer-events: none">
+                            <span style="position: absolute; left: -6px; top: -4px; width: 10px; height: 10px; border-radius: 999px; background: #B5832F; box-shadow: 0 0 0 2px #FFFFFF"></span>
+                          </div>
+                        </sc-if>
+                      </div>
+                    </sc-for>
+                  </div>
+                </div>
+              </div>
+            </sc-if>
+
+            <!-- VISÃO DIA -->
+            <sc-if value="{{isDay}}" hint-placeholder-val="{{ false }}">
+              <div style="overflow-x: auto">
+                <div style="min-width: 900px">
+                  <div style="display: flex; border-bottom: 1px solid #DFDBD3">
+                    <div style="width: 60px; flex-shrink: 0; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 10px; font-size: 11px; font-weight: 700; color: #77736B">GMT-3</div>
+                    <sc-for list="{{dayProfs}}" as="p" hint-placeholder-count="6">
+                      <div style="flex: 1 1 0; min-width: 0; display: flex; align-items: center; gap: 10px; padding: 12px 10px; border-left: 1px solid #ECE9E3">
+                        <span style="width: 36px; height: 36px; border-radius: 999px; background: #F5F3EF; color: #43413C; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; flex-shrink: 0; box-shadow: 0 0 0 2px #FFFFFF, 0 0 0 3.5px {{p.color}}">{{p.initials}}</span>
+                        <span style="display: flex; flex-direction: column; min-width: 0">
+                          <span style="font-size: 13px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{p.short}}</span>
+                          <span style="font-size: 11px; font-weight: 600; color: #5B5852; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{p.sub}}</span>
+                        </span>
+                      </div>
+                    </sc-for>
+                  </div>
+                  <div style="position: relative; display: flex; height: 804px">
+                    <div aria-hidden="true" style="position: absolute; left: 60px; right: 0; top: 0; height: 792px; display: flex; flex-direction: column; pointer-events: none">
+                      <sc-for list="{{gridRows}}" as="r" hint-placeholder-count="22">
+                        <div style="height: 36px; box-sizing: border-box; border-top: {{r.border}}"></div>
+                      </sc-for>
+                    </div>
+                    <div aria-hidden="true" style="position: relative; width: 60px; flex-shrink: 0">
+                      <sc-for list="{{hours}}" as="h" hint-placeholder-count="12">
+                        <span style="position: absolute; top: {{h.top}}; right: 10px; font-size: 11px; font-weight: 700; color: #77736B; font-variant-numeric: tabular-nums">{{h.label}}</span>
+                      </sc-for>
+                      <span style="position: absolute; top: {{nowLabelTop}}; right: 4px; height: 18px; padding: 0 6px; border-radius: 999px; background: #8F6425; color: #FFFFFF; font-size: 11px; font-weight: 800; display: inline-flex; align-items: center; font-variant-numeric: tabular-nums">10:24</span>
+                    </div>
+                    <sc-for list="{{dayProfs}}" as="d" hint-placeholder-count="6">
+                      <div style="position: relative; flex: 1 1 0; min-width: 0; height: 792px; border-left: 1px solid #ECE9E3">
+                        <sc-for list="{{d.blocks}}" as="b" hint-placeholder-count="1">
+                          <div style="position: absolute; top: {{b.top}}; height: {{b.height}}; left: 0; right: 0; box-sizing: border-box; padding: 6px 8px; background: repeating-linear-gradient(135deg, #F5F3EF 0 6px, #ECE9E3 6px 7px); display: flex; align-items: flex-start; gap: 6px; font-size: 11px; font-weight: 700; color: #5B5852; overflow: hidden">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0; margin-top: 1px"><path d="{{b.d1}}"></path><path d="{{b.d2}}"></path></svg>
+                            <span>{{b.label}}</span>
+                          </div>
+                        </sc-for>
+                        <sc-for list="{{d.free}}" as="f" hint-placeholder-count="1">
+                          <a href="AgendaModais.dc.html" aria-label="{{f.aria}}" style="position: absolute; top: {{f.top}}; height: {{f.height}}; left: 4px; right: 4px; box-sizing: border-box; border: 1.5px dashed #DDB872; border-radius: 8px; background: rgba(251,246,236,.75); color: #6F4D1D; font-size: 11px; font-weight: 800; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 4px; z-index: 1">
+                            Horário livre
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>
+                          </a>
+                        </sc-for>
+                        <sc-for list="{{d.appts}}" as="a" hint-placeholder-count="4">
+                          <div style="position: absolute; top: {{a.top}}; height: {{a.height}}; left: {{a.left}}; width: {{a.width}}; z-index: {{a.z}}">
+                            <button type="button" aria-pressed="{{a.selStr}}" aria-label="{{a.aria}}" onClick="{{a.onSel}}" style="display: flex; flex-direction: column; width: 100%; height: 100%; padding: 0; box-sizing: border-box; border: 1px solid {{a.border}}; border-radius: 8px; background: {{a.bg}}; box-shadow: {{a.shadow}}; overflow: hidden; text-align: left; cursor: pointer; opacity: {{a.opacity}}; font-family: Manrope, sans-serif; color: #1E1D1B">
+                              <span aria-hidden="true" style="display: block; height: 3px; flex-shrink: 0; background: {{a.color}}"></span>
+                              <sc-if value="{{a.isShort}}" hint-placeholder-val="{{ false }}">
+                                <span style="display: flex; align-items: center; gap: 4px; flex: 1; min-width: 0; padding: 0 6px">
+                                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="{{a.stFg}}" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0"><path d="{{a.d1}}"></path><path d="{{a.d2}}"></path></svg>
+                                  <span style="font-size: 11px; font-weight: 800; font-variant-numeric: tabular-nums; flex-shrink: 0">{{a.start}}</span>
+                                  <span style="font-size: 11px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-decoration: {{a.deco}}">{{a.patient}}</span>
+                                </span>
+                              </sc-if>
+                              <sc-if value="{{a.notShort}}" hint-placeholder-val="{{ true }}">
+                                <span style="display: flex; flex-direction: column; gap: 1px; padding: 4px 7px; min-width: 0">
+                                  <span style="display: flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 700; color: #5B5852; font-variant-numeric: tabular-nums">
+                                    <span style="flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{a.rangeShow}}</span>
+                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="{{a.stFg}}" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0"><path d="{{a.d1}}"></path><path d="{{a.d2}}"></path></svg>
+                                  </span>
+                                  <span style="font-size: 12px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-decoration: {{a.deco}}">{{a.patient}}</span>
+                                  <sc-if value="{{a.showMeta}}" hint-placeholder-val="{{ true }}">
+                                    <span style="font-size: 11px; font-weight: 600; color: #5B5852; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{a.meta}}</span>
+                                  </sc-if>
+                                  <sc-if value="{{a.showStatus}}" hint-placeholder-val="{{ false }}">
+                                    <span style="font-size: 11px; font-weight: 800; color: {{a.stFg}}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{a.status}}</span>
+                                  </sc-if>
+                                </span>
+                              </sc-if>
+                            </button>
+                            <sc-if value="{{a.isSel}}" hint-placeholder-val="{{ false }}">
+                              <div role="dialog" aria-label="Detalhes rápidos da consulta" style="position: absolute; top: {{a.popTop}}; left: {{a.popL}}; right: {{a.popR}}; width: 316px; box-sizing: border-box; background: #FFFFFF; border: 1px solid #DFDBD3; border-radius: 12px; box-shadow: 0 18px 50px rgba(30,29,27,.14); padding: 16px; display: flex; flex-direction: column; gap: 14px; text-align: left; cursor: default">
+                                <div style="display: flex; align-items: flex-start; gap: 12px">
+                                  <span style="width: 40px; height: 40px; border-radius: 999px; background: #F5E9D0; color: #6F4D1D; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; flex-shrink: 0; box-shadow: 0 0 0 2px #FFFFFF, 0 0 0 3px #DDB872">{{a.initials}}</span>
+                                  <span style="display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1">
+                                    <span style="font-size: 15px; font-weight: 800; color: #1E1D1B">{{a.fullPatient}}</span>
+                                    <span style="font-size: 12px; font-weight: 600; color: #5B5852">{{a.phone}}</span>
+                                  </span>
+                                  <button type="button" aria-label="Fechar detalhes" onClick="{{a.onClose}}" style="width: 32px; height: 32px; border: 0; border-radius: 8px; background: transparent; color: #5B5852; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; padding: 0; flex-shrink: 0">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+                                  </button>
+                                </div>
+                                <span style="align-self: flex-start; display: inline-flex; align-items: center; gap: 5px; height: 24px; padding: 0 9px; border-radius: 999px; background: {{a.stBg}}; color: {{a.stFg}}; font-size: 12px; font-weight: 700">
+                                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{a.d1}}"></path><path d="{{a.d2}}"></path></svg>
+                                  {{a.status}}
+                                </span>
+                                <dl style="margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 8px 14px; font-size: 13px">
+                                  <dt style="color: #77736B; font-weight: 600">Serviço</dt><dd style="margin: 0; font-weight: 700">{{a.service}}</dd>
+                                  <dt style="color: #77736B; font-weight: 600">Sala</dt><dd style="margin: 0; font-weight: 700">{{a.room}}</dd>
+                                  <dt style="color: #77736B; font-weight: 600">Quando</dt><dd style="margin: 0; font-weight: 700">{{a.when}}</dd>
+                                  <dt style="color: #77736B; font-weight: 600">Valor</dt><dd style="margin: 0; font-weight: 800">{{a.value}}</dd>
+                                </dl>
+                                <div style="display: flex; gap: 8px">
+                                  <sc-if value="{{a.canConfirm}}" hint-placeholder-val="{{ true }}">
+                                    <button type="button" onClick="{{a.onConfirm}}" style="flex: 1; height: 36px; border: 0; border-radius: 8px; background: #8F6425; color: #FFFFFF; font: 700 13px Manrope, sans-serif; cursor: pointer">Confirmar</button>
+                                  </sc-if>
+                                  <a href="AgendaModais.dc.html" style="flex: 1; display: inline-flex; align-items: center; justify-content: center; height: 36px; box-sizing: border-box; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; color: #2E2C29; font: 700 13px Manrope, sans-serif; text-decoration: none">Reagendar</a>
+                                  <a href="AgendaModais.dc.html" style="flex: 1; display: inline-flex; align-items: center; justify-content: center; height: 36px; border-radius: 8px; background: #FBF6EC; color: #8F6425; font: 700 13px Manrope, sans-serif; text-decoration: none">Detalhes</a>
+                                </div>
+                              </div>
+                            </sc-if>
+                          </div>
+                        </sc-for>
+                      </div>
+                    </sc-for>
+                    <div aria-hidden="true" style="position: absolute; left: 60px; right: 0; top: {{nowTop}}; height: 2px; background: #B5832F; z-index: 6; pointer-events: none">
+                      <span style="position: absolute; left: -6px; top: -4px; width: 10px; height: 10px; border-radius: 999px; background: #B5832F; box-shadow: 0 0 0 2px #FFFFFF"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </sc-if>
+
+            <!-- VISÃO MÊS -->
+            <sc-if value="{{isMonth}}" hint-placeholder-val="{{ false }}">
+              <div style="overflow-x: auto">
+                <div style="min-width: 780px">
+                  <div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); border-bottom: 1px solid #DFDBD3; background: #FFFFFF">
+                    <sc-for list="{{monthDow}}" as="w" hint-placeholder-count="7">
+                      <span style="padding: 10px 12px; font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: #5B5852">{{w}}</span>
+                    </sc-for>
+                  </div>
+                  <div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr))">
+                    <sc-for list="{{monthCells}}" as="c" hint-placeholder-count="35">
+                      <div style="min-height: 140px; box-sizing: border-box; padding: 8px; border-top: 1px solid #ECE9E3; border-left: {{c.borderL}}; background: {{c.bg}}; display: flex; flex-direction: column; gap: 6px; min-width: 0">
+                        <div style="display: flex; align-items: center; gap: 6px">
+                          <span style="width: 28px; height: 28px; border-radius: 999px; background: {{c.numBg}}; color: {{c.numFg}}; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; font-variant-numeric: tabular-nums">{{c.num}}</span>
+                          <span style="margin-left: auto; font-size: 11px; font-weight: 700; color: #5B5852; font-variant-numeric: tabular-nums">{{c.countLabel}}</span>
+                        </div>
+                        <sc-if value="{{c.hasCount}}" hint-placeholder-val="{{ true }}">
+                          <div role="img" aria-label="{{c.occAria}}" style="height: 3px; border-radius: 999px; background: #ECE9E3; overflow: hidden"><div style="height: 100%; width: {{c.occ}}; border-radius: 999px; background: {{c.occColor}}"></div></div>
+                        </sc-if>
+                        <sc-for list="{{c.items}}" as="it" hint-placeholder-count="3">
+                          <span style="display: flex; align-items: center; gap: 5px; height: 20px; padding: 0 5px; border-radius: 5px; background: #F5F3EF; font-size: 11px; color: #2E2C29; min-width: 0; overflow: hidden; white-space: nowrap">
+                            <span style="width: 6px; height: 6px; border-radius: 999px; background: {{it.color}}; flex-shrink: 0"></span>
+                            <span style="font-weight: 800; font-variant-numeric: tabular-nums; flex-shrink: 0">{{it.time}}</span>
+                            <span style="font-weight: 600; overflow: hidden; text-overflow: ellipsis">{{it.name}}</span>
+                          </span>
+                        </sc-for>
+                        <sc-if value="{{c.hasMore}}" hint-placeholder-val="{{ true }}">
+                          <button type="button" onClick="{{c.onMore}}" style="align-self: flex-start; height: 22px; padding: 0 4px; border: 0; border-radius: 5px; background: transparent; color: #8F6425; font: 800 11px Manrope, sans-serif; cursor: pointer">{{c.more}}</button>
+                        </sc-if>
+                        <sc-if value="{{c.hasNote}}" hint-placeholder-val="{{ false }}">
+                          <span style="font-size: 11px; font-weight: 700; color: {{c.noteColor}}">{{c.note}}</span>
+                        </sc-if>
+                      </div>
+                    </sc-for>
+                  </div>
+                </div>
+              </div>
+            </sc-if>
+          </section>
+
+          <!-- Resumo do período -->
+          <section aria-label="Resumo do período" style="background: #FFFFFF; border: 1px solid #DFDBD3; border-radius: 12px; box-shadow: 0 1px 2px rgba(30,29,27,.06); padding: 20px 24px; display: flex; flex-direction: column; gap: 16px">
+            <div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px">
+              <h3 style="margin: 0 auto 0 0; font-size: 15px; font-weight: 700">{{summaryTitle}}</h3>
+              <span style="font-size: 12px; font-weight: 600; color: #77736B">Atualizado às 10:24 · dados de demonstração</span>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(150px, 100%), 1fr)); gap: 16px">
+              <sc-for list="{{summary}}" as="s" hint-placeholder-count="4">
+                <div style="display: flex; flex-direction: column; gap: 4px; padding-right: 12px">
+                  <span style="font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: #77736B">{{s.label}}</span>
+                  <span style="font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 34px; line-height: 1; color: #1E1D1B">{{s.value}}</span>
+                  <span style="font-size: 12px; font-weight: 600; color: {{s.subColor}}">{{s.sub}}</span>
+                </div>
+              </sc-for>
+              <div style="display: flex; flex-direction: column; gap: 6px">
+                <span style="font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: #77736B">Ocupação</span>
+                <span style="font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 34px; line-height: 1; color: #1E1D1B">{{occLabel}}</span>
+                <div role="img" aria-label="{{occAria}}" style="height: 8px; border-radius: 999px; background: #ECE9E3; overflow: hidden"><div style="width: {{occLabel}}; height: 100%; border-radius: 999px; background: #B5832F"></div></div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1900}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { view: 'semana', sel: 'w14', hidden: {}, chips: ['Unidade: Centro', 'Turno: manhã e tarde'], over: {} };
+  }
+  renderVals() {
+    const S = this.state || {};
+    const view = S.view || 'semana';
+    const hidden = S.hidden || {};
+    const over = S.over || {};
+    const sel = S.sel || '';
+    const chipsState = S.chips || [];
+    const HOUR = 72, START = 480, GRID_H = 792, NOW = 624;
+
+    const CIRCLE = 'M2 12a10 10 0 1 0 20 0a10 10 0 1 0 -20 0';
+    const ST = {
+      'Confirmada': { fg: '#2E7351', bg: '#E6F2EB', d1: CIRCLE, d2: 'm9 12 2 2 4-4' },
+      'Agendada': { fg: '#2D5F88', bg: '#E5EEF6', d1: CIRCLE, d2: 'M12 6v6l4 2' },
+      'Em atendimento': { fg: '#8F6425', bg: '#FBF6EC', d1: CIRCLE, d2: 'm10 8 6 4-6 4z' },
+      'Concluída': { fg: '#5B5852', bg: '#ECE9E3', d1: 'M18 6 7 17l-5-5', d2: 'm22 10-7.5 7.5L13 16' },
+      'Cancelada': { fg: '#A93B30', bg: '#FAE7E4', d1: CIRCLE, d2: 'm15 9-6 6M9 9l6 6' },
+      'Faltou': { fg: '#9A5F0E', bg: '#FBF0DA', d1: 'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M5 7a4 4 0 1 0 8 0a4 4 0 1 0 -8 0', d2: 'm17 8 5 5m0-5-5 5' },
+      'Reagendada': { fg: '#5B4E8C', bg: '#EEEBF6', d1: 'M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8', d2: 'M3 3v5h5' }
+    };
+    const SPECS = ['Odontologia', 'Fonoaudiologia', 'Estética Avançada', 'Psicologia', 'Quiropraxia', 'Podologia', 'Fisioterapia', 'Nutrição'];
+    const SP = { 'Odontologia': '#B5832F', 'Fonoaudiologia': '#3E7CA8', 'Estética Avançada': '#B0607A', 'Psicologia': '#6E62A6', 'Quiropraxia': '#3F8A72', 'Podologia': '#8A7A3F', 'Fisioterapia': '#C0703A', 'Nutrição': '#5E8A3A' };
+    const PROF = { 'Odontologia': 'Dra. Lauren Bertocchi', 'Fonoaudiologia': 'Dra. Helena Marchetti', 'Estética Avançada': 'Dra. Bianca Toniolo', 'Psicologia': 'Dra. Marina Lazzari', 'Quiropraxia': 'Dr. Rafael Zanella', 'Podologia': 'Ana Paula Schmitt', 'Fisioterapia': 'Dr. Gustavo Pagnussat', 'Nutrição': 'Dra. Júlia Dalmolin' };
+    const SERV = { 'Odontologia': ['Manutenção ortodôntica', 220], 'Fonoaudiologia': ['Sessão de fonoterapia', 160], 'Estética Avançada': ['Limpeza de pele profunda', 240], 'Psicologia': ['Psicoterapia individual', 180], 'Quiropraxia': ['Ajuste quiropráxico', 150], 'Podologia': ['Podologia clínica', 120], 'Fisioterapia': ['Sessão de fisioterapia', 140], 'Nutrição': ['Consulta nutricional', 200] };
+
+    const pad = n => String(n).padStart(2, '0');
+    const toMin = t => parseInt(t.slice(0, 2), 10) * 60 + parseInt(t.slice(3), 10);
+    const fmt = m => pad(Math.floor(m / 60)) + ':' + pad(m % 60);
+    const brl = v => { const parts = v.toFixed(2).split('.'); return 'R$ ' + parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ',' + parts[1]; };
+    const ini = n => { const p = n.replace(/^Dra?\.\s/, '').split(' '); return (p[0][0] + p[p.length - 1][0]).toUpperCase(); };
+    const shortName = n => { const p = n.split(' '); return p[0] + ' ' + p[p.length - 1][0] + '.'; };
+    const profShort = n => n.split(' ').slice(0, 2).join(' ');
+    const phone = n => { let h = 7; for (const ch of n) h = (h * 31 + ch.charCodeAt(0)) % 100000; return '(54) 9' + (8100 + h % 1800) + '-' + (1000 + (h * 7) % 9000); };
+
+    const ICON = {
+      food: ['M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2M7 2v20', 'M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7'],
+      lock: ['M5 11h14a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2z', 'M7 11V7a5 5 0 0 1 10 0v4']
+    };
+    const mkBlock = b => ({ top: Math.round((toMin(b[1]) - START) / 60 * HOUR) + 'px', height: Math.round((toMin(b[2]) - toMin(b[1])) / 60 * HOUR) + 'px', label: b[3], d1: ICON[b[4]][0], d2: ICON[b[4]][1] });
+    const mkFree = f => ({ top: Math.round((toMin(f[1]) - START) / 60 * HOUR + 2) + 'px', height: Math.round((toMin(f[2]) - toMin(f[1])) / 60 * HOUR - 4) + 'px', aria: 'Horário livre das ' + f[1] + ' às ' + f[2] + ': criar agendamento' });
+    const blockedIn = (list, col) => list.filter(b => b[0] === col).reduce((t, b) => t + Math.max(0, Math.min(toMin(b[2]), 1080) - Math.max(toMin(b[1]), 480)), 0);
+
+    const mkCard = (a, colIdx, dateLabel, inDay) => {
+      const status = over[a.id] || a.status;
+      const st = ST[status];
+      const s0 = toMin(a.start), s1 = s0 + a.dur;
+      const top = (s0 - START) / 60 * HOUR;
+      const h = a.dur / 60 * HOUR - 4;
+      const lanes = a.lanes || 1, lane = a.lane || 0;
+      const narrow = lanes > 1;
+      const isSel = sel === a.id;
+      const canc = status === 'Cancelada';
+      const isShort = h < 44;
+      const sv = SERV[a.spec];
+      const prof = PROF[a.spec];
+      return {
+        id: a.id, status, spec: a.spec, room: a.room, prof, dur: a.dur, canc, valNum: sv[1],
+        patient: narrow ? shortName(a.patient) : a.patient, fullPatient: a.patient,
+        start: fmt(s0), rangeShow: narrow ? fmt(s0) : fmt(s0) + ' – ' + fmt(s1),
+        meta: inDay ? sv[0] : profShort(prof) + ' · ' + a.room,
+        top: (Math.round(top) + 2) + 'px', height: Math.round(h) + 'px',
+        left: 'calc(' + (lane * 100 / lanes) + '% + 4px)', width: 'calc(' + (100 / lanes) + '% - 8px)',
+        z: isSel ? 30 : 2,
+        color: SP[a.spec],
+        bg: canc || status === 'Concluída' ? '#FAF8F4' : (status === 'Em atendimento' ? '#FFFDF8' : '#FFFFFF'),
+        border: status === 'Em atendimento' ? '#DDB872' : '#DFDBD3',
+        shadow: isSel ? '0 0 0 2px #FFFFFF, 0 0 0 4px #B5832F, 0 6px 20px rgba(30,29,27,.12)' : '0 1px 2px rgba(30,29,27,.06)',
+        opacity: canc ? '.72' : '1',
+        deco: canc ? 'line-through' : 'none',
+        stFg: st.fg, stBg: st.bg, d1: st.d1, d2: st.d2,
+        isShort, notShort: !isShort,
+        showMeta: !isShort && !narrow && h >= 60,
+        showStatus: !isShort && !narrow && h >= 80,
+        aria: a.patient + ', ' + fmt(s0) + ' às ' + fmt(s1) + ', ' + a.spec + ', ' + status,
+        selStr: isSel ? 'true' : 'false', isSel,
+        onSel: () => this.setState({ sel: isSel ? '' : a.id }),
+        onClose: () => this.setState({ sel: '' }),
+        popTop: Math.min(0, GRID_H - 440 - top) + 'px',
+        popL: colIdx <= 2 ? 'calc(100% + 10px)' : 'auto',
+        popR: colIdx <= 2 ? 'auto' : 'calc(100% + 10px)',
+        initials: ini(a.patient), phone: phone(a.patient), service: sv[0], value: brl(sv[1]),
+        when: dateLabel + ' · ' + fmt(s0) + '–' + fmt(s1),
+        canConfirm: status === 'Agendada' || status === 'Reagendada',
+        isConfirmed: status === 'Confirmada',
+        onConfirm: () => this.setState({ over: Object.assign({}, over, { [a.id]: 'Confirmada' }) }),
+        iaNote: over[a.id] ? 'Confirmada agora por Camila S. · paciente avisado no WhatsApp' : (status === 'Confirmada' ? 'Confirmada pela Assistente IA via WhatsApp' : 'Assistente IA enviará lembrete 24 h antes')
+      };
+    };
+
+    // ---------- SEMANA (19–24 out) ----------
+    const DAYS = [['Seg', 19, 'Seg, 19/10'], ['Ter', 20, 'Ter, 20/10'], ['Qua', 21, 'Qua, 21/10'], ['Qui', 22, 'Qui, 22/10'], ['Sex', 23, 'Sex, 23/10'], ['Sáb', 24, 'Sáb, 24/10']];
+    const W = [
+      [0, '08:00', 45, 'Marcos Webber', 'Podologia', 'Sala 3', 'Concluída'],
+      [0, '09:00', 30, 'Tiago Zortéa', 'Fonoaudiologia', 'Sala 2', 'Faltou'],
+      [0, '09:45', 75, 'Carla Menegatti', 'Odontologia', 'Sala 1', 'Em atendimento', 0, 2],
+      [0, '10:00', 45, 'João Pedro Basso', 'Quiropraxia', 'Sala 3', 'Em atendimento', 1, 2],
+      [0, '11:00', 60, 'Eduardo Rech', 'Psicologia', 'Sala 6', 'Confirmada'],
+      [0, '13:00', 60, 'Sofia Cavalheiro', 'Estética Avançada', 'Sala 5', 'Confirmada'],
+      [0, '14:00', 45, 'Luíza Bortolini', 'Quiropraxia', 'Sala 3', 'Agendada'],
+      [0, '15:00', 50, 'Patrícia Golin', 'Fonoaudiologia', 'Sala 2', 'Confirmada'],
+      [0, '16:30', 60, 'Renato Spanholi', 'Fisioterapia', 'Sala 7', 'Cancelada'],
+      [0, '17:30', 45, 'Beatriz Fiorentin', 'Nutrição', 'Sala 7', 'Confirmada'],
+      [1, '08:30', 60, 'Fernanda Lise', 'Odontologia', 'Sala 1', 'Confirmada'],
+      [1, '10:00', 50, 'Paulo Brum', 'Psicologia', 'Sala 6', 'Agendada'],
+      [1, '11:00', 45, 'João Pedro Basso', 'Fonoaudiologia', 'Sala 2', 'Confirmada'],
+      [1, '13:15', 30, 'Marcos Webber', 'Quiropraxia', 'Sala 3', 'Reagendada'],
+      [1, '14:00', 60, 'Beatriz Fiorentin', 'Estética Avançada', 'Sala 5', 'Agendada'],
+      [1, '15:30', 45, 'Tiago Zortéa', 'Fisioterapia', 'Sala 7', 'Agendada'],
+      [1, '17:00', 60, 'Carla Menegatti', 'Odontologia', 'Sala 1', 'Agendada'],
+      [2, '08:00', 45, 'Renato Spanholi', 'Podologia', 'Sala 3', 'Confirmada'],
+      [2, '09:00', 60, 'Luíza Bortolini', 'Odontologia', 'Sala 1', 'Agendada'],
+      [2, '10:30', 50, 'Sofia Cavalheiro', 'Psicologia', 'Sala 6', 'Confirmada'],
+      [2, '13:00', 45, 'Eduardo Rech', 'Nutrição', 'Sala 7', 'Agendada'],
+      [2, '15:00', 60, 'Patrícia Golin', 'Estética Avançada', 'Sala 5', 'Cancelada'],
+      [2, '16:30', 45, 'Paulo Brum', 'Fonoaudiologia', 'Sala 4', 'Confirmada'],
+      [3, '08:30', 45, 'Fernanda Lise', 'Fisioterapia', 'Sala 7', 'Confirmada'],
+      [3, '09:30', 60, 'Marcos Webber', 'Odontologia', 'Sala 1', 'Agendada'],
+      [3, '11:00', 30, 'Beatriz Fiorentin', 'Quiropraxia', 'Sala 3', 'Confirmada'],
+      [3, '14:00', 45, 'João Pedro Basso', 'Fonoaudiologia', 'Sala 2', 'Agendada'],
+      [3, '15:00', 60, 'Renato Spanholi', 'Fisioterapia', 'Sala 7', 'Reagendada'],
+      [3, '17:00', 50, 'Tiago Zortéa', 'Psicologia', 'Sala 6', 'Confirmada'],
+      [4, '08:00', 60, 'Carla Menegatti', 'Estética Avançada', 'Sala 5', 'Confirmada'],
+      [4, '09:30', 45, 'Paulo Brum', 'Podologia', 'Sala 3', 'Agendada'],
+      [4, '11:00', 60, 'Luíza Bortolini', 'Psicologia', 'Sala 6', 'Agendada'],
+      [4, '14:30', 45, 'Sofia Cavalheiro', 'Nutrição', 'Sala 7', 'Confirmada'],
+      [4, '16:00', 60, 'Eduardo Rech', 'Odontologia', 'Sala 1', 'Agendada'],
+      [5, '08:00', 45, 'Patrícia Golin', 'Odontologia', 'Sala 1', 'Confirmada'],
+      [5, '09:00', 60, 'Fernanda Lise', 'Estética Avançada', 'Sala 5', 'Agendada'],
+      [5, '10:30', 45, 'Beatriz Fiorentin', 'Podologia', 'Sala 3', 'Agendada']
+    ];
+    const WB = [
+      [0, '12:00', '13:00', 'Almoço', 'food'], [1, '12:00', '13:00', 'Almoço', 'food'], [2, '12:00', '13:00', 'Almoço', 'food'],
+      [2, '17:30', '19:00', 'Bloqueado · Reunião clínica', 'lock'], [3, '12:00', '13:00', 'Almoço', 'food'], [4, '12:00', '13:00', 'Almoço', 'food'],
+      [4, '17:15', '19:00', 'Bloqueado · Manutenção Sala 1', 'lock'], [5, '12:00', '19:00', 'Fechado · sábado à tarde', 'lock']
+    ];
+    const WF = [[0, '18:15', '19:00'], [1, '09:30', '10:00'], [2, '11:30', '12:00'], [3, '16:00', '17:00'], [4, '13:00', '14:00']];
+    const week = W.map((r, i) => ({ id: 'w' + i, day: r[0], start: r[1], dur: r[2], patient: r[3], spec: r[4], room: r[5], status: r[6], lane: r[7] || 0, lanes: r[8] || 1 }));
+    const nowTop = Math.round((NOW - START) / 60 * HOUR) + 'px';
+    const weekDays = DAYS.map((d, i) => {
+      const appts = week.filter(a => a.day === i && !hidden[a.spec]).map(a => mkCard(a, i, d[2], false));
+      const isToday = i === 0;
+      const n = appts.filter(x => !x.canc).length;
+      return {
+        dow: d[0], num: d[1], isToday, nowTop, appts,
+        countLabel: n + (n === 1 ? ' consulta' : ' consultas'),
+        headBg: isToday ? '#FBF6EC' : '#FFFFFF', headLine: isToday ? '#B5832F' : 'transparent',
+        numBg: isToday ? '#8F6425' : 'transparent', numFg: isToday ? '#FFFFFF' : '#1E1D1B', dowFg: isToday ? '#6F4D1D' : '#5B5852',
+        colBg: isToday ? 'rgba(251,246,236,.55)' : 'transparent',
+        blocks: WB.filter(b => b[0] === i).map(mkBlock),
+        free: WF.filter(f => f[0] === i).map(mkFree)
+      };
+    });
+
+    // ---------- DIA (19/10, por profissional) ----------
+    const PROFS = [['Dra. Lauren Bertocchi', 'Odontologia', 'Sala 1'], ['Dra. Helena Marchetti', 'Fonoaudiologia', 'Sala 2'], ['Dr. Rafael Zanella', 'Quiropraxia', 'Sala 3'], ['Dra. Bianca Toniolo', 'Estética Avançada', 'Sala 5'], ['Dra. Marina Lazzari', 'Psicologia', 'Sala 6'], ['Dr. Gustavo Pagnussat', 'Fisioterapia', 'Sala 7']];
+    const D = [
+      [0, '08:00', 45, 'Paulo Brum', 'Concluída'], [0, '09:45', 75, 'Carla Menegatti', 'Em atendimento'], [0, '11:15', 45, 'Fernanda Lise', 'Confirmada'], [0, '14:00', 60, 'Gabriela Rossetto', 'Confirmada'],
+      [1, '08:00', 45, 'Eliane Zanatta', 'Concluída'], [1, '09:00', 30, 'Tiago Zortéa', 'Faltou'], [1, '10:30', 45, 'Larissa Pegoraro', 'Confirmada'], [1, '15:00', 50, 'Patrícia Golin', 'Confirmada'],
+      [2, '10:00', 45, 'João Pedro Basso', 'Em atendimento'], [2, '11:00', 45, 'Priscila Dametto', 'Confirmada'], [2, '14:00', 45, 'Luíza Bortolini', 'Agendada'], [2, '15:00', 30, 'Leandro Fachinetto', 'Reagendada'],
+      [3, '08:30', 90, 'Rosana Benincá', 'Concluída'], [3, '13:00', 60, 'Sofia Cavalheiro', 'Confirmada'], [3, '15:30', 60, 'Simone Piovesan', 'Agendada'],
+      [4, '08:00', 50, 'Alexandre Tonin', 'Concluída'], [4, '11:00', 60, 'Eduardo Rech', 'Confirmada'], [4, '13:00', 50, 'Mateus Cerutti', 'Agendada'],
+      [5, '08:00', 60, 'Juliana Bressan', 'Concluída'], [5, '09:30', 60, 'Otávio Pasqualotto', 'Em atendimento'], [5, '13:30', 60, 'Cristiane Mores', 'Confirmada'], [5, '16:30', 60, 'Renato Spanholi', 'Cancelada']
+    ];
+    const DB = [
+      [0, '12:00', '13:00', 'Almoço', 'food'], [1, '12:00', '13:30', 'Almoço', 'food'], [2, '08:00', '09:30', 'Bloqueado · Curso', 'lock'], [2, '12:00', '13:00', 'Almoço', 'food'],
+      [3, '12:00', '13:00', 'Almoço', 'food'], [4, '12:00', '13:00', 'Almoço', 'food'], [4, '15:00', '16:00', 'Supervisão clínica', 'lock'], [5, '12:00', '13:00', 'Almoço', 'food']
+    ];
+    const DF = [[0, '15:00', '16:00'], [1, '13:30', '14:30'], [2, '16:00', '17:00'], [3, '10:30', '12:00'], [4, '16:00', '17:00'], [5, '17:30', '18:30']];
+    const dayAll = D.map((r, i) => ({ id: 'd' + i, col: r[0], start: r[1], dur: r[2], patient: r[3], status: r[4], spec: PROFS[r[0]][1], room: PROFS[r[0]][2] }));
+    const profRows = PROFS.map((p, i) => {
+      const mine = dayAll.filter(a => a.col === i);
+      const booked = mine.filter(a => (over[a.id] || a.status) !== 'Cancelada').reduce((t, a) => t + a.dur, 0);
+      const cap = 600 - blockedIn(DB, i);
+      const pct = Math.round(booked / cap * 100);
+      const free = Math.max(1, Math.floor((cap - booked) / 50));
+      return { p, i, mine, booked, cap, pct, free };
+    });
+    const visProfs = profRows.filter(r => !hidden[r.p[1]]);
+    const dayProfs = visProfs.map((r, k) => {
+      const appts = r.mine.map(a => mkCard(a, k, 'Seg, 19/10', true));
+      const n = appts.filter(x => !x.canc).length;
+      return {
+        short: profShort(r.p[0]), initials: ini(r.p[0]), color: SP[r.p[1]],
+        sub: r.p[2] + ' · ' + n + (n === 1 ? ' consulta' : ' consultas'),
+        appts, blocks: DB.filter(b => b[0] === r.i).map(mkBlock), free: DF.filter(f => f[0] === r.i).map(mkFree)
+      };
+    });
+    const avail = profRows.map(r => ({
+      name: r.p[0], spec: r.p[1], color: SP[r.p[1]], initials: ini(r.p[0]),
+      pct: r.pct + '%', pctLabel: r.pct + '%',
+      aria: r.p[0] + ': ' + r.pct + '% da agenda ocupada',
+      freeLabel: r.free + (r.free === 1 ? ' horário livre' : ' horários livres')
+    }));
+
+    // ---------- MÊS (outubro 2026) ----------
+    const POOL = [['08:00', 'Carla M.', 'Odontologia'], ['08:30', 'Paulo B.', 'Psicologia'], ['09:00', 'Luíza B.', 'Fonoaudiologia'], ['09:30', 'Eduardo R.', 'Fisioterapia'], ['10:00', 'Sofia C.', 'Estética Avançada'], ['10:30', 'Marcos W.', 'Quiropraxia'], ['11:00', 'Patrícia G.', 'Podologia'], ['13:30', 'Renato S.', 'Nutrição'], ['14:00', 'Beatriz F.', 'Odontologia'], ['08:00', 'Tiago Z.', 'Fonoaudiologia'], ['08:15', 'Fernanda L.', 'Estética Avançada'], ['09:00', 'João P.', 'Quiropraxia']];
+    const TODAY_ITEMS = [['08:00', 'Paulo B.', 'Odontologia'], ['08:00', 'Eliane Z.', 'Fonoaudiologia'], ['08:00', 'Juliana B.', 'Fisioterapia']];
+    const monthCells = [];
+    const calCells = [];
+    let monthTotal = 0, monthDone = 0;
+    for (let i = 0; i < 35; i++) {
+      const wd = i % 7;
+      const d = i - 3;
+      const inMonth = d >= 1 && d <= 31;
+      const num = inMonth ? d : 27 + i;
+      let count = 0, note = '', noteColor = '#5B5852';
+      if (inMonth) {
+        if (d === 12) { note = 'Feriado · N. Sra. Aparecida'; noteColor = '#9A5F0E'; }
+        else if (wd >= 1 && wd <= 5) count = 15 + ((d * 7 + 3) % 11);
+        else if (wd === 6) count = 4 + (d % 4);
+        else note = 'Clínica fechada';
+        if (d === 19) count = 24;
+      }
+      monthTotal += count;
+      if (inMonth && d < 19) monthDone += count;
+      const isToday = d === 19;
+      const inWeek = d >= 19 && d <= 24;
+      let items = [];
+      if (count > 0) {
+        const src = isToday ? TODAY_ITEMS : [0, 1, 2].map(k => POOL[(d * 5 + k) % POOL.length]);
+        items = src.slice().sort((x, y) => x[0] < y[0] ? -1 : 1).filter(x => !hidden[x[2]]).map(x => ({ time: x[0], name: x[1], color: SP[x[2]] }));
+      }
+      const cap = wd === 6 ? 10 : 26;
+      monthCells.push({
+        num, countLabel: count > 0 ? count + ' consultas' : '',
+        hasCount: count > 0, occ: Math.min(100, Math.round(count / cap * 100)) + '%',
+        occAria: 'Ocupação de ' + Math.min(100, Math.round(count / cap * 100)) + '%',
+        occColor: inMonth && d < 19 ? '#9E998F' : '#B5832F',
+        items, hasMore: count > 3, more: '+' + (count - 3) + ' mais',
+        onMore: () => this.setState({ view: 'dia' }),
+        hasNote: note !== '', note, noteColor,
+        borderL: wd === 0 ? '0' : '1px solid #ECE9E3',
+        bg: !inMonth ? '#FAF8F4' : (isToday ? '#FBF6EC' : (inWeek ? '#FFFDF8' : '#FFFFFF')),
+        numBg: isToday ? '#8F6425' : 'transparent',
+        numFg: isToday ? '#FFFFFF' : (inMonth ? '#1E1D1B' : '#77736B')
+      });
+      const hasAppts = inMonth && count > 0;
+      calCells.push({
+        num,
+        aria: (inMonth ? num + ' de outubro' : num + ' de setembro') + (hasAppts ? ', ' + count + ' consultas' : ''),
+        bg: isToday ? '#8F6425' : (inWeek ? '#FBF6EC' : 'transparent'),
+        fg: isToday ? '#FFFFFF' : (inWeek ? '#6F4D1D' : (inMonth ? '#2E2C29' : '#77736B')),
+        weight: isToday || inWeek ? '800' : (inMonth ? '600' : '500'),
+        dot: hasAppts ? (isToday ? '#F5E9D0' : (d < 19 ? '#C7C2B9' : '#B5832F')) : 'transparent',
+        onPick: () => this.setState({ view: isToday ? 'dia' : (inWeek ? 'semana' : 'mes') })
+      });
+    }
+
+    // ---------- Resumo ----------
+    const weekCards = weekDays.reduce((acc, d) => acc.concat(d.appts), []);
+    const dayCards = dayProfs.reduce((acc, d) => acc.concat(d.appts), []);
+    const summarize = (cards, cap) => {
+      const cnt = s => cards.filter(c => c.status === s).length;
+      const active = cards.filter(c => !c.canc);
+      const conf = cnt('Confirmada');
+      const pend = cnt('Agendada') + cnt('Reagendada');
+      const lost = cnt('Cancelada') + cnt('Faltou');
+      const revenue = active.filter(c => c.status !== 'Faltou').reduce((t, c) => t + c.valNum, 0);
+      const booked = active.reduce((t, c) => t + c.dur, 0);
+      const occ = Math.round(booked / cap * 100);
+      return {
+        items: [
+          { label: 'Consultas', value: String(active.length), sub: cnt('Cancelada') + ' canceladas · ' + cnt('Faltou') + ' falta', subColor: '#5B5852' },
+          { label: 'Confirmadas', value: String(conf), sub: Math.round(conf / Math.max(1, active.length) * 100) + '% do total', subColor: '#2E7351' },
+          { label: 'Pendentes', value: String(pend), sub: 'IA envia lembretes às 18:00', subColor: '#2F6F68' },
+          { label: 'Receita prevista', value: brl(revenue).replace(',00', ''), sub: lost + ' horários perdidos', subColor: '#5B5852' }
+        ],
+        occ
+      };
+    };
+    const weekCap = DAYS.reduce((t, d, i) => t + (i === 5 ? 240 : 600 - blockedIn(WB, i)), 0);
+    const dayCap = visProfs.reduce((t, r) => t + r.cap, 0) || 1;
+    let summary, occ, summaryTitle;
+    if (view === 'mes') {
+      summaryTitle = 'Resumo de outubro';
+      occ = 78;
+      summary = [
+        { label: 'Consultas no mês', value: String(monthTotal), sub: monthDone + ' já realizadas', subColor: '#5B5852' },
+        { label: 'A realizar', value: String(monthTotal - monthDone), sub: 'de 19 a 31 de outubro', subColor: '#2D5F88' },
+        { label: 'Confirmação', value: '71%', sub: '+6 p.p. com a Assistente IA', subColor: '#2E7351' },
+        { label: 'Dias de atendimento', value: '22', sub: '1 feriado · domingos fechados', subColor: '#5B5852' }
+      ];
+    } else if (view === 'dia') {
+      summaryTitle = 'Resumo do dia · 19/10';
+      const r = summarize(dayCards, dayCap);
+      summary = r.items; occ = r.occ;
+    } else {
+      summaryTitle = 'Resumo da semana · 19 a 24/10';
+      const r = summarize(weekCards, weekCap);
+      summary = r.items; occ = r.occ;
+    }
+
+    // ---------- Controles ----------
+    const VIEWS = [['dia', 'Dia'], ['semana', 'Semana'], ['mes', 'Mês']];
+    const segs = VIEWS.map(v => ({
+      label: v[1], pressed: view === v[0] ? 'true' : 'false',
+      bg: view === v[0] ? '#FFFFFF' : 'transparent', fg: view === v[0] ? '#1E1D1B' : '#5B5852',
+      shadow: view === v[0] ? '0 1px 2px rgba(30,29,27,.08)' : 'none',
+      onClick: () => this.setState({ view: v[0] })
+    }));
+    const PERIOD = {
+      semana: ['Semana 43 · 2026', '19 – 24 de outubro'],
+      dia: ['Hoje', 'Segunda, 19 de outubro'],
+      mes: ['2026', 'Outubro de 2026']
+    };
+    const hiddenKeys = SPECS.filter(s => hidden[s]);
+    const chips = chipsState.map(l => ({ label: l, aria: 'Remover filtro ' + l, onRemove: () => this.setState({ chips: chipsState.filter(x => x !== l) }) }))
+      .concat(hiddenKeys.map(k => ({ label: 'Oculto: ' + k, aria: 'Voltar a exibir ' + k, onRemove: () => this.setState({ hidden: Object.assign({}, hidden, { [k]: false }) }) })));
+    const legend = SPECS.map(s => {
+      const on = !hidden[s];
+      return {
+        name: s, on, checked: on ? 'true' : 'false', count: week.filter(a => a.spec === s).length,
+        fg: on ? '#2E2C29' : '#77736B',
+        boxBg: on ? SP[s] : '#FFFFFF', boxBorder: on ? SP[s] : '#9E998F',
+        onToggle: () => this.setState({ hidden: Object.assign({}, hidden, { [s]: on }) })
+      };
+    });
+    const ROOMS = [
+      ['1', 'Odontologia', true, 'Carla Menegatti · até 11:00'],
+      ['2', 'Fonoaudiologia', false, 'Próxima consulta às 10:30'],
+      ['3', 'Podologia · Quiropraxia', true, 'João Pedro Basso · até 10:45'],
+      ['4', 'Fonoaudiologia', false, 'Sem consultas hoje'],
+      ['5', 'Estética Avançada', false, 'Próxima consulta às 13:00'],
+      ['6', 'Psicologia', false, 'Próxima consulta às 11:00'],
+      ['7', 'Multiuso · Fisio e Nutrição', true, 'Otávio Pasqualotto · até 10:30']
+    ];
+    const rooms = ROOMS.map(r => ({
+      num: r[0], use: 'Sala ' + r[0] + ' · ' + r[1], detail: r[3],
+      state: r[2] ? 'Ocupada' : 'Livre',
+      bg: r[2] ? '#FBF6EC' : '#E6F2EB', fg: r[2] ? '#8F6425' : '#2E7351', iconBg: r[2] ? '#FBF6EC' : '#F5F3EF'
+    }));
+
+    return {
+      isWeek: view === 'semana', isDay: view === 'dia', isMonth: view === 'mes',
+      periodOver: PERIOD[view][0], periodLabel: PERIOD[view][1],
+      calAria: view === 'dia' ? 'Agenda do dia por profissional' : (view === 'mes' ? 'Agenda do mês' : 'Agenda da semana'),
+      segs, chips, hasChips: chips.length > 0, noChips: chips.length === 0,
+      onClear: () => this.setState({ chips: [], hidden: {} }),
+      calDow: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'],
+      calCells, legend, avail, rooms,
+      roomsBusy: ROOMS.filter(r => r[2]).length + ' de 7 ocupadas',
+      statusLegend: ['Agendada', 'Confirmada', 'Em atendimento', 'Concluída', 'Reagendada', 'Faltou', 'Cancelada'].map(s => ({ label: s, fg: ST[s].fg, d1: ST[s].d1, d2: ST[s].d2 })),
+      gridRows: Array.from({ length: 22 }, (_, i) => ({ border: i % 2 === 0 ? '1px solid #ECE9E3' : '1px dashed #ECE9E3' })),
+      hours: Array.from({ length: 12 }, (_, i) => ({ label: pad(8 + i) + ':00', top: (i === 0 ? 4 : i * HOUR - 8) + 'px' })),
+      nowTop, nowLabelTop: (Math.round((NOW - START) / 60 * HOUR) - 9) + 'px',
+      weekDays, dayProfs,
+      monthDow: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
+      monthCells,
+      summaryTitle, summary,
+      occLabel: occ + '%', occAria: 'Ocupação de ' + occ + '% da capacidade do período'
+    };
+  }
+}
+</script>
+</body>
+</html>

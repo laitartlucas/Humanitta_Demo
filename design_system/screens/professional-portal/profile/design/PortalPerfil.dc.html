@@ -1,0 +1,733 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Portal · Meu Perfil — Humanittá Gestão</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&amp;family=Manrope:wght@400;500;600;700;800&amp;family=Josefin+Sans:wght@300;400&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#FAF8F4}
+a{color:#8F6425}a:hover{color:#6F4D1D}
+</style>
+</helmet>
+<div style="display: flex; flex-wrap: wrap; min-height: 100vh; background: #FAF8F4; font-family: Manrope, system-ui, sans-serif; color: #1E1D1B">
+
+  <!-- PORTAL:SIDEBAR START (sidebar exclusiva do Portal do Profissional — copiar; mudar só o item ativo) -->
+  <aside aria-label="Menu principal" style="flex: 1 1 264px; max-width: 264px; min-width: 220px; background: #1E1D1B; color: #E9E5DD; display: flex; flex-direction: column; gap: 24px; padding: 24px 16px">
+    <a href="PortalDashboard.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 4px 8px; text-decoration: none; color: #F5E9D0">
+      <svg width="40" height="40" viewBox="0 0 64 64" role="img" aria-label="Símbolo Humanittá">
+        <defs><linearGradient id="sg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#DDB872"></stop><stop offset=".55" stop-color="#CC9B47"></stop><stop offset="1" stop-color="#B5832F"></stop></linearGradient></defs>
+        <circle cx="32" cy="32" r="30" fill="none" stroke="#CC9B47" stroke-width="2"></circle>
+        <circle cx="24" cy="31" r="3.6" fill="url(#sg)"></circle>
+        <path d="M20 39.5c0-2.6 1.8-4.3 4-4.3s4 1.7 4 4.3V47c-4.4 0-8-3.2-8-7.5z" fill="url(#sg)"></path>
+        <circle cx="38.5" cy="19.5" r="4.6" fill="url(#sg)"></circle>
+        <path d="M31.5 31c0-3.3 2.7-5.6 6-5.6h6.5V40c0 4.6-3.7 8-8.3 8h-4.2z" fill="url(#sg)"></path>
+      </svg>
+      <span style="display: flex; flex-direction: column; gap: 2px">
+        <span style="font-family: 'Josefin Sans', Manrope, sans-serif; font-weight: 300; font-size: 22px; letter-spacing: .08em; color: #F3EFE8; line-height: 1">Humanittá</span>
+        <span style="font-size: 10px; font-weight: 700; letter-spacing: .24em; text-transform: uppercase; color: #DDB872">Gestão</span>
+      </span>
+    </a>
+    <span style="align-self: flex-start; margin-top: -12px; display: inline-flex; align-items: center; height: 24px; padding: 0 12px; border-radius: 999px; background: rgba(221,184,114,.12); color: #DDB872; font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase">Portal do Profissional</span>
+    <nav aria-label="Seções do portal" style="display: flex; flex-direction: column; gap: 2px">
+      <a href="PortalDashboard.dc.html" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 10px; color: #D6D1C7; text-decoration: none; font-size: 14px; font-weight: 600">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"></path><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+        <span style="flex: 1">Meu Dashboard</span>
+      </a>
+      <a href="PortalAgenda.dc.html" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 10px; color: #D6D1C7; text-decoration: none; font-size: 14px; font-weight: 600">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 7.5V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h3.5"></path><path d="M16 2v4"></path><path d="M8 2v4"></path><path d="M3 10h5"></path><path d="M17.5 17.5 16 16.3V14"></path><circle cx="16" cy="16" r="6"></circle></svg>
+        <span style="flex: 1">Minha Agenda</span>
+      </a>
+      <a href="PortalPacientes.dc.html" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 10px; color: #D6D1C7; text-decoration: none; font-size: 14px; font-weight: 600">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+        <span style="flex: 1">Meus Pacientes</span>
+      </a>
+      <a href="PortalAtendimentos.dc.html" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 10px; color: #D6D1C7; text-decoration: none; font-size: 14px; font-weight: 600">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="8" height="4" x="8" y="2" rx="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><path d="m9 14 2 2 4-4"></path></svg>
+        <span style="flex: 1">Meus Atendimentos</span>
+      </a>
+      <a href="PortalPerfil.dc.html" aria-current="page" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 10px; background: rgba(221,184,114,.12); color: #F5E9D0; text-decoration: none; font-size: 14px; font-weight: 700">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#DDB872" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 20a6 6 0 0 0-12 0"></path><circle cx="12" cy="10" r="4"></circle><circle cx="12" cy="12" r="10"></circle></svg>
+        <span style="flex: 1">Meu Perfil</span><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 999px; background: #DDB872"></span>
+      </a>
+    </nav>
+    <div style="margin-top: auto; display: flex; flex-direction: column; gap: 12px">
+      <div style="display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 12px; background: rgba(255,255,255,.05)">
+        <span style="width: 36px; height: 36px; border-radius: 999px; background: #43413C; color: #F5E9D0; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800">LB</span>
+        <span style="display: flex; flex-direction: column; min-width: 0">
+          <span style="font-size: 13px; font-weight: 700; color: #F3EFE8">Dra. Lauren Bertocchi</span>
+          <span style="font-size: 12px; color: #B9B3A8">Ortodontista</span>
+        </span>
+      </div>
+      <button type="button" style="display: flex; align-items: center; gap: 10px; height: 40px; padding: 0 12px; border: 0; border-radius: 10px; background: transparent; color: #B9B3A8; font: 600 13px Manrope, sans-serif; cursor: pointer">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="18" x="3" y="3" rx="2"></rect><path d="M9 3v18"></path><path d="m16 15-3-3 3-3"></path></svg>
+        Recolher menu
+      </button>
+    </div>
+  </aside>
+  <!-- PORTAL:SIDEBAR END -->
+
+  <div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
+    <!-- PORTAL:HEADER START (copiar; mudar título e breadcrumb) -->
+    <header style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px; min-height: 72px; padding: 12px 32px; box-sizing: border-box; background: #FFFFFF; border-bottom: 1px solid #DFDBD3">
+      <div style="display: flex; flex-direction: column; gap: 2px; margin-right: auto">
+        <span style="font-size: 12px; font-weight: 600; color: #77736B">Portal do Profissional</span>
+        <h1 style="margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 28px; line-height: 1.1">Meu Perfil</h1>
+      </div>
+      <label style="display: flex; align-items: center; gap: 10px; flex: 0 1 360px; min-width: 200px; height: 40px; padding: 0 12px; box-sizing: border-box; border: 1px solid #DFDBD3; border-radius: 8px; background: #FAF8F4; color: #77736B">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+        <span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Busca global</span>
+        <input type="search" placeholder="Buscar nos meus pacientes e consultas…" style="flex: 1; min-width: 0; border: 0; background: transparent; font: 500 14px Manrope, sans-serif; color: #1E1D1B; outline: none">
+        <span style="font-size: 11px; font-weight: 700; color: #77736B; border: 1px solid #DFDBD3; border-radius: 6px; padding: 2px 6px; background: #FFFFFF">⌘K</span>
+      </label>
+      <span style="display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 10px; border-radius: 999px; background: #FBF0DA; color: #9A5F0E; font-size: 12px; font-weight: 700">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 2v7.31"></path><path d="M14 9.3V1.99"></path><path d="M8.5 2h7"></path><path d="M14 9.3a6.5 6.5 0 1 1-4 0"></path></svg>
+        Ambiente de demonstração
+      </span>
+      <span style="display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: #43413C">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#77736B" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path></svg>
+        Segunda, 19 de outubro de 2026
+      </span>
+      <button type="button" aria-label="Notificações (3 novas)" style="position: relative; width: 40px; height: 40px; border: 1px solid #DFDBD3; border-radius: 10px; background: #FFFFFF; color: #43413C; display: inline-flex; align-items: center; justify-content: center; cursor: pointer">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path></svg>
+        <span aria-hidden="true" style="position: absolute; top: 8px; right: 9px; width: 8px; height: 8px; border-radius: 999px; background: #A93B30; border: 2px solid #FFFFFF"></span>
+      </button>
+      <button type="button" aria-label="Menu do usuário" style="display: flex; align-items: center; gap: 10px; height: 44px; padding: 0 8px 0 4px; border: 0; background: transparent; cursor: pointer; font-family: Manrope, sans-serif">
+        <span style="width: 36px; height: 36px; border-radius: 999px; background: #F5E9D0; color: #6F4D1D; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; box-shadow: 0 0 0 2px #FFFFFF, 0 0 0 3px #DDB872">LB</span>
+        <span style="display: flex; flex-direction: column; align-items: flex-start">
+          <span style="font-size: 13px; font-weight: 700; color: #1E1D1B">Dra. Lauren Bertocchi</span>
+          <span style="font-size: 12px; color: #77736B">Ortodontista · Portal do Profissional</span>
+        </span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#77736B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
+      </button>
+    </header>
+    <!-- PORTAL:HEADER END -->
+
+    <main style="flex: 1; padding: 32px; box-sizing: border-box; display: flex; flex-direction: column; gap: 24px; max-width: 1440px; width: 100%">
+
+      <!-- Cabeçalho do perfil -->
+      <section aria-label="Identificação profissional" style="position: relative; overflow: hidden; background: #FFFFFF; border: 1px solid #DFDBD3; border-radius: 16px; box-shadow: 0 1px 2px rgba(30,29,27,.06); padding: 28px; display: flex; flex-wrap: wrap; align-items: center; gap: 28px">
+        <span aria-hidden="true" style="position: absolute; top: -90px; right: -90px; width: 180px; height: 180px; border-radius: 999px; background: #F5E9D0"></span>
+        <div style="position: relative; display: flex; flex-direction: column; align-items: center; gap: 12px">
+          <span role="img" aria-label="Foto de perfil (iniciais LB)" style="width: 112px; height: 112px; border-radius: 999px; background: #FBF6EC; color: #6F4D1D; display: inline-flex; align-items: center; justify-content: center; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 42px; font-weight: 700; box-shadow: 0 0 0 4px #FFFFFF, 0 0 0 5.5px #B5832F">LB</span>
+          <button type="button" style="display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 12px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; color: #2E2C29; font: 700 13px Manrope, sans-serif; cursor: pointer">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"></path><circle cx="12" cy="13" r="3"></circle></svg>
+            Trocar foto
+          </button>
+        </div>
+        <div style="position: relative; flex: 1 1 360px; min-width: 0; display: flex; flex-direction: column; gap: 10px">
+          <span style="font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #8F6425">Meu perfil profissional</span>
+          <h2 style="margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 36px; line-height: 1.1">Dra. Lauren Bertocchi</h2>
+          <span style="font-size: 15px; font-weight: 600; color: #43413C">Ortodontista · Clínica Geral</span>
+          <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px">
+            <span style="display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 12px; border-radius: 999px; background: #FBF6EC; border: 1px solid #EBD4A6; color: #6F4D1D; font-size: 12px; font-weight: 800">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"></path><path d="m9 12 2 2 4-4"></path></svg>
+              Responsável técnica
+            </span>
+            <span style="display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 12px; border-radius: 999px; background: #F5F3EF; color: #43413C; font-size: 12px; font-weight: 700">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 10h2"></path><path d="M16 14h2"></path><path d="M6.17 15a3 3 0 0 1 5.66 0"></path><circle cx="9" cy="11" r="2"></circle><rect x="2" y="5" width="20" height="14" rx="2"></rect></svg>
+              CRO/RS 15630
+            </span>
+            <span style="display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 12px; border-radius: 999px; background: #F5F3EF; color: #43413C; font-size: 12px; font-weight: 700">
+              <span style="width: 8px; height: 8px; border-radius: 999px; background: #B5832F"></span>
+              Sala 1 · Odontologia
+            </span>
+          </div>
+        </div>
+        <dl style="position: relative; flex: 0 1 380px; min-width: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(110px, 100%), 1fr)); gap: 12px">
+          <div style="display: flex; flex-direction: column; gap: 4px; padding: 14px; border-radius: 12px; background: #FAF8F4; border: 1px solid #ECE9E3">
+            <dt style="font-size: 12px; font-weight: 600; color: #77736B">Na clínica desde</dt>
+            <dd style="margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 26px; font-weight: 600; line-height: 1">2019</dd>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 4px; padding: 14px; border-radius: 12px; background: #FAF8F4; border: 1px solid #ECE9E3">
+            <dt style="font-size: 12px; font-weight: 600; color: #77736B">Atendimentos · out</dt>
+            <dd style="margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 26px; font-weight: 600; line-height: 1">112</dd>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 4px; padding: 14px; border-radius: 12px; background: #FAF8F4; border: 1px solid #ECE9E3">
+            <dt style="font-size: 12px; font-weight: 600; color: #77736B">Perfil completo</dt>
+            <dd style="margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 26px; font-weight: 600; line-height: 1">90%</dd>
+          </div>
+        </dl>
+      </section>
+
+      <!-- Abas -->
+      <div role="tablist" aria-label="Seções do perfil" style="display: flex; flex-wrap: wrap; gap: 4px; border-bottom: 1px solid #DFDBD3">
+        <sc-for list="{{tabs}}" as="t" hint-placeholder-count="4">
+          <button type="button" role="tab" aria-selected="{{t.sel}}" onClick="{{ t.go }}" style="display: inline-flex; align-items: center; gap: 8px; height: 48px; padding: 0 16px; margin-bottom: -1px; border: 0; border-bottom: 2px solid {{t.line}}; background: transparent; color: {{t.fg}}; font: {{t.w}} 14px Manrope, sans-serif; cursor: pointer">
+            {{t.label}}
+            <span style="display: {{t.badgeDisplay}}; align-items: center; height: 20px; padding: 0 7px; border-radius: 999px; background: #FBF0DA; color: #9A5F0E; font-size: 11px; font-weight: 800">{{t.badge}}</span>
+          </button>
+        </sc-for>
+      </div>
+
+      <!-- ===== Dados profissionais ===== -->
+      <sc-if value="{{isDados}}" hint-placeholder-val="{{ true }}">
+        <section role="tabpanel" aria-label="Dados profissionais" style="display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start">
+          <div style="flex: 2 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+            <div style="background: #FFFFFF; border: 1px solid #DFDBD3; border-radius: 12px; box-shadow: 0 1px 2px rgba(30,29,27,.06); padding: 24px; display: flex; flex-direction: column; gap: 20px">
+              <div style="display: flex; flex-direction: column; gap: 2px">
+                <h3 style="margin: 0; font-size: 16px; font-weight: 700">Informações de contato</h3>
+                <span style="font-size: 13px; color: #77736B">Usadas pela equipe da clínica e nas comunicações com seus pacientes</span>
+              </div>
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); gap: 16px 20px">
+                <label style="display: flex; flex-direction: column; gap: 6px">
+                  <span style="font-size: 13px; font-weight: 600; color: #2E2C29">Nome de exibição</span>
+                  <input type="text" value="Dra. Lauren Bertocchi" style="height: 40px; padding: 0 12px; box-sizing: border-box; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 500 14px Manrope, sans-serif; color: #1E1D1B">
+                  <span style="font-size: 12px; color: #77736B">Aparece em lembretes e confirmações enviados ao paciente.</span>
+                </label>
+                <label style="display: flex; flex-direction: column; gap: 6px">
+                  <span style="font-size: 13px; font-weight: 600; color: #2E2C29">E-mail profissional</span>
+                  <input type="email" value="lauren.bertocchi@demo.humanitta.com.br" style="height: 40px; padding: 0 12px; box-sizing: border-box; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 500 14px Manrope, sans-serif; color: #1E1D1B">
+                  <span style="font-size: 12px; color: #77736B">Endereço fictício do ambiente de demonstração.</span>
+                </label>
+                <label style="display: flex; flex-direction: column; gap: 6px">
+                  <span style="font-size: 13px; font-weight: 600; color: #2E2C29">Telefone</span>
+                  <input type="tel" value="(54) 9••••-1187" style="height: 40px; padding: 0 12px; box-sizing: border-box; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 500 14px Manrope, sans-serif; color: #1E1D1B; font-variant-numeric: tabular-nums">
+                  <span style="font-size: 12px; color: #77736B">Visível apenas para a administração. Nunca exibido ao paciente.</span>
+                </label>
+                <div style="display: flex; flex-direction: column; gap: 6px">
+                  <span style="font-size: 13px; font-weight: 600; color: #2E2C29">Registro profissional</span>
+                  <span style="display: flex; align-items: center; gap: 8px; height: 40px; padding: 0 12px; box-sizing: border-box; border: 1px solid #ECE9E3; border-radius: 8px; background: #F5F3EF; font-size: 14px; font-weight: 600; color: #43413C">
+                    CRO/RS 15630
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#77736B" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="margin-left: auto"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                  </span>
+                  <span style="font-size: 12px; color: #77736B">Alterado somente pela administração mediante documento.</span>
+                </div>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 8px">
+                <span style="font-size: 13px; font-weight: 600; color: #2E2C29">Especialidades</span>
+                <div style="display: flex; flex-wrap: wrap; gap: 8px">
+                  <span style="display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 12px; border-radius: 999px; background: #FBF6EC; border: 1px solid #EBD4A6; color: #6F4D1D; font-size: 13px; font-weight: 700"><span style="width: 7px; height: 7px; border-radius: 999px; background: #B5832F"></span>Ortodontia</span>
+                  <span style="display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 12px; border-radius: 999px; background: #FBF6EC; border: 1px solid #EBD4A6; color: #6F4D1D; font-size: 13px; font-weight: 700"><span style="width: 7px; height: 7px; border-radius: 999px; background: #B5832F"></span>Clínica Geral</span>
+                  <span style="display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 12px; border-radius: 999px; background: #F5F3EF; color: #43413C; font-size: 13px; font-weight: 700">Responsável técnica</span>
+                  <button type="button" style="display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 12px; border-radius: 999px; border: 1px dashed #C7C2B9; background: #FFFFFF; color: #43413C; font: 700 13px Manrope, sans-serif; cursor: pointer">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>
+                    Solicitar nova especialidade
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div style="background: #FFFFFF; border: 1px solid #DFDBD3; border-radius: 12px; box-shadow: 0 1px 2px rgba(30,29,27,.06); display: flex; flex-direction: column">
+              <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 20px 24px">
+                <div style="display: flex; flex-direction: column; gap: 2px; margin-right: auto">
+                  <h3 style="margin: 0; font-size: 16px; font-weight: 700">Serviços que realizo</h3>
+                  <span style="font-size: 13px; color: #77736B">Duração padrão usada pela recepção ao agendar</span>
+                </div>
+                <span style="display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; background: #F5F3EF; color: #43413C; font-size: 12px; font-weight: 700">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                  Definidos pela administração
+                </span>
+              </div>
+              <div style="overflow-x: auto">
+                <table style="width: 100%; min-width: 560px; border-collapse: collapse; font-size: 14px">
+                  <thead>
+                    <tr style="background: #F5F3EF">
+                      <th scope="col" style="text-align: left; padding: 10px 24px; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #5B5852">Serviço</th>
+                      <th scope="col" style="text-align: left; padding: 10px 12px; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #5B5852">Duração</th>
+                      <th scope="col" style="text-align: left; padding: 10px 12px; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #5B5852">Valor</th>
+                      <th scope="col" style="text-align: left; padding: 10px 24px 10px 12px; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #5B5852">Agenda online</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <sc-for list="{{services}}" as="s" hint-placeholder-count="6">
+                      <tr style="border-top: 1px solid #ECE9E3; height: 52px">
+                        <td style="padding: 0 24px; font-weight: 700">{{s.name}}</td>
+                        <td style="padding: 0 12px; color: #43413C; font-variant-numeric: tabular-nums; white-space: nowrap">{{s.duration}}</td>
+                        <td style="padding: 0 12px; white-space: nowrap"><span style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: #5B5852"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>Definido pela administração</span></td>
+                        <td style="padding: 0 24px 0 12px"><span style="display: inline-flex; align-items: center; gap: 6px; height: 24px; padding: 0 10px; border-radius: 999px; background: {{s.bg}}; color: {{s.fg}}; font-size: 12px; font-weight: 700; white-space: nowrap"><span style="width: 6px; height: 6px; border-radius: 999px; background: {{s.fg}}"></span>{{s.online}}</span></td>
+                      </tr>
+                    </sc-for>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div style="flex: 1 1 320px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+            <div style="background: #FFFFFF; border: 1px solid #DFDBD3; border-radius: 12px; box-shadow: 0 1px 2px rgba(30,29,27,.06); padding: 24px; display: flex; flex-direction: column; gap: 14px">
+              <div style="display: flex; flex-direction: column; gap: 2px">
+                <h3 style="margin: 0; font-size: 16px; font-weight: 700">Mini-bio para o paciente</h3>
+                <span style="font-size: 13px; color: #77736B">Exibida no link de agendamento e nas confirmações</span>
+              </div>
+              <label style="display: flex; flex-direction: column; gap: 6px">
+                <span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Mini-bio</span>
+                <textarea rows="7" style="padding: 12px; box-sizing: border-box; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 500 14px/22px Manrope, sans-serif; color: #1E1D1B; resize: vertical">Ortodontista e clínica geral, responsável técnica da Humanittá. Acredito em um cuidado próximo e sem pressa: cada sorriso tem uma história, e o tratamento começa por ouvi-la. Atendo crianças, adolescentes e adultos.</textarea>
+                <span style="display: flex; justify-content: space-between; font-size: 12px; color: #77736B"><span>Tom acolhedor, em primeira pessoa.</span><span style="font-variant-numeric: tabular-nums">215/400</span></span>
+              </label>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #DFDBD3; border-radius: 12px; box-shadow: 0 1px 2px rgba(30,29,27,.06); padding: 24px; display: flex; flex-direction: column; gap: 14px">
+              <span style="font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #77736B">Pré-visualização</span>
+              <div style="display: flex; align-items: center; gap: 12px">
+                <span style="width: 48px; height: 48px; border-radius: 999px; background: #FBF6EC; color: #6F4D1D; display: inline-flex; align-items: center; justify-content: center; font-family: 'Cormorant Garamond', Georgia, serif; font-size: 20px; font-weight: 700; box-shadow: 0 0 0 2px #FFFFFF, 0 0 0 3.5px #B5832F">LB</span>
+                <span style="display: flex; flex-direction: column">
+                  <span style="font-size: 15px; font-weight: 700">Dra. Lauren Bertocchi</span>
+                  <span style="font-size: 12px; color: #5B5852">Ortodontista · Clínica Geral · CRO/RS 15630</span>
+                </span>
+              </div>
+              <p style="margin: 0; font-size: 13px; line-height: 1.6; color: #43413C">Ortodontista e clínica geral, responsável técnica da Humanittá. Acredito em um cuidado próximo e sem pressa: cada sorriso tem uma história, e o tratamento começa por ouvi-la.</p>
+            </div>
+          </div>
+        </section>
+      </sc-if>
+
+      <!-- ===== Disponibilidade ===== -->
+      <sc-if value="{{isDisp}}" hint-placeholder-val="{{ false }}">
+        <section role="tabpanel" aria-label="Disponibilidade" style="display: flex; flex-direction: column; gap: 16px">
+          <div role="note" style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 14px 18px; border-radius: 12px; background: #E5EEF6; color: #2D5F88">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+            <span style="flex: 1 1 320px; font-size: 14px; font-weight: 600">Alterações de disponibilidade passam pela aprovação da administração. Sua grade atual fica ativa até a resposta.</span>
+            <button type="button" onClick="{{ requestChange }}" style="display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px; border: 0; border-radius: 8px; background: #8F6425; color: #FFFFFF; font: 700 14px Manrope, sans-serif; cursor: pointer">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"></path><path d="m21.854 2.147-10.94 10.939"></path></svg>
+              Solicitar alteração
+            </button>
+          </div>
+          <sc-if value="{{requested}}" hint-placeholder-val="{{ false }}">
+            <div role="status" style="display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-radius: 12px; background: #FBF0DA; color: #9A5F0E; font-size: 13px; font-weight: 700">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>
+              Rascunho de solicitação aberto — descreva a alteração e envie para a administração.
+            </div>
+          </sc-if>
+
+          <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start">
+            <div style="flex: 2 1 560px; min-width: 0; background: #FFFFFF; border: 1px solid #DFDBD3; border-radius: 12px; box-shadow: 0 1px 2px rgba(30,29,27,.06); display: flex; flex-direction: column">
+              <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 20px 24px">
+                <div style="display: flex; flex-direction: column; gap: 2px; margin-right: auto">
+                  <h3 style="margin: 0; font-size: 16px; font-weight: 700">Grade semanal</h3>
+                  <span style="font-size: 13px; color: #77736B">Sala 1 · vigente desde 01/08/2026 · 49 h semanais</span>
+                </div>
+                <span style="display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; background: #F5F3EF; color: #43413C; font-size: 12px; font-weight: 700">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                  Somente leitura
+                </span>
+              </div>
+              <div style="overflow-x: auto">
+                <table style="width: 100%; min-width: 600px; border-collapse: collapse; font-size: 14px">
+                  <thead>
+                    <tr style="background: #F5F3EF">
+                      <th scope="col" style="text-align: left; padding: 10px 24px; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #5B5852">Dia</th>
+                      <th scope="col" style="text-align: left; padding: 10px 12px; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #5B5852">Início</th>
+                      <th scope="col" style="text-align: left; padding: 10px 12px; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #5B5852">Fim</th>
+                      <th scope="col" style="text-align: left; padding: 10px 12px; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #5B5852">Intervalo</th>
+                      <th scope="col" style="text-align: left; padding: 10px 24px 10px 12px; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #5B5852">Carga</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <sc-for list="{{grid}}" as="g" hint-placeholder-count="7">
+                      <tr style="border-top: 1px solid #ECE9E3; height: 56px">
+                        <td style="padding: 0 24px">
+                          <span style="display: flex; align-items: center; gap: 12px">
+                            <button type="button" role="switch" aria-checked="{{g.checked}}" aria-label="{{g.aria}}" disabled style="width: 44px; height: 26px; padding: 3px; box-sizing: border-box; border: 0; border-radius: 999px; background: {{g.track}}; display: inline-flex; justify-content: {{g.justify}}; cursor: not-allowed; opacity: .8"><span style="width: 20px; height: 20px; border-radius: 999px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(30,29,27,.25)"></span></button>
+                            <span style="font-weight: 700; color: {{g.dayFg}}">{{g.day}}</span>
+                          </span>
+                        </td>
+                        <td style="padding: 0 12px"><span style="display: inline-flex; align-items: center; height: 34px; padding: 0 12px; border-radius: 8px; background: #F5F3EF; color: {{g.fg}}; font-weight: 700; font-variant-numeric: tabular-nums">{{g.start}}</span></td>
+                        <td style="padding: 0 12px"><span style="display: inline-flex; align-items: center; height: 34px; padding: 0 12px; border-radius: 8px; background: #F5F3EF; color: {{g.fg}}; font-weight: 700; font-variant-numeric: tabular-nums">{{g.end}}</span></td>
+                        <td style="padding: 0 12px; color: #43413C; font-variant-numeric: tabular-nums">{{g.pause}}</td>
+                        <td style="padding: 0 24px 0 12px; color: #43413C; font-weight: 700; font-variant-numeric: tabular-nums">{{g.load}}</td>
+                      </tr>
+                    </sc-for>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div style="flex: 1 1 320px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+              <div style="background: #FFFFFF; border: 1px solid #DFDBD3; border-radius: 12px; box-shadow: 0 1px 2px rgba(30,29,27,.06); padding: 24px; display: flex; flex-direction: column; gap: 14px">
+                <h3 style="margin: 0; font-size: 16px; font-weight: 700">Minhas solicitações</h3>
+                <ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px">
+                  <sc-for list="{{requests}}" as="r" hint-placeholder-count="3">
+                    <li style="display: flex; flex-direction: column; gap: 8px; padding: 14px; border-radius: 12px; border: 1px solid #ECE9E3; background: #FFFFFF">
+                      <span style="display: inline-flex; align-self: flex-start; align-items: center; gap: 6px; height: 24px; padding: 0 10px; border-radius: 999px; background: {{r.bg}}; color: {{r.fg}}; font-size: 12px; font-weight: 700">
+                        <sc-if value="{{r.isWait}}" hint-placeholder-val="{{ true }}"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg></sc-if>
+                        <sc-if value="{{r.isOk}}" hint-placeholder-val="{{ false }}"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg></sc-if>
+                        <sc-if value="{{r.isNo}}" hint-placeholder-val="{{ false }}"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></sc-if>
+                        {{r.status}}
+                      </span>
+                      <span style="font-size: 14px; font-weight: 700">{{r.title}}</span>
+                      <span style="font-size: 12px; color: #5B5852">{{r.meta}}</span>
+                      <sc-if value="{{r.hasReason}}" hint-placeholder-val="{{ false }}">
+                        <span style="display: flex; gap: 8px; padding: 10px 12px; border-radius: 8px; background: #FAE7E4; color: #A93B30; font-size: 12px; line-height: 1.5; font-weight: 600">
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0; margin-top: 2px"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4"></path><path d="M12 16h.01"></path></svg>
+                          {{r.reason}}
+                        </span>
+                      </sc-if>
+                    </li>
+                  </sc-for>
+                </ul>
+              </div>
+
+              <div style="background: #FFFFFF; border: 1px solid #DFDBD3; border-radius: 12px; box-shadow: 0 1px 2px rgba(30,29,27,.06); padding: 24px; display: flex; flex-direction: column; gap: 14px">
+                <div style="display: flex; align-items: center; gap: 8px">
+                  <h3 style="margin: 0 auto 0 0; font-size: 16px; font-weight: 700">Bloqueios futuros</h3>
+                  <button type="button" style="display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 12px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; color: #2E2C29; font: 700 13px Manrope, sans-serif; cursor: pointer">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="m4.9 4.9 14.2 14.2"></path></svg>
+                    Solicitar bloqueio
+                  </button>
+                </div>
+                <ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column">
+                  <sc-for list="{{blocks}}" as="b" hint-placeholder-count="3">
+                    <li style="display: flex; align-items: center; gap: 12px; padding: 12px 0; border-top: 1px solid #ECE9E3">
+                      <span style="width: 48px; height: 48px; border-radius: 10px; border: 1px solid #DFDBD3; background: repeating-linear-gradient(135deg, #F5F3EF 0 3px, #FFFFFF 3px 8px); display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0">
+                        <span style="font-size: 16px; font-weight: 800; line-height: 1">{{b.day}}</span>
+                        <span style="font-size: 11px; font-weight: 700; color: #5B5852; text-transform: uppercase">{{b.month}}</span>
+                      </span>
+                      <span style="display: flex; flex-direction: column; gap: 2px; min-width: 0">
+                        <span style="font-size: 14px; font-weight: 700">{{b.title}}</span>
+                        <span style="font-size: 12px; color: #5B5852">{{b.meta}}</span>
+                      </span>
+                    </li>
+                  </sc-for>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+      </sc-if>
+
+      <!-- ===== Preferências ===== -->
+      <sc-if value="{{isPref}}" hint-placeholder-val="{{ false }}">
+        <section role="tabpanel" aria-label="Preferências" style="display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start">
+          <div style="flex: 2 1 560px; min-width: 0; background: #FFFFFF; border: 1px solid #DFDBD3; border-radius: 12px; box-shadow: 0 1px 2px rgba(30,29,27,.06); padding: 24px; display: flex; flex-direction: column; gap: 8px">
+            <div style="display: flex; flex-direction: column; gap: 2px; padding-bottom: 8px">
+              <h3 style="margin: 0; font-size: 16px; font-weight: 700">Notificações</h3>
+              <span style="font-size: 13px; color: #77736B">Escolha como quer ser avisada sobre a sua agenda</span>
+            </div>
+            <ul style="list-style: none; margin: 0; padding: 0">
+              <sc-for list="{{notifs}}" as="n" hint-placeholder-count="5">
+                <li style="display: flex; align-items: center; gap: 14px; padding: 14px 0; border-top: 1px solid #ECE9E3">
+                  <span style="width: 40px; height: 40px; border-radius: 10px; background: #FBF6EC; color: #8F6425; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0">
+                    <sc-if value="{{n.iMail}}" hint-placeholder-val="{{ true }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></svg></sc-if>
+                    <sc-if value="{{n.iChat}}" hint-placeholder-val="{{ false }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path></svg></sc-if>
+                    <sc-if value="{{n.iPlus}}" hint-placeholder-val="{{ false }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path><path d="M12 14v4"></path><path d="M10 16h4"></path></svg></sc-if>
+                    <sc-if value="{{n.iX}}" hint-placeholder-val="{{ false }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path><path d="m14 14-4 4"></path><path d="m10 14 4 4"></path></svg></sc-if>
+                  </span>
+                  <span style="display: flex; flex-direction: column; gap: 2px; margin-right: auto; min-width: 0">
+                    <span style="font-size: 14px; font-weight: 700">{{n.title}}</span>
+                    <span style="font-size: 12px; color: #5B5852">{{n.desc}}</span>
+                  </span>
+                  <span style="font-size: 12px; font-weight: 700; color: {{n.t.fg}}; min-width: 52px; text-align: right">{{n.t.label}}</span>
+                  <button type="button" role="switch" aria-checked="{{n.t.checked}}" aria-label="{{n.title}}" onClick="{{ n.t.toggle }}" style="width: 44px; height: 26px; padding: 3px; box-sizing: border-box; border: 0; border-radius: 999px; background: {{n.t.bg}}; display: inline-flex; justify-content: {{n.t.justify}}; cursor: pointer; flex-shrink: 0"><span style="width: 20px; height: 20px; border-radius: 999px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(30,29,27,.25)"></span></button>
+                </li>
+              </sc-for>
+            </ul>
+            <label style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding-top: 14px; border-top: 1px solid #ECE9E3">
+              <span style="display: flex; flex-direction: column; gap: 2px; margin-right: auto">
+                <span style="font-size: 14px; font-weight: 700">Horário do lembrete diário</span>
+                <span style="font-size: 12px; color: #5B5852">Resumo com os pacientes e horários do dia</span>
+              </span>
+              <select style="height: 40px; min-width: 140px; padding: 0 12px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 600 14px Manrope, sans-serif; color: #1E1D1B">
+                <option>06:30</option>
+                <option selected>07:00</option>
+                <option>07:30</option>
+                <option>Na noite anterior, 20:00</option>
+              </select>
+            </label>
+          </div>
+
+          <div style="flex: 1 1 320px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+            <div style="background: #FFFFFF; border: 1px solid #DFDBD3; border-radius: 12px; box-shadow: 0 1px 2px rgba(30,29,27,.06); padding: 24px; display: flex; flex-direction: column; gap: 14px">
+              <div style="display: flex; flex-direction: column; gap: 2px">
+                <h3 style="margin: 0; font-size: 16px; font-weight: 700">Visualização padrão da agenda</h3>
+                <span style="font-size: 13px; color: #77736B">Como a Minha Agenda abre ao entrar</span>
+              </div>
+              <div role="group" aria-label="Visualização padrão" style="display: flex; padding: 3px; border-radius: 10px; background: #F5F3EF; gap: 2px">
+                <sc-for list="{{views}}" as="v" hint-placeholder-count="3">
+                  <button type="button" aria-pressed="{{v.pressed}}" onClick="{{ v.pick }}" style="flex: 1; height: 36px; border: 0; border-radius: 8px; background: {{v.bg}}; color: {{v.fg}}; box-shadow: {{v.shadow}}; font: 700 13px Manrope, sans-serif; cursor: pointer">{{v.label}}</button>
+                </sc-for>
+              </div>
+              <span style="font-size: 12px; color: #5B5852">{{viewHint}}</span>
+            </div>
+            <div style="background: #FFFFFF; border: 1px solid #DFDBD3; border-radius: 12px; box-shadow: 0 1px 2px rgba(30,29,27,.06); padding: 24px; display: flex; flex-direction: column; gap: 14px">
+              <div style="display: flex; align-items: center; gap: 8px">
+                <h3 style="margin: 0 auto 0 0; font-size: 16px; font-weight: 700">Cor da agenda</h3>
+                <span style="display: inline-flex; align-items: center; gap: 6px; height: 24px; padding: 0 10px; border-radius: 999px; background: #F5F3EF; color: #43413C; font-size: 12px; font-weight: 700">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                  Somente leitura
+                </span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 14px">
+                <span aria-hidden="true" style="width: 44px; height: 44px; border-radius: 12px; background: #B5832F; box-shadow: 0 0 0 3px #FFFFFF, 0 0 0 4px #DFDBD3"></span>
+                <span style="display: flex; flex-direction: column; gap: 2px">
+                  <span style="font-size: 14px; font-weight: 700">Dourado · Odontologia</span>
+                  <span style="font-size: 12px; color: #5B5852; font-variant-numeric: tabular-nums">#B5832F · padrão da especialidade</span>
+                </span>
+              </div>
+              <span style="font-size: 12px; line-height: 1.5; color: #5B5852">A cor identifica a especialidade na agenda geral da clínica e é definida pela administração.</span>
+            </div>
+          </div>
+        </section>
+      </sc-if>
+
+      <!-- ===== Segurança ===== -->
+      <sc-if value="{{isSeg}}" hint-placeholder-val="{{ false }}">
+        <section role="tabpanel" aria-label="Segurança" style="display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start">
+          <div style="flex: 2 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+            <div style="background: #FFFFFF; border: 1px solid #DFDBD3; border-radius: 12px; box-shadow: 0 1px 2px rgba(30,29,27,.06); padding: 24px; display: flex; flex-direction: column; gap: 18px">
+              <div style="display: flex; flex-direction: column; gap: 2px">
+                <h3 style="margin: 0; font-size: 16px; font-weight: 700">Alterar senha</h3>
+                <span style="font-size: 13px; color: #77736B">Última alteração em 02/09/2026</span>
+              </div>
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)); gap: 16px">
+                <label style="display: flex; flex-direction: column; gap: 6px">
+                  <span style="font-size: 13px; font-weight: 600; color: #2E2C29">Senha atual</span>
+                  <input type="password" value="senhademo" style="height: 40px; padding: 0 12px; box-sizing: border-box; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 500 14px Manrope, sans-serif; color: #1E1D1B">
+                </label>
+                <label style="display: flex; flex-direction: column; gap: 6px">
+                  <span style="font-size: 13px; font-weight: 600; color: #2E2C29">Nova senha</span>
+                  <input type="password" placeholder="Mínimo de 10 caracteres" style="height: 40px; padding: 0 12px; box-sizing: border-box; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 500 14px Manrope, sans-serif; color: #1E1D1B">
+                </label>
+                <label style="display: flex; flex-direction: column; gap: 6px">
+                  <span style="font-size: 13px; font-weight: 600; color: #2E2C29">Confirmar nova senha</span>
+                  <input type="password" placeholder="Repita a nova senha" style="height: 40px; padding: 0 12px; box-sizing: border-box; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 500 14px Manrope, sans-serif; color: #1E1D1B">
+                </label>
+              </div>
+              <ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px 20px; font-size: 12px; font-weight: 600; color: #5B5852">
+                <li style="display: inline-flex; align-items: center; gap: 6px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#77736B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle></svg>10 ou mais caracteres</li>
+                <li style="display: inline-flex; align-items: center; gap: 6px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#77736B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle></svg>Letras maiúsculas e minúsculas</li>
+                <li style="display: inline-flex; align-items: center; gap: 6px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#77736B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle></svg>Ao menos um número ou símbolo</li>
+              </ul>
+              <div>
+                <button type="button" style="display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; color: #2E2C29; font: 700 14px Manrope, sans-serif; cursor: pointer">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z"></path><circle cx="16.5" cy="7.5" r=".5" fill="currentColor"></circle></svg>
+                  Atualizar senha
+                </button>
+              </div>
+            </div>
+
+            <div style="background: #FFFFFF; border: 1px solid #DFDBD3; border-radius: 12px; box-shadow: 0 1px 2px rgba(30,29,27,.06); display: flex; flex-direction: column">
+              <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 20px 24px 8px">
+                <div style="display: flex; flex-direction: column; gap: 2px; margin-right: auto">
+                  <h3 style="margin: 0; font-size: 16px; font-weight: 700">Sessões ativas</h3>
+                  <span style="font-size: 13px; color: #77736B">{{sessionsCount}}</span>
+                </div>
+                <button type="button" onClick="{{ endAll }}" style="display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 12px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; color: #A93B30; font: 700 13px Manrope, sans-serif; cursor: pointer">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><path d="m16 17 5-5-5-5"></path><path d="M21 12H9"></path></svg>
+                  Encerrar outras sessões
+                </button>
+              </div>
+              <ul style="list-style: none; margin: 0; padding: 0 24px 12px">
+                <sc-for list="{{sessions}}" as="s" hint-placeholder-count="3">
+                  <li style="display: flex; flex-wrap: wrap; align-items: center; gap: 14px; padding: 14px 0; border-top: 1px solid #ECE9E3">
+                    <span style="width: 40px; height: 40px; border-radius: 10px; background: #F5F3EF; color: #43413C; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0">
+                      <sc-if value="{{s.iDesk}}" hint-placeholder-val="{{ true }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="14" x="2" y="3" rx="2"></rect><path d="M8 21h8"></path><path d="M12 17v4"></path></svg></sc-if>
+                      <sc-if value="{{s.iPhone}}" hint-placeholder-val="{{ false }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"></rect><path d="M12 18h.01"></path></svg></sc-if>
+                      <sc-if value="{{s.iTab}}" hint-placeholder-val="{{ false }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="16" height="20" x="4" y="2" rx="2" ry="2"></rect><path d="M12 18h.01"></path></svg></sc-if>
+                    </span>
+                    <span style="display: flex; flex-direction: column; gap: 2px; margin-right: auto; min-width: 0">
+                      <span style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 14px; font-weight: 700">{{s.device}}<sc-if value="{{s.current}}" hint-placeholder-val="{{ true }}"><span style="display: inline-flex; align-items: center; height: 22px; padding: 0 8px; border-radius: 999px; background: #E6F2EB; color: #2E7351; font-size: 11px; font-weight: 700">Esta sessão</span></sc-if></span>
+                      <span style="font-size: 12px; color: #5B5852">{{s.meta}}</span>
+                    </span>
+                    <sc-if value="{{s.canEnd}}" hint-placeholder-val="{{ false }}">
+                      <button type="button" onClick="{{ s.end }}" aria-label="{{s.endAria}}" style="height: 36px; padding: 0 12px; border: 0; border-radius: 8px; background: transparent; color: #A93B30; font: 700 13px Manrope, sans-serif; cursor: pointer">Encerrar</button>
+                    </sc-if>
+                  </li>
+                </sc-for>
+              </ul>
+            </div>
+          </div>
+
+          <div style="flex: 1 1 320px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+            <div style="background: #FFFFFF; border: 1px solid #DFDBD3; border-radius: 12px; box-shadow: 0 1px 2px rgba(30,29,27,.06); padding: 24px; display: flex; flex-direction: column; gap: 14px">
+              <div style="display: flex; align-items: flex-start; gap: 12px">
+                <span style="display: flex; flex-direction: column; gap: 2px; margin-right: auto">
+                  <h3 style="margin: 0; font-size: 16px; font-weight: 700">Autenticação em duas etapas</h3>
+                  <span style="font-size: 13px; color: #77736B">Código por aplicativo autenticador ao entrar</span>
+                </span>
+                <button type="button" role="switch" aria-checked="{{twoFa.checked}}" aria-label="Autenticação em duas etapas" onClick="{{ twoFa.toggle }}" style="width: 44px; height: 26px; padding: 3px; box-sizing: border-box; border: 0; border-radius: 999px; background: {{twoFa.bg}}; display: inline-flex; justify-content: {{twoFa.justify}}; cursor: pointer; flex-shrink: 0"><span style="width: 20px; height: 20px; border-radius: 999px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(30,29,27,.25)"></span></button>
+              </div>
+              <span style="display: flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 8px; background: {{twoFa.noteBg}}; color: {{twoFa.noteFg}}; font-size: 12px; font-weight: 700">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg>
+                {{twoFa.note}}
+              </span>
+            </div>
+
+            <div style="position: relative; overflow: hidden; background: #FFFFFF; border: 1px solid #DFDBD3; border-radius: 12px; box-shadow: 0 1px 2px rgba(30,29,27,.06); padding: 24px; display: flex; flex-direction: column; gap: 12px">
+              <span aria-hidden="true" style="position: absolute; top: -48px; right: -48px; width: 96px; height: 96px; border-radius: 999px; background: #F5E9D0"></span>
+              <div style="position: relative; display: flex; align-items: center; gap: 8px">
+                <h3 style="margin: 0 auto 0 0; font-size: 16px; font-weight: 700">Meus repasses</h3>
+                <span style="display: inline-flex; align-items: center; gap: 6px; height: 24px; padding: 0 10px; border-radius: 999px; background: #F5F3EF; color: #43413C; font-size: 12px; font-weight: 700">Somente os próprios</span>
+              </div>
+              <span style="position: relative; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #77736B">Previsto para outubro</span>
+              <span style="position: relative; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 40px; line-height: 1">R$ 6.840,00</span>
+              <span style="position: relative; font-size: 13px; color: #43413C">112 atendimentos até 19/10 · fechamento em 05/11</span>
+              <div role="img" aria-label="Mês 62% decorrido" style="position: relative; height: 6px; border-radius: 999px; background: #F5F3EF; overflow: hidden"><div style="width: 62%; height: 100%; border-radius: 999px; background: #B5832F"></div></div>
+              <p style="position: relative; margin: 4px 0 0; display: flex; gap: 8px; font-size: 12px; line-height: 1.5; color: #5B5852">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0; margin-top: 1px"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
+                Valor fictício de demonstração. Detalhes, descontos e comprovantes com o financeiro da clínica.
+              </p>
+            </div>
+          </div>
+        </section>
+      </sc-if>
+
+      <!-- Rodapé de ações -->
+      <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 16px 20px; background: #FFFFFF; border: 1px solid #DFDBD3; border-radius: 12px; box-shadow: 0 1px 2px rgba(30,29,27,.06)">
+        <sc-if value="{{saved}}" hint-placeholder-val="{{ false }}">
+          <span role="status" style="display: inline-flex; align-items: center; gap: 8px; margin-right: auto; font-size: 13px; font-weight: 700; color: #2E7351">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.801 10A10 10 0 1 1 17 3.335"></path><path d="m9 11 3 3L22 4"></path></svg>
+            Alterações salvas agora há pouco.
+          </span>
+        </sc-if>
+        <sc-if value="{{notSaved}}" hint-placeholder-val="{{ true }}">
+          <span style="display: inline-flex; align-items: center; gap: 8px; margin-right: auto; font-size: 13px; color: #5B5852">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>
+            Última alteração salva em 12/10/2026 às 18:05
+          </span>
+        </sc-if>
+        <button type="button" onClick="{{ discard }}" style="display: inline-flex; align-items: center; height: 40px; padding: 0 16px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; color: #2E2C29; font: 700 14px Manrope, sans-serif; cursor: pointer">Descartar</button>
+        <button type="button" onClick="{{ save }}" style="display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 18px; border: 0; border-radius: 8px; background: #8F6425; color: #FFFFFF; font: 700 14px Manrope, sans-serif; cursor: pointer">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>
+          Salvar alterações
+        </button>
+      </div>
+    </main>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1700}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { tab: 'dados', tg: {}, view: 'Dia', saved: false, requested: false, ended: {} };
+  }
+  renderVals() {
+    const s = this.state || {};
+    const tab = s.tab ?? 'dados';
+    const tg = s.tg ?? {};
+    const ended = s.ended ?? {};
+    const view = s.view ?? 'Dia';
+
+    const TABS = [['dados', 'Dados profissionais', ''], ['disp', 'Disponibilidade', '1'], ['pref', 'Preferências', ''], ['seg', 'Segurança', '']];
+
+    const tog = (key, def) => {
+      const on = tg[key] === undefined ? def : tg[key];
+      return {
+        on, checked: on ? 'true' : 'false', bg: on ? '#8F6425' : '#C7C2B9', justify: on ? 'flex-end' : 'flex-start',
+        label: on ? 'Ativo' : 'Inativo', fg: on ? '#2E7351' : '#5B5852',
+        toggle: () => this.setState({ tg: { ...(this.state?.tg ?? {}), [key]: !on }, saved: false })
+      };
+    };
+
+    const grid = [
+      ['Segunda', true, '08:00', '18:00', '12:00 – 13:00', '9 h'],
+      ['Terça', true, '08:00', '18:00', '12:00 – 13:00', '9 h'],
+      ['Quarta', true, '08:00', '18:00', '12:00 – 13:00', '9 h'],
+      ['Quinta', true, '08:00', '18:00', '12:00 – 13:00', '9 h'],
+      ['Sexta', true, '08:00', '18:00', '12:00 – 13:00', '9 h'],
+      ['Sábado', true, '08:00', '12:00', 'Sem intervalo', '4 h'],
+      ['Domingo', false, '—', '—', '—', '—']
+    ];
+
+    const REQ = {
+      wait: ['Enviada — aguardando aprovação', '#9A5F0E', '#FBF0DA'],
+      ok: ['Aprovada', '#2E7351', '#E6F2EB'],
+      no: ['Recusada', '#A93B30', '#FAE7E4']
+    };
+    const reqs = [
+      ['wait', 'Alteração · sábados até 13:00', 'A partir de 07/11 · enviada em 17/10 às 19:12', ''],
+      ['ok', 'Bloqueio · 29 e 30/10 (dia inteiro)', 'Congresso de Ortodontia · aprovada por Camila S. em 09/10', ''],
+      ['no', 'Bloqueio · 23/10, 14:00 – 18:00', 'Enviada em 06/10 · respondida em 07/10', 'Motivo: a tarde já tem 4 pacientes confirmados. Sugerimos 06/11 no mesmo horário.']
+    ];
+
+    const sessions = [
+      ['desk', 'Chrome · Windows', 'Ronda Alta, RS · ativa agora', true],
+      ['phone', 'Safari · iPhone', 'Ronda Alta, RS · último acesso há 2 h', false],
+      ['tab', 'Chrome · Tablet Android', 'Passo Fundo, RS · último acesso em 16/10 às 18:42', false]
+    ].filter(([k]) => !ended[k]);
+
+    const two = tog('twofa', false);
+
+    return {
+      tabs: TABS.map(([k, label, badge]) => ({
+        label, badge,
+        sel: tab === k ? 'true' : 'false',
+        line: tab === k ? '#B5832F' : 'transparent',
+        fg: tab === k ? '#1E1D1B' : '#5B5852',
+        w: tab === k ? 700 : 600,
+        badgeDisplay: badge ? 'inline-flex' : 'none',
+        go: () => this.setState({ tab: k })
+      })),
+      isDados: tab === 'dados', isDisp: tab === 'disp', isPref: tab === 'pref', isSeg: tab === 'seg',
+
+      services: [
+        ['Avaliação ortodôntica', '50 min', true],
+        ['Manutenção ortodôntica', '30 min', true],
+        ['Instalação de aparelho', '1 h 30 min', false],
+        ['Consulta de clínica geral', '40 min', true],
+        ['Limpeza e profilaxia', '40 min', true],
+        ['Restauração', '50 min', false]
+      ].map(([name, duration, on]) => ({
+        name, duration,
+        online: on ? 'Disponível' : 'Só pela recepção',
+        fg: on ? '#2E7351' : '#5B5852', bg: on ? '#E6F2EB' : '#ECE9E3'
+      })),
+
+      requestChange: () => this.setState({ requested: true }),
+      requested: !!s.requested,
+      grid: grid.map(([day, on, start, end, pause, load]) => ({
+        day, start, end, pause, load,
+        checked: on ? 'true' : 'false',
+        aria: day + (on ? ': atende (somente leitura)' : ': não atende (somente leitura)'),
+        track: on ? '#B5832F' : '#C7C2B9', justify: on ? 'flex-end' : 'flex-start',
+        dayFg: on ? '#1E1D1B' : '#77736B', fg: on ? '#1E1D1B' : '#77736B'
+      })),
+      requests: reqs.map(([k, title, meta, reason]) => ({
+        title, meta, reason, status: REQ[k][0], fg: REQ[k][1], bg: REQ[k][2],
+        isWait: k === 'wait', isOk: k === 'ok', isNo: k === 'no', hasReason: !!reason
+      })),
+      blocks: [
+        { day: '29', month: 'out', title: 'Congresso de Ortodontia', meta: '29 e 30/10 · dia inteiro · aprovado' },
+        { day: '02', month: 'nov', title: 'Finados — clínica fechada', meta: 'Feriado nacional · definido pela administração' },
+        { day: '20', month: 'nov', title: 'Consciência Negra — clínica fechada', meta: 'Feriado nacional · definido pela administração' }
+      ],
+
+      notifs: [
+        ['mail', 'mail', 'Lembrete da agenda do dia por e-mail', 'Lista de pacientes e horários, todo dia útil', true],
+        ['wpp', 'chat', 'Lembrete da agenda do dia por WhatsApp', 'Mensagem curta no número cadastrado na clínica', true],
+        ['novo', 'plus', 'Aviso de novo agendamento', 'Quando a recepção marcar um paciente para você', true],
+        ['cancel', 'x', 'Aviso de cancelamento', 'Quando um paciente cancelar ou reagendar', true],
+        ['resumo', 'mail', 'Resumo semanal', 'Toda sexta, com a agenda da semana seguinte', false]
+      ].map(([key, icon, title, desc, def]) => ({
+        title, desc, t: tog(key, def),
+        iMail: icon === 'mail', iChat: icon === 'chat', iPlus: icon === 'plus', iX: icon === 'x'
+      })),
+      views: ['Dia', 'Semana', 'Mês'].map(v => ({
+        label: v,
+        pressed: v === view ? 'true' : 'false',
+        bg: v === view ? '#FFFFFF' : 'transparent',
+        fg: v === view ? '#1E1D1B' : '#5B5852',
+        shadow: v === view ? '0 1px 2px rgba(30,29,27,.08)' : 'none',
+        pick: () => this.setState({ view: v, saved: false })
+      })),
+      viewHint: view === 'Dia' ? 'Linha do tempo de hoje, com a hora atual destacada.' : view === 'Semana' ? 'Segunda a sábado em colunas, com horários livres.' : 'Calendário do mês com dias bloqueados e volume de consultas.',
+
+      sessions: sessions.map(([k, device, meta, current]) => ({
+        device, meta, current, canEnd: !current,
+        iDesk: k === 'desk', iPhone: k === 'phone', iTab: k === 'tab',
+        endAria: 'Encerrar sessão ' + device,
+        end: () => this.setState({ ended: { ...(this.state?.ended ?? {}), [k]: true } })
+      })),
+      sessionsCount: sessions.length === 1 ? '1 dispositivo conectado' : sessions.length + ' dispositivos conectados',
+      endAll: () => this.setState({ ended: { phone: true, tab: true } }),
+      twoFa: {
+        ...two,
+        note: two.on ? 'Proteção ativa nesta conta.' : 'Recomendado para quem acessa registros clínicos.',
+        noteBg: two.on ? '#E6F2EB' : '#FBF0DA',
+        noteFg: two.on ? '#2E7351' : '#9A5F0E'
+      },
+
+      saved: !!s.saved,
+      notSaved: !s.saved,
+      save: () => this.setState({ saved: true }),
+      discard: () => this.setState({ tg: {}, view: 'Dia', saved: false, requested: false })
+    };
+  }
+}
+</script>
+</body>
+</html>

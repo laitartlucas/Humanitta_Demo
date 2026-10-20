@@ -1,0 +1,319 @@
+{
+  "v": 3,
+  "createdOnFiles": {
+    "v": 1,
+    "at": "2026-10-19T19:50:00Z"
+  },
+  "title": "Humanittá Gestão — Design System",
+  "launch": {
+    "view": "canvas",
+    "page": "fundamentos"
+  },
+  "pages": [
+    {
+      "id": "fundamentos",
+      "name": "Fundamentos"
+    },
+    {
+      "id": "telas",
+      "name": "Telas"
+    },
+    {
+      "id": "modais",
+      "name": "Modais & Responsivo"
+    },
+    {
+      "id": "portal",
+      "name": "Portal do Profissional & Acesso"
+    }
+  ],
+  "boards": {
+    "Main.dc.html": {
+      "x": 0,
+      "y": 0,
+      "w": 1440,
+      "h": 3400,
+      "title": "00 · Fundamentos do Design System",
+      "page": "fundamentos",
+      "expand": "fill"
+    },
+    "Componentes.dc.html": {
+      "x": 1520,
+      "y": 0,
+      "w": 1440,
+      "h": 8400,
+      "title": "01 · Componentes & Estados",
+      "page": "fundamentos",
+      "expand": "fill"
+    },
+    "Login.dc.html": {
+      "x": 0,
+      "y": 0,
+      "w": 1440,
+      "h": 1320,
+      "title": "Tela 01 · Login",
+      "page": "telas",
+      "expand": "fill"
+    },
+    "Dashboard.dc.html": {
+      "x": 1520,
+      "y": 0,
+      "w": 1440,
+      "h": 1500,
+      "title": "Tela 02 · Dashboard",
+      "page": "telas",
+      "expand": "fill"
+    },
+    "Agenda.dc.html": {
+      "x": 3040,
+      "y": 0,
+      "w": 1440,
+      "h": 1900,
+      "title": "Tela 03 · Agenda Inteligente",
+      "page": "telas",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "Pacientes.dc.html": {
+      "x": 4560,
+      "y": 0,
+      "w": 1440,
+      "h": 1850,
+      "title": "Tela 04a · Pacientes — Lista",
+      "page": "telas",
+      "expand": "fill"
+    },
+    "PacientePerfil.dc.html": {
+      "x": 0,
+      "y": 2020,
+      "w": 1440,
+      "h": 1450,
+      "title": "Tela 04b · Paciente — Perfil",
+      "page": "telas",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "Profissionais.dc.html": {
+      "x": 1520,
+      "y": 2020,
+      "w": 1440,
+      "h": 3150,
+      "title": "Tela 05 · Profissionais",
+      "page": "telas",
+      "expand": "fill"
+    },
+    "Atendimentos.dc.html": {
+      "x": 3040,
+      "y": 2020,
+      "w": 1440,
+      "h": 2400,
+      "title": "Tela 06 · Atendimentos",
+      "page": "telas",
+      "expand": "fill"
+    },
+    "Financeiro.dc.html": {
+      "x": 4560,
+      "y": 2020,
+      "w": 1440,
+      "h": 1860,
+      "title": "Tela 07 · Financeiro",
+      "page": "telas",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "WhatsApp.dc.html": {
+      "x": 0,
+      "y": 5290,
+      "w": 1440,
+      "h": 1800,
+      "title": "Tela 08 · Central WhatsApp",
+      "page": "telas",
+      "expand": "fill"
+    },
+    "AssistenteIA.dc.html": {
+      "x": 1520,
+      "y": 5290,
+      "w": 1440,
+      "h": 1700,
+      "title": "Tela 09 · Assistente IA",
+      "page": "telas",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "Relatorios.dc.html": {
+      "x": 3040,
+      "y": 5290,
+      "w": 1440,
+      "h": 2760,
+      "title": "Tela 10 · Relatórios",
+      "page": "telas",
+      "expand": "fill"
+    },
+    "Configuracoes.dc.html": {
+      "x": 4560,
+      "y": 5290,
+      "w": 1440,
+      "h": 1500,
+      "title": "Tela 11 · Configurações",
+      "page": "telas",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "AgendaModais.dc.html": {
+      "x": 0,
+      "y": 0,
+      "w": 1440,
+      "h": 7400,
+      "title": "Modais · Agenda",
+      "page": "modais",
+      "expand": "fill"
+    },
+    "Modais.dc.html": {
+      "x": 1520,
+      "y": 0,
+      "w": 1440,
+      "h": 10400,
+      "title": "Modais · Cadastros, financeiro e confirmações",
+      "page": "modais",
+      "expand": "fill"
+    },
+    "Responsivo.dc.html": {
+      "x": 3040,
+      "y": 0,
+      "w": 1440,
+      "h": 5900,
+      "title": "Responsivo · Tablet & Smartphone",
+      "page": "modais",
+      "expand": "fill"
+    },
+    "Perfis.dc.html": {
+      "x": 0,
+      "y": 0,
+      "w": 1440,
+      "h": 5200,
+      "title": "Acesso · Perfis & Matriz de permissões",
+      "page": "portal",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "PortalDashboard.dc.html": {
+      "x": 1520,
+      "y": 0,
+      "w": 1440,
+      "h": 2250,
+      "title": "Portal 01 · Meu Dashboard",
+      "page": "portal",
+      "expand": "fill"
+    },
+    "PortalAgenda.dc.html": {
+      "x": 3040,
+      "y": 0,
+      "w": 1440,
+      "h": 2000,
+      "title": "Portal 02 · Minha Agenda",
+      "page": "portal",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "PortalPacientes.dc.html": {
+      "x": 4560,
+      "y": 0,
+      "w": 1440,
+      "h": 1900,
+      "title": "Portal 03 · Meus Pacientes",
+      "page": "portal",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "PortalAtendimentos.dc.html": {
+      "x": 1520,
+      "y": 2370,
+      "w": 1440,
+      "h": 3400,
+      "title": "Portal 04 · Meus Atendimentos",
+      "page": "portal",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "PortalPerfil.dc.html": {
+      "x": 3040,
+      "y": 2370,
+      "w": 1440,
+      "h": 1700,
+      "title": "Portal 05 · Meu Perfil",
+      "page": "portal",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "PortalResponsivo.dc.html": {
+      "x": 4560,
+      "y": 2370,
+      "w": 1440,
+      "h": 6300,
+      "title": "Portal · Tablet & Smartphone",
+      "page": "portal",
+      "expand": "fill"
+    }
+  },
+  "order": [
+    "Main.dc.html",
+    "Componentes.dc.html",
+    "Login.dc.html",
+    "Dashboard.dc.html",
+    "Agenda.dc.html",
+    "Pacientes.dc.html",
+    "PacientePerfil.dc.html",
+    "Profissionais.dc.html",
+    "Atendimentos.dc.html",
+    "Financeiro.dc.html",
+    "WhatsApp.dc.html",
+    "AssistenteIA.dc.html",
+    "Relatorios.dc.html",
+    "Configuracoes.dc.html",
+    "AgendaModais.dc.html",
+    "Modais.dc.html",
+    "Responsivo.dc.html",
+    "Perfis.dc.html",
+    "PortalDashboard.dc.html",
+    "PortalAgenda.dc.html",
+    "PortalPacientes.dc.html",
+    "PortalAtendimentos.dc.html",
+    "PortalPerfil.dc.html",
+    "PortalResponsivo.dc.html"
+  ],
+  "notes": {
+    "t_fund": {
+      "x": 0,
+      "y": -300,
+      "text": "Humanittá Gestão · Fundamentos e componentes",
+      "kind": "title1",
+      "maxW": 2960,
+      "page": "fundamentos"
+    },
+    "t_telas": {
+      "x": 0,
+      "y": -300,
+      "text": "As 11 telas da plataforma",
+      "kind": "title1",
+      "maxW": 6000,
+      "page": "telas"
+    },
+    "t_modais": {
+      "x": 0,
+      "y": -300,
+      "text": "Modais, estados e adaptações responsivas",
+      "kind": "title1",
+      "maxW": 4480,
+      "page": "modais"
+    },
+    "t_portal": {
+      "x": 0,
+      "y": -300,
+      "text": "Portal do Profissional · perfis e controle de acesso",
+      "kind": "title1",
+      "maxW": 6000,
+      "page": "portal"
+    }
+  },
+  "designSystems": []
+}

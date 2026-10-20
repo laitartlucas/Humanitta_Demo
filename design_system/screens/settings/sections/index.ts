@@ -1,0 +1,10 @@
+export { ClinicDataSection } from './ClinicDataSection';
+export { SpecialtiesSection } from './SpecialtiesSection';
+export { ServicesSection } from './ServicesSection';
+export { RoomsSection } from './RoomsSection';
+export { HoursSection } from './HoursSection';
+export { UsersSection } from './UsersSection';
+export { PermissionsSection } from './PermissionsSection';
+export { NotificationsSection } from './NotificationsSection';
+export { VisualIdentitySection } from './VisualIdentitySection';
+export { IntegrationsSection } from './IntegrationsSection';

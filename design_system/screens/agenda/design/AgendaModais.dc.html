@@ -1,0 +1,880 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Modais · Agenda — Humanittá Gestão</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&amp;family=Manrope:wght@400;500;600;700;800&amp;family=Josefin+Sans:wght@300;400&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#FAF8F4}
+a{color:#8F6425}a:hover{color:#6F4D1D}
+</style>
+</helmet>
+<div style="min-height: 100vh; background: #F5F3EF; font-family: Manrope, system-ui, sans-serif; color: #1E1D1B; padding: 56px clamp(16px, 4vw, 40px) 80px; box-sizing: border-box">
+  <div style="max-width: 1280px; margin: 0 auto; display: flex; flex-direction: column; gap: 72px">
+
+    <!-- ===================== CABEÇALHO DA PÁGINA ===================== -->
+    <header style="display: flex; flex-direction: column; gap: 28px">
+      <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px">
+        <svg width="44" height="44" viewBox="0 0 64 64" role="img" aria-label="Símbolo Humanittá">
+          <defs><linearGradient id="amLogo" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#DDB872"></stop><stop offset=".55" stop-color="#B5832F"></stop><stop offset="1" stop-color="#7A5220"></stop></linearGradient></defs>
+          <circle cx="32" cy="32" r="30" fill="none" stroke="#B5832F" stroke-width="1.5"></circle>
+          <circle cx="24" cy="31" r="3.6" fill="url(#amLogo)"></circle>
+          <path d="M20 39.5c0-2.6 1.8-4.3 4-4.3s4 1.7 4 4.3V47c-4.4 0-8-3.2-8-7.5z" fill="url(#amLogo)"></path>
+          <circle cx="38.5" cy="19.5" r="4.6" fill="url(#amLogo)"></circle>
+          <path d="M31.5 31c0-3.3 2.7-5.6 6-5.6h6.5V40c0 4.6-3.7 8-8.3 8h-4.2z" fill="url(#amLogo)"></path>
+        </svg>
+        <span style="display: flex; flex-direction: column; gap: 2px; margin-right: auto">
+          <span style="font-family: 'Josefin Sans', Manrope, sans-serif; font-weight: 300; font-size: 22px; letter-spacing: .08em; color: #77736B; line-height: 1">Humanittá</span>
+          <span style="font-size: 10px; font-weight: 700; letter-spacing: .24em; text-transform: uppercase; color: #8F6425">Gestão · Design system</span>
+        </span>
+        <a href="Agenda.dc.html" style="display: inline-flex; align-items: center; gap: 8px; height: 36px; padding: 0 14px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; color: #2E2C29; font-size: 13px; font-weight: 700; text-decoration: none">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg>
+          Voltar para a Agenda
+        </a>
+        <span style="display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 10px; border-radius: 999px; background: #FBF0DA; color: #9A5F0E; font-size: 12px; font-weight: 700">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 2v7.31"></path><path d="M14 9.3V1.99"></path><path d="M8.5 2h7"></path><path d="M14 9.3a6.5 6.5 0 1 1-4 0"></path></svg>
+          Ambiente de demonstração · dados fictícios
+        </span>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 24px">
+        <div style="flex: 2 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 10px">
+          <span style="font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #8F6425">Padrões de interface · Agenda</span>
+          <h1 style="margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 48px; line-height: 52px">Modais · Agenda</h1>
+          <p style="margin: 0; font-size: 15px; line-height: 24px; color: #43413C; max-width: 720px">Fluxo completo de uma consulta: agendar, consultar detalhes, editar, reagendar e cancelar — com os estados de retorno que a recepção vê depois de cada ação. Mesmo overlay grafite a 45%, painel branco com raio de 16 px e ações à direita no rodapé.</p>
+        </div>
+        <dl style="flex: 1 1 320px; min-width: 0; margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; background: #DFDBD3; border: 1px solid #DFDBD3; border-radius: 12px; overflow: hidden">
+          <div style="background: #FFFFFF; padding: 14px 16px"><dt style="font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #77736B">sm</dt><dd style="margin: 4px 0 0; font-size: 14px; font-weight: 700">440 px · cancelar</dd></div>
+          <div style="background: #FFFFFF; padding: 14px 16px"><dt style="font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #77736B">md</dt><dd style="margin: 4px 0 0; font-size: 14px; font-weight: 700">640 px · detalhes, editar, reagendar</dd></div>
+          <div style="background: #FFFFFF; padding: 14px 16px"><dt style="font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #77736B">lg</dt><dd style="margin: 4px 0 0; font-size: 14px; font-weight: 700">880 px · novo agendamento</dd></div>
+          <div style="background: #FFFFFF; padding: 14px 16px"><dt style="font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #77736B">Data de referência</dt><dd style="margin: 4px 0 0; font-size: 14px; font-weight: 700">Seg, 19/10/2026 · 10:24</dd></div>
+        </dl>
+      </div>
+      <nav aria-label="Modais desta página" style="display: flex; flex-wrap: wrap; gap: 8px">
+        <sc-for list="{{index}}" as="ix" hint-placeholder-count="6">
+          <a href="{{ix.href}}" style="display: inline-flex; align-items: center; gap: 8px; height: 36px; padding: 0 14px; border: 1px solid #DFDBD3; border-radius: 999px; background: #FFFFFF; color: #2E2C29; font-size: 13px; font-weight: 700; text-decoration: none"><span style="font-variant-numeric: tabular-nums; color: #8F6425">{{ix.n}}</span>{{ix.label}}</a>
+        </sc-for>
+      </nav>
+    </header>
+
+    <!-- ===================== 01 · NOVO AGENDAMENTO ===================== -->
+    <section id="a1" aria-labelledby="a1t" style="display: flex; flex-direction: column; gap: 20px">
+      <div style="display: flex; flex-direction: column; gap: 6px">
+        <span style="font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #8F6425">01 · Agenda · lg 880 px</span>
+        <h2 id="a1t" style="margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 32px; line-height: 1.15">Novo agendamento</h2>
+        <p style="margin: 0; font-size: 14px; color: #5B5852">Assistente em quatro passos, aqui no passo Horário: paciente e serviço já escolhidos, grade com horários livres, ocupados e bloqueados, e resumo fixo à direita.</p>
+      </div>
+      <div style="background: rgba(30,29,27,.45); border-radius: 16px; padding: clamp(16px, 4vw, 48px); display: flex; justify-content: center">
+        <div role="dialog" aria-modal="true" aria-labelledby="ad1t" aria-describedby="ad1d" style="width: 100%; max-width: 880px; background: #FFFFFF; border-radius: 16px; box-shadow: 0 18px 50px rgba(30,29,27,.14); display: flex; flex-direction: column; overflow: hidden">
+          <div style="display: flex; flex-direction: column; gap: 20px; padding: 24px 28px 20px; border-bottom: 1px solid #ECE9E3">
+            <div style="display: flex; align-items: flex-start; gap: 16px">
+              <div style="display: flex; flex-direction: column; gap: 4px; margin-right: auto; min-width: 0">
+                <h3 id="ad1t" style="margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 24px; line-height: 1.2">Novo agendamento</h3>
+                <p id="ad1d" style="margin: 0; font-size: 13px; line-height: 20px; color: #5B5852">Escolha um horário livre na agenda da profissional. A sala é reservada junto com o horário.</p>
+              </div>
+              <button type="button" aria-label="Fechar" style="width: 40px; height: 40px; margin: -6px -10px 0 0; border: 0; border-radius: 8px; background: transparent; color: #5B5852; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button>
+            </div>
+            <ol aria-label="Etapas do agendamento" style="list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 0">
+              <sc-for list="{{steps}}" as="st" hint-placeholder-count="4">
+                <li aria-current="{{st.current}}" style="display: flex; align-items: center; flex: {{st.flex}}; min-width: 0">
+                  <span style="display: inline-flex; align-items: center; gap: 10px; flex-shrink: 0">
+                    <span style="width: 28px; height: 28px; border-radius: 999px; background: {{st.dotBg}}; box-shadow: {{st.dotRing}}; color: {{st.dotFg}}; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; flex-shrink: 0">
+                      <sc-if value="{{st.done}}" hint-placeholder-val="{{ true }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg></sc-if>
+                      <sc-if value="{{st.notDone}}" hint-placeholder-val="{{ false }}">{{st.n}}</sc-if>
+                    </span>
+                    <span style="display: flex; flex-direction: column; line-height: 1.2">
+                      <span style="font-size: 13px; font-weight: {{st.weight}}; color: {{st.labelFg}}">{{st.label}}</span>
+                      <span style="font-size: 11px; font-weight: 600; color: #77736B">{{st.sub}}</span>
+                    </span>
+                  </span>
+                  <sc-if value="{{st.hasLine}}" hint-placeholder-val="{{ true }}">
+                    <span aria-hidden="true" style="flex: 1; min-width: 16px; height: 2px; margin: 0 14px; border-radius: 999px; background: {{st.lineBg}}"></span>
+                  </sc-if>
+                </li>
+              </sc-for>
+            </ol>
+          </div>
+
+          <div style="display: flex; flex-wrap: wrap">
+            <!-- Coluna principal -->
+            <div style="flex: 2 1 520px; min-width: 0; padding: 24px 28px; display: flex; flex-direction: column; gap: 24px">
+              <!-- Paciente -->
+              <div style="display: flex; flex-direction: column; gap: 8px">
+                <span style="font-size: 13px; font-weight: 600; color: #2E2C29">Paciente</span>
+                <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 14px; padding: 14px 16px; border: 1px solid #DFDBD3; border-radius: 12px; background: #FFFFFF">
+                  <span style="width: 44px; height: 44px; border-radius: 999px; background: #F5E9D0; color: #6F4D1D; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; box-shadow: 0 0 0 2px #FFFFFF, 0 0 0 3.5px #DDB872; flex-shrink: 0">CM</span>
+                  <span style="flex: 1 1 200px; min-width: 0; display: flex; flex-direction: column; gap: 4px">
+                    <span style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px">
+                      <span style="font-size: 15px; font-weight: 800">Carla Menegatti</span>
+                      <span style="display: inline-flex; align-items: center; height: 22px; padding: 0 9px; border-radius: 999px; background: #FBF6EC; color: #6F4D1D; font-size: 11px; font-weight: 700">Ortodontia em andamento</span>
+                      <span style="display: inline-flex; align-items: center; height: 22px; padding: 0 9px; border-radius: 999px; background: #FBF6EC; color: #6F4D1D; font-size: 11px; font-weight: 700">Prefere manhã</span>
+                    </span>
+                    <span style="display: inline-flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; font-size: 12px; font-weight: 600; color: #5B5852; font-variant-numeric: tabular-nums">
+                      <span style="display: inline-flex; align-items: center; gap: 5px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>(54) 99811-2045</span>
+                      <span>Cadastro nº 0412 · última consulta 19/10/2026</span>
+                    </span>
+                  </span>
+                  <button type="button" style="height: 36px; padding: 0 12px; border: 0; border-radius: 8px; background: transparent; color: #8F6425; font: 700 13px Manrope, sans-serif; cursor: pointer">Trocar paciente</button>
+                </div>
+              </div>
+
+              <!-- Serviço -->
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)); gap: 16px 20px">
+                <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #2E2C29">Especialidade
+                  <span style="position: relative; display: block">
+                    <span aria-hidden="true" style="position: absolute; left: 12px; top: 16px; width: 8px; height: 8px; border-radius: 999px; background: #5E8A3A"></span>
+                    <select style="appearance: none; -webkit-appearance: none; height: 40px; width: 100%; box-sizing: border-box; padding: 0 36px 0 28px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 500 14px Manrope, sans-serif; color: #1E1D1B"><option>Nutrição</option><option>Odontologia</option><option>Fonoaudiologia</option><option>Estética Avançada</option><option>Psicologia</option><option>Quiropraxia</option><option>Podologia</option><option>Fisioterapia</option></select>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#77736B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="position: absolute; right: 12px; top: 12px; pointer-events: none"><path d="m6 9 6 6 6-6"></path></svg>
+                  </span>
+                </label>
+                <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #2E2C29">Serviço
+                  <span style="position: relative; display: block">
+                    <select style="appearance: none; -webkit-appearance: none; height: 40px; width: 100%; box-sizing: border-box; padding: 0 36px 0 12px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 500 14px Manrope, sans-serif; color: #1E1D1B"><option>Consulta nutricional</option><option>Retorno nutricional</option><option>Bioimpedância</option></select>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#77736B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="position: absolute; right: 12px; top: 12px; pointer-events: none"><path d="m6 9 6 6 6-6"></path></svg>
+                  </span>
+                </label>
+                <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #2E2C29">Profissional
+                  <span style="position: relative; display: block">
+                    <select style="appearance: none; -webkit-appearance: none; height: 40px; width: 100%; box-sizing: border-box; padding: 0 36px 0 12px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 500 14px Manrope, sans-serif; color: #1E1D1B"><option>Dra. Júlia Dalmolin</option></select>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#77736B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="position: absolute; right: 12px; top: 12px; pointer-events: none"><path d="m6 9 6 6 6-6"></path></svg>
+                  </span>
+                  <span style="font-size: 12px; font-weight: 500; color: #77736B">Única profissional de Nutrição.</span>
+                </label>
+                <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #2E2C29">Sala
+                  <span style="position: relative; display: block">
+                    <select style="appearance: none; -webkit-appearance: none; height: 40px; width: 100%; box-sizing: border-box; padding: 0 36px 0 12px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 500 14px Manrope, sans-serif; color: #1E1D1B"><option>Sala 7 · a definir</option><option>Sala 4 · Fonoaudiologia</option></select>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#77736B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="position: absolute; right: 12px; top: 12px; pointer-events: none"><path d="m6 9 6 6 6-6"></path></svg>
+                  </span>
+                  <span style="font-size: 12px; font-weight: 500; color: #77736B">Sala padrão da profissional.</span>
+                </label>
+              </div>
+
+              <!-- Data + grade -->
+              <div style="display: flex; flex-direction: column; gap: 14px; padding-top: 24px; border-top: 1px solid #ECE9E3">
+                <div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 16px 20px">
+                  <label style="flex: 1 1 240px; min-width: 0; display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #2E2C29">Data
+                    <span style="position: relative; display: block">
+                      <input type="text" value="Seg, 19/10/2026" style="height: 40px; width: 100%; box-sizing: border-box; padding: 0 40px 0 12px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 600 14px Manrope, sans-serif; color: #1E1D1B; font-variant-numeric: tabular-nums">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#77736B" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="position: absolute; right: 12px; top: 11px; pointer-events: none"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path></svg>
+                    </span>
+                  </label>
+                  <div style="display: flex; gap: 8px">
+                    <button type="button" aria-label="Dia anterior" style="width: 40px; height: 40px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; color: #43413C; display: inline-flex; align-items: center; justify-content: center; cursor: pointer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></button>
+                    <button type="button" aria-label="Próximo dia" style="width: 40px; height: 40px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; color: #43413C; display: inline-flex; align-items: center; justify-content: center; cursor: pointer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg></button>
+                    <button type="button" style="height: 40px; padding: 0 14px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; color: #2E2C29; font: 700 13px Manrope, sans-serif; cursor: pointer">Próximo livre</button>
+                  </div>
+                </div>
+                <fieldset style="margin: 0; padding: 0; border: 0; min-width: 0">
+                  <legend style="width: 100%; display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px; padding: 0 0 10px">
+                    <span style="font-size: 13px; font-weight: 600; color: #2E2C29; margin-right: auto">Horários de Dra. Júlia Dalmolin · Sala 7</span>
+                    <span style="font-size: 12px; font-weight: 600; color: #5B5852">9 horários livres a partir das 10:30</span>
+                  </legend>
+                  <div role="radiogroup" aria-label="Horários disponíveis em 19/10/2026" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(88px, 1fr)); gap: 8px">
+                    <sc-for list="{{slots1}}" as="sl" hint-placeholder-count="17">
+                      <button type="button" role="radio" aria-checked="{{sl.checked}}" aria-disabled="{{sl.dis}}" aria-label="{{sl.aria}}" style="height: 50px; padding: 0 6px; box-sizing: border-box; border: {{sl.border}}; border-radius: 8px; background: {{sl.bg}}; color: {{sl.fg}}; box-shadow: {{sl.ring}}; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; cursor: {{sl.cursor}}; font-family: Manrope, sans-serif">
+                        <span style="display: inline-flex; align-items: center; gap: 4px; font-size: 14px; font-weight: 800; font-variant-numeric: tabular-nums; text-decoration: {{sl.deco}}">
+                          <sc-if value="{{sl.isSel}}" hint-placeholder-val="{{ false }}"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg></sc-if>
+                          <sc-if value="{{sl.isBlock}}" hint-placeholder-val="{{ false }}"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></sc-if>
+                          {{sl.time}}
+                        </span>
+                        <span style="font-size: 11px; font-weight: 700; color: {{sl.subFg}}">{{sl.sub}}</span>
+                      </button>
+                    </sc-for>
+                  </div>
+                  <ul aria-label="Legenda da grade de horários" style="list-style: none; margin: 12px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 12px; font-weight: 600; color: #5B5852">
+                    <sc-for list="{{slotLegend}}" as="lg" hint-placeholder-count="5">
+                      <li style="display: inline-flex; align-items: center; gap: 6px"><span aria-hidden="true" style="width: 14px; height: 14px; box-sizing: border-box; border-radius: 4px; border: {{lg.border}}; background: {{lg.bg}}"></span>{{lg.label}}</li>
+                    </sc-for>
+                  </ul>
+                </fieldset>
+              </div>
+
+              <!-- Duração, valor, canal -->
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(160px, 100%), 1fr)); gap: 16px 20px; padding-top: 24px; border-top: 1px solid #ECE9E3">
+                <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #2E2C29">Duração
+                  <span style="position: relative; display: block">
+                    <select style="appearance: none; -webkit-appearance: none; height: 40px; width: 100%; box-sizing: border-box; padding: 0 36px 0 12px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 500 14px Manrope, sans-serif; color: #1E1D1B"><option>45 min</option><option>30 min</option><option>60 min</option></select>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#77736B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="position: absolute; right: 12px; top: 12px; pointer-events: none"><path d="m6 9 6 6 6-6"></path></svg>
+                  </span>
+                  <span style="font-size: 12px; font-weight: 500; color: #77736B">Padrão do serviço.</span>
+                </label>
+                <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #2E2C29">Valor
+                  <span style="display: flex; align-items: center; height: 40px; box-sizing: border-box; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; overflow: hidden">
+                    <span style="display: inline-flex; align-items: center; height: 100%; padding: 0 12px; background: #F5F3EF; border-right: 1px solid #DFDBD3; color: #43413C; font-size: 13px; font-weight: 700">R$</span>
+                    <input type="text" value="200,00" inputmode="decimal" style="flex: 1; min-width: 0; height: 100%; padding: 0 12px; border: 0; background: transparent; font: 600 14px Manrope, sans-serif; color: #1E1D1B; font-variant-numeric: tabular-nums">
+                  </span>
+                  <span style="font-size: 12px; font-weight: 500; color: #77736B">Valor fictício · demonstração.</span>
+                </label>
+                <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #2E2C29">Canal de origem
+                  <span style="position: relative; display: block">
+                    <select style="appearance: none; -webkit-appearance: none; height: 40px; width: 100%; box-sizing: border-box; padding: 0 36px 0 12px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 500 14px Manrope, sans-serif; color: #1E1D1B"><option>WhatsApp</option><option>Instagram</option><option>Telefone</option><option>Presencial na recepção</option><option>Indicação</option></select>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#77736B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="position: absolute; right: 12px; top: 12px; pointer-events: none"><path d="m6 9 6 6 6-6"></path></svg>
+                  </span>
+                </label>
+                <label style="grid-column: 1 / -1; display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #2E2C29">Observações <span style="font-weight: 500; color: #77736B">(administrativas, opcional)</span>
+                  <textarea rows="2" style="width: 100%; box-sizing: border-box; padding: 10px 12px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 500 14px/22px Manrope, sans-serif; color: #1E1D1B; resize: vertical">Primeira consulta de nutrição. Paciente pediu horário após o expediente.</textarea>
+                </label>
+              </div>
+
+              <div style="display: flex; align-items: center; gap: 14px; padding: 14px 16px; border-radius: 12px; background: #FAF8F4; border: 1px solid #ECE9E3">
+                <span style="width: 36px; height: 36px; border-radius: 999px; background: #E3F0EE; color: #2F6F68; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path></svg></span>
+                <span style="display: flex; flex-direction: column; gap: 2px; margin-right: auto; min-width: 0">
+                  <span id="na-wpp" style="font-size: 14px; font-weight: 700">Enviar confirmação por WhatsApp</span>
+                  <span style="font-size: 12px; line-height: 18px; color: #5B5852">A Assistente IA envia a mensagem agora e um lembrete 24 h antes.</span>
+                </span>
+                <button type="button" role="switch" aria-checked="true" aria-labelledby="na-wpp" style="width: 44px; height: 26px; padding: 3px; box-sizing: border-box; border: 0; border-radius: 999px; background: #8F6425; display: inline-flex; justify-content: flex-end; cursor: pointer; flex-shrink: 0"><span style="width: 20px; height: 20px; border-radius: 999px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(30,29,27,.25)"></span></button>
+              </div>
+            </div>
+
+            <!-- Coluna de resumo -->
+            <aside aria-label="Resumo do agendamento" style="flex: 1 1 260px; min-width: 0; padding: 24px; background: #FAF8F4; border-left: 1px solid #ECE9E3; display: flex; flex-direction: column; gap: 18px">
+              <span style="font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #8F6425">Resumo</span>
+              <div style="display: flex; flex-direction: column; gap: 4px">
+                <span style="font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 26px; line-height: 1.1">Seg, 19 de outubro</span>
+                <span style="font-size: 20px; font-weight: 800; font-variant-numeric: tabular-nums; color: #6F4D1D">16:30 – 17:15</span>
+                <span style="font-size: 12px; font-weight: 600; color: #5B5852">45 minutos</span>
+              </div>
+              <dl style="margin: 0; display: flex; flex-direction: column; gap: 12px; padding-top: 16px; border-top: 1px solid #DFDBD3">
+                <sc-for list="{{summary1}}" as="sm" hint-placeholder-count="5">
+                  <div style="display: flex; flex-direction: column; gap: 2px">
+                    <dt style="font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #77736B">{{sm.k}}</dt>
+                    <dd style="margin: 0; display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 700"><span aria-hidden="true" style="width: 8px; height: 8px; border-radius: 999px; background: {{sm.dot}}; display: {{sm.dotDisplay}}"></span>{{sm.v}}</dd>
+                  </div>
+                </sc-for>
+              </dl>
+              <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding-top: 16px; border-top: 1px solid #DFDBD3">
+                <span style="font-size: 13px; font-weight: 700; color: #43413C">Valor</span>
+                <span style="font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 28px; font-variant-numeric: tabular-nums">R$ 200,00</span>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 8px; padding: 14px; border-radius: 12px; background: #FFFFFF; border: 1px solid #DFDBD3">
+                <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: #2F6F68">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 8V4H8"></path><rect width="16" height="12" x="4" y="8" rx="2"></rect><path d="M2 14h2"></path><path d="M20 14h2"></path><path d="M15 13v2"></path><path d="M9 13v2"></path></svg>
+                  Prévia da mensagem
+                </span>
+                <p style="margin: 0; padding: 10px 12px; border-radius: 10px 10px 10px 2px; background: #E3F0EE; font-size: 13px; line-height: 20px; color: #1E1D1B">Olá, Carla! Sua consulta nutricional com a Dra. Júlia Dalmolin está marcada para segunda, 19/10, às 16:30, na Humanittá. Responda 1 para confirmar ou 2 para reagendar.</p>
+              </div>
+            </aside>
+          </div>
+
+          <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 12px; padding: 16px 28px; border-top: 1px solid #ECE9E3; background: #FAF8F4">
+            <span style="margin-right: auto; font-size: 12px; font-weight: 600; color: #5B5852">Passo 3 de 4 · Horário</span>
+            <button type="button" style="height: 40px; padding: 0 16px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; color: #2E2C29; font: 700 14px Manrope, sans-serif; cursor: pointer">Cancelar</button>
+            <button type="button" style="display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 18px; border: 0; border-radius: 8px; background: #8F6425; color: #FFFFFF; font: 700 14px Manrope, sans-serif; cursor: pointer">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4"></path><path d="M16 2v4"></path><path d="M21 13V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8"></path><path d="M3 10h18"></path><path d="m16 19 2 2 4-4"></path></svg>
+              Agendar consulta
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 02 · DETALHES DA CONSULTA ===================== -->
+    <section id="a2" aria-labelledby="a2t" style="display: flex; flex-direction: column; gap: 20px">
+      <div style="display: flex; flex-direction: column; gap: 6px">
+        <span style="font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #8F6425">02 · Agenda · md 640 px</span>
+        <h2 id="a2t" style="margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 32px; line-height: 1.15">Detalhes da consulta</h2>
+        <p style="margin: 0; font-size: 14px; color: #5B5852">Aberto ao clicar num card da agenda. Paciente já fez check-in: a ação principal é iniciar o atendimento.</p>
+      </div>
+      <div style="background: rgba(30,29,27,.45); border-radius: 16px; padding: clamp(16px, 4vw, 48px); display: flex; justify-content: center">
+        <div role="dialog" aria-modal="true" aria-labelledby="ad2t" style="width: 100%; max-width: 640px; background: #FFFFFF; border-radius: 16px; box-shadow: 0 18px 50px rgba(30,29,27,.14); display: flex; flex-direction: column; overflow: hidden">
+          <div style="display: flex; align-items: flex-start; gap: 14px; padding: 24px 28px 20px; border-bottom: 1px solid #ECE9E3">
+            <span style="width: 48px; height: 48px; border-radius: 999px; background: #F5E9D0; color: #6F4D1D; display: inline-flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 800; box-shadow: 0 0 0 2px #FFFFFF, 0 0 0 3.5px #DDB872; flex-shrink: 0">ER</span>
+            <div style="display: flex; flex-direction: column; gap: 6px; margin-right: auto; min-width: 0">
+              <h3 id="ad2t" style="margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 24px; line-height: 1.2">Eduardo Rech</h3>
+              <span style="display: inline-flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; font-size: 13px; font-weight: 600; color: #5B5852; font-variant-numeric: tabular-nums">
+                <span style="display: inline-flex; align-items: center; gap: 5px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>(54) 99724-3318</span>
+                <a href="PacientePerfil.dc.html" style="font-weight: 700; color: #8F6425">Ver cadastro</a>
+              </span>
+              <span style="display: flex; flex-wrap: wrap; gap: 6px">
+                <span style="display: inline-flex; align-items: center; height: 22px; padding: 0 9px; border-radius: 999px; background: #FBF6EC; color: #6F4D1D; font-size: 11px; font-weight: 700">Psicoterapia semanal</span>
+                <span style="display: inline-flex; align-items: center; height: 22px; padding: 0 9px; border-radius: 999px; background: #FBF6EC; color: #6F4D1D; font-size: 11px; font-weight: 700">Prefere WhatsApp</span>
+              </span>
+            </div>
+            <span style="display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; background: #E6F2EB; color: #2E7351; font-size: 12px; font-weight: 700; flex-shrink: 0"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="m9 12 2 2 4-4"></path></svg>Confirmada</span>
+            <button type="button" aria-label="Fechar" style="width: 40px; height: 40px; margin: -6px -10px 0 0; border: 0; border-radius: 8px; background: transparent; color: #5B5852; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button>
+          </div>
+          <div style="padding: 24px 28px; display: flex; flex-direction: column; gap: 24px">
+            <dl style="margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(170px, 100%), 1fr)); gap: 1px; background: #ECE9E3; border: 1px solid #ECE9E3; border-radius: 12px; overflow: hidden">
+              <sc-for list="{{details2}}" as="dd2" hint-placeholder-count="6">
+                <div style="background: #FFFFFF; padding: 12px 14px; display: flex; flex-direction: column; gap: 4px">
+                  <dt style="font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #77736B">{{dd2.k}}</dt>
+                  <dd style="margin: 0; display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums"><span aria-hidden="true" style="width: 8px; height: 8px; border-radius: 999px; background: {{dd2.dot}}; display: {{dd2.dotDisplay}}"></span>{{dd2.v}}</dd>
+                </div>
+              </sc-for>
+            </dl>
+
+            <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; padding: 14px 16px; border-radius: 12px; background: #FBF0DA">
+              <span style="width: 36px; height: 36px; border-radius: 999px; background: #FFFFFF; color: #9A5F0E; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"></path><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"></path></svg></span>
+              <span style="display: flex; flex-direction: column; gap: 2px; margin-right: auto; min-width: 0">
+                <span style="font-size: 14px; font-weight: 800; color: #6B420A">Pagamento pendente · R$ 180,00</span>
+                <span style="font-size: 12px; font-weight: 600; color: #6B420A">Pode ser registrado antes ou depois do atendimento.</span>
+              </span>
+              <button type="button" style="display: inline-flex; align-items: center; gap: 8px; height: 36px; padding: 0 14px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; color: #2E2C29; font: 700 13px Manrope, sans-serif; cursor: pointer">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14"></path><path d="M5 12h14"></path></svg>
+                Registrar pagamento
+              </button>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 12px">
+              <h4 style="margin: 0; font-size: 15px; font-weight: 700">Linha do tempo</h4>
+              <ol style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column">
+                <sc-for list="{{timeline}}" as="tl" hint-placeholder-count="5">
+                  <li style="display: flex; gap: 14px">
+                    <span style="display: flex; flex-direction: column; align-items: center; flex-shrink: 0">
+                      <span style="width: 32px; height: 32px; box-sizing: border-box; border-radius: 999px; background: {{tl.bg}}; border: {{tl.border}}; color: {{tl.fg}}; display: inline-flex; align-items: center; justify-content: center">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{tl.d1}}"></path><path d="{{tl.d2}}"></path></svg>
+                      </span>
+                      <span aria-hidden="true" style="flex: 1; width: 2px; min-height: 12px; background: {{tl.line}}"></span>
+                    </span>
+                    <span style="display: flex; flex-direction: column; gap: 2px; padding: 5px 0 16px; min-width: 0">
+                      <span style="font-size: 14px; font-weight: 700; color: {{tl.titleFg}}">{{tl.title}}</span>
+                      <span style="font-size: 12px; line-height: 18px; font-weight: 600; color: #5B5852">{{tl.meta}}</span>
+                      <sc-if value="{{tl.hasQuote}}" hint-placeholder-val="{{ false }}">
+                        <span style="margin-top: 6px; align-self: flex-start; padding: 8px 12px; border-radius: 10px 10px 10px 2px; background: #E3F0EE; font-size: 13px; line-height: 20px; color: #1E1D1B">{{tl.quote}}</span>
+                      </sc-if>
+                    </span>
+                  </li>
+                </sc-for>
+              </ol>
+            </div>
+
+            <div style="display: flex; flex-wrap: wrap; gap: 8px">
+              <button type="button" style="display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 14px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; color: #2E2C29; font: 700 13px Manrope, sans-serif; cursor: pointer">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path></svg>
+                Enviar mensagem
+              </button>
+              <button type="button" style="display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 14px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; color: #2E2C29; font: 700 13px Manrope, sans-serif; cursor: pointer">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"></path><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"></path></svg>
+                Registrar pagamento
+              </button>
+            </div>
+          </div>
+          <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 12px; padding: 16px 28px; border-top: 1px solid #ECE9E3; background: #FAF8F4">
+            <button type="button" style="margin-right: auto; display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 12px; border: 0; border-radius: 8px; background: transparent; color: #A93B30; font: 700 14px Manrope, sans-serif; cursor: pointer">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="m15 9-6 6"></path><path d="m9 9 6 6"></path></svg>
+              Cancelar
+            </button>
+            <button type="button" style="display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; color: #2E2C29; font: 700 14px Manrope, sans-serif; cursor: pointer">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+              Reagendar
+            </button>
+            <button type="button" style="display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 18px; border: 0; border-radius: 8px; background: #8F6425; color: #FFFFFF; font: 700 14px Manrope, sans-serif; cursor: pointer">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3l14 9-14 9z"></path></svg>
+              Iniciar atendimento
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 03 · EDITAR AGENDAMENTO ===================== -->
+    <section id="a3" aria-labelledby="a3t" style="display: flex; flex-direction: column; gap: 20px">
+      <div style="display: flex; flex-direction: column; gap: 6px">
+        <span style="font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #8F6425">03 · Agenda · md 640 px</span>
+        <h2 id="a3t" style="margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 32px; line-height: 1.15">Editar agendamento</h2>
+        <p style="margin: 0; font-size: 14px; color: #5B5852">Validação de conflito em tempo real: o sistema aponta a sala ocupada e sugere o horário livre mais próximo.</p>
+      </div>
+      <div style="background: rgba(30,29,27,.45); border-radius: 16px; padding: clamp(16px, 4vw, 48px); display: flex; justify-content: center">
+        <div role="dialog" aria-modal="true" aria-labelledby="ad3t" style="width: 100%; max-width: 640px; background: #FFFFFF; border-radius: 16px; box-shadow: 0 18px 50px rgba(30,29,27,.14); display: flex; flex-direction: column; overflow: hidden">
+          <div style="display: flex; align-items: flex-start; gap: 16px; padding: 24px 28px 20px; border-bottom: 1px solid #ECE9E3">
+            <div style="display: flex; flex-direction: column; gap: 4px; margin-right: auto; min-width: 0">
+              <h3 id="ad3t" style="margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 24px; line-height: 1.2">Editar agendamento</h3>
+              <p style="margin: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 13px; line-height: 20px; color: #5B5852">João Pedro Basso · Sessão de fonoterapia
+                <span style="display: inline-flex; align-items: center; gap: 6px; height: 24px; padding: 0 10px; border-radius: 999px; background: #E5EEF6; color: #2D5F88; font-size: 12px; font-weight: 700"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>Agendada</span>
+              </p>
+            </div>
+            <button type="button" aria-label="Fechar" style="width: 40px; height: 40px; margin: -6px -10px 0 0; border: 0; border-radius: 8px; background: transparent; color: #5B5852; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button>
+          </div>
+          <div style="padding: 24px 28px; display: flex; flex-direction: column; gap: 20px">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 16px 20px">
+              <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #2E2C29">Paciente
+                <input type="text" value="João Pedro Basso" readonly style="height: 40px; width: 100%; box-sizing: border-box; padding: 0 12px; border: 1px solid #ECE9E3; border-radius: 8px; background: #F5F3EF; font: 500 14px Manrope, sans-serif; color: #43413C">
+              </label>
+              <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #2E2C29">Profissional
+                <span style="position: relative; display: block">
+                  <select style="appearance: none; -webkit-appearance: none; height: 40px; width: 100%; box-sizing: border-box; padding: 0 36px 0 12px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 500 14px Manrope, sans-serif; color: #1E1D1B"><option>Dra. Helena Marchetti</option></select>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#77736B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="position: absolute; right: 12px; top: 12px; pointer-events: none"><path d="m6 9 6 6 6-6"></path></svg>
+                </span>
+              </label>
+              <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #2E2C29">Serviço
+                <span style="position: relative; display: block">
+                  <select style="appearance: none; -webkit-appearance: none; height: 40px; width: 100%; box-sizing: border-box; padding: 0 36px 0 12px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 500 14px Manrope, sans-serif; color: #1E1D1B"><option>Sessão de fonoterapia</option><option>Avaliação fonoaudiológica</option></select>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#77736B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="position: absolute; right: 12px; top: 12px; pointer-events: none"><path d="m6 9 6 6 6-6"></path></svg>
+                </span>
+              </label>
+              <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #2E2C29">Data
+                <input type="text" value="Ter, 27/10/2026" style="height: 40px; width: 100%; box-sizing: border-box; padding: 0 12px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 500 14px Manrope, sans-serif; color: #1E1D1B; font-variant-numeric: tabular-nums">
+              </label>
+            </div>
+
+            <!-- Grupo em conflito -->
+            <div style="display: flex; flex-direction: column; gap: 10px">
+              <div style="display: flex; flex-wrap: wrap; gap: 16px 20px">
+                <label style="flex: 1 1 140px; min-width: 0; display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #2E2C29">Horário
+                  <input type="text" value="14:00" aria-invalid="true" aria-describedby="ea-err" style="height: 40px; width: 100%; box-sizing: border-box; padding: 0 12px; border: 1px solid #A93B30; border-radius: 8px; background: #FFFFFF; font: 600 14px Manrope, sans-serif; color: #1E1D1B; font-variant-numeric: tabular-nums">
+                </label>
+                <label style="flex: 1 1 120px; min-width: 0; display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #2E2C29">Duração
+                  <span style="position: relative; display: block">
+                    <select style="appearance: none; -webkit-appearance: none; height: 40px; width: 100%; box-sizing: border-box; padding: 0 36px 0 12px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 500 14px Manrope, sans-serif; color: #1E1D1B"><option>45 min</option><option>30 min</option><option>60 min</option></select>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#77736B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="position: absolute; right: 12px; top: 12px; pointer-events: none"><path d="m6 9 6 6 6-6"></path></svg>
+                  </span>
+                </label>
+                <label style="flex: 2 1 200px; min-width: 0; display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #2E2C29">Sala
+                  <span style="position: relative; display: block">
+                    <select aria-invalid="true" aria-describedby="ea-err" style="appearance: none; -webkit-appearance: none; height: 40px; width: 100%; box-sizing: border-box; padding: 0 36px 0 12px; border: 1px solid #A93B30; border-radius: 8px; background: #FFFFFF; font: 500 14px Manrope, sans-serif; color: #1E1D1B"><option>Sala 2 · Fonoaudiologia</option><option>Sala 4 · Fonoaudiologia</option></select>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#77736B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="position: absolute; right: 12px; top: 12px; pointer-events: none"><path d="m6 9 6 6 6-6"></path></svg>
+                  </span>
+                </label>
+              </div>
+              <div id="ea-err" role="alert" style="display: flex; flex-direction: column; gap: 10px; padding: 12px 14px; border-radius: 10px; background: #FAE7E4">
+                <span style="display: inline-flex; align-items: flex-start; gap: 8px; font-size: 13px; line-height: 20px; font-weight: 700; color: #A93B30">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0; margin-top: 2px"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4"></path><path d="M12 16h.01"></path></svg>
+                  <span>Conflito: Sala 2 ocupada às 14:00<span style="display: block; font-weight: 600; color: #7F2C24">Outra sessão de fonoterapia reservada das 14:00 às 14:30.</span></span>
+                </span>
+                <span style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding-left: 24px">
+                  <span style="font-size: 12px; font-weight: 700; color: #43413C">Sugestões:</span>
+                  <button type="button" style="display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px; border: 1px solid #B5832F; border-radius: 999px; background: #FFFFFF; color: #6F4D1D; font: 700 12px Manrope, sans-serif; cursor: pointer">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>
+                    Usar 14:30 (livre)
+                  </button>
+                  <button type="button" style="display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px; border: 1px solid #DFDBD3; border-radius: 999px; background: #FFFFFF; color: #43413C; font: 700 12px Manrope, sans-serif; cursor: pointer">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                    Manter 14:00 na Sala 4
+                  </button>
+                </span>
+              </div>
+            </div>
+
+            <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #2E2C29">Observações
+              <textarea rows="2" style="width: 100%; box-sizing: border-box; padding: 10px 12px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 500 14px/22px Manrope, sans-serif; color: #1E1D1B; resize: vertical">Responsável acompanha o paciente. Prefere horários após as 14h.</textarea>
+            </label>
+            <label style="display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 600; color: #43413C; cursor: pointer">
+              <input type="checkbox" checked style="margin: 0; width: 18px; height: 18px; accent-color: #8F6425">
+              Avisar o paciente sobre a alteração pelo WhatsApp
+            </label>
+          </div>
+          <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 12px; padding: 16px 28px; border-top: 1px solid #ECE9E3; background: #FAF8F4">
+            <span style="margin-right: auto; display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: #5B5852">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
+              Resolva o conflito para salvar.
+            </span>
+            <button type="button" style="height: 40px; padding: 0 16px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; color: #2E2C29; font: 700 14px Manrope, sans-serif; cursor: pointer">Cancelar</button>
+            <button type="button" aria-disabled="true" style="height: 40px; padding: 0 18px; border: 0; border-radius: 8px; background: #ECE9E3; color: #77736B; font: 700 14px Manrope, sans-serif; cursor: not-allowed">Salvar alterações</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 04 · REAGENDAR ===================== -->
+    <section id="a4" aria-labelledby="a4t" style="display: flex; flex-direction: column; gap: 20px">
+      <div style="display: flex; flex-direction: column; gap: 6px">
+        <span style="font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #8F6425">04 · Agenda · md 640 px</span>
+        <h2 id="a4t" style="margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 32px; line-height: 1.15">Reagendar</h2>
+        <p style="margin: 0; font-size: 14px; color: #5B5852">Comparação clara entre o horário atual e o novo, com calendário do mês e horários do dia escolhido.</p>
+      </div>
+      <div style="background: rgba(30,29,27,.45); border-radius: 16px; padding: clamp(16px, 4vw, 48px); display: flex; justify-content: center">
+        <div role="dialog" aria-modal="true" aria-labelledby="ad4t" style="width: 100%; max-width: 640px; background: #FFFFFF; border-radius: 16px; box-shadow: 0 18px 50px rgba(30,29,27,.14); display: flex; flex-direction: column; overflow: hidden">
+          <div style="display: flex; align-items: flex-start; gap: 16px; padding: 24px 28px 20px; border-bottom: 1px solid #ECE9E3">
+            <div style="display: flex; flex-direction: column; gap: 4px; margin-right: auto; min-width: 0">
+              <h3 id="ad4t" style="margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 24px; line-height: 1.2">Reagendar consulta</h3>
+              <p style="margin: 0; font-size: 13px; line-height: 20px; color: #5B5852">Luíza Bortolini · Ajuste quiropráxico · Dr. Rafael Zanella · Sala 3</p>
+            </div>
+            <button type="button" aria-label="Fechar" style="width: 40px; height: 40px; margin: -6px -10px 0 0; border: 0; border-radius: 8px; background: transparent; color: #5B5852; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button>
+          </div>
+          <div style="padding: 24px 28px; display: flex; flex-direction: column; gap: 24px">
+            <!-- Atual → novo -->
+            <div style="display: flex; flex-wrap: wrap; align-items: stretch; gap: 12px">
+              <div style="flex: 1 1 200px; min-width: 0; display: flex; flex-direction: column; gap: 4px; padding: 14px 16px; border-radius: 12px; border: 1px solid #ECE9E3; background: #FAF8F4">
+                <span style="font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #77736B">Horário atual</span>
+                <span style="font-size: 16px; font-weight: 700; color: #5B5852; text-decoration: line-through; font-variant-numeric: tabular-nums">Seg, 19/10 · 14:00 – 14:45</span>
+                <span style="font-size: 12px; font-weight: 600; color: #5B5852">Será liberado na agenda</span>
+              </div>
+              <span aria-hidden="true" style="display: inline-flex; align-items: center; justify-content: center; width: 32px; color: #8F6425; flex-shrink: 0"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></span>
+              <div style="flex: 1 1 200px; min-width: 0; display: flex; flex-direction: column; gap: 4px; padding: 14px 16px; border-radius: 12px; border: 1.5px solid #B5832F; background: #FBF6EC; box-shadow: 0 0 0 3px rgba(181,131,47,.14)">
+                <span style="font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #8F6425">Novo horário</span>
+                <span style="font-size: 16px; font-weight: 800; color: #1E1D1B; font-variant-numeric: tabular-nums">Qua, 21/10 · 09:30 – 10:15</span>
+                <span style="font-size: 12px; font-weight: 600; color: #6F4D1D">Mesma profissional e sala</span>
+              </div>
+            </div>
+
+            <!-- Calendário + slots -->
+            <div style="display: flex; flex-wrap: wrap; gap: 24px">
+              <div style="flex: 1 1 260px; min-width: 0; display: flex; flex-direction: column; gap: 10px">
+                <div style="display: flex; align-items: center; gap: 8px">
+                  <span style="font-size: 15px; font-weight: 800; margin-right: auto">Outubro 2026</span>
+                  <button type="button" aria-label="Mês anterior" style="width: 36px; height: 36px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; color: #43413C; display: inline-flex; align-items: center; justify-content: center; cursor: pointer"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"></path></svg></button>
+                  <button type="button" aria-label="Próximo mês" style="width: 36px; height: 36px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; color: #43413C; display: inline-flex; align-items: center; justify-content: center; cursor: pointer"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg></button>
+                </div>
+                <div role="grid" aria-label="Outubro de 2026" style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 2px">
+                  <sc-for list="{{calHead}}" as="ch" hint-placeholder-count="7">
+                    <span role="columnheader" aria-label="{{ch.full}}" style="height: 28px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #5B5852">{{ch.s}}</span>
+                  </sc-for>
+                  <sc-for list="{{calDays}}" as="cd" hint-placeholder-count="35">
+                    <span role="gridcell" style="display: flex; justify-content: center">
+                      <sc-if value="{{cd.real}}" hint-placeholder-val="{{ true }}">
+                        <button type="button" aria-label="{{cd.aria}}" aria-pressed="{{cd.pressed}}" aria-disabled="{{cd.dis}}" style="position: relative; width: 100%; max-width: 40px; height: 40px; border: 0; border-radius: 8px; background: {{cd.bg}}; box-shadow: {{cd.ring}}; color: {{cd.fg}}; font: {{cd.weight}} 13px Manrope, sans-serif; font-variant-numeric: tabular-nums; cursor: {{cd.cursor}}; text-decoration: {{cd.deco}}; display: inline-flex; align-items: center; justify-content: center; padding: 0">
+                          {{cd.d}}
+                          <span aria-hidden="true" style="position: absolute; bottom: 5px; left: 50%; margin-left: -2px; width: 4px; height: 4px; border-radius: 999px; background: {{cd.dot}}"></span>
+                        </button>
+                      </sc-if>
+                    </span>
+                  </sc-for>
+                </div>
+                <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: #5B5852"><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 999px; background: #B5832F"></span>Dias com horários livres para Dr. Rafael Zanella</span>
+              </div>
+              <fieldset style="flex: 1 1 220px; min-width: 0; margin: 0; padding: 0; border: 0">
+                <legend style="padding: 0 0 10px; font-size: 15px; font-weight: 800">Qua, 21 de outubro</legend>
+                <div role="radiogroup" aria-label="Horários de 21/10/2026" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px">
+                  <sc-for list="{{slots4}}" as="s4" hint-placeholder-count="12">
+                    <button type="button" role="radio" aria-checked="{{s4.checked}}" aria-disabled="{{s4.dis}}" aria-label="{{s4.aria}}" style="height: 44px; padding: 0 4px; box-sizing: border-box; border: {{s4.border}}; border-radius: 8px; background: {{s4.bg}}; color: {{s4.fg}}; box-shadow: {{s4.ring}}; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0; cursor: {{s4.cursor}}; font-family: Manrope, sans-serif">
+                      <span style="font-size: 13px; font-weight: 800; font-variant-numeric: tabular-nums; text-decoration: {{s4.deco}}">{{s4.time}}</span>
+                      <span style="font-size: 10px; font-weight: 700; color: {{s4.subFg}}">{{s4.sub}}</span>
+                    </button>
+                  </sc-for>
+                </div>
+              </fieldset>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 16px 20px; padding-top: 20px; border-top: 1px solid #ECE9E3">
+              <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #2E2C29"><span>Motivo do reagendamento <span aria-hidden="true" style="color: #A93B30">*</span></span>
+                <span style="position: relative; display: block">
+                  <select style="appearance: none; -webkit-appearance: none; height: 40px; width: 100%; box-sizing: border-box; padding: 0 36px 0 12px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 500 14px Manrope, sans-serif; color: #1E1D1B"><option>Solicitação do paciente</option><option>Profissional indisponível</option><option>Sala em manutenção</option><option>Ajuste interno da clínica</option><option>Outro</option></select>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#77736B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="position: absolute; right: 12px; top: 12px; pointer-events: none"><path d="m6 9 6 6 6-6"></path></svg>
+                </span>
+              </label>
+              <div style="display: flex; align-items: center; gap: 12px; min-height: 44px; align-self: end">
+                <span style="display: flex; flex-direction: column; gap: 2px; margin-right: auto">
+                  <span id="rg-notify" style="font-size: 14px; font-weight: 700">Notificar paciente pelo WhatsApp</span>
+                  <span style="font-size: 12px; font-weight: 600; color: #5B5852">Mensagem com o novo horário</span>
+                </span>
+                <button type="button" role="switch" aria-checked="true" aria-labelledby="rg-notify" style="width: 44px; height: 26px; padding: 3px; box-sizing: border-box; border: 0; border-radius: 999px; background: #8F6425; display: inline-flex; justify-content: flex-end; cursor: pointer; flex-shrink: 0"><span style="width: 20px; height: 20px; border-radius: 999px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(30,29,27,.25)"></span></button>
+              </div>
+            </div>
+          </div>
+          <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 12px; padding: 16px 28px; border-top: 1px solid #ECE9E3; background: #FAF8F4">
+            <button type="button" style="height: 40px; padding: 0 16px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; color: #2E2C29; font: 700 14px Manrope, sans-serif; cursor: pointer">Cancelar</button>
+            <button type="button" style="display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 18px; border: 0; border-radius: 8px; background: #8F6425; color: #FFFFFF; font: 700 14px Manrope, sans-serif; cursor: pointer">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+              Confirmar reagendamento
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 05 · CANCELAR CONSULTA ===================== -->
+    <section id="a5" aria-labelledby="a5t" style="display: flex; flex-direction: column; gap: 20px">
+      <div style="display: flex; flex-direction: column; gap: 6px">
+        <span style="font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #8F6425">05 · Agenda · sm 440 px</span>
+        <h2 id="a5t" style="margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 32px; line-height: 1.15">Cancelar consulta</h2>
+        <p style="margin: 0; font-size: 14px; color: #5B5852">Confirmação destrutiva com motivo obrigatório. O foco inicial vai para “Voltar”, nunca para a ação destrutiva.</p>
+      </div>
+      <div style="background: rgba(30,29,27,.45); border-radius: 16px; padding: clamp(16px, 4vw, 48px); display: flex; justify-content: center">
+        <div role="alertdialog" aria-modal="true" aria-labelledby="ad5t" aria-describedby="ad5d" style="width: 100%; max-width: 440px; background: #FFFFFF; border-radius: 16px; box-shadow: 0 18px 50px rgba(30,29,27,.14); display: flex; flex-direction: column; overflow: hidden">
+          <div style="padding: 28px 28px 8px; display: flex; flex-direction: column; align-items: flex-start; gap: 14px">
+            <span style="width: 48px; height: 48px; border-radius: 999px; background: #FAE7E4; color: #A93B30; display: inline-flex; align-items: center; justify-content: center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg></span>
+            <div style="display: flex; flex-direction: column; gap: 6px">
+              <h3 id="ad5t" style="margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 24px; line-height: 1.2">Cancelar esta consulta?</h3>
+              <p id="ad5d" style="margin: 0; font-size: 14px; line-height: 22px; color: #43413C"><strong style="color: #1E1D1B">Paulo Brum</strong> · Psicoterapia individual com Dra. Marina Lazzari · Ter, 20/10 às 10:00 · Sala 6. O horário volta a ficar livre na agenda.</p>
+            </div>
+          </div>
+          <div style="padding: 16px 28px 24px; display: flex; flex-direction: column; gap: 18px">
+            <fieldset style="margin: 0; padding: 0; border: 0; min-width: 0">
+              <legend style="padding: 0 0 8px; font-size: 13px; font-weight: 600; color: #2E2C29">Motivo <span aria-hidden="true" style="color: #A93B30">*</span></legend>
+              <div style="display: flex; flex-direction: column; gap: 6px">
+                <label style="display: flex; align-items: center; gap: 10px; min-height: 40px; padding: 0 12px; border: 1px solid #B5832F; border-radius: 8px; background: #FBF6EC; font-size: 14px; font-weight: 700; cursor: pointer"><input type="radio" name="cc-motivo" checked style="margin: 0; width: 16px; height: 16px; accent-color: #8F6425">Solicitação do paciente</label>
+                <label style="display: flex; align-items: center; gap: 10px; min-height: 40px; padding: 0 12px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font-size: 14px; font-weight: 600; color: #43413C; cursor: pointer"><input type="radio" name="cc-motivo" style="margin: 0; width: 16px; height: 16px; accent-color: #8F6425">Profissional indisponível</label>
+                <label style="display: flex; align-items: center; gap: 10px; min-height: 40px; padding: 0 12px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font-size: 14px; font-weight: 600; color: #43413C; cursor: pointer"><input type="radio" name="cc-motivo" style="margin: 0; width: 16px; height: 16px; accent-color: #8F6425">Paciente não confirmou presença</label>
+                <label style="display: flex; align-items: center; gap: 10px; min-height: 40px; padding: 0 12px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font-size: 14px; font-weight: 600; color: #43413C; cursor: pointer"><input type="radio" name="cc-motivo" style="margin: 0; width: 16px; height: 16px; accent-color: #8F6425">Outro motivo</label>
+              </div>
+            </fieldset>
+            <div role="note" style="display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px; border-radius: 10px; background: #F5F3EF; font-size: 13px; line-height: 20px; color: #43413C">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5B5852" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0; margin-top: 2px"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
+              <span>Faltam cerca de 23 h para a consulta. Política de cancelamento e eventual cobrança: <strong style="color: #1E1D1B">[a definir pela clínica]</strong>.</span>
+            </div>
+            <label style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer">
+              <input type="checkbox" checked style="margin: 2px 0 0; width: 18px; height: 18px; accent-color: #8F6425; flex-shrink: 0">
+              <span style="display: flex; flex-direction: column; gap: 2px">
+                <span style="font-size: 14px; font-weight: 700">Notificar paciente</span>
+                <span style="font-size: 12px; font-weight: 600; color: #5B5852">Mensagem pelo WhatsApp com opção de reagendar.</span>
+              </span>
+            </label>
+          </div>
+          <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 12px; padding: 16px 28px; border-top: 1px solid #ECE9E3; background: #FAF8F4">
+            <button type="button" autofocus style="height: 40px; padding: 0 16px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; color: #2E2C29; font: 700 14px Manrope, sans-serif; cursor: pointer">Voltar</button>
+            <button type="button" style="display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 18px; border: 0; border-radius: 8px; background: #A93B30; color: #FFFFFF; font: 700 14px Manrope, sans-serif; cursor: pointer">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="m15 9-6 6"></path><path d="m9 9 6 6"></path></svg>
+              Cancelar consulta
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 06 · ESTADOS DE RESULTADO ===================== -->
+    <section id="a6" aria-labelledby="a6t" style="display: flex; flex-direction: column; gap: 20px">
+      <div style="display: flex; flex-direction: column; gap: 6px">
+        <span style="font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #8F6425">06 · Agenda · feedback</span>
+        <h2 id="a6t" style="margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 32px; line-height: 1.15">Estados de resultado</h2>
+        <p style="margin: 0; font-size: 14px; color: #5B5852">O que a recepção vê depois de cada ação: toast no canto inferior direito, botão em processamento e o card da consulta atualizado na agenda.</p>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 28px; padding: clamp(20px, 3vw, 32px); border-radius: 16px; background: #FFFFFF; border: 1px solid #DFDBD3">
+        <!-- Toasts -->
+        <div style="display: flex; flex-direction: column; gap: 14px">
+          <div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px">
+            <h3 style="margin: 0; font-size: 16px; font-weight: 700; margin-right: auto">Toasts</h3>
+            <span style="font-size: 12px; font-weight: 600; color: #5B5852">Canto inferior direito · fecham sozinhos após 6 s · role="status"</span>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); gap: 16px; padding: 20px; border-radius: 12px; background: #F5F3EF">
+            <sc-for list="{{toasts}}" as="to" hint-placeholder-count="3">
+              <div role="status" style="display: flex; align-items: flex-start; gap: 12px; padding: 14px 10px 14px 14px; border-radius: 12px; background: #FFFFFF; border: 1px solid #ECE9E3; box-shadow: 0 6px 20px rgba(30,29,27,.07)">
+                <span style="width: 32px; height: 32px; border-radius: 999px; background: {{to.bg}}; color: {{to.fg}}; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{to.d1}}"></path><path d="{{to.d2}}"></path></svg>
+                </span>
+                <span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; padding-top: 1px">
+                  <span style="font-size: 14px; font-weight: 800">{{to.title}}</span>
+                  <span style="font-size: 13px; line-height: 20px; color: #43413C">{{to.text}}</span>
+                  <button type="button" style="align-self: flex-start; margin-top: 4px; height: 28px; padding: 0; border: 0; background: transparent; color: #8F6425; font: 700 13px Manrope, sans-serif; cursor: pointer; text-decoration: underline; text-underline-offset: 3px">{{to.action}}</button>
+                </span>
+                <button type="button" aria-label="Fechar aviso" style="width: 32px; height: 32px; border: 0; border-radius: 8px; background: transparent; color: #5B5852; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-wrap: wrap; gap: 28px; padding-top: 24px; border-top: 1px solid #ECE9E3">
+          <!-- Botão carregando -->
+          <div style="flex: 1 1 340px; min-width: 0; display: flex; flex-direction: column; gap: 14px">
+            <div style="display: flex; flex-direction: column; gap: 2px">
+              <h3 style="margin: 0; font-size: 16px; font-weight: 700">Botão “Agendar consulta”</h3>
+              <span style="font-size: 12px; font-weight: 600; color: #5B5852">Largura travada durante o envio para não deslocar o rodapé.</span>
+            </div>
+            <div style="display: flex; flex-wrap: wrap; gap: 20px; padding: 20px; border-radius: 12px; background: #FAF8F4; border: 1px solid #ECE9E3">
+              <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 8px">
+                <button type="button" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: 196px; height: 40px; padding: 0 18px; border: 0; border-radius: 8px; background: #8F6425; color: #FFFFFF; font: 700 14px Manrope, sans-serif; cursor: pointer">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4"></path><path d="M16 2v4"></path><path d="M21 13V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8"></path><path d="M3 10h18"></path><path d="m16 19 2 2 4-4"></path></svg>
+                  Agendar consulta
+                </button>
+                <span style="font-size: 12px; font-weight: 700; color: #5B5852">Padrão</span>
+              </div>
+              <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 8px">
+                <button type="button" aria-busy="true" aria-disabled="true" style="display: inline-flex; align-items: center; justify-content: center; gap: 10px; width: 196px; height: 40px; padding: 0 18px; border: 0; border-radius: 8px; background: #8F6425; color: #FFFFFF; font: 700 14px Manrope, sans-serif; cursor: progress">
+                  <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="12" cy="12" r="9" fill="none" stroke="rgba(255,255,255,.3)" stroke-width="2.5"></circle>
+                    <path d="M12 3a9 9 0 0 1 9 9" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round"><animateTransform attributeName="transform" type="rotate" from="0 12 12" to="360 12 12" dur=".8s" repeatCount="indefinite"></animateTransform></path>
+                  </svg>
+                  Agendando…
+                </button>
+                <span style="font-size: 12px; font-weight: 700; color: #5B5852">Carregando · aria-busy</span>
+              </div>
+              <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 8px">
+                <span style="display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 999px; background: #FFFFFF; box-shadow: inset 0 0 0 1px #ECE9E3">
+                  <svg width="24" height="24" viewBox="0 0 24 24" role="img" aria-label="Carregando">
+                    <circle cx="12" cy="12" r="9" fill="none" stroke="#F5E9D0" stroke-width="2"></circle>
+                    <path d="M12 3a9 9 0 0 1 9 9" fill="none" stroke="#B5832F" stroke-width="2" stroke-linecap="round"><animateTransform attributeName="transform" type="rotate" from="0 12 12" to="360 12 12" dur=".8s" repeatCount="indefinite"></animateTransform></path>
+                  </svg>
+                </span>
+                <span style="font-size: 12px; font-weight: 700; color: #5B5852">Spinner anel</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Cards da agenda -->
+          <div style="flex: 1 1 520px; min-width: 0; display: flex; flex-direction: column; gap: 14px">
+            <div style="display: flex; flex-direction: column; gap: 2px">
+              <h3 style="margin: 0; font-size: 16px; font-weight: 700">Card de consulta na agenda</h3>
+              <span style="font-size: 12px; font-weight: 600; color: #5B5852">Status sempre com ícone + texto; cancelada fica riscada e esmaecida.</span>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr)); gap: 16px; padding: 20px; border-radius: 12px; background: #FAF8F4; border: 1px solid #ECE9E3">
+              <sc-for list="{{cards}}" as="cc" hint-placeholder-count="3">
+                <div style="display: flex; flex-direction: column; gap: 8px">
+                  <div role="button" tabindex="0" aria-label="{{cc.aria}}" style="display: flex; flex-direction: column; height: 112px; box-sizing: border-box; border: 1px solid #DFDBD3; border-radius: 8px; background: {{cc.bg}}; box-shadow: 0 1px 2px rgba(30,29,27,.06); overflow: hidden; opacity: {{cc.opacity}}; cursor: pointer">
+                    <span aria-hidden="true" style="display: block; height: 3px; flex-shrink: 0; background: {{cc.color}}"></span>
+                    <span style="display: flex; flex-direction: column; gap: 2px; padding: 7px 10px; min-width: 0">
+                      <span style="display: flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 700; color: #5B5852; font-variant-numeric: tabular-nums">
+                        <span style="flex: 1; min-width: 0">{{cc.range}}</span>
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="{{cc.stFg}}" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{cc.d1}}"></path><path d="{{cc.d2}}"></path></svg>
+                      </span>
+                      <span style="font-size: 13px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-decoration: {{cc.deco}}">{{cc.patient}}</span>
+                      <span style="font-size: 11px; font-weight: 600; color: #5B5852; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{cc.meta}}</span>
+                      <span style="font-size: 11px; font-weight: 800; color: {{cc.stFg}}">{{cc.status}}</span>
+                    </span>
+                  </div>
+                  <span style="display: inline-flex; align-items: center; gap: 6px; align-self: flex-start; height: 24px; padding: 0 10px; border-radius: 999px; background: {{cc.stBg}}; color: {{cc.stFg}}; font-size: 12px; font-weight: 700">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{cc.d1}}"></path><path d="{{cc.d2}}"></path></svg>{{cc.status}}
+                  </span>
+                  <span style="font-size: 12px; line-height: 18px; color: #5B5852">{{cc.note}}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":7400}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const SP = { 'Odontologia': '#B5832F', 'Fonoaudiologia': '#3E7CA8', 'Estética Avançada': '#B0607A', 'Psicologia': '#6E62A6', 'Quiropraxia': '#3F8A72', 'Podologia': '#8A7A3F', 'Fisioterapia': '#C0703A', 'Nutrição': '#5E8A3A' };
+    const CIRCLE = 'M2 12a10 10 0 1 0 20 0a10 10 0 1 0 -20 0';
+
+    const index = [
+      ['01', 'Novo agendamento'], ['02', 'Detalhes da consulta'], ['03', 'Editar agendamento'],
+      ['04', 'Reagendar'], ['05', 'Cancelar consulta'], ['06', 'Estados de resultado']
+    ].map(([n, label], i) => ({ n, label, href: '#a' + (i + 1) }));
+
+    // ---------- 01 · passos ----------
+    const stepDefs = [['Paciente', 'Carla Menegatti', 'done'], ['Serviço', 'Consulta nutricional', 'done'], ['Horário', 'Em andamento', 'active'], ['Confirmação', 'Revisar e enviar', 'todo']];
+    const steps = stepDefs.map(([label, sub, s], i) => ({
+      n: String(i + 1), label, sub,
+      done: s === 'done', notDone: s !== 'done',
+      current: s === 'active' ? 'step' : 'false',
+      flex: i < stepDefs.length - 1 ? '1 1 140px' : '0 0 auto',
+      hasLine: i < stepDefs.length - 1,
+      lineBg: s === 'done' ? '#B5832F' : '#DFDBD3',
+      dotBg: s === 'done' ? '#8F6425' : (s === 'active' ? '#FBF6EC' : '#FFFFFF'),
+      dotRing: s === 'done' ? 'none' : (s === 'active' ? 'inset 0 0 0 2px #B5832F, 0 0 0 3px rgba(181,131,47,.18)' : 'inset 0 0 0 1.5px #C7C2B9'),
+      dotFg: s === 'done' ? '#FFFFFF' : (s === 'active' ? '#6F4D1D' : '#5B5852'),
+      weight: s === 'todo' ? '600' : '800',
+      labelFg: s === 'todo' ? '#5B5852' : '#1E1D1B'
+    }));
+
+    // ---------- estados de slot ----------
+    const SLOT = {
+      free: { border: '1px solid #DFDBD3', bg: '#FFFFFF', fg: '#1E1D1B', subFg: '#2E7351', sub: 'Livre', ring: 'none', cursor: 'pointer', deco: 'none', dis: 'false' },
+      busy: { border: '1px solid #ECE9E3', bg: '#F5F3EF', fg: '#5B5852', subFg: '#5B5852', sub: 'Ocupado', ring: 'none', cursor: 'not-allowed', deco: 'line-through', dis: 'true' },
+      block: { border: '1px dashed #C7C2B9', bg: '#ECE9E3', fg: '#43413C', subFg: '#43413C', sub: 'Bloqueado', ring: 'none', cursor: 'not-allowed', deco: 'none', dis: 'true' },
+      sel: { border: '1px solid #8F6425', bg: '#8F6425', fg: '#FFFFFF', subFg: '#F5E9D0', sub: 'Selecionado', ring: '0 0 0 3px rgba(181,131,47,.35)', cursor: 'pointer', deco: 'none', dis: 'false' },
+      span: { border: '1px solid #DDB872', bg: '#F5E9D0', fg: '#6F4D1D', subFg: '#6F4D1D', sub: 'Até 17:15', ring: 'none', cursor: 'pointer', deco: 'none', dis: 'false' }
+    };
+    const NAMES = { free: 'livre', busy: 'ocupado', block: 'bloqueado', sel: 'selecionado', span: 'incluído na duração' };
+    const mkSlot = (time, k, subOverride) => {
+      const s = SLOT[k];
+      return Object.assign({}, s, {
+        time, sub: subOverride || s.sub,
+        isSel: k === 'sel', isBlock: k === 'block',
+        checked: k === 'sel' ? 'true' : 'false',
+        aria: time + ', ' + NAMES[k]
+      });
+    };
+    const slots1 = [
+      ['10:30', 'busy'], ['11:00', 'busy'], ['11:30', 'free'], ['12:00', 'block', 'Almoço'], ['12:30', 'block', 'Almoço'],
+      ['13:00', 'free'], ['13:30', 'free'], ['14:00', 'busy'], ['14:30', 'free'], ['15:00', 'free'], ['15:30', 'busy'],
+      ['16:00', 'free'], ['16:30', 'sel'], ['17:00', 'span'], ['17:30', 'busy'], ['18:00', 'busy'], ['18:30', 'free']
+    ].map(r => mkSlot(r[0], r[1], r[2]));
+
+    const slotLegend = [
+      ['Livre', SLOT.free], ['Ocupado', SLOT.busy], ['Bloqueado', SLOT.block], ['Selecionado', SLOT.sel], ['Incluído na duração', SLOT.span]
+    ].map(([label, s]) => ({ label, border: s.border, bg: s.bg }));
+
+    const summary1 = [
+      ['Paciente', 'Carla Menegatti', null],
+      ['Serviço', 'Consulta nutricional', SP['Nutrição']],
+      ['Profissional', 'Dra. Júlia Dalmolin', null],
+      ['Sala', 'Sala 7', null],
+      ['Origem', 'WhatsApp', null]
+    ].map(([k, v, dot]) => ({ k, v, dot: dot || 'transparent', dotDisplay: dot ? 'inline-block' : 'none' }));
+
+    // ---------- 02 · detalhes ----------
+    const details2 = [
+      ['Serviço', 'Psicoterapia individual', SP['Psicologia']],
+      ['Profissional', 'Dra. Marina Lazzari', null],
+      ['Sala', 'Sala 6 · Psicologia', null],
+      ['Data', 'Seg, 19/10/2026', null],
+      ['Horário', '11:00 – 12:00', null],
+      ['Valor', 'R$ 180,00', null]
+    ].map(([k, v, dot]) => ({ k, v, dot: dot || 'transparent', dotDisplay: dot ? 'inline-block' : 'none' }));
+
+    const TL = {
+      created: ['M8 2v4M16 2v4', 'M3 6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM3 10h18'],
+      bot: ['M12 8V4H8', 'M6 8h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2zM2 14h2M20 14h2M15 13v2M9 13v2'],
+      check: [CIRCLE, 'm9 12 2 2 4-4'],
+      checkin: ['M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4', 'm10 17 5-5-5-5M15 12H3'],
+      play: [CIRCLE, 'm10 8 6 4-6 4z']
+    };
+    const timeline = [
+      ['created', 'Criada pela recepção', 'Camila S. · 12/10/2026, 15:12 · canal: telefone', '', '#ECE9E3', '#43413C', 'none', '#1E1D1B'],
+      ['bot', 'Lembrete enviado pela Assistente IA', 'WhatsApp · 18/10/2026, 09:00', '', '#E3F0EE', '#2F6F68', 'none', '#1E1D1B'],
+      ['check', 'Confirmada pela IA via WhatsApp', 'Resposta do paciente · 18/10/2026, 09:07', '“1 — Confirmo, obrigado!”', '#E6F2EB', '#2E7351', 'none', '#1E1D1B'],
+      ['checkin', 'Check-in na recepção', 'Camila S. · hoje, 10:52 · 8 min antes do horário', '', '#FBF6EC', '#8F6425', 'none', '#1E1D1B'],
+      ['play', 'Atendimento', 'Aguardando início pela Dra. Marina Lazzari', '', '#FFFFFF', '#5B5852', '1.5px dashed #C7C2B9', '#43413C']
+    ].map((r, i, arr) => ({
+      d1: TL[r[0]][0], d2: TL[r[0]][1], title: r[1], meta: r[2], quote: r[3], hasQuote: !!r[3],
+      bg: r[4], fg: r[5], border: r[6], titleFg: r[7],
+      line: i < arr.length - 1 ? '#ECE9E3' : 'transparent'
+    }));
+
+    // ---------- 04 · calendário outubro/2026 (1º = quinta) ----------
+    const calHead = [['S', 'Segunda'], ['T', 'Terça'], ['Q', 'Quarta'], ['Q', 'Quinta'], ['S', 'Sexta'], ['S', 'Sábado'], ['D', 'Domingo']].map(([s, full]) => ({ s, full }));
+    const TODAY = 19, PICK = 21;
+    const FULL = { 23: true, 28: true };
+    const calDays = [];
+    for (let i = 0; i < 3; i++) calDays.push({ real: false });
+    for (let d = 1; d <= 31; d++) {
+      const dow = (3 + d - 1) % 7; // 0 = segunda
+      const sunday = dow === 6;
+      const past = d < TODAY;
+      const full = !!FULL[d];
+      const isPick = d === PICK, isToday = d === TODAY;
+      const off = past || sunday || full;
+      calDays.push({
+        real: true, d: String(d),
+        pressed: isPick ? 'true' : 'false', dis: off ? 'true' : 'false',
+        aria: d + ' de outubro' + (isToday ? ', hoje' : '') + (isPick ? ', selecionado' : '') + (full ? ', sem horários livres' : '') + (sunday ? ', clínica fechada' : '') + (past ? ', data passada' : ''),
+        bg: isPick ? '#8F6425' : 'transparent',
+        ring: isToday ? 'inset 0 0 0 1.5px #B5832F' : 'none',
+        fg: isPick ? '#FFFFFF' : (off ? '#77736B' : '#1E1D1B'),
+        weight: isPick || isToday ? '800' : (off ? '500' : '700'),
+        cursor: off ? 'not-allowed' : 'pointer',
+        deco: full ? 'line-through' : 'none',
+        dot: (!off && !isPick) ? '#B5832F' : (isPick ? '#F5E9D0' : 'transparent')
+      });
+    }
+
+    const slots4 = [
+      ['08:00', 'free'], ['08:30', 'busy'], ['09:00', 'busy'], ['09:30', 'sel', 'Novo'], ['10:00', 'span', 'Até 10:15'], ['10:30', 'free'],
+      ['11:00', 'free'], ['11:30', 'busy'], ['12:00', 'block', 'Almoço'], ['13:00', 'free'], ['13:30', 'free'], ['14:00', 'busy']
+    ].map(r => mkSlot(r[0], r[1], r[2]));
+
+    // ---------- 06 · toasts e cards ----------
+    const toasts = [
+      { title: 'Consulta confirmada', text: 'Carla Menegatti · seg, 19/10 às 16:30 com Dra. Júlia Dalmolin. Confirmação enviada pelo WhatsApp.', action: 'Ver na agenda', bg: '#E6F2EB', fg: '#2E7351', d1: CIRCLE, d2: 'm9 12 2 2 4-4' },
+      { title: 'Consulta cancelada', text: 'Paulo Brum · ter, 20/10 às 10:00. O horário foi liberado e o paciente foi avisado.', action: 'Desfazer', bg: '#FAE7E4', fg: '#A93B30', d1: CIRCLE, d2: 'm15 9-6 6M9 9l6 6' },
+      { title: 'Atendimento concluído', text: 'Eduardo Rech · Psicoterapia individual. Pagamento de R$ 180,00 ainda pendente.', action: 'Registrar pagamento', bg: '#F5E9D0', fg: '#6F4D1D', d1: 'M18 6 7 17l-5-5', d2: 'm22 10-7.5 7.5L13 16' }
+    ];
+
+    const ST = {
+      'Confirmada': { fg: '#2E7351', bg: '#E6F2EB', d1: CIRCLE, d2: 'm9 12 2 2 4-4' },
+      'Cancelada': { fg: '#A93B30', bg: '#FAE7E4', d1: CIRCLE, d2: 'm15 9-6 6M9 9l6 6' },
+      'Concluída': { fg: '#5B5852', bg: '#ECE9E3', d1: 'M18 6 7 17l-5-5', d2: 'm22 10-7.5 7.5L13 16' }
+    };
+    const cards = [
+      ['Carla Menegatti', '16:30 – 17:15', 'Dra. Júlia · Sala 7', 'Nutrição', 'Confirmada', 'Fundo branco, ícone e rótulo em verde de sucesso.'],
+      ['Renato Spanholi', '16:30 – 17:30', 'Dr. Gustavo · Sala 7', 'Fisioterapia', 'Cancelada', 'Nome riscado, opacidade 72% e fundo marfim; horário volta a aparecer como livre.'],
+      ['Marcos Webber', '08:00 – 08:45', 'Ana Paula · Sala 3', 'Podologia', 'Concluída', 'Fundo marfim e status grafite: sai do foco sem sumir do histórico do dia.']
+    ].map(([patient, range, meta, spec, status, note]) => {
+      const st = ST[status];
+      const canc = status === 'Cancelada';
+      return {
+        patient, range, meta, status, note,
+        color: SP[spec], stFg: st.fg, stBg: st.bg, d1: st.d1, d2: st.d2,
+        bg: status === 'Confirmada' ? '#FFFFFF' : '#FAF8F4',
+        opacity: canc ? '.72' : '1', deco: canc ? 'line-through' : 'none',
+        aria: patient + ', ' + range + ', ' + spec + ', ' + status
+      };
+    });
+
+    return { index, steps, slots1, slotLegend, summary1, details2, timeline, calHead, calDays, slots4, toasts, cards };
+  }
+}
+</script>
+</body>
+</html>

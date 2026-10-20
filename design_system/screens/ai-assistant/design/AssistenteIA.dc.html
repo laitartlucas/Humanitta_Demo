@@ -1,0 +1,754 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Assistente IA — Humanittá Gestão</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&amp;family=Manrope:wght@400;500;600;700;800&amp;family=Josefin+Sans:wght@300;400&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#FAF8F4}
+a{color:#8F6425}a:hover{color:#6F4D1D}
+</style>
+</helmet>
+<div style="display: flex; flex-wrap: wrap; min-height: 100vh; background: #FAF8F4; font-family: Manrope, system-ui, sans-serif; color: #1E1D1B">
+
+  <!-- SHELL:SIDEBAR START (copiar igual em todas as telas; mudar apenas o item ativo) -->
+  <aside aria-label="Menu principal" style="flex: 1 1 264px; max-width: 264px; min-width: 220px; background: #1E1D1B; color: #E9E5DD; display: flex; flex-direction: column; gap: 24px; padding: 24px 16px">
+    <a href="Dashboard.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 4px 8px; text-decoration: none; color: #F5E9D0">
+      <svg width="40" height="40" viewBox="0 0 64 64" role="img" aria-label="Símbolo Humanittá">
+        <defs><linearGradient id="sg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#DDB872"></stop><stop offset=".55" stop-color="#CC9B47"></stop><stop offset="1" stop-color="#B5832F"></stop></linearGradient></defs>
+        <circle cx="32" cy="32" r="30" fill="none" stroke="#CC9B47" stroke-width="2"></circle>
+        <circle cx="24" cy="31" r="3.6" fill="url(#sg)"></circle>
+        <path d="M20 39.5c0-2.6 1.8-4.3 4-4.3s4 1.7 4 4.3V47c-4.4 0-8-3.2-8-7.5z" fill="url(#sg)"></path>
+        <circle cx="38.5" cy="19.5" r="4.6" fill="url(#sg)"></circle>
+        <path d="M31.5 31c0-3.3 2.7-5.6 6-5.6h6.5V40c0 4.6-3.7 8-8.3 8h-4.2z" fill="url(#sg)"></path>
+      </svg>
+      <span style="display: flex; flex-direction: column; gap: 2px">
+        <span style="font-family: 'Josefin Sans', Manrope, sans-serif; font-weight: 300; font-size: 22px; letter-spacing: .08em; color: #F3EFE8; line-height: 1">Humanittá</span>
+        <span style="font-size: 10px; font-weight: 700; letter-spacing: .24em; text-transform: uppercase; color: #DDB872">Gestão</span>
+      </span>
+    </a>
+    <nav style="display: flex; flex-direction: column; gap: 2px">
+      <a href="Dashboard.dc.html" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 10px; color: #D6D1C7; text-decoration: none; font-size: 14px; font-weight: 600">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="7" height="9" x="3" y="3" rx="1"></rect><rect width="7" height="5" x="14" y="3" rx="1"></rect><rect width="7" height="9" x="14" y="12" rx="1"></rect><rect width="7" height="5" x="3" y="16" rx="1"></rect></svg>
+        <span style="flex: 1">Dashboard</span>
+      </a>
+      <a href="Agenda.dc.html" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 10px; color: #D6D1C7; text-decoration: none; font-size: 14px; font-weight: 600">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path><path d="M8 14h.01"></path><path d="M12 14h.01"></path><path d="M16 14h.01"></path><path d="M8 18h.01"></path><path d="M12 18h.01"></path><path d="M16 18h.01"></path></svg>
+        <span style="flex: 1">Agenda</span>
+      </a>
+      <a href="Pacientes.dc.html" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 10px; color: #D6D1C7; text-decoration: none; font-size: 14px; font-weight: 600">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+        <span style="flex: 1">Pacientes</span>
+      </a>
+      <a href="Profissionais.dc.html" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 10px; color: #D6D1C7; text-decoration: none; font-size: 14px; font-weight: 600">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 2v2"></path><path d="M5 2v2"></path><path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1"></path><path d="M8 15a6 6 0 0 0 12 0v-3"></path><circle cx="20" cy="10" r="2"></circle></svg>
+        <span style="flex: 1">Profissionais</span>
+      </a>
+      <a href="Atendimentos.dc.html" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 10px; color: #D6D1C7; text-decoration: none; font-size: 14px; font-weight: 600">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="8" height="4" x="8" y="2" rx="1"></rect><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><path d="M12 11h4"></path><path d="M12 16h4"></path><path d="M8 11h.01"></path><path d="M8 16h.01"></path></svg>
+        <span style="flex: 1">Atendimentos</span>
+      </a>
+      <a href="Financeiro.dc.html" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 10px; color: #D6D1C7; text-decoration: none; font-size: 14px; font-weight: 600">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"></path><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"></path></svg>
+        <span style="flex: 1">Financeiro</span>
+      </a>
+      <a href="WhatsApp.dc.html" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 10px; color: #D6D1C7; text-decoration: none; font-size: 14px; font-weight: 600">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path></svg>
+        <span style="flex: 1">WhatsApp</span>
+        <span style="min-width: 22px; height: 20px; padding: 0 6px; box-sizing: border-box; border-radius: 999px; background: #DDB872; color: #1E1D1B; font-size: 11px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center">4</span>
+      </a>
+      <a href="AssistenteIA.dc.html" aria-current="page" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 10px; background: rgba(221,184,114,.12); color: #F5E9D0; text-decoration: none; font-size: 14px; font-weight: 700">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#DDB872" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 8V4H8"></path><rect width="16" height="12" x="4" y="8" rx="2"></rect><path d="M2 14h2"></path><path d="M20 14h2"></path><path d="M15 13v2"></path><path d="M9 13v2"></path></svg>
+        <span style="flex: 1">Assistente IA</span><span aria-hidden="true" style="width: 6px; height: 6px; border-radius: 999px; background: #DDB872"></span>
+      </a>
+      <a href="Relatorios.dc.html" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 10px; color: #D6D1C7; text-decoration: none; font-size: 14px; font-weight: 600">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"></path><path d="M18 17V9"></path><path d="M13 17V5"></path><path d="M8 17v-3"></path></svg>
+        <span style="flex: 1">Relatórios</span>
+      </a>
+      <a href="Configuracoes.dc.html" style="display: flex; align-items: center; gap: 12px; height: 44px; padding: 0 12px; border-radius: 10px; color: #D6D1C7; text-decoration: none; font-size: 14px; font-weight: 600">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+        <span style="flex: 1">Configurações</span>
+      </a>
+    </nav>
+    <div style="margin-top: auto; display: flex; flex-direction: column; gap: 12px">
+      <div style="display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 12px; background: rgba(255,255,255,.05)">
+        <span style="width: 36px; height: 36px; border-radius: 999px; background: #43413C; color: #F5E9D0; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800">CS</span>
+        <span style="display: flex; flex-direction: column; min-width: 0">
+          <span style="font-size: 13px; font-weight: 700; color: #F3EFE8">Camila S.</span>
+          <span style="font-size: 12px; color: #B9B3A8">Administradora</span>
+        </span>
+      </div>
+      <button type="button" style="display: flex; align-items: center; gap: 10px; height: 40px; padding: 0 12px; border: 0; border-radius: 10px; background: transparent; color: #B9B3A8; font: 600 13px Manrope, sans-serif; cursor: pointer">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="18" x="3" y="3" rx="2"></rect><path d="M9 3v18"></path><path d="m16 15-3-3 3-3"></path></svg>
+        Recolher menu
+      </button>
+    </div>
+  </aside>
+  <!-- SHELL:SIDEBAR END -->
+
+  <div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
+    <!-- SHELL:HEADER START (copiar; mudar título e breadcrumb) -->
+    <header style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px; min-height: 72px; padding: 12px 32px; box-sizing: border-box; background: #FFFFFF; border-bottom: 1px solid #DFDBD3">
+      <div style="display: flex; flex-direction: column; gap: 2px; margin-right: auto">
+        <span style="font-size: 12px; font-weight: 600; color: #77736B">Atendimento</span>
+        <h1 style="margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 28px; line-height: 1.1">Assistente IA</h1>
+      </div>
+      <label style="display: flex; align-items: center; gap: 10px; flex: 0 1 360px; min-width: 200px; height: 40px; padding: 0 12px; box-sizing: border-box; border: 1px solid #DFDBD3; border-radius: 8px; background: #FAF8F4; color: #77736B">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+        <span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Busca global</span>
+        <input type="search" placeholder="Buscar pacientes, consultas, profissionais…" style="flex: 1; min-width: 0; border: 0; background: transparent; font: 500 14px Manrope, sans-serif; color: #1E1D1B; outline: none">
+        <span style="font-size: 11px; font-weight: 700; color: #77736B; border: 1px solid #DFDBD3; border-radius: 6px; padding: 2px 6px; background: #FFFFFF">⌘K</span>
+      </label>
+      <span style="display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 10px; border-radius: 999px; background: #FBF0DA; color: #9A5F0E; font-size: 12px; font-weight: 700">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 2v7.31"></path><path d="M14 9.3V1.99"></path><path d="M8.5 2h7"></path><path d="M14 9.3a6.5 6.5 0 1 1-4 0"></path></svg>
+        Ambiente de demonstração
+      </span>
+      <span style="display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: #43413C">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#77736B" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path></svg>
+        Segunda, 19 de outubro de 2026
+      </span>
+      <button type="button" aria-label="Notificações (3 novas)" style="position: relative; width: 40px; height: 40px; border: 1px solid #DFDBD3; border-radius: 10px; background: #FFFFFF; color: #43413C; display: inline-flex; align-items: center; justify-content: center; cursor: pointer">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path></svg>
+        <span aria-hidden="true" style="position: absolute; top: 8px; right: 9px; width: 8px; height: 8px; border-radius: 999px; background: #A93B30; border: 2px solid #FFFFFF"></span>
+      </button>
+      <button type="button" aria-label="Menu do usuário" style="display: flex; align-items: center; gap: 10px; height: 44px; padding: 0 8px 0 4px; border: 0; background: transparent; cursor: pointer; font-family: Manrope, sans-serif">
+        <span style="width: 36px; height: 36px; border-radius: 999px; background: #F5E9D0; color: #6F4D1D; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; box-shadow: 0 0 0 2px #FFFFFF, 0 0 0 3px #DDB872">CS</span>
+        <span style="display: flex; flex-direction: column; align-items: flex-start">
+          <span style="font-size: 13px; font-weight: 700; color: #1E1D1B">Camila S.</span>
+          <span style="font-size: 12px; color: #77736B">Administradora</span>
+        </span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#77736B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
+      </button>
+    </header>
+    <!-- SHELL:HEADER END -->
+
+    <main style="flex: 1; padding: 32px; box-sizing: border-box; display: flex; flex-direction: column; gap: 24px; max-width: 1440px; width: 100%">
+
+      <!-- Card do agente -->
+      <section aria-label="Resumo do assistente" style="background: #FFFFFF; border: 1px solid #DFDBD3; border-radius: 12px; box-shadow: 0 1px 2px rgba(30,29,27,.06); padding: 24px; display: flex; flex-direction: column; gap: 20px">
+        <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 20px">
+          <span style="flex-shrink: 0; width: 72px; height: 72px; border-radius: 999px; border: 1.5px solid #CC9B47; display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box">
+            <span style="width: 58px; height: 58px; border-radius: 999px; background: #FBF6EC; color: #8F6425; display: inline-flex; align-items: center; justify-content: center">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 8V4H8"></path><rect width="16" height="12" x="4" y="8" rx="2"></rect><path d="M2 14h2"></path><path d="M20 14h2"></path><path d="M15 13v2"></path><path d="M9 13v2"></path></svg>
+            </span>
+          </span>
+          <div style="display: flex; flex-direction: column; gap: 6px; margin-right: auto; min-width: 0">
+            <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px">
+              <h2 style="margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 30px; line-height: 1.1">Assistente Humanittá</h2>
+              <span style="display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; background: {{statusBg}}; color: {{statusFg}}; font-size: 12px; font-weight: 700">
+                <span style="width: 7px; height: 7px; border-radius: 999px; background: {{statusFg}}"></span>{{statusLabel}}
+              </span>
+            </div>
+            <span style="font-size: 14px; color: #5B5852">Atende o WhatsApp da clínica · (54) 99292-0770 · {{statusDetail}}</span>
+          </div>
+          <button type="button" role="switch" aria-checked="{{activeStr}}" onClick="{{toggleActive}}" style="display: inline-flex; align-items: center; gap: 12px; height: 48px; padding: 0 16px 0 12px; border: 1px solid #DFDBD3; border-radius: 10px; background: #FFFFFF; color: #1E1D1B; font: 700 14px Manrope, sans-serif; cursor: pointer">
+            <span style="position: relative; width: 44px; height: 24px; border-radius: 999px; background: {{activeTrack}}; flex-shrink: 0">
+              <span style="position: absolute; top: 2px; left: {{activeKnob}}; width: 20px; height: 20px; border-radius: 999px; background: #FFFFFF; box-shadow: 0 1px 3px rgba(30,29,27,.25)"></span>
+            </span>
+            Assistente ativo
+          </button>
+        </div>
+
+        <sc-if value="{{paused}}" hint-placeholder-val="{{ false }}">
+          <div role="status" style="display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-radius: 10px; background: #FBF0DA; color: #9A5F0E; font-size: 13px; font-weight: 700">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M10 15V9"></path><path d="M14 15V9"></path></svg>
+            Assistente pausado. Novas mensagens do WhatsApp vão direto para a fila da recepção.
+          </div>
+        </sc-if>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr)); gap: 12px">
+          <sc-for list="{{metrics}}" as="m" hint-placeholder-count="4">
+            <div style="padding: 16px; border-radius: 10px; background: #FAF8F4; border: 1px solid #ECE9E3; display: flex; flex-direction: column; gap: 8px">
+              <span style="font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #77736B">{{m.label}}</span>
+              <span style="font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 34px; line-height: 1">{{m.value}}</span>
+              <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: #5B5852"><span style="display: inline-flex; align-items: center; gap: 2px; color: #2E7351"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m22 7-8.5 8.5-5-5L2 17"></path><path d="M16 7h6v6"></path></svg>{{m.delta}}</span>{{m.note}}</span>
+            </div>
+          </sc-for>
+        </div>
+        <span style="font-size: 12px; color: #77736B">Outubro de 2026 · métricas demonstrativas</span>
+      </section>
+
+      <!-- Abas -->
+      <div role="tablist" aria-label="Configurações do assistente" style="display: flex; gap: 4px; overflow-x: auto; border-bottom: 1px solid #DFDBD3">
+        <sc-for list="{{tabs}}" as="t" hint-placeholder-count="6">
+          <button type="button" role="tab" aria-selected="{{t.selected}}" onClick="{{t.onClick}}" style="flex-shrink: 0; display: inline-flex; align-items: center; gap: 8px; height: 46px; padding: 0 14px; border: 0; border-bottom: 2px solid {{t.line}}; margin-bottom: -1px; background: transparent; color: {{t.fg}}; font-family: Manrope, sans-serif; font-size: 14px; font-weight: {{t.weight}}; cursor: pointer; white-space: nowrap">
+            {{t.label}}
+          </button>
+        </sc-for>
+      </div>
+
+      <section style="display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start">
+
+        <!-- Configurações -->
+        <div style="flex: 2 1 560px; min-width: 0; background: #FFFFFF; border: 1px solid #DFDBD3; border-radius: 12px; box-shadow: 0 1px 2px rgba(30,29,27,.06); display: flex; flex-direction: column">
+
+          <!-- IDENTIDADE -->
+          <sc-if value="{{tabIdentidade}}" hint-placeholder-val="{{ true }}">
+            <div role="tabpanel" aria-label="Identidade" style="padding: 24px; display: flex; flex-direction: column; gap: 24px">
+              <div style="display: flex; flex-direction: column; gap: 2px">
+                <h3 style="margin: 0; font-size: 16px; font-weight: 700">Identidade</h3>
+                <span style="font-size: 13px; color: #77736B">Como o assistente se apresenta e conversa com os pacientes.</span>
+              </div>
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 16px">
+                <label style="display: flex; flex-direction: column; gap: 6px">
+                  <span style="font-size: 13px; font-weight: 600; color: #2E2C29">Nome do assistente</span>
+                  <input type="text" value="Assistente Humanittá" style="height: 40px; padding: 0 12px; box-sizing: border-box; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 500 14px Manrope, sans-serif; color: #1E1D1B">
+                  <span style="font-size: 12px; color: #77736B">Exibido na primeira mensagem e nos relatórios.</span>
+                </label>
+                <label style="display: flex; flex-direction: column; gap: 6px">
+                  <span style="font-size: 13px; font-weight: 600; color: #2E2C29">Assinatura</span>
+                  <input type="text" value="Equipe Humanittá Saúde Integral" style="height: 40px; padding: 0 12px; box-sizing: border-box; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 500 14px Manrope, sans-serif; color: #1E1D1B">
+                  <span style="font-size: 12px; color: #77736B">Adicionada ao fim de confirmações e lembretes.</span>
+                </label>
+              </div>
+
+              <fieldset style="margin: 0; padding: 0; border: 0; display: flex; flex-direction: column; gap: 10px">
+                <legend style="padding: 0; margin-bottom: 10px; font-size: 13px; font-weight: 600; color: #2E2C29">Personalidade</legend>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr)); gap: 12px">
+                  <sc-for list="{{personas}}" as="p" hint-placeholder-count="3">
+                    <button type="button" aria-pressed="{{p.pressed}}" onClick="{{p.onClick}}" style="display: flex; flex-direction: column; align-items: flex-start; gap: 8px; padding: 16px; border-radius: 12px; border: 1px solid {{p.border}}; background: {{p.bg}}; box-shadow: {{p.ring}}; text-align: left; cursor: pointer; font-family: Manrope, sans-serif; color: #1E1D1B">
+                      <span style="display: flex; align-items: center; gap: 8px; width: 100%">
+                        <span style="font-size: 15px; font-weight: 800; margin-right: auto">{{p.name}}</span>
+                        <span style="width: 18px; height: 18px; border-radius: 999px; border: 1.5px solid {{p.radio}}; display: inline-flex; align-items: center; justify-content: center; box-sizing: border-box"><span style="width: 8px; height: 8px; border-radius: 999px; background: {{p.dot}}"></span></span>
+                      </span>
+                      <span style="font-size: 13px; line-height: 1.5; color: #5B5852">{{p.desc}}</span>
+                      <span style="font-size: 12px; font-style: italic; color: #43413C">{{p.sample}}</span>
+                    </button>
+                  </sc-for>
+                </div>
+              </fieldset>
+
+              <div style="display: flex; flex-wrap: wrap; gap: 24px">
+                <div style="flex: 2 1 300px; min-width: 0; display: flex; flex-direction: column; gap: 8px">
+                  <span id="tom-label" style="font-size: 13px; font-weight: 600; color: #2E2C29">Tom de voz</span>
+                  <div role="radiogroup" aria-labelledby="tom-label" style="display: flex; padding: 3px; border-radius: 10px; background: #F5F3EF; gap: 2px">
+                    <sc-for list="{{tones}}" as="t" hint-placeholder-count="5">
+                      <button type="button" role="radio" aria-checked="{{t.checked}}" onClick="{{t.onClick}}" style="flex: 1; height: 34px; padding: 0 6px; border: 0; border-radius: 8px; background: {{t.bg}}; color: {{t.fg}}; box-shadow: {{t.shadow}}; font-family: Manrope, sans-serif; font-size: 12px; font-weight: 700; cursor: pointer">{{t.label}}</button>
+                    </sc-for>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; color: #77736B"><span>Formal</span><span>Próximo</span></div>
+                </div>
+                <div style="flex: 1 1 220px; min-width: 0; display: flex; flex-direction: column; gap: 8px">
+                  <span style="font-size: 13px; font-weight: 600; color: #2E2C29">Uso de emojis</span>
+                  <button type="button" role="switch" aria-checked="{{emojiStr}}" onClick="{{toggleEmoji}}" style="display: inline-flex; align-items: center; gap: 12px; height: 40px; padding: 0; border: 0; background: transparent; color: #43413C; font: 600 13px Manrope, sans-serif; cursor: pointer; text-align: left">
+                    <span style="position: relative; width: 40px; height: 22px; border-radius: 999px; background: {{emojiTrack}}; flex-shrink: 0">
+                      <span style="position: absolute; top: 2px; left: {{emojiKnob}}; width: 18px; height: 18px; border-radius: 999px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(30,29,27,.25)"></span>
+                    </span>
+                    {{emojiLabel}}
+                  </button>
+                </div>
+              </div>
+
+              <label style="display: flex; flex-direction: column; gap: 6px">
+                <span style="font-size: 13px; font-weight: 600; color: #2E2C29">Mensagem inicial</span>
+                <textarea rows="4" style="width: 100%; box-sizing: border-box; resize: vertical; padding: 12px 14px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 500 14px/1.55 Manrope, sans-serif; color: #1E1D1B">{{greetingTemplate}}</textarea>
+                <span style="font-size: 12px; color: #77736B">Enviada quando um paciente inicia a conversa ou volta após 24 horas sem contato.</span>
+              </label>
+              <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 6px">
+                <span style="font-size: 12px; font-weight: 700; color: #5B5852; margin-right: 4px">Inserir variável</span>
+                <sc-for list="{{variables}}" as="v" hint-placeholder-count="4">
+                  <button type="button" style="height: 28px; padding: 0 10px; border: 1px solid #DFDBD3; border-radius: 6px; background: #FAF8F4; color: #6F4D1D; font: 700 12px ui-monospace, Menlo, monospace; cursor: pointer">{{v}}</button>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- COMPORTAMENTO -->
+          <sc-if value="{{tabComportamento}}" hint-placeholder-val="{{ false }}">
+            <div role="tabpanel" aria-label="Comportamento" style="padding: 24px; display: flex; flex-direction: column; gap: 24px">
+              <div style="display: flex; flex-direction: column; gap: 2px">
+                <h3 style="margin: 0; font-size: 16px; font-weight: 700">O que o assistente pode fazer</h3>
+                <span style="font-size: 13px; color: #77736B">Ações executadas sozinho, sem precisar da recepção.</span>
+              </div>
+              <div style="display: flex; flex-direction: column; border: 1px solid #DFDBD3; border-radius: 12px; overflow: hidden">
+                <sc-for list="{{capabilities}}" as="c" hint-placeholder-count="6">
+                  <label style="display: flex; align-items: flex-start; gap: 12px; padding: 14px 16px; border-top: 1px solid #ECE9E3; background: #FFFFFF; cursor: pointer">
+                    <sc-if value="{{c.on}}" hint-placeholder-val="{{ true }}"><input type="checkbox" checked style="width: 18px; height: 18px; margin: 2px 0 0; accent-color: #8F6425; flex-shrink: 0"></sc-if><sc-if value="{{c.off}}" hint-placeholder-val="{{ false }}"><input type="checkbox" style="width: 18px; height: 18px; margin: 2px 0 0; accent-color: #8F6425; flex-shrink: 0"></sc-if>
+                    <span style="flex: 1; display: flex; flex-direction: column; gap: 2px">
+                      <span style="font-size: 14px; font-weight: 700; color: #1E1D1B">{{c.name}}</span>
+                      <span style="font-size: 13px; color: #5B5852">{{c.desc}}</span>
+                    </span>
+                    <sc-if value="{{c.pending}}" hint-placeholder-val="{{ false }}">
+                      <span style="display: inline-flex; align-items: center; gap: 6px; height: 24px; padding: 0 10px; border-radius: 999px; background: #FBF0DA; color: #9A5F0E; font-size: 12px; font-weight: 700; white-space: nowrap"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>Valores oficiais pendentes</span>
+                    </sc-if>
+                  </label>
+                </sc-for>
+              </div>
+
+              <label style="display: flex; flex-direction: column; gap: 6px">
+                <span style="font-size: 13px; font-weight: 600; color: #2E2C29">Instruções personalizadas</span>
+                <textarea rows="8" style="width: 100%; box-sizing: border-box; resize: vertical; padding: 12px 14px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 500 14px/1.6 Manrope, sans-serif; color: #1E1D1B">Chame o paciente pelo primeiro nome e confirme sempre o nome completo antes de agendar.
+Ao sugerir horários, ofereça no máximo 3 opções, priorizando o profissional que já atende o paciente.
+Para crianças, pergunte o nome e a idade e registre o responsável.
+Se o paciente perguntar sobre convênios ou valores, informe que a recepção confirma e transfira o atendimento.
+Encerre sempre lembrando o endereço: R. Rio Branco, 185 – Centro, Ronda Alta.</textarea>
+                <span style="font-size: 12px; color: #77736B">Escreva em linguagem natural. O assistente segue estas orientações em todas as conversas.</span>
+              </label>
+
+              <div style="display: flex; flex-direction: column; gap: 10px">
+                <div style="display: flex; flex-direction: column; gap: 2px">
+                  <h3 style="margin: 0; font-size: 16px; font-weight: 700">Limites</h3>
+                  <span style="font-size: 13px; color: #77736B">Regras fixas de segurança. Não podem ser desativadas.</span>
+                </div>
+                <sc-for list="{{limits}}" as="l" hint-placeholder-count="3">
+                  <div style="display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-radius: 10px; background: #F5F3EF; border: 1px solid #ECE9E3">
+                    <span style="width: 32px; height: 32px; border-radius: 8px; background: #FFFFFF; color: #43413C; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; border: 1px solid #DFDBD3"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></span>
+                    <span style="flex: 1; display: flex; flex-direction: column; gap: 2px">
+                      <span style="font-size: 14px; font-weight: 700">{{l.name}}</span>
+                      <span style="font-size: 12px; color: #5B5852">{{l.desc}}</span>
+                    </span>
+                    <span style="font-size: 12px; font-weight: 700; color: #5B5852; white-space: nowrap">Sempre ativo</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- CONHECIMENTO -->
+          <sc-if value="{{tabConhecimento}}" hint-placeholder-val="{{ false }}">
+            <div role="tabpanel" aria-label="Conhecimento" style="padding: 24px; display: flex; flex-direction: column; gap: 20px">
+              <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px">
+                <div style="display: flex; flex-direction: column; gap: 2px; margin-right: auto">
+                  <h3 style="margin: 0; font-size: 16px; font-weight: 700">Perguntas frequentes</h3>
+                  <span style="font-size: 13px; color: #77736B">{{faqSummary}}</span>
+                </div>
+                <label style="display: flex; align-items: center; gap: 8px; flex: 0 1 240px; min-width: 180px; height: 40px; padding: 0 12px; box-sizing: border-box; border: 1px solid #DFDBD3; border-radius: 8px; background: #FAF8F4; color: #77736B">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>
+                  <span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Buscar perguntas</span>
+                  <input type="search" placeholder="Buscar pergunta" style="flex: 1; min-width: 0; border: 0; background: transparent; font: 500 14px Manrope, sans-serif; color: #1E1D1B; outline: none">
+                </label>
+                <button type="button" style="display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px; border: 0; border-radius: 8px; background: #8F6425; color: #FFFFFF; font: 700 14px Manrope, sans-serif; cursor: pointer">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>
+                  Adicionar pergunta
+                </button>
+              </div>
+              <ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px">
+                <sc-for list="{{faqs}}" as="q" hint-placeholder-count="6">
+                  <li style="display: flex; gap: 14px; padding: 16px; border: 1px solid #DFDBD3; border-radius: 12px; background: {{q.bg}}">
+                    <span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px">
+                      <span style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px">
+                        <span style="font-size: 14px; font-weight: 800; color: #1E1D1B">{{q.q}}</span>
+                        <sc-if value="{{q.pending}}" hint-placeholder-val="{{ false }}"><span style="display: inline-flex; align-items: center; height: 22px; padding: 0 8px; border-radius: 999px; background: #FBF0DA; color: #9A5F0E; font-size: 11px; font-weight: 700">A confirmar com a clínica</span></sc-if>
+                        <sc-if value="{{q.confirmed}}" hint-placeholder-val="{{ true }}"><span style="display: inline-flex; align-items: center; gap: 4px; height: 22px; padding: 0 8px; border-radius: 999px; background: #E6F2EB; color: #2E7351; font-size: 11px; font-weight: 700"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>Informação confirmada</span></sc-if>
+                      </span>
+                      <span style="font-size: 13px; line-height: 1.55; color: #43413C">{{q.a}}</span>
+                      <span style="font-size: 12px; color: #77736B">{{q.meta}}</span>
+                    </span>
+                    <span style="display: flex; flex-direction: column; align-items: flex-end; gap: 8px; flex-shrink: 0">
+                      <button type="button" role="switch" aria-checked="{{q.activeStr}}" aria-label="{{q.switchLabel}}" style="position: relative; width: 40px; height: 22px; border: 0; padding: 0; border-radius: 999px; background: {{q.track}}; cursor: pointer">
+                        <span style="position: absolute; top: 2px; left: {{q.knob}}; width: 18px; height: 18px; border-radius: 999px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(30,29,27,.25)"></span>
+                      </button>
+                      <button type="button" aria-label="{{q.editLabel}}" style="width: 36px; height: 36px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; color: #43413C; display: inline-flex; align-items: center; justify-content: center; cursor: pointer"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"></path><path d="m15 5 4 4"></path></svg></button>
+                    </span>
+                  </li>
+                </sc-for>
+              </ul>
+            </div>
+          </sc-if>
+
+          <!-- HORÁRIOS -->
+          <sc-if value="{{tabHorarios}}" hint-placeholder-val="{{ false }}">
+            <div role="tabpanel" aria-label="Horários" style="padding: 24px; display: flex; flex-direction: column; gap: 20px">
+              <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px">
+                <div style="display: flex; flex-direction: column; gap: 2px; margin-right: auto">
+                  <h3 style="margin: 0; font-size: 16px; font-weight: 700">Horários de atendimento</h3>
+                  <span style="font-size: 13px; color: #77736B">Quando o assistente responde e quando a equipe está disponível.</span>
+                </div>
+                <div role="group" aria-label="Modo de atendimento da IA" style="display: inline-flex; padding: 3px; border-radius: 10px; background: #F5F3EF; gap: 2px">
+                  <button type="button" aria-pressed="true" style="height: 34px; padding: 0 12px; border: 0; border-radius: 8px; background: #FFFFFF; color: #1E1D1B; box-shadow: 0 1px 2px rgba(30,29,27,.08); font: 700 12px Manrope, sans-serif; cursor: pointer">IA 24 horas</button>
+                  <button type="button" aria-pressed="false" style="height: 34px; padding: 0 12px; border: 0; border-radius: 8px; background: transparent; color: #5B5852; font: 700 12px Manrope, sans-serif; cursor: pointer">Só horário comercial</button>
+                </div>
+              </div>
+              <div style="overflow-x: auto; border: 1px solid #DFDBD3; border-radius: 12px">
+                <table style="width: 100%; min-width: 560px; border-collapse: collapse; font-size: 14px">
+                  <thead>
+                    <tr style="background: #F5F3EF">
+                      <th scope="col" style="text-align: left; padding: 10px 16px; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #5B5852">Dia</th>
+                      <th scope="col" style="text-align: left; padding: 10px 12px; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #5B5852">Assistente IA</th>
+                      <th scope="col" style="text-align: left; padding: 10px 12px; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #5B5852">Equipe (horário comercial)</th>
+                      <th scope="col" style="text-align: left; padding: 10px 16px; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #5B5852">Fora do horário</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <sc-for list="{{hours}}" as="h" hint-placeholder-count="7">
+                      <tr style="border-top: 1px solid #ECE9E3; height: 52px">
+                        <th scope="row" style="text-align: left; padding: 0 16px; font-weight: 700">{{h.day}}</th>
+                        <td style="padding: 0 12px"><span style="display: inline-flex; align-items: center; gap: 6px; height: 24px; padding: 0 10px; border-radius: 999px; background: #E3F0EE; color: #2F6F68; font-size: 12px; font-weight: 700"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 8V4H8"></path><rect width="16" height="12" x="4" y="8" rx="2"></rect><path d="M9 13v2"></path><path d="M15 13v2"></path></svg>24 horas</span></td>
+                        <td style="padding: 0 12px; color: {{h.teamColor}}; font-weight: 600; font-variant-numeric: tabular-nums">{{h.team}}</td>
+                        <td style="padding: 0 16px; font-size: 13px; color: #5B5852">{{h.after}}</td>
+                      </tr>
+                    </sc-for>
+                  </tbody>
+                </table>
+              </div>
+              <span style="font-size: 12px; color: #77736B">Horário comercial de exemplo — a confirmar com a clínica.</span>
+              <label style="display: flex; flex-direction: column; gap: 6px">
+                <span style="font-size: 13px; font-weight: 600; color: #2E2C29">Mensagem fora do horário</span>
+                <textarea rows="4" style="width: 100%; box-sizing: border-box; resize: vertical; padding: 12px 14px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 500 14px/1.55 Manrope, sans-serif; color: #1E1D1B">Olá, {primeiro_nome}! Nossa recepção está fora do horário agora, mas eu já posso agendar, confirmar ou reagendar sua consulta por aqui. Assuntos que precisam da equipe serão respondidos a partir das 08:00 do próximo dia útil.</textarea>
+              </label>
+              <label style="display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; color: #2E2C29">
+                <input type="checkbox" checked style="width: 18px; height: 18px; margin: 0; accent-color: #8F6425">
+                Considerar feriados municipais de Ronda Alta como fora do horário
+              </label>
+            </div>
+          </sc-if>
+
+          <!-- TRANSFERÊNCIA -->
+          <sc-if value="{{tabTransferencia}}" hint-placeholder-val="{{ false }}">
+            <div role="tabpanel" aria-label="Transferência humana" style="padding: 24px; display: flex; flex-direction: column; gap: 20px">
+              <div style="display: flex; flex-direction: column; gap: 2px">
+                <h3 style="margin: 0; font-size: 16px; font-weight: 700">Regras de transferência</h3>
+                <span style="font-size: 13px; color: #77736B">Quando o assistente passa a conversa para uma pessoa da equipe.</span>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 10px">
+                <sc-for list="{{rules}}" as="r" hint-placeholder-count="5">
+                  <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 14px; padding: 16px; border: 1px solid #DFDBD3; border-radius: 12px; background: #FFFFFF">
+                    <span style="width: 36px; height: 36px; border-radius: 10px; background: {{r.iconBg}}; color: {{r.iconFg}}; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m16 3 4 4-4 4"></path><path d="M20 7H4"></path><path d="m8 21-4-4 4-4"></path><path d="M4 17h16"></path></svg></span>
+                    <span style="flex: 1 1 220px; min-width: 0; display: flex; flex-direction: column; gap: 6px">
+                      <span style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px"><span style="font-size: 14px; font-weight: 800">{{r.name}}</span><sc-if value="{{r.priority}}" hint-placeholder-val="{{ false }}"><span style="display: inline-flex; align-items: center; height: 22px; padding: 0 8px; border-radius: 999px; background: #FAE7E4; color: #A93B30; font-size: 11px; font-weight: 700">Prioridade alta</span></sc-if></span>
+                      <span style="font-size: 13px; color: #5B5852">{{r.desc}}</span>
+                      <sc-if value="{{r.hasKeywords}}" hint-placeholder-val="{{ false }}">
+                        <span style="display: flex; flex-wrap: wrap; gap: 6px">
+                          <sc-for list="{{r.keywords}}" as="k" hint-placeholder-count="3"><span style="display: inline-flex; align-items: center; height: 24px; padding: 0 10px; border-radius: 999px; background: #F5F3EF; border: 1px solid #DFDBD3; color: #2E2C29; font-size: 12px; font-weight: 700">{{k}}</span></sc-for>
+                          <button type="button" style="display: inline-flex; align-items: center; gap: 4px; height: 24px; padding: 0 10px; border-radius: 999px; border: 1px dashed #C7C2B9; background: #FFFFFF; color: #5B5852; font: 700 12px Manrope, sans-serif; cursor: pointer">+ palavra</button>
+                        </span>
+                      </sc-if>
+                    </span>
+                    <span style="display: flex; flex-direction: column; gap: 2px; min-width: 150px">
+                      <span style="font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #77736B">Destino</span>
+                      <span style="font-size: 13px; font-weight: 700">{{r.dest}}</span>
+                    </span>
+                    <span style="display: flex; flex-direction: column; gap: 2px; min-width: 90px">
+                      <span style="font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #77736B">SLA</span>
+                      <span style="display: inline-flex; align-items: center; gap: 4px; font-size: 13px; font-weight: 700"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#77736B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>{{r.sla}}</span>
+                    </span>
+                    <button type="button" role="switch" aria-checked="true" aria-label="{{r.switchLabel}}" style="position: relative; width: 40px; height: 22px; border: 0; padding: 0; border-radius: 999px; background: #8F6425; cursor: pointer; flex-shrink: 0">
+                      <span style="position: absolute; top: 2px; left: 20px; width: 18px; height: 18px; border-radius: 999px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(30,29,27,.25)"></span>
+                    </button>
+                  </div>
+                </sc-for>
+              </div>
+
+              <div style="display: flex; flex-direction: column; gap: 12px; padding: 20px; border-radius: 12px; background: #FAF8F4; border: 1px solid #DFDBD3">
+                <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px">
+                  <h3 style="margin: 0; margin-right: auto; font-size: 15px; font-weight: 700">Fila de transbordo agora</h3>
+                  <a href="WhatsApp.dc.html" style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; color: #8F6425; text-decoration: none">Abrir Central WhatsApp<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></a>
+                </div>
+                <sc-for list="{{queue}}" as="w" hint-placeholder-count="3">
+                  <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 10px; background: #FFFFFF; border: 1px solid #ECE9E3">
+                    <span style="width: 34px; height: 34px; border-radius: 999px; background: #F5F3EF; color: #43413C; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; flex-shrink: 0">{{w.initials}}</span>
+                    <span style="flex: 1 1 160px; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 14px; font-weight: 700">{{w.name}}</span><span style="font-size: 12px; color: #5B5852">{{w.reason}} · {{w.dest}}</span></span>
+                    <span style="display: inline-flex; align-items: center; gap: 6px; height: 24px; padding: 0 10px; border-radius: 999px; background: {{w.bg}}; color: {{w.fg}}; font-size: 12px; font-weight: 700">{{w.tag}}</span>
+                    <span style="font-size: 12px; font-weight: 700; color: {{w.waitColor}}; font-variant-numeric: tabular-nums">{{w.wait}}</span>
+                  </div>
+                </sc-for>
+                <label style="display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 600; color: #2E2C29">
+                  <input type="checkbox" checked style="width: 18px; height: 18px; margin: 0; accent-color: #8F6425">
+                  Se ninguém assumir em 15 minutos, notificar a administradora e avisar o paciente sobre a espera
+                </label>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- TESTES -->
+          <sc-if value="{{tabTestes}}" hint-placeholder-val="{{ false }}">
+            <div role="tabpanel" aria-label="Ambiente de testes" style="padding: 24px; display: flex; flex-direction: column; gap: 20px">
+              <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px">
+                <div style="display: flex; flex-direction: column; gap: 2px; margin-right: auto">
+                  <h3 style="margin: 0; font-size: 16px; font-weight: 700">Ambiente de testes</h3>
+                  <span style="font-size: 13px; color: #77736B">Converse com o assistente usando a configuração atual.</span>
+                </div>
+                <span style="display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 10px; border-radius: 999px; background: #FBF0DA; color: #9A5F0E; font-size: 12px; font-weight: 700">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 2v7.31"></path><path d="M14 9.3V1.99"></path><path d="M8.5 2h7"></path><path d="M14 9.3a6.5 6.5 0 1 1-4 0"></path></svg>
+                  Sandbox — nenhuma mensagem é enviada
+                </span>
+                <button type="button" onClick="{{resetTest}}" style="display: inline-flex; align-items: center; gap: 8px; height: 36px; padding: 0 12px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; color: #2E2C29; font: 700 13px Manrope, sans-serif; cursor: pointer">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+                  Reiniciar conversa de teste
+                </button>
+              </div>
+              <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: stretch">
+                <div style="flex: 3 1 300px; min-width: 0; display: flex; flex-direction: column; border: 1px solid #DFDBD3; border-radius: 12px; overflow: hidden">
+                  <div role="log" aria-label="Conversa de teste" style="flex: 1; min-height: 340px; background: #F5F3EF; padding: 16px; display: flex; flex-direction: column; gap: 10px">
+                    <sc-for list="{{testMessages}}" as="m" hint-placeholder-count="4">
+                      <div style="align-self: {{m.align}}; max-width: 85%; background: {{m.bg}}; border: 1px solid {{m.border}}; border-radius: {{m.radius}}; padding: 9px 12px; display: flex; flex-direction: column; gap: 4px">
+                        <sc-if value="{{m.isAI}}" hint-placeholder-val="{{ false }}"><span style="font-size: 11px; font-weight: 700; color: #2F6F68">Assistente Humanittá · IA</span></sc-if>
+                        <span style="font-size: 13px; line-height: 1.5; color: #1E1D1B">{{m.text}}</span>
+                        <span style="align-self: flex-end; font-size: 11px; font-weight: 600; color: #5B5852">{{m.time}}</span>
+                      </div>
+                    </sc-for>
+                  </div>
+                  <div style="display: flex; gap: 8px; padding: 10px; background: #FFFFFF; border-top: 1px solid #DFDBD3">
+                    <label style="flex: 1; min-width: 0; display: flex">
+                      <span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Mensagem de teste</span>
+                      <input type="text" placeholder="Escreva como se fosse um paciente…" style="flex: 1; min-width: 0; height: 40px; padding: 0 12px; box-sizing: border-box; border: 1px solid #DFDBD3; border-radius: 8px; background: #FAF8F4; font: 500 14px Manrope, sans-serif; color: #1E1D1B">
+                    </label>
+                    <button type="button" onClick="{{runTest}}" aria-label="Enviar mensagem de teste" style="width: 40px; height: 40px; border: 0; border-radius: 8px; background: #8F6425; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"></path><path d="m21.854 2.147-10.94 10.939"></path></svg>
+                    </button>
+                  </div>
+                </div>
+
+                <div style="flex: 2 1 240px; min-width: 0; border: 1px solid #DFDBD3; border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 14px; background: #FFFFFF">
+                  <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #77736B">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2F6F68" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path></svg>
+                    Raciocínio e ações
+                  </span>
+                  <sc-if value="{{testRan}}" hint-placeholder-val="{{ true }}">
+                    <div style="display: flex; flex-direction: column; gap: 14px">
+                      <div style="display: flex; flex-direction: column; gap: 6px">
+                        <span style="font-size: 12px; font-weight: 700; color: #5B5852">Intenção detectada</span>
+                        <span style="font-size: 15px; font-weight: 800">Agendar consulta</span>
+                        <div style="display: flex; align-items: center; gap: 8px">
+                          <div role="img" aria-label="Confiança de 94%" style="flex: 1; height: 6px; border-radius: 999px; background: #ECE9E3; overflow: hidden"><div style="width: 94%; height: 100%; border-radius: 999px; background: #2F6F68"></div></div>
+                          <span style="font-size: 12px; font-weight: 800; color: #2F6F68; font-variant-numeric: tabular-nums">94%</span>
+                        </div>
+                      </div>
+                      <div style="display: flex; flex-direction: column; gap: 6px">
+                        <span style="font-size: 12px; font-weight: 700; color: #5B5852">Informações extraídas</span>
+                        <div style="display: flex; flex-wrap: wrap; gap: 6px">
+                          <span style="display: inline-flex; align-items: center; height: 24px; padding: 0 10px; border-radius: 6px; background: #F5F3EF; font-size: 12px; font-weight: 700; color: #2E2C29">especialidade: Fisioterapia</span>
+                          <span style="display: inline-flex; align-items: center; height: 24px; padding: 0 10px; border-radius: 6px; background: #F5F3EF; font-size: 12px; font-weight: 700; color: #2E2C29">data: qui, 22/10</span>
+                          <span style="display: inline-flex; align-items: center; height: 24px; padding: 0 10px; border-radius: 6px; background: #F5F3EF; font-size: 12px; font-weight: 700; color: #2E2C29">período: manhã</span>
+                        </div>
+                      </div>
+                      <ol style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px">
+                        <sc-for list="{{testSteps}}" as="s" hint-placeholder-count="4">
+                          <li style="display: flex; align-items: flex-start; gap: 10px">
+                            <span style="width: 22px; height: 22px; border-radius: 999px; background: {{s.bg}}; color: {{s.fg}}; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg></span>
+                            <span style="display: flex; flex-direction: column; gap: 1px"><span style="font-size: 13px; font-weight: 700">{{s.title}}</span><span style="font-size: 12px; color: #5B5852">{{s.detail}}</span></span>
+                          </li>
+                        </sc-for>
+                      </ol>
+                      <div style="display: flex; justify-content: space-between; padding-top: 10px; border-top: 1px solid #ECE9E3; font-size: 12px; font-weight: 600; color: #5B5852"><span>Tempo de resposta</span><span style="font-weight: 800; color: #1E1D1B">1,8 s</span></div>
+                    </div>
+                  </sc-if>
+                  <sc-if value="{{testIdle}}" hint-placeholder-val="{{ false }}">
+                    <div style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 24px 8px; text-align: center">
+                      <span style="width: 48px; height: 48px; border-radius: 999px; border: 1.5px solid #DDB872; color: #8F6425; display: inline-flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 8V4H8"></path><rect width="16" height="12" x="4" y="8" rx="2"></rect><path d="M9 13v2"></path><path d="M15 13v2"></path></svg></span>
+                      <span style="font-family: 'Cormorant Garamond', Georgia, serif; font-size: 20px; font-weight: 600">Aguardando mensagem</span>
+                      <span style="font-size: 13px; color: #5B5852">Envie uma mensagem de teste para ver a intenção detectada e as ações executadas.</span>
+                    </div>
+                  </sc-if>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+
+          <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 16px 24px; border-top: 1px solid #ECE9E3; background: #FAF8F4; border-radius: 0 0 12px 12px">
+            <span style="display: inline-flex; align-items: center; gap: 6px; margin-right: auto; font-size: 12px; font-weight: 600; color: #5B5852">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>
+              Última alteração por Camila S. · hoje, 08:47
+            </span>
+            <button type="button" style="height: 40px; padding: 0 16px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; color: #2E2C29; font: 700 14px Manrope, sans-serif; cursor: pointer">Descartar</button>
+            <button type="button" style="height: 40px; padding: 0 18px; border: 0; border-radius: 8px; background: #8F6425; color: #FFFFFF; font: 700 14px Manrope, sans-serif; cursor: pointer">Salvar alterações</button>
+          </div>
+        </div>
+
+        <!-- Prévia ao vivo -->
+        <aside aria-label="Prévia ao vivo" style="flex: 1 1 340px; min-width: 0; position: sticky; top: 24px; display: flex; flex-direction: column; gap: 12px">
+          <div style="display: flex; align-items: center; gap: 8px">
+            <span style="font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #77736B; margin-right: auto">Prévia ao vivo</span>
+            <span style="font-size: 12px; font-weight: 600; color: #5B5852">Personalidade: {{personaName}}</span>
+          </div>
+          <div style="background: #FFFFFF; border: 1px solid #DFDBD3; border-radius: 16px; box-shadow: 0 6px 20px rgba(30,29,27,.07); overflow: hidden; display: flex; flex-direction: column">
+            <div style="display: flex; align-items: center; gap: 10px; padding: 12px 16px; background: #1E1D1B; color: #F3EFE8">
+              <span style="width: 36px; height: 36px; border-radius: 999px; border: 1.5px solid #CC9B47; display: inline-flex; align-items: center; justify-content: center; color: #DDB872; box-sizing: border-box"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 8V4H8"></path><rect width="16" height="12" x="4" y="8" rx="2"></rect><path d="M2 14h2"></path><path d="M20 14h2"></path><path d="M15 13v2"></path><path d="M9 13v2"></path></svg></span>
+              <span style="display: flex; flex-direction: column; margin-right: auto"><span style="font-size: 14px; font-weight: 700">Humanittá Saúde Integral</span><span style="font-size: 12px; color: #B9B3A8">{{previewStatus}}</span></span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#B9B3A8" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+            </div>
+            <div style="background: #F5F3EF; padding: 16px; min-height: 380px; display: flex; flex-direction: column; gap: 10px">
+              <span style="align-self: center; height: 24px; padding: 0 10px; border-radius: 999px; background: #FFFFFF; border: 1px solid #DFDBD3; display: inline-flex; align-items: center; font-size: 11px; font-weight: 700; color: #5B5852">Hoje</span>
+              <div style="align-self: flex-start; max-width: 85%; background: #FFFFFF; border: 1px solid #ECE9E3; border-radius: 12px 12px 12px 4px; padding: 9px 12px; display: flex; flex-direction: column; gap: 4px">
+                <span style="font-size: 13px; line-height: 1.5">Oi, boa tarde! Queria marcar um horário.</span>
+                <span style="align-self: flex-end; font-size: 11px; font-weight: 600; color: #77736B">14:02</span>
+              </div>
+              <sc-if value="{{active}}" hint-placeholder-val="{{ true }}">
+                <div style="align-self: flex-end; max-width: 88%; background: #E3F0EE; border-radius: 12px 12px 4px 12px; padding: 9px 12px; display: flex; flex-direction: column; gap: 6px">
+                  <span style="font-size: 11px; font-weight: 700; color: #2F6F68">Assistente Humanittá · IA</span>
+                  <span style="font-size: 13px; line-height: 1.55; color: #1E1D1B">{{greetingPreview}}</span>
+                  <span style="font-size: 12px; font-weight: 600; color: #43413C">— Equipe Humanittá Saúde Integral</span>
+                  <span style="align-self: flex-end; display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 600; color: #43413C">14:02<span role="img" aria-label="Lida" style="display: inline-flex; color: #2D5F88"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 7 17l-5-5"></path><path d="m22 10-7.5 7.5L13 16"></path></svg></span></span>
+                </div>
+                <div style="align-self: flex-end; display: flex; flex-direction: column; gap: 6px; width: min(88%, 280px)">
+                  <span style="height: 36px; border-radius: 8px; background: #FFFFFF; border: 1px solid #DFDBD3; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #2F6F68">Agendar consulta</span>
+                  <span style="height: 36px; border-radius: 8px; background: #FFFFFF; border: 1px solid #DFDBD3; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #2F6F68">Endereço e horários</span>
+                  <span style="height: 36px; border-radius: 8px; background: #FFFFFF; border: 1px solid #DFDBD3; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #2F6F68">Falar com a recepção</span>
+                </div>
+              </sc-if>
+              <sc-if value="{{paused}}" hint-placeholder-val="{{ false }}">
+                <span style="align-self: center; display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 999px; background: #ECE9E3; color: #43413C; font-size: 12px; font-weight: 600; text-align: center">Assistente pausado · mensagem encaminhada à recepção</span>
+              </sc-if>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px; padding: 10px 12px; border-top: 1px solid #DFDBD3">
+              <span style="flex: 1; height: 36px; border-radius: 999px; background: #F5F3EF; display: flex; align-items: center; padding: 0 14px; font-size: 13px; color: #77736B">Mensagem</span>
+              <span aria-hidden="true" style="width: 36px; height: 36px; border-radius: 999px; background: #8F6425; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"></path><path d="m21.854 2.147-10.94 10.939"></path></svg></span>
+            </div>
+          </div>
+          <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #5B5852">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
+            A prévia usa “Carla” como paciente de exemplo e atualiza conforme você edita.
+          </span>
+        </aside>
+      </section>
+    </main>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1700}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { tab: 'identidade', active: true, persona: 'acolhedora', tone: 3, emoji: false, testReset: false };
+  }
+  renderVals() {
+    const tab = this.state?.tab ?? 'identidade';
+    const active = this.state?.active ?? true;
+    const persona = this.state?.persona ?? 'acolhedora';
+    const tone = this.state?.tone ?? 3;
+    const emoji = this.state?.emoji ?? false;
+    const testReset = this.state?.testReset ?? false;
+
+    const tabDefs = [['identidade', 'Identidade'], ['comportamento', 'Comportamento'], ['conhecimento', 'Conhecimento (FAQ)'], ['horarios', 'Horários'], ['transferencia', 'Transferência humana'], ['testes', 'Ambiente de testes']];
+    const tabs = tabDefs.map(([id, label]) => {
+      const sel = tab === id;
+      return { label, selected: sel ? 'true' : 'false', line: sel ? '#B5832F' : 'transparent', fg: sel ? '#1E1D1B' : '#5B5852', weight: sel ? 800 : 600, onClick: () => this.setState({ tab: id }) };
+    });
+
+    const P = {
+      acolhedora: {
+        name: 'Acolhedora', desc: 'Calorosa e paciente, explica com calma e faz o paciente se sentir bem-vindo.', sample: '“Que bom ter você por aqui!”',
+        tpl: 'Olá, {nome_paciente}! Que bom ter você por aqui. Sou a assistente virtual da Humanittá Saúde Integral e posso ajudar a agendar, confirmar ou reagendar sua consulta. Como posso te ajudar hoje?'
+      },
+      objetiva: {
+        name: 'Objetiva', desc: 'Direta e eficiente, vai ao ponto com mensagens curtas.', sample: '“Posso agendar agora. Qual especialidade?”',
+        tpl: 'Olá, {nome_paciente}. Sou a assistente virtual da Humanittá. Posso agendar, confirmar ou reagendar consultas. O que você precisa?'
+      },
+      formal: {
+        name: 'Formal', desc: 'Cordial e respeitosa, com linguagem mais cerimoniosa.', sample: '“Estou à disposição para auxiliá-la.”',
+        tpl: 'Boa tarde, {nome_paciente}. Aqui é a assistente virtual da Humanittá Saúde Integral. Estou à disposição para agendamentos, confirmações e informações sobre a clínica. Em que posso ajudar?'
+      }
+    };
+    const personas = Object.keys(P).map(id => {
+      const sel = persona === id;
+      return {
+        name: P[id].name, desc: P[id].desc, sample: P[id].sample, pressed: sel ? 'true' : 'false',
+        border: sel ? '#B5832F' : '#DFDBD3', bg: sel ? '#FBF6EC' : '#FFFFFF', ring: sel ? '0 0 0 3px rgba(181,131,47,.2)' : 'none',
+        radio: sel ? '#8F6425' : '#C7C2B9', dot: sel ? '#8F6425' : 'transparent',
+        onClick: () => this.setState({ persona: id })
+      };
+    });
+    const tones = ['Formal', 'Cordial', 'Neutro', 'Próximo', 'Descontraído'].map((label, i) => ({
+      label, checked: tone === i ? 'true' : 'false',
+      bg: tone === i ? '#FFFFFF' : 'transparent', fg: tone === i ? '#1E1D1B' : '#5B5852',
+      shadow: tone === i ? '0 1px 2px rgba(30,29,27,.08)' : 'none',
+      onClick: () => this.setState({ tone: i })
+    }));
+
+    const caps = [
+      ['Agendar consultas', 'Consulta a agenda em tempo real e reserva o horário escolhido pelo paciente.', true, false],
+      ['Reagendar consultas', 'Oferece novos horários com o mesmo profissional e libera o horário anterior.', true, false],
+      ['Cancelar consultas', 'Cancela a pedido do paciente e oferece reagendamento.', true, false],
+      ['Confirmar presença', 'Envia confirmação 24 horas antes e registra a resposta na agenda.', true, false],
+      ['Informar endereço e horários', 'Responde com endereço, horários de funcionamento e como chegar.', true, false],
+      ['Enviar valores de procedimentos', 'Desativado até a clínica validar a tabela oficial de valores.', false, true]
+    ];
+
+    const faqRaw = [
+      ['Qual é o endereço da clínica?', 'Estamos na R. Rio Branco, 185 – Centro, Ronda Alta – RS, CEP 99670-000.', true, 'confirmed', 'Usada 58 vezes em outubro'],
+      ['Quais especialidades vocês atendem?', 'Odontologia, Fonoaudiologia, Estética Avançada, Psicologia, Quiropraxia, Podologia, Fisioterapia e Nutrição.', true, 'confirmed', 'Usada 41 vezes em outubro'],
+      ['Como faço para agendar?', 'Por aqui mesmo: eu verifico os horários livres do profissional e reservo para você na hora. Se preferir, a recepção também atende neste número.', true, 'none', 'Usada 112 vezes em outubro'],
+      ['Qual é o WhatsApp oficial da clínica?', 'O número oficial é (54) 99292-0770.', true, 'confirmed', 'Usada 9 vezes em outubro'],
+      ['Quais são as formas de pagamento?', '[A confirmar com a clínica] Enquanto isso, o assistente informa que a recepção confirma as formas de pagamento.', false, 'pending', 'Inativa até confirmação'],
+      ['Atendem crianças?', 'Sim, várias especialidades atendem o público infantil. Para agendar, informe o nome e a idade da criança e o nome do responsável.', true, 'none', 'Usada 17 vezes em outubro']
+    ];
+    const faqs = faqRaw.map(([q, a, on, kind, meta]) => ({
+      q, a, meta, pending: kind === 'pending', confirmed: kind === 'confirmed',
+      activeStr: on ? 'true' : 'false', track: on ? '#8F6425' : '#C7C2B9', knob: on ? '20px' : '2px',
+      bg: on ? '#FFFFFF' : '#FAF8F4',
+      switchLabel: 'Pergunta ativa: ' + q, editLabel: 'Editar pergunta: ' + q
+    }));
+    const activeFaqs = faqRaw.filter(f => f[2]).length;
+
+    const hours = [
+      ['Segunda', '08:00 – 18:00'], ['Terça', '08:00 – 18:00'], ['Quarta', '08:00 – 18:00'], ['Quinta', '08:00 – 18:00'],
+      ['Sexta', '08:00 – 18:00'], ['Sábado', '08:00 – 12:00'], ['Domingo', 'Fechado']
+    ].map(([day, team]) => ({ day, team, teamColor: team === 'Fechado' ? '#77736B' : '#1E1D1B', after: team === 'Fechado' ? 'IA responde e agenda; equipe retoma na segunda' : 'IA responde e envia mensagem fora do horário' }));
+
+    const rules = [
+      { name: 'Paciente pede para falar com uma pessoa', desc: 'Expressões como “quero falar com alguém”, “atendente”, “recepção”.', dest: 'Recepção', sla: '5 min', priority: false, keywords: [], iconBg: '#FBF6EC', iconFg: '#8F6425' },
+      { name: 'Palavras-chave sensíveis', desc: 'Transfere na hora e marca a conversa como Urgente.', dest: 'Recepção', sla: '2 min', priority: true, keywords: ['urgência', 'dor', 'reclamação'], iconBg: '#FAE7E4', iconFg: '#A93B30' },
+      { name: 'Não entendeu após 2 tentativas', desc: 'Depois de duas respostas sem compreender o pedido do paciente.', dest: 'Recepção', sla: '10 min', priority: false, keywords: [], iconBg: '#FBF6EC', iconFg: '#8F6425' },
+      { name: 'Assuntos clínicos', desc: 'Sintomas, medicação, resultados de exames ou dúvidas sobre tratamento.', dest: 'Profissional responsável', sla: 'Mesmo dia', priority: false, keywords: [], iconBg: '#E5EEF6', iconFg: '#2D5F88' },
+      { name: 'Pagamentos e valores', desc: 'Cobranças, segunda via, convênios e orçamentos.', dest: 'Financeiro', sla: '30 min', priority: false, keywords: [], iconBg: '#E6F2EB', iconFg: '#2E7351' }
+    ].map(r => ({ ...r, hasKeywords: r.keywords.length > 0, switchLabel: 'Regra ativa: ' + r.name }));
+
+    const queue = [
+      ['Marcos Webber', 'Palavra-chave “dor”', 'Recepção', 'Urgente', '#A93B30', '#FAE7E4', 'há 6 min', '#A93B30'],
+      ['Sofia Cavalheiro', 'Pediu orçamento', 'Financeiro', 'Orçamento', '#8F6425', '#FBF6EC', 'há 3 min', '#5B5852'],
+      ['Beatriz Fiorentin', 'Pediu para falar com alguém', 'Recepção', 'Agendamento', '#2D5F88', '#E5EEF6', 'há 1 min', '#5B5852']
+    ].map(([name, reason, dest, tag, fg, bg, wait, waitColor]) => ({ name, reason, dest, tag, fg, bg, wait, waitColor, initials: name.split(' ').map(p => p[0]).slice(0, 2).join('') }));
+
+    const pat = { align: 'flex-start', bg: '#FFFFFF', border: '#ECE9E3', radius: '12px 12px 12px 4px', isAI: false };
+    const ia = { align: 'flex-end', bg: '#E3F0EE', border: '#E3F0EE', radius: '12px 12px 4px 12px', isAI: true };
+    const greet = P[persona].tpl.replace('{nome_paciente}', 'Carla');
+    const fullTest = [
+      { ...pat, text: 'Oi, queria marcar fisioterapia para quinta de manhã', time: '14:10' },
+      { ...ia, text: 'Claro, Carla! Na quinta, 22/10, o Dr. Gustavo Pagnussat tem horário às 08:30 e às 10:00. Qual prefere?', time: '14:10' },
+      { ...pat, text: '10h', time: '14:11' },
+      { ...ia, text: 'Reservado: quinta, 22/10, às 10:00 com o Dr. Gustavo Pagnussat (Fisioterapia). Quer que eu envie um lembrete na véspera?', time: '14:11' }
+    ];
+    const testMessages = testReset ? [{ ...ia, text: greet, time: 'agora' }] : fullTest;
+
+    return {
+      active, paused: !active, activeStr: active ? 'true' : 'false',
+      activeTrack: active ? '#2F6F68' : '#C7C2B9', activeKnob: active ? '22px' : '2px',
+      statusLabel: active ? 'IA ativa' : 'IA pausada',
+      statusBg: active ? '#E3F0EE' : '#FBF0DA', statusFg: active ? '#2F6F68' : '#9A5F0E',
+      statusDetail: active ? 'respondendo agora, 24 horas' : 'pausada por Camila S.',
+      toggleActive: () => this.setState({ active: !active }),
+      previewStatus: active ? 'online · responde na hora' : 'resposta da equipe em horário comercial',
+      metrics: [
+        { label: 'Conversas atendidas', value: '412', delta: '+18%', note: 'vs. setembro' },
+        { label: 'Resolvidas sem humano', value: '78%', delta: '+6 p.p.', note: 'vs. setembro' },
+        { label: 'Agendamentos feitos', value: '136', delta: '+22', note: 'vs. setembro' },
+        { label: 'Tempo médio de resposta', value: '8 s', delta: '-3 s', note: 'mais rápido' }
+      ],
+      tabs,
+      tabIdentidade: tab === 'identidade', tabComportamento: tab === 'comportamento', tabConhecimento: tab === 'conhecimento',
+      tabHorarios: tab === 'horarios', tabTransferencia: tab === 'transferencia', tabTestes: tab === 'testes',
+      personas, tones, personaName: P[persona].name,
+      emojiStr: emoji ? 'true' : 'false', emojiTrack: emoji ? '#8F6425' : '#C7C2B9', emojiKnob: emoji ? '20px' : '2px',
+      emojiLabel: emoji ? 'Ativado · no máximo 1 por mensagem' : 'Desativado',
+      toggleEmoji: () => this.setState({ emoji: !emoji }),
+      greetingTemplate: P[persona].tpl,
+      greetingPreview: greet,
+      variables: ['{nome_paciente}', '{primeiro_nome}', '{nome_clinica}', '{proxima_consulta}'],
+      capabilities: caps.map(([name, desc, on, pending]) => ({ name, desc, on, off: !on, pending })),
+      limits: [
+        { name: 'Nunca dar orientação clínica ou diagnóstico', desc: 'Sintomas e dúvidas de saúde são sempre encaminhados ao profissional.' },
+        { name: 'Nunca compartilhar dados de outros pacientes', desc: 'Informações só são tratadas com o próprio paciente ou responsável.' },
+        { name: 'Sempre se identificar como assistente virtual', desc: 'O paciente sabe que está falando com uma IA desde a primeira mensagem.' }
+      ],
+      faqs, faqSummary: faqRaw.length + ' perguntas · ' + activeFaqs + ' ativas',
+      hours, rules, queue,
+      testMessages, testRan: !testReset, testIdle: testReset,
+      testSteps: [
+        { title: 'Consultou agenda', detail: 'Fisioterapia · qui, 22/10 · 2 horários livres', bg: '#E6F2EB', fg: '#2E7351' },
+        { title: 'Ofereceu horários', detail: 'Priorizou o profissional da especialidade', bg: '#E6F2EB', fg: '#2E7351' },
+        { title: 'Criou pré-reserva', detail: '22/10 · 10:00 · simulada no sandbox', bg: '#E6F2EB', fg: '#2E7351' },
+        { title: 'Regras de transferência', detail: 'Nenhuma acionada', bg: '#ECE9E3', fg: '#5B5852' }
+      ],
+      resetTest: () => this.setState({ testReset: true }),
+      runTest: () => this.setState({ testReset: false })
+    };
+  }
+}
+</script>
+</body>
+</html>

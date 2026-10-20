@@ -1,0 +1,1062 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Modais — Humanittá Gestão</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&amp;family=Manrope:wght@400;500;600;700;800&amp;family=Josefin+Sans:wght@300;400&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#FAF8F4}
+a{color:#8F6425}a:hover{color:#6F4D1D}
+</style>
+</helmet>
+<div style="min-height: 100vh; background: #F5F3EF; font-family: Manrope, system-ui, sans-serif; color: #1E1D1B; padding: 56px clamp(16px, 4vw, 40px) 80px; box-sizing: border-box">
+  <div style="max-width: 1280px; margin: 0 auto; display: flex; flex-direction: column; gap: 72px">
+
+    <!-- ===================== CABEÇALHO DA PÁGINA ===================== -->
+    <header style="display: flex; flex-direction: column; gap: 28px">
+      <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px">
+        <svg width="44" height="44" viewBox="0 0 64 64" role="img" aria-label="Símbolo Humanittá">
+          <defs><linearGradient id="mdLogo" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#DDB872"></stop><stop offset=".55" stop-color="#B5832F"></stop><stop offset="1" stop-color="#7A5220"></stop></linearGradient></defs>
+          <circle cx="32" cy="32" r="30" fill="none" stroke="#B5832F" stroke-width="1.5"></circle>
+          <circle cx="24" cy="31" r="3.6" fill="url(#mdLogo)"></circle>
+          <path d="M20 39.5c0-2.6 1.8-4.3 4-4.3s4 1.7 4 4.3V47c-4.4 0-8-3.2-8-7.5z" fill="url(#mdLogo)"></path>
+          <circle cx="38.5" cy="19.5" r="4.6" fill="url(#mdLogo)"></circle>
+          <path d="M31.5 31c0-3.3 2.7-5.6 6-5.6h6.5V40c0 4.6-3.7 8-8.3 8h-4.2z" fill="url(#mdLogo)"></path>
+        </svg>
+        <span style="display: flex; flex-direction: column; gap: 2px; margin-right: auto">
+          <span style="font-family: 'Josefin Sans', Manrope, sans-serif; font-weight: 300; font-size: 22px; letter-spacing: .08em; color: #77736B; line-height: 1">Humanittá</span>
+          <span style="font-size: 10px; font-weight: 700; letter-spacing: .24em; text-transform: uppercase; color: #8F6425">Gestão · Design system</span>
+        </span>
+        <span style="display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 10px; border-radius: 999px; background: #FBF0DA; color: #9A5F0E; font-size: 12px; font-weight: 700">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 2v7.31"></path><path d="M14 9.3V1.99"></path><path d="M8.5 2h7"></path><path d="M14 9.3a6.5 6.5 0 1 1-4 0"></path></svg>
+          Ambiente de demonstração · dados fictícios
+        </span>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 24px">
+        <div style="flex: 2 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 10px">
+          <span style="font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #8F6425">Padrões de interface</span>
+          <h1 style="margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 48px; line-height: 52px">Modais · Cadastros, financeiro e confirmações</h1>
+          <p style="margin: 0; font-size: 15px; line-height: 24px; color: #43413C; max-width: 720px">Diálogos sobrepostos à tela atual para criar, editar, confirmar e consultar registros sem perder o contexto. Overlay grafite a 45%, painel branco com raio de 16 px e sombra lg, ações sempre à direita no rodapé.</p>
+        </div>
+        <dl style="flex: 1 1 320px; min-width: 0; margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; background: #DFDBD3; border: 1px solid #DFDBD3; border-radius: 12px; overflow: hidden">
+          <div style="background: #FFFFFF; padding: 14px 16px"><dt style="font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #77736B">sm</dt><dd style="margin: 4px 0 0; font-size: 14px; font-weight: 700">440 px · confirmações</dd></div>
+          <div style="background: #FFFFFF; padding: 14px 16px"><dt style="font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #77736B">md</dt><dd style="margin: 4px 0 0; font-size: 14px; font-weight: 700">640 px · edição e detalhes</dd></div>
+          <div style="background: #FFFFFF; padding: 14px 16px"><dt style="font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #77736B">lg</dt><dd style="margin: 4px 0 0; font-size: 14px; font-weight: 700">880 px · cadastros completos</dd></div>
+          <div style="background: #FFFFFF; padding: 14px 16px"><dt style="font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #77736B">Drawer</dt><dd style="margin: 4px 0 0; font-size: 14px; font-weight: 700">480 px · filtros laterais</dd></div>
+        </dl>
+      </div>
+      <nav aria-label="Modais desta página" style="display: flex; flex-wrap: wrap; gap: 8px">
+        <sc-for list="{{index}}" as="ix" hint-placeholder-count="9">
+          <a href="{{ix.href}}" style="display: inline-flex; align-items: center; gap: 8px; height: 36px; padding: 0 14px; border: 1px solid #DFDBD3; border-radius: 999px; background: #FFFFFF; color: #2E2C29; font-size: 13px; font-weight: 700; text-decoration: none"><span style="font-variant-numeric: tabular-nums; color: #8F6425">{{ix.n}}</span>{{ix.label}}</a>
+        </sc-for>
+      </nav>
+    </header>
+
+    <!-- ===================== 01 · NOVO PACIENTE ===================== -->
+    <section id="m1" aria-labelledby="m1t" style="display: flex; flex-direction: column; gap: 20px">
+      <div style="display: flex; flex-direction: column; gap: 6px">
+        <span style="font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #8F6425">01 · Pacientes · lg 880 px</span>
+        <h2 id="m1t" style="margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 32px; line-height: 1.15">Novo paciente</h2>
+        <p style="margin: 0; font-size: 14px; color: #5B5852">Estados documentados: campo em foco (Nome completo) e erro de validação (WhatsApp).</p>
+      </div>
+      <div style="background: rgba(30,29,27,.45); border-radius: 16px; padding: clamp(16px, 4vw, 48px); display: flex; justify-content: center">
+        <div role="dialog" aria-modal="true" aria-labelledby="d1t" aria-describedby="d1d" style="width: 100%; max-width: 880px; background: #FFFFFF; border-radius: 16px; box-shadow: 0 18px 50px rgba(30,29,27,.14); display: flex; flex-direction: column; overflow: hidden">
+          <div style="display: flex; align-items: flex-start; gap: 16px; padding: 24px 28px 20px; border-bottom: 1px solid #ECE9E3">
+            <div style="display: flex; flex-direction: column; gap: 4px; margin-right: auto; min-width: 0">
+              <h3 id="d1t" style="margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 24px; line-height: 1.2">Novo paciente</h3>
+              <p id="d1d" style="margin: 0; font-size: 13px; line-height: 20px; color: #5B5852">Cadastro administrativo. Informações clínicas são registradas apenas no prontuário do profissional.</p>
+            </div>
+            <button type="button" aria-label="Fechar" style="width: 40px; height: 40px; margin: -6px -10px 0 0; border: 0; border-radius: 8px; background: transparent; color: #5B5852; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button>
+          </div>
+
+          <div style="padding: 24px 28px; display: flex; flex-direction: column; gap: 28px">
+            <!-- Dados pessoais -->
+            <fieldset style="margin: 0; padding: 0; border: 0; min-width: 0">
+              <legend style="display: flex; align-items: center; gap: 10px; padding: 0 0 14px; font-size: 15px; font-weight: 700"><span aria-hidden="true" style="width: 24px; height: 24px; border-radius: 999px; box-shadow: inset 0 0 0 1.5px #B5832F; color: #8F6425; font-size: 12px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center">1</span>Dados pessoais</legend>
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)); gap: 16px 20px">
+                <label style="grid-column: 1 / -1; display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #2E2C29">
+                  <span>Nome completo <span aria-hidden="true" style="color: #A93B30">*</span></span>
+                  <input type="text" value="Beatriz Fiorentin" required style="height: 40px; width: 100%; box-sizing: border-box; padding: 0 12px; border: 1px solid #B5832F; border-radius: 8px; background: #FFFFFF; font: 500 14px Manrope, sans-serif; color: #1E1D1B; box-shadow: 0 0 0 3px rgba(181,131,47,.35); outline: none">
+                  <span style="font-size: 12px; font-weight: 500; color: #77736B">Como consta no documento de identidade.</span>
+                </label>
+                <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #2E2C29">
+                  <span>Data de nascimento <span aria-hidden="true" style="color: #A93B30">*</span></span>
+                  <span style="position: relative; display: block">
+                    <input type="text" value="14/03/1991" inputmode="numeric" required style="height: 40px; width: 100%; box-sizing: border-box; padding: 0 40px 0 12px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 500 14px Manrope, sans-serif; color: #1E1D1B; font-variant-numeric: tabular-nums">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#77736B" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="position: absolute; right: 12px; top: 11px; pointer-events: none"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path></svg>
+                  </span>
+                </label>
+                <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #2E2C29">
+                  <span>CPF <span style="font-weight: 500; color: #77736B">(opcional)</span></span>
+                  <input type="text" placeholder="000.000.000-00" inputmode="numeric" style="height: 40px; width: 100%; box-sizing: border-box; padding: 0 12px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 500 14px Manrope, sans-serif; color: #1E1D1B">
+                </label>
+                <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #2E2C29">
+                  <span>Gênero <span style="font-weight: 500; color: #77736B">(opcional)</span></span>
+                  <span style="position: relative; display: block">
+                    <select style="appearance: none; -webkit-appearance: none; height: 40px; width: 100%; box-sizing: border-box; padding: 0 36px 0 12px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 500 14px Manrope, sans-serif; color: #1E1D1B"><option>Prefiro não informar</option><option>Feminino</option><option>Masculino</option><option>Outro</option></select>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#77736B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="position: absolute; right: 12px; top: 12px; pointer-events: none"><path d="m6 9 6 6 6-6"></path></svg>
+                  </span>
+                </label>
+              </div>
+            </fieldset>
+
+            <!-- Contato -->
+            <fieldset style="margin: 0; padding: 24px 0 0; border: 0; border-top: 1px solid #ECE9E3; min-width: 0">
+              <legend style="float: left; width: 100%; display: flex; align-items: center; gap: 10px; padding: 0 0 14px; font-size: 15px; font-weight: 700"><span aria-hidden="true" style="width: 24px; height: 24px; border-radius: 999px; box-shadow: inset 0 0 0 1.5px #B5832F; color: #8F6425; font-size: 12px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center">2</span>Contato</legend>
+              <div style="clear: both; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 16px 20px">
+                <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #2E2C29">
+                  <span>WhatsApp <span aria-hidden="true" style="color: #A93B30">*</span></span>
+                  <input type="tel" value="(54) 9929-07" aria-invalid="true" aria-describedby="np-tel-err" style="height: 40px; width: 100%; box-sizing: border-box; padding: 0 12px; border: 1px solid #A93B30; border-radius: 8px; background: #FFFFFF; font: 500 14px Manrope, sans-serif; color: #1E1D1B; font-variant-numeric: tabular-nums">
+                  <span id="np-tel-err" style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: #A93B30">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 8v4"></path><path d="M12 16h.01"></path></svg>
+                    Telefone inválido. Use DDD + 9 dígitos, ex.: (54) 99999-0000.
+                  </span>
+                </label>
+                <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #2E2C29">
+                  <span>E-mail <span style="font-weight: 500; color: #77736B">(opcional)</span></span>
+                  <input type="email" value="beatriz.fiorentin@exemplo.com" style="height: 40px; width: 100%; box-sizing: border-box; padding: 0 12px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 500 14px Manrope, sans-serif; color: #1E1D1B">
+                </label>
+                <fieldset style="grid-column: 1 / -1; margin: 0; padding: 0; border: 0; min-width: 0; display: flex; flex-direction: column; gap: 8px">
+                  <legend style="padding: 0 0 8px; font-size: 13px; font-weight: 600; color: #2E2C29">Preferência de contato</legend>
+                  <div style="display: flex; flex-wrap: wrap; gap: 8px">
+                    <label style="display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 14px; border: 1px solid #B5832F; border-radius: 8px; background: #FBF6EC; font-size: 14px; font-weight: 700; color: #1E1D1B; cursor: pointer"><input type="radio" name="np-pref" checked style="margin: 0; width: 16px; height: 16px; accent-color: #8F6425">WhatsApp</label>
+                    <label style="display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 14px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font-size: 14px; font-weight: 600; color: #43413C; cursor: pointer"><input type="radio" name="np-pref" style="margin: 0; width: 16px; height: 16px; accent-color: #8F6425">Ligação</label>
+                    <label style="display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 14px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font-size: 14px; font-weight: 600; color: #43413C; cursor: pointer"><input type="radio" name="np-pref" style="margin: 0; width: 16px; height: 16px; accent-color: #8F6425">E-mail</label>
+                  </div>
+                </fieldset>
+              </div>
+            </fieldset>
+
+            <!-- Endereço -->
+            <fieldset style="margin: 0; padding: 24px 0 0; border: 0; border-top: 1px solid #ECE9E3; min-width: 0">
+              <legend style="float: left; width: 100%; display: flex; align-items: center; gap: 10px; padding: 0 0 14px; font-size: 15px; font-weight: 700"><span aria-hidden="true" style="width: 24px; height: 24px; border-radius: 999px; box-shadow: inset 0 0 0 1.5px #B5832F; color: #8F6425; font-size: 12px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center">3</span>Endereço</legend>
+              <div style="clear: both; display: flex; flex-wrap: wrap; gap: 16px 20px">
+                <label style="flex: 1 1 150px; min-width: 0; display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #2E2C29">CEP
+                  <input type="text" value="99670-000" inputmode="numeric" style="height: 40px; width: 100%; box-sizing: border-box; padding: 0 12px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 500 14px Manrope, sans-serif; color: #1E1D1B">
+                  <span style="font-size: 12px; font-weight: 500; color: #77736B">Preenche o endereço automaticamente.</span>
+                </label>
+                <label style="flex: 4 1 280px; min-width: 0; display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #2E2C29">Rua
+                  <input type="text" value="Rua Independência" style="height: 40px; width: 100%; box-sizing: border-box; padding: 0 12px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 500 14px Manrope, sans-serif; color: #1E1D1B">
+                </label>
+                <label style="flex: 1 1 100px; min-width: 0; display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #2E2C29">Número
+                  <input type="text" value="248" style="height: 40px; width: 100%; box-sizing: border-box; padding: 0 12px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 500 14px Manrope, sans-serif; color: #1E1D1B">
+                </label>
+                <label style="flex: 2 1 200px; min-width: 0; display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #2E2C29">Bairro
+                  <input type="text" value="Centro" style="height: 40px; width: 100%; box-sizing: border-box; padding: 0 12px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 500 14px Manrope, sans-serif; color: #1E1D1B">
+                </label>
+                <label style="flex: 2 1 200px; min-width: 0; display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #2E2C29">Cidade
+                  <input type="text" value="Ronda Alta" style="height: 40px; width: 100%; box-sizing: border-box; padding: 0 12px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 500 14px Manrope, sans-serif; color: #1E1D1B">
+                </label>
+                <label style="flex: 1 1 100px; min-width: 0; display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #2E2C29">UF
+                  <span style="position: relative; display: block">
+                    <select style="appearance: none; -webkit-appearance: none; height: 40px; width: 100%; box-sizing: border-box; padding: 0 36px 0 12px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 500 14px Manrope, sans-serif; color: #1E1D1B"><option>RS</option><option>SC</option><option>PR</option></select>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#77736B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="position: absolute; right: 12px; top: 12px; pointer-events: none"><path d="m6 9 6 6 6-6"></path></svg>
+                  </span>
+                </label>
+              </div>
+            </fieldset>
+
+            <!-- Informações adicionais -->
+            <fieldset style="margin: 0; padding: 24px 0 0; border: 0; border-top: 1px solid #ECE9E3; min-width: 0">
+              <legend style="float: left; width: 100%; display: flex; align-items: center; gap: 10px; padding: 0 0 14px; font-size: 15px; font-weight: 700"><span aria-hidden="true" style="width: 24px; height: 24px; border-radius: 999px; box-shadow: inset 0 0 0 1.5px #B5832F; color: #8F6425; font-size: 12px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center">4</span>Informações adicionais</legend>
+              <div style="clear: both; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)); gap: 16px 20px">
+                <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #2E2C29">Como conheceu a clínica
+                  <span style="position: relative; display: block">
+                    <select style="appearance: none; -webkit-appearance: none; height: 40px; width: 100%; box-sizing: border-box; padding: 0 36px 0 12px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 500 14px Manrope, sans-serif; color: #1E1D1B"><option>Instagram</option><option>Indicação de paciente</option><option>Indicação de profissional</option><option>Google</option><option>Passou em frente à clínica</option><option>Outro</option></select>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#77736B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="position: absolute; right: 12px; top: 12px; pointer-events: none"><path d="m6 9 6 6 6-6"></path></svg>
+                  </span>
+                </label>
+                <div style="display: flex; flex-direction: column; gap: 6px">
+                  <label for="np-tags" style="font-size: 13px; font-weight: 600; color: #2E2C29">Tags</label>
+                  <span style="display: flex; flex-wrap: wrap; align-items: center; gap: 6px; min-height: 40px; padding: 5px 8px; box-sizing: border-box; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF">
+                    <span style="display: inline-flex; align-items: center; gap: 4px; height: 26px; padding: 0 4px 0 10px; border-radius: 999px; background: #FBF6EC; color: #6F4D1D; font-size: 12px; font-weight: 700">Primeira consulta<button type="button" aria-label="Remover tag Primeira consulta" style="width: 20px; height: 20px; border: 0; border-radius: 999px; background: transparent; color: #6F4D1D; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; padding: 0"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button></span>
+                    <span style="display: inline-flex; align-items: center; gap: 4px; height: 26px; padding: 0 4px 0 10px; border-radius: 999px; background: #FBF6EC; color: #6F4D1D; font-size: 12px; font-weight: 700">Prefere manhã<button type="button" aria-label="Remover tag Prefere manhã" style="width: 20px; height: 20px; border: 0; border-radius: 999px; background: transparent; color: #6F4D1D; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; padding: 0"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button></span>
+                    <input id="np-tags" type="text" placeholder="Adicionar tag…" style="flex: 1; min-width: 100px; height: 28px; border: 0; background: transparent; font: 500 14px Manrope, sans-serif; color: #1E1D1B">
+                  </span>
+                </div>
+                <label style="grid-column: 1 / -1; display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #2E2C29">Observações administrativas
+                  <textarea rows="3" placeholder="Ex.: prefere ser contatada após as 18h; acompanhante na primeira visita." style="width: 100%; box-sizing: border-box; padding: 10px 12px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 500 14px/22px Manrope, sans-serif; color: #1E1D1B; resize: vertical"></textarea>
+                  <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; color: #77736B">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                    Não registre informações clínicas aqui — use o prontuário do profissional.
+                  </span>
+                </label>
+              </div>
+            </fieldset>
+
+            <label style="display: flex; align-items: flex-start; gap: 12px; padding: 16px; border-radius: 12px; background: #FAF8F4; border: 1px solid #ECE9E3; cursor: pointer">
+              <input type="checkbox" checked required style="margin: 2px 0 0; width: 18px; height: 18px; accent-color: #8F6425; flex-shrink: 0">
+              <span style="display: flex; flex-direction: column; gap: 4px">
+                <span style="font-size: 14px; font-weight: 700">Consentimento LGPD <span aria-hidden="true" style="color: #A93B30">*</span></span>
+                <span style="font-size: 13px; line-height: 20px; color: #43413C">O paciente autorizou o tratamento dos seus dados pessoais para agendamento, atendimento e comunicação pela clínica, conforme a Lei nº 13.709/2018 (LGPD).</span>
+              </span>
+            </label>
+          </div>
+
+          <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 12px; padding: 16px 28px; border-top: 1px solid #ECE9E3; background: #FAF8F4">
+            <span style="margin-right: auto; font-size: 12px; font-weight: 600; color: #5B5852"><span aria-hidden="true" style="color: #A93B30">*</span> Campos obrigatórios</span>
+            <button type="button" style="height: 40px; padding: 0 16px; border: 0; border-radius: 8px; background: transparent; color: #43413C; font: 700 14px Manrope, sans-serif; cursor: pointer">Cancelar</button>
+            <button type="button" style="height: 40px; padding: 0 16px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; color: #2E2C29; font: 700 14px Manrope, sans-serif; cursor: pointer">Salvar e agendar</button>
+            <button type="button" style="display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 18px; border: 0; border-radius: 8px; background: #8F6425; color: #FFFFFF; font: 700 14px Manrope, sans-serif; cursor: pointer">Salvar paciente</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 02 · EDITAR PACIENTE ===================== -->
+    <section id="m2" aria-labelledby="m2t" style="display: flex; flex-direction: column; gap: 20px">
+      <div style="display: flex; flex-direction: column; gap: 6px">
+        <span style="font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #8F6425">02 · Pacientes · md 640 px</span>
+        <h2 id="m2t" style="margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 32px; line-height: 1.15">Editar paciente</h2>
+        <p style="margin: 0; font-size: 14px; color: #5B5852">Formulário preenchido, com aviso de rastreabilidade das alterações.</p>
+      </div>
+      <div style="background: rgba(30,29,27,.45); border-radius: 16px; padding: clamp(16px, 4vw, 48px); display: flex; justify-content: center">
+        <div role="dialog" aria-modal="true" aria-labelledby="d2t" style="width: 100%; max-width: 640px; background: #FFFFFF; border-radius: 16px; box-shadow: 0 18px 50px rgba(30,29,27,.14); display: flex; flex-direction: column; overflow: hidden">
+          <div style="display: flex; align-items: flex-start; gap: 14px; padding: 24px 28px 20px; border-bottom: 1px solid #ECE9E3">
+            <span style="width: 44px; height: 44px; border-radius: 999px; background: #F5E9D0; color: #6F4D1D; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; box-shadow: 0 0 0 2px #FFFFFF, 0 0 0 3.5px #DDB872; flex-shrink: 0">CM</span>
+            <div style="display: flex; flex-direction: column; gap: 4px; margin-right: auto; min-width: 0">
+              <h3 id="d2t" style="margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 24px; line-height: 1.2">Editar paciente</h3>
+              <p style="margin: 0; font-size: 13px; line-height: 20px; color: #5B5852">Carla Menegatti · Cadastro nº 0412 · paciente desde mar/2024</p>
+            </div>
+            <button type="button" aria-label="Fechar" style="width: 40px; height: 40px; margin: -6px -10px 0 0; border: 0; border-radius: 8px; background: transparent; color: #5B5852; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button>
+          </div>
+          <div style="padding: 24px 28px; display: flex; flex-direction: column; gap: 20px">
+            <div role="note" style="display: flex; align-items: flex-start; gap: 12px; padding: 12px 14px; border-radius: 10px; background: #E5EEF6; color: #1F4766; font-size: 13px; line-height: 20px">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2D5F88" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0; margin-top: 1px"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path><path d="M12 7v5l4 2"></path></svg>
+              <span><strong>Alterações ficam registradas no histórico administrativo.</strong><br>Última edição em 12/10/2026, 16:20, por Camila S.</span>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 16px 20px">
+              <label style="grid-column: 1 / -1; display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #2E2C29">Nome completo
+                <input type="text" value="Carla Menegatti" style="height: 40px; width: 100%; box-sizing: border-box; padding: 0 12px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 500 14px Manrope, sans-serif; color: #1E1D1B">
+              </label>
+              <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #2E2C29">Data de nascimento
+                <input type="text" value="22/07/1988" style="height: 40px; width: 100%; box-sizing: border-box; padding: 0 12px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 500 14px Manrope, sans-serif; color: #1E1D1B; font-variant-numeric: tabular-nums">
+              </label>
+              <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #2E2C29">CPF
+                <input type="text" value="***.482.019-**" readonly style="height: 40px; width: 100%; box-sizing: border-box; padding: 0 12px; border: 1px solid #ECE9E3; border-radius: 8px; background: #F5F3EF; font: 500 14px Manrope, sans-serif; color: #43413C; font-variant-numeric: tabular-nums">
+                <span style="font-size: 12px; font-weight: 500; color: #77736B">Mascarado por privacidade.</span>
+              </label>
+              <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #2E2C29">WhatsApp
+                <input type="tel" value="(54) 99811-2045" style="height: 40px; width: 100%; box-sizing: border-box; padding: 0 12px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 500 14px Manrope, sans-serif; color: #1E1D1B; font-variant-numeric: tabular-nums">
+              </label>
+              <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #2E2C29">E-mail
+                <input type="email" value="carla.menegatti@exemplo.com" style="height: 40px; width: 100%; box-sizing: border-box; padding: 0 12px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 500 14px Manrope, sans-serif; color: #1E1D1B">
+              </label>
+              <label style="grid-column: 1 / -1; display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #2E2C29">Endereço
+                <input type="text" value="Rua Independência, 412 – Centro, Ronda Alta – RS, 99670-000" style="height: 40px; width: 100%; box-sizing: border-box; padding: 0 12px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 500 14px Manrope, sans-serif; color: #1E1D1B">
+              </label>
+              <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #2E2C29">Preferência de contato
+                <span style="position: relative; display: block">
+                  <select style="appearance: none; -webkit-appearance: none; height: 40px; width: 100%; box-sizing: border-box; padding: 0 36px 0 12px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 500 14px Manrope, sans-serif; color: #1E1D1B"><option>WhatsApp</option><option>Ligação</option><option>E-mail</option></select>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#77736B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="position: absolute; right: 12px; top: 12px; pointer-events: none"><path d="m6 9 6 6 6-6"></path></svg>
+                </span>
+              </label>
+              <div style="display: flex; flex-direction: column; gap: 6px">
+                <span style="font-size: 13px; font-weight: 600; color: #2E2C29">Tags</span>
+                <span style="display: flex; flex-wrap: wrap; gap: 6px; min-height: 40px; align-items: center">
+                  <span style="display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; background: #FBF6EC; color: #6F4D1D; font-size: 12px; font-weight: 700">Ortodontia em andamento</span>
+                  <span style="display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; background: #FBF6EC; color: #6F4D1D; font-size: 12px; font-weight: 700">Prefere manhã</span>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 12px; padding: 16px 28px; border-top: 1px solid #ECE9E3; background: #FAF8F4">
+            <button type="button" style="margin-right: auto; display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 12px; border: 0; border-radius: 8px; background: transparent; color: #A93B30; font: 700 14px Manrope, sans-serif; cursor: pointer">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="m4.9 4.9 14.2 14.2"></path></svg>
+              Inativar cadastro
+            </button>
+            <button type="button" style="height: 40px; padding: 0 16px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; color: #2E2C29; font: 700 14px Manrope, sans-serif; cursor: pointer">Cancelar</button>
+            <button type="button" style="height: 40px; padding: 0 18px; border: 0; border-radius: 8px; background: #8F6425; color: #FFFFFF; font: 700 14px Manrope, sans-serif; cursor: pointer">Salvar alterações</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 03 · NOVO PROFISSIONAL ===================== -->
+    <section id="m3" aria-labelledby="m3t" style="display: flex; flex-direction: column; gap: 20px">
+      <div style="display: flex; flex-direction: column; gap: 6px">
+        <span style="font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #8F6425">03 · Profissionais · lg 880 px</span>
+        <h2 id="m3t" style="margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 32px; line-height: 1.15">Novo profissional</h2>
+        <p style="margin: 0; font-size: 14px; color: #5B5852">Cadastro com foto, registro no conselho, serviços, repasse, cor na agenda e disponibilidade semanal.</p>
+      </div>
+      <div style="background: rgba(30,29,27,.45); border-radius: 16px; padding: clamp(16px, 4vw, 48px); display: flex; justify-content: center">
+        <div role="dialog" aria-modal="true" aria-labelledby="d3t" style="width: 100%; max-width: 880px; background: #FFFFFF; border-radius: 16px; box-shadow: 0 18px 50px rgba(30,29,27,.14); display: flex; flex-direction: column; overflow: hidden">
+          <div style="display: flex; align-items: flex-start; gap: 16px; padding: 24px 28px 20px; border-bottom: 1px solid #ECE9E3">
+            <div style="display: flex; flex-direction: column; gap: 4px; margin-right: auto; min-width: 0">
+              <h3 id="d3t" style="margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 24px; line-height: 1.2">Novo profissional</h3>
+              <p style="margin: 0; font-size: 13px; line-height: 20px; color: #5B5852">O profissional recebe um convite por e-mail para acessar a própria agenda e o prontuário.</p>
+            </div>
+            <button type="button" aria-label="Fechar" style="width: 40px; height: 40px; margin: -6px -10px 0 0; border: 0; border-radius: 8px; background: transparent; color: #5B5852; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button>
+          </div>
+          <div style="padding: 24px 28px; display: flex; flex-direction: column; gap: 28px">
+            <!-- Foto + identificação -->
+            <div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start">
+              <div style="flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; gap: 10px; width: 140px">
+                <button type="button" aria-label="Enviar foto do profissional" style="width: 112px; height: 112px; border-radius: 999px; border: 1.5px dashed #B5832F; background: #FBF6EC; color: #8F6425; display: inline-flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; cursor: pointer; font: 700 12px Manrope, sans-serif">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"></path><circle cx="12" cy="13" r="3"></circle></svg>
+                  Adicionar foto
+                </button>
+                <span style="font-size: 12px; line-height: 16px; color: #77736B; text-align: center">JPG ou PNG, até 5 MB</span>
+              </div>
+              <div style="flex: 1 1 420px; min-width: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)); gap: 16px 20px">
+                <label style="grid-column: 1 / -1; display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #2E2C29"><span>Nome completo <span aria-hidden="true" style="color: #A93B30">*</span></span>
+                  <input type="text" value="Dra. Júlia Dalmolin" style="height: 40px; width: 100%; box-sizing: border-box; padding: 0 12px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 500 14px Manrope, sans-serif; color: #1E1D1B">
+                </label>
+                <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #2E2C29"><span>Especialidade <span aria-hidden="true" style="color: #A93B30">*</span></span>
+                  <span style="position: relative; display: block">
+                    <select style="appearance: none; -webkit-appearance: none; height: 40px; width: 100%; box-sizing: border-box; padding: 0 36px 0 12px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 500 14px Manrope, sans-serif; color: #1E1D1B"><option>Nutrição</option><option>Odontologia</option><option>Fonoaudiologia</option><option>Estética Avançada</option><option>Psicologia</option><option>Quiropraxia</option><option>Podologia</option><option>Fisioterapia</option></select>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#77736B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="position: absolute; right: 12px; top: 12px; pointer-events: none"><path d="m6 9 6 6 6-6"></path></svg>
+                  </span>
+                </label>
+                <fieldset style="margin: 0; padding: 0; border: 0; min-width: 0">
+                  <legend style="padding: 0 0 6px; font-size: 13px; font-weight: 600; color: #2E2C29">Registro profissional <span aria-hidden="true" style="color: #A93B30">*</span></legend>
+                  <div style="display: flex; gap: 8px">
+                    <label style="flex: 1 1 80px; min-width: 0"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Conselho</span><input type="text" value="CRN-2" style="height: 40px; width: 100%; box-sizing: border-box; padding: 0 10px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 600 14px Manrope, sans-serif; color: #1E1D1B"></label>
+                    <label style="flex: 0 1 60px; min-width: 0"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">UF do registro</span><input type="text" value="RS" style="height: 40px; width: 100%; box-sizing: border-box; padding: 0 10px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 600 14px Manrope, sans-serif; color: #1E1D1B; text-align: center"></label>
+                    <label style="flex: 2 1 100px; min-width: 0"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Número do registro</span><input type="text" placeholder="Número" inputmode="numeric" style="height: 40px; width: 100%; box-sizing: border-box; padding: 0 10px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 500 14px Manrope, sans-serif; color: #1E1D1B"></label>
+                  </div>
+                </fieldset>
+                <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #2E2C29">E-mail
+                  <input type="email" value="julia.dalmolin@exemplo.com" style="height: 40px; width: 100%; box-sizing: border-box; padding: 0 12px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 500 14px Manrope, sans-serif; color: #1E1D1B">
+                </label>
+                <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #2E2C29">Telefone
+                  <input type="tel" value="(54) 99640-3187" style="height: 40px; width: 100%; box-sizing: border-box; padding: 0 12px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 500 14px Manrope, sans-serif; color: #1E1D1B; font-variant-numeric: tabular-nums">
+                </label>
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 16px 20px; padding-top: 24px; border-top: 1px solid #ECE9E3">
+              <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #2E2C29">Sala padrão
+                <span style="position: relative; display: block">
+                  <select style="appearance: none; -webkit-appearance: none; height: 40px; width: 100%; box-sizing: border-box; padding: 0 36px 0 12px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 500 14px Manrope, sans-serif; color: #1E1D1B"><option>Sala 7 · a definir</option><option>Sala 1 · Odontologia</option><option>Sala 2 · Fonoaudiologia</option><option>Sala 3 · Podologia/Quiropraxia</option><option>Sala 4 · Fonoaudiologia</option><option>Sala 5 · Estética Avançada</option><option>Sala 6 · Psicologia</option></select>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#77736B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="position: absolute; right: 12px; top: 12px; pointer-events: none"><path d="m6 9 6 6 6-6"></path></svg>
+                </span>
+              </label>
+              <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #2E2C29">Percentual de repasse
+                <span style="display: flex; align-items: center; height: 40px; box-sizing: border-box; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; overflow: hidden">
+                  <input type="text" value="40" inputmode="numeric" style="flex: 1; min-width: 0; height: 100%; padding: 0 12px; border: 0; background: transparent; font: 600 14px Manrope, sans-serif; color: #1E1D1B; font-variant-numeric: tabular-nums">
+                  <span style="display: inline-flex; align-items: center; height: 100%; padding: 0 12px; background: #F5F3EF; border-left: 1px solid #DFDBD3; color: #43413C; font-size: 13px; font-weight: 700">%</span>
+                </span>
+                <span style="font-size: 12px; font-weight: 500; color: #77736B">Sobre o valor líquido recebido · valor fictício.</span>
+              </label>
+              <fieldset style="margin: 0; padding: 0; border: 0; min-width: 0">
+                <legend style="padding: 0 0 6px; font-size: 13px; font-weight: 600; color: #2E2C29">Cor na agenda</legend>
+                <div role="radiogroup" aria-label="Cor na agenda" style="display: flex; flex-wrap: wrap; gap: 6px">
+                  <sc-for list="{{agendaColors}}" as="ac" hint-placeholder-count="8">
+                    <button type="button" role="radio" aria-checked="{{ac.on}}" aria-label="{{ac.name}}" style="width: 32px; height: 32px; border-radius: 999px; border: 0; background: {{ac.hex}}; box-shadow: {{ac.ring}}; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; color: #FFFFFF; padding: 0">
+                      <sc-if value="{{ac.selected}}" hint-placeholder-val="{{ false }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg></sc-if>
+                    </button>
+                  </sc-for>
+                </div>
+              </fieldset>
+            </div>
+
+            <fieldset style="margin: 0; padding: 0; border: 0; min-width: 0">
+              <legend style="padding: 0 0 10px; font-size: 13px; font-weight: 600; color: #2E2C29">Serviços que realiza</legend>
+              <div style="display: flex; flex-wrap: wrap; gap: 8px">
+                <sc-for list="{{nutriServices}}" as="ns" hint-placeholder-count="6">
+                  <button type="button" aria-pressed="{{ns.pressed}}" style="display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 14px; border-radius: 999px; border: {{ns.border}}; background: {{ns.bg}}; color: {{ns.fg}}; font: 700 13px Manrope, sans-serif; cursor: pointer">
+                    <sc-if value="{{ns.on}}" hint-placeholder-val="{{ true }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg></sc-if>
+                    <sc-if value="{{ns.off}}" hint-placeholder-val="{{ false }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg></sc-if>
+                    {{ns.name}}
+                  </button>
+                </sc-for>
+              </div>
+            </fieldset>
+
+            <div style="display: flex; flex-direction: column; gap: 10px">
+              <div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px">
+                <span style="font-size: 13px; font-weight: 600; color: #2E2C29; margin-right: auto">Horários semanais</span>
+                <span style="font-size: 12px; color: #5B5852">Toque nos blocos para marcar disponibilidade · 5 de 18 blocos</span>
+              </div>
+              <div style="overflow-x: auto">
+                <table style="width: 100%; min-width: 520px; border-collapse: separate; border-spacing: 4px; font-size: 12px">
+                  <thead>
+                    <tr>
+                      <th scope="col" style="width: 84px"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Período</span></th>
+                      <sc-for list="{{weekDays}}" as="wd" hint-placeholder-count="6">
+                        <th scope="col" style="padding: 4px; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #5B5852">{{wd}}</th>
+                      </sc-for>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <sc-for list="{{proGrid}}" as="pg" hint-placeholder-count="3">
+                      <tr>
+                        <th scope="row" style="text-align: left; padding: 0 6px; font-size: 12px; font-weight: 700; color: #43413C; white-space: nowrap; font-variant-numeric: tabular-nums">{{pg.label}}</th>
+                        <sc-for list="{{pg.cells}}" as="pc" hint-placeholder-count="6">
+                          <td style="padding: 0">
+                            <button type="button" aria-pressed="{{pc.pressed}}" aria-label="{{pc.aria}}" style="width: 100%; height: 40px; border-radius: 8px; border: {{pc.border}}; background: {{pc.bg}}; color: {{pc.fg}}; font: 700 11px Manrope, sans-serif; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 4px">{{pc.text}}</button>
+                          </td>
+                        </sc-for>
+                      </tr>
+                    </sc-for>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 12px; padding: 16px 28px; border-top: 1px solid #ECE9E3; background: #FAF8F4">
+            <label style="margin-right: auto; display: inline-flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 600; color: #43413C; cursor: pointer">
+              <input type="checkbox" checked style="margin: 0; width: 18px; height: 18px; accent-color: #8F6425">
+              Enviar convite de acesso por e-mail
+            </label>
+            <button type="button" style="height: 40px; padding: 0 16px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; color: #2E2C29; font: 700 14px Manrope, sans-serif; cursor: pointer">Cancelar</button>
+            <button type="button" style="height: 40px; padding: 0 18px; border: 0; border-radius: 8px; background: #8F6425; color: #FFFFFF; font: 700 14px Manrope, sans-serif; cursor: pointer">Cadastrar profissional</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 04 · EDITAR PROFISSIONAL ===================== -->
+    <section id="m4" aria-labelledby="m4t" style="display: flex; flex-direction: column; gap: 20px">
+      <div style="display: flex; flex-direction: column; gap: 6px">
+        <span style="font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #8F6425">04 · Profissionais · md 640 px</span>
+        <h2 id="m4t" style="margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 32px; line-height: 1.15">Editar profissional</h2>
+        <p style="margin: 0; font-size: 14px; color: #5B5852">Modal com abas; aba Horários ativa com disponibilidade por dia.</p>
+      </div>
+      <div style="background: rgba(30,29,27,.45); border-radius: 16px; padding: clamp(16px, 4vw, 48px); display: flex; justify-content: center">
+        <div role="dialog" aria-modal="true" aria-labelledby="d4t" style="width: 100%; max-width: 640px; background: #FFFFFF; border-radius: 16px; box-shadow: 0 18px 50px rgba(30,29,27,.14); display: flex; flex-direction: column; overflow: hidden">
+          <div style="display: flex; align-items: flex-start; gap: 14px; padding: 24px 28px 0">
+            <span style="width: 48px; height: 48px; border-radius: 999px; background: #F5F3EF; color: #43413C; display: inline-flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 800; box-shadow: 0 0 0 2px #FFFFFF, 0 0 0 3.5px #C0703A; flex-shrink: 0">GP</span>
+            <div style="display: flex; flex-direction: column; gap: 4px; margin-right: auto; min-width: 0">
+              <h3 id="d4t" style="margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 24px; line-height: 1.2">Dr. Gustavo Pagnussat</h3>
+              <p style="margin: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 13px; color: #5B5852">
+                <span style="display: inline-flex; align-items: center; gap: 6px"><span style="width: 8px; height: 8px; border-radius: 999px; background: #C0703A"></span>Fisioterapia</span>
+                <span aria-hidden="true">·</span><span>CREFITO-5</span>
+                <span style="display: inline-flex; align-items: center; height: 20px; padding: 0 8px; border-radius: 999px; background: #FBF0DA; color: #9A5F0E; font-size: 11px; font-weight: 700">Demo</span>
+              </p>
+            </div>
+            <button type="button" aria-label="Fechar" style="width: 40px; height: 40px; margin: -6px -10px 0 0; border: 0; border-radius: 8px; background: transparent; color: #5B5852; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button>
+          </div>
+          <div role="tablist" aria-label="Seções do profissional" style="display: flex; gap: 4px; padding: 16px 28px 0; border-bottom: 1px solid #ECE9E3; overflow-x: auto">
+            <button type="button" role="tab" aria-selected="false" style="height: 44px; padding: 0 12px; border: 0; border-bottom: 2px solid transparent; background: transparent; color: #5B5852; font: 700 14px Manrope, sans-serif; cursor: pointer; white-space: nowrap">Dados</button>
+            <button type="button" role="tab" aria-selected="true" style="height: 44px; padding: 0 12px; border: 0; border-bottom: 2px solid #B5832F; background: transparent; color: #1E1D1B; font: 700 14px Manrope, sans-serif; cursor: pointer; white-space: nowrap">Horários</button>
+            <button type="button" role="tab" aria-selected="false" style="height: 44px; padding: 0 12px; border: 0; border-bottom: 2px solid transparent; background: transparent; color: #5B5852; font: 700 14px Manrope, sans-serif; cursor: pointer; white-space: nowrap">Serviços</button>
+            <button type="button" role="tab" aria-selected="false" style="height: 44px; padding: 0 12px; border: 0; border-bottom: 2px solid transparent; background: transparent; color: #5B5852; font: 700 14px Manrope, sans-serif; cursor: pointer; white-space: nowrap">Repasse</button>
+          </div>
+          <div role="tabpanel" aria-label="Horários" style="padding: 20px 28px 24px; display: flex; flex-direction: column; gap: 16px">
+            <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px">
+              <span style="font-size: 13px; color: #5B5852; margin-right: auto">Atende na <strong style="color: #1E1D1B">Sala 7 · a definir</strong> · consultas de 50 min</span>
+              <button type="button" style="display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 12px; border: 0; border-radius: 8px; background: transparent; color: #8F6425; font: 700 13px Manrope, sans-serif; cursor: pointer">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>
+                Copiar segunda para dias úteis
+              </button>
+            </div>
+            <div style="border: 1px solid #DFDBD3; border-radius: 12px; overflow: hidden">
+              <div aria-hidden="true" style="display: flex; gap: 12px; padding: 8px 16px; background: #F5F3EF; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #5B5852">
+                <span style="flex: 0 0 132px">Dia</span><span style="flex: 1 1 0">Início</span><span style="flex: 1 1 0">Fim</span><span style="flex: 1.4 1 0">Intervalo</span>
+              </div>
+              <sc-for list="{{editDays}}" as="ed" hint-placeholder-count="7">
+                <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; min-height: 60px; padding: 8px 16px; box-sizing: border-box; border-top: 1px solid #ECE9E3; background: {{ed.rowBg}}">
+                  <span style="flex: 0 0 132px; display: flex; align-items: center; gap: 10px">
+                    <button type="button" role="switch" aria-checked="{{ed.checked}}" aria-label="{{ed.aria}}" style="width: 40px; height: 24px; padding: 2px; box-sizing: border-box; border: 0; border-radius: 999px; background: {{ed.swBg}}; display: inline-flex; justify-content: {{ed.swJustify}}; cursor: pointer; flex-shrink: 0"><span style="width: 20px; height: 20px; border-radius: 999px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(30,29,27,.25)"></span></button>
+                    <span style="font-size: 14px; font-weight: 700; color: {{ed.fg}}">{{ed.name}}</span>
+                  </span>
+                  <sc-if value="{{ed.on}}" hint-placeholder-val="{{ true }}">
+                    <input type="text" value="{{ed.start}}" aria-label="{{ed.ariaStart}}" style="flex: 1 1 0; min-width: 72px; height: 36px; box-sizing: border-box; padding: 0 10px; border: 1px solid #DFDBD3; border-radius: 8px; font: 600 14px Manrope, sans-serif; color: #1E1D1B; font-variant-numeric: tabular-nums">
+                    <input type="text" value="{{ed.end}}" aria-label="{{ed.ariaEnd}}" style="flex: 1 1 0; min-width: 72px; height: 36px; box-sizing: border-box; padding: 0 10px; border: 1px solid #DFDBD3; border-radius: 8px; font: 600 14px Manrope, sans-serif; color: #1E1D1B; font-variant-numeric: tabular-nums">
+                    <input type="text" value="{{ed.pause}}" aria-label="{{ed.ariaPause}}" style="flex: 1.4 1 0; min-width: 110px; height: 36px; box-sizing: border-box; padding: 0 10px; border: 1px solid #DFDBD3; border-radius: 8px; font: 600 14px Manrope, sans-serif; color: #1E1D1B; font-variant-numeric: tabular-nums">
+                  </sc-if>
+                  <sc-if value="{{ed.off}}" hint-placeholder-val="{{ false }}">
+                    <span style="flex: 1 1 0; font-size: 13px; color: #77736B">Indisponível</span>
+                  </sc-if>
+                </div>
+              </sc-for>
+            </div>
+            <div role="note" style="display: flex; align-items: flex-start; gap: 10px; font-size: 12px; line-height: 18px; color: #5B5852">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0; margin-top: 1px"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
+              Consultas já agendadas fora do novo horário não são canceladas — a recepção recebe uma lista para remarcar.
+            </div>
+          </div>
+          <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 12px; padding: 16px 28px; border-top: 1px solid #ECE9E3; background: #FAF8F4">
+            <button type="button" style="height: 40px; padding: 0 16px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; color: #2E2C29; font: 700 14px Manrope, sans-serif; cursor: pointer">Cancelar</button>
+            <button type="button" style="height: 40px; padding: 0 18px; border: 0; border-radius: 8px; background: #8F6425; color: #FFFFFF; font: 700 14px Manrope, sans-serif; cursor: pointer">Salvar horários</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 05 · NOVO LANÇAMENTO ===================== -->
+    <section id="m5" aria-labelledby="m5t" style="display: flex; flex-direction: column; gap: 20px">
+      <div style="display: flex; flex-direction: column; gap: 6px">
+        <span style="font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #8F6425">05 · Financeiro · md 640 px</span>
+        <h2 id="m5t" style="margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 32px; line-height: 1.15">Novo lançamento financeiro</h2>
+        <p style="margin: 0; font-size: 14px; color: #5B5852">Receita, despesa ou repasse, com recorrência, vínculos e comprovante.</p>
+      </div>
+      <div style="background: rgba(30,29,27,.45); border-radius: 16px; padding: clamp(16px, 4vw, 48px); display: flex; justify-content: center">
+        <div role="dialog" aria-modal="true" aria-labelledby="d5t" style="width: 100%; max-width: 640px; background: #FFFFFF; border-radius: 16px; box-shadow: 0 18px 50px rgba(30,29,27,.14); display: flex; flex-direction: column; overflow: hidden">
+          <div style="display: flex; align-items: flex-start; gap: 16px; padding: 24px 28px 20px; border-bottom: 1px solid #ECE9E3">
+            <div style="display: flex; flex-direction: column; gap: 4px; margin-right: auto; min-width: 0">
+              <h3 id="d5t" style="margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 24px; line-height: 1.2">Novo lançamento</h3>
+              <p style="margin: 0; font-size: 13px; line-height: 20px; color: #5B5852">Registre uma movimentação no fluxo de caixa de outubro/2026.</p>
+            </div>
+            <button type="button" aria-label="Fechar" style="width: 40px; height: 40px; margin: -6px -10px 0 0; border: 0; border-radius: 8px; background: transparent; color: #5B5852; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button>
+          </div>
+          <div style="padding: 24px 28px; display: flex; flex-direction: column; gap: 20px">
+            <div role="radiogroup" aria-label="Tipo de lançamento" style="display: flex; padding: 4px; border-radius: 10px; background: #F5F3EF; gap: 4px">
+              <button type="button" role="radio" aria-checked="true" style="flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; border: 0; border-radius: 8px; background: #FFFFFF; color: #2E7351; box-shadow: 0 1px 2px rgba(30,29,27,.08); font: 700 14px Manrope, sans-serif; cursor: pointer">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 7 7 17"></path><path d="M17 17H7V7"></path></svg>Receita
+              </button>
+              <button type="button" role="radio" aria-checked="false" style="flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; border: 0; border-radius: 8px; background: transparent; color: #5B5852; font: 700 14px Manrope, sans-serif; cursor: pointer">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>Despesa
+              </button>
+              <button type="button" role="radio" aria-checked="false" style="flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; border: 0; border-radius: 8px; background: transparent; color: #5B5852; font: 700 14px Manrope, sans-serif; cursor: pointer">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m16 3 4 4-4 4"></path><path d="M20 7H4"></path><path d="m8 21-4-4 4-4"></path><path d="M4 17h16"></path></svg>Repasse
+              </button>
+            </div>
+
+            <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #2E2C29">Valor
+              <span style="display: flex; align-items: baseline; gap: 10px; padding: 10px 16px; border: 1px solid #DFDBD3; border-radius: 12px; background: #FFFFFF">
+                <span style="font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 24px; color: #77736B">R$</span>
+                <input type="text" value="640,00" inputmode="decimal" style="flex: 1; min-width: 0; border: 0; background: transparent; padding: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 44px; line-height: 1.1; color: #1E1D1B; font-variant-numeric: tabular-nums">
+              </span>
+            </label>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 16px 20px">
+              <label style="grid-column: 1 / -1; display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #2E2C29">Descrição
+                <input type="text" value="Pacote de fonoterapia · 4 sessões" style="height: 40px; width: 100%; box-sizing: border-box; padding: 0 12px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 500 14px Manrope, sans-serif; color: #1E1D1B">
+              </label>
+              <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #2E2C29">Categoria
+                <span style="position: relative; display: block">
+                  <select style="appearance: none; -webkit-appearance: none; height: 40px; width: 100%; box-sizing: border-box; padding: 0 36px 0 12px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 500 14px Manrope, sans-serif; color: #1E1D1B"><option>Atendimentos · Fonoaudiologia</option><option>Atendimentos · Odontologia</option><option>Pacotes e planos</option><option>Outras receitas</option></select>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#77736B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="position: absolute; right: 12px; top: 12px; pointer-events: none"><path d="m6 9 6 6 6-6"></path></svg>
+                </span>
+              </label>
+              <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #2E2C29">Forma de pagamento
+                <span style="position: relative; display: block">
+                  <select style="appearance: none; -webkit-appearance: none; height: 40px; width: 100%; box-sizing: border-box; padding: 0 36px 0 12px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 500 14px Manrope, sans-serif; color: #1E1D1B"><option>Pix</option><option>Cartão de crédito</option><option>Cartão de débito</option><option>Dinheiro</option><option>Boleto</option></select>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#77736B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="position: absolute; right: 12px; top: 12px; pointer-events: none"><path d="m6 9 6 6 6-6"></path></svg>
+                </span>
+              </label>
+              <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #2E2C29">Data
+                <input type="text" value="19/10/2026" style="height: 40px; width: 100%; box-sizing: border-box; padding: 0 12px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 500 14px Manrope, sans-serif; color: #1E1D1B; font-variant-numeric: tabular-nums">
+              </label>
+              <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #2E2C29">Vencimento
+                <input type="text" value="26/10/2026" style="height: 40px; width: 100%; box-sizing: border-box; padding: 0 12px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 500 14px Manrope, sans-serif; color: #1E1D1B; font-variant-numeric: tabular-nums">
+              </label>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 12px; padding: 16px; border-radius: 12px; border: 1px solid #ECE9E3; background: #FAF8F4">
+              <div style="display: flex; align-items: center; gap: 12px">
+                <span style="display: flex; flex-direction: column; gap: 2px; margin-right: auto">
+                  <span id="rec-l" style="font-size: 14px; font-weight: 700">Lançamento recorrente</span>
+                  <span style="font-size: 12px; color: #5B5852">Gera as próximas parcelas automaticamente.</span>
+                </span>
+                <button type="button" role="switch" aria-checked="true" aria-labelledby="rec-l" style="width: 44px; height: 26px; padding: 3px; box-sizing: border-box; border: 0; border-radius: 999px; background: #8F6425; display: inline-flex; justify-content: flex-end; cursor: pointer"><span style="width: 20px; height: 20px; border-radius: 999px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(30,29,27,.25)"></span></button>
+              </div>
+              <div style="display: flex; flex-wrap: wrap; gap: 12px 16px">
+                <label style="flex: 1 1 180px; min-width: 0; display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #2E2C29">Frequência
+                  <span style="position: relative; display: block">
+                    <select style="appearance: none; -webkit-appearance: none; height: 40px; width: 100%; box-sizing: border-box; padding: 0 36px 0 12px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 500 14px Manrope, sans-serif; color: #1E1D1B"><option>Mensal</option><option>Semanal</option><option>Quinzenal</option><option>Trimestral</option></select>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#77736B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="position: absolute; right: 12px; top: 12px; pointer-events: none"><path d="m6 9 6 6 6-6"></path></svg>
+                  </span>
+                </label>
+                <label style="flex: 1 1 140px; min-width: 0; display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #2E2C29">Repetir por
+                  <span style="display: flex; align-items: center; height: 40px; box-sizing: border-box; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; overflow: hidden">
+                    <input type="text" value="3" inputmode="numeric" style="flex: 1; min-width: 0; height: 100%; padding: 0 12px; border: 0; background: transparent; font: 600 14px Manrope, sans-serif; color: #1E1D1B">
+                    <span style="display: inline-flex; align-items: center; height: 100%; padding: 0 12px; background: #F5F3EF; border-left: 1px solid #DFDBD3; color: #43413C; font-size: 13px; font-weight: 700">meses</span>
+                  </span>
+                </label>
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 16px 20px">
+              <div style="display: flex; flex-direction: column; gap: 6px">
+                <label for="nl-pac" style="font-size: 13px; font-weight: 600; color: #2E2C29">Vincular paciente</label>
+                <span style="display: flex; align-items: center; gap: 8px; height: 40px; padding: 0 6px; box-sizing: border-box; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF">
+                  <span style="display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 4px 0 4px; border-radius: 999px; background: #F5F3EF; font-size: 13px; font-weight: 700; color: #2E2C29"><span style="width: 20px; height: 20px; border-radius: 999px; background: #FFFFFF; font-size: 9px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center">JP</span>João Pedro Basso<button type="button" aria-label="Remover paciente vinculado" style="width: 22px; height: 22px; border: 0; border-radius: 999px; background: transparent; color: #5B5852; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; padding: 0"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button></span>
+                  <input id="nl-pac" type="text" style="flex: 1; min-width: 0; border: 0; background: transparent; font: 500 14px Manrope, sans-serif">
+                </span>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 6px">
+                <label for="nl-pro" style="font-size: 13px; font-weight: 600; color: #2E2C29">Vincular profissional</label>
+                <span style="display: flex; align-items: center; gap: 8px; height: 40px; padding: 0 6px; box-sizing: border-box; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF">
+                  <span style="display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 4px 0 8px; border-radius: 999px; background: #F5F3EF; font-size: 13px; font-weight: 700; color: #2E2C29"><span style="width: 8px; height: 8px; border-radius: 999px; background: #3E7CA8"></span>Dra. Helena Marchetti<button type="button" aria-label="Remover profissional vinculado" style="width: 22px; height: 22px; border: 0; border-radius: 999px; background: transparent; color: #5B5852; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; padding: 0"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button></span>
+                  <input id="nl-pro" type="text" style="flex: 1; min-width: 0; border: 0; background: transparent; font: 500 14px Manrope, sans-serif">
+                </span>
+              </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 6px">
+              <span style="font-size: 13px; font-weight: 600; color: #2E2C29">Comprovante</span>
+              <label style="display: flex; flex-wrap: wrap; align-items: center; gap: 14px; padding: 18px; border: 1.5px dashed #C7C2B9; border-radius: 12px; background: #FAF8F4; cursor: pointer">
+                <span style="width: 40px; height: 40px; border-radius: 10px; background: #FFFFFF; color: #8F6425; display: inline-flex; align-items: center; justify-content: center; box-shadow: 0 1px 2px rgba(30,29,27,.06); flex-shrink: 0"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg></span>
+                <span style="display: flex; flex-direction: column; gap: 2px; flex: 1 1 200px">
+                  <span style="font-size: 14px; font-weight: 700">Arraste o arquivo ou <span style="color: #8F6425; text-decoration: underline">selecione</span></span>
+                  <span style="font-size: 12px; color: #5B5852">PDF, JPG ou PNG até 10 MB</span>
+                </span>
+                <input type="file" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">
+              </label>
+            </div>
+          </div>
+          <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 12px; padding: 16px 28px; border-top: 1px solid #ECE9E3; background: #FAF8F4">
+            <button type="button" style="height: 40px; padding: 0 16px; border: 0; border-radius: 8px; background: transparent; color: #43413C; font: 700 14px Manrope, sans-serif; cursor: pointer">Cancelar</button>
+            <button type="button" style="height: 40px; padding: 0 16px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; color: #2E2C29; font: 700 14px Manrope, sans-serif; cursor: pointer">Salvar e criar outro</button>
+            <button type="button" style="height: 40px; padding: 0 18px; border: 0; border-radius: 8px; background: #8F6425; color: #FFFFFF; font: 700 14px Manrope, sans-serif; cursor: pointer">Salvar lançamento</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 06 · REGISTRAR PAGAMENTO ===================== -->
+    <section id="m6" aria-labelledby="m6t" style="display: flex; flex-direction: column; gap: 20px">
+      <div style="display: flex; flex-direction: column; gap: 6px">
+        <span style="font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #8F6425">06 · Financeiro · md 640 px + sucesso sm 440 px</span>
+        <h2 id="m6t" style="margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 32px; line-height: 1.15">Registrar pagamento</h2>
+        <p style="margin: 0; font-size: 14px; color: #5B5852">Baixa de um título em aberto, com seleção da forma de pagamento e confirmação.</p>
+      </div>
+      <div style="background: rgba(30,29,27,.45); border-radius: 16px; padding: clamp(16px, 4vw, 48px); display: flex; justify-content: center">
+        <div role="dialog" aria-modal="true" aria-labelledby="d6t" style="width: 100%; max-width: 640px; background: #FFFFFF; border-radius: 16px; box-shadow: 0 18px 50px rgba(30,29,27,.14); display: flex; flex-direction: column; overflow: hidden">
+          <div style="display: flex; align-items: flex-start; gap: 16px; padding: 24px 28px 20px; border-bottom: 1px solid #ECE9E3">
+            <div style="display: flex; flex-direction: column; gap: 4px; margin-right: auto; min-width: 0">
+              <h3 id="d6t" style="margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 24px; line-height: 1.2">Registrar pagamento</h3>
+              <p style="margin: 0; font-size: 13px; line-height: 20px; color: #5B5852">Confira o título e informe como o valor foi recebido.</p>
+            </div>
+            <button type="button" aria-label="Fechar" style="width: 40px; height: 40px; margin: -6px -10px 0 0; border: 0; border-radius: 8px; background: transparent; color: #5B5852; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button>
+          </div>
+          <div style="padding: 24px 28px; display: flex; flex-direction: column; gap: 20px">
+            <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px; padding: 16px 18px; border-radius: 12px; background: #FAF8F4; border: 1px solid #ECE9E3">
+              <span style="width: 40px; height: 40px; border-radius: 999px; background: #F5E9D0; color: #6F4D1D; display: inline-flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; flex-shrink: 0">CM</span>
+              <span style="display: flex; flex-direction: column; gap: 2px; flex: 1 1 220px; min-width: 0">
+                <span style="font-size: 14px; font-weight: 700">Carla Menegatti</span>
+                <span style="font-size: 12px; color: #5B5852">Manutenção ortodôntica · Dra. Lauren Bertocchi · venc. 19/10/2026</span>
+              </span>
+              <span style="display: flex; flex-direction: column; align-items: flex-end">
+                <span style="font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #77736B">Valor do título</span>
+                <span style="font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 30px; line-height: 1.1; font-variant-numeric: tabular-nums">R$ 380,00</span>
+              </span>
+            </div>
+
+            <fieldset style="margin: 0; padding: 0; border: 0; min-width: 0">
+              <legend style="padding: 0 0 8px; font-size: 13px; font-weight: 600; color: #2E2C29">Forma de pagamento</legend>
+              <div role="radiogroup" aria-label="Forma de pagamento" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(120px, 100%), 1fr)); gap: 10px">
+                <sc-for list="{{payMethods}}" as="pm" hint-placeholder-count="4">
+                  <button type="button" role="radio" aria-checked="{{pm.on}}" style="position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 10px; min-height: 84px; padding: 14px; border-radius: 12px; border: {{pm.border}}; background: {{pm.bg}}; box-shadow: {{pm.ring}}; color: #1E1D1B; font: 700 13px Manrope, sans-serif; text-align: left; cursor: pointer">
+                    <span style="width: 32px; height: 32px; border-radius: 8px; background: {{pm.iconBg}}; color: {{pm.iconFg}}; display: inline-flex; align-items: center; justify-content: center">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{pm.d1}}"></path><path d="{{pm.d2}}"></path><path d="{{pm.d3}}"></path></svg>
+                    </span>
+                    {{pm.name}}
+                    <sc-if value="{{pm.selected}}" hint-placeholder-val="{{ false }}">
+                      <span aria-hidden="true" style="position: absolute; top: 10px; right: 10px; width: 20px; height: 20px; border-radius: 999px; background: #8F6425; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg></span>
+                    </sc-if>
+                  </button>
+                </sc-for>
+              </div>
+            </fieldset>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 16px 20px">
+              <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #2E2C29">Valor recebido
+                <span style="display: flex; align-items: center; height: 40px; box-sizing: border-box; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; overflow: hidden">
+                  <span style="display: inline-flex; align-items: center; height: 100%; padding: 0 12px; background: #F5F3EF; border-right: 1px solid #DFDBD3; color: #43413C; font-size: 13px; font-weight: 700">R$</span>
+                  <input type="text" value="380,00" inputmode="decimal" style="flex: 1; min-width: 0; height: 100%; padding: 0 12px; border: 0; background: transparent; font: 700 15px Manrope, sans-serif; color: #1E1D1B; font-variant-numeric: tabular-nums">
+                </span>
+              </label>
+              <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #2E2C29">Data do pagamento
+                <input type="text" value="19/10/2026" style="height: 40px; width: 100%; box-sizing: border-box; padding: 0 12px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 500 14px Manrope, sans-serif; color: #1E1D1B; font-variant-numeric: tabular-nums">
+              </label>
+              <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #77736B">Parcelas
+                <span style="position: relative; display: block">
+                  <select disabled style="appearance: none; -webkit-appearance: none; height: 40px; width: 100%; box-sizing: border-box; padding: 0 36px 0 12px; border: 1px solid #ECE9E3; border-radius: 8px; background: #F5F3EF; font: 500 14px Manrope, sans-serif; color: #77736B; cursor: not-allowed"><option>À vista</option></select>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9E998F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="position: absolute; right: 12px; top: 12px; pointer-events: none"><path d="m6 9 6 6 6-6"></path></svg>
+                </span>
+                <span style="font-size: 12px; font-weight: 500; color: #77736B">Indisponível para Pix.</span>
+              </label>
+              <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #2E2C29">Desconto
+                <span style="display: flex; align-items: center; height: 40px; box-sizing: border-box; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; overflow: hidden">
+                  <span style="display: inline-flex; align-items: center; height: 100%; padding: 0 12px; background: #F5F3EF; border-right: 1px solid #DFDBD3; color: #43413C; font-size: 13px; font-weight: 700">R$</span>
+                  <input type="text" value="0,00" inputmode="decimal" style="flex: 1; min-width: 0; height: 100%; padding: 0 12px; border: 0; background: transparent; font: 500 14px Manrope, sans-serif; color: #1E1D1B; font-variant-numeric: tabular-nums">
+                </span>
+              </label>
+              <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #77736B">Troco
+                <input type="text" value="R$ 0,00" disabled style="height: 40px; width: 100%; box-sizing: border-box; padding: 0 12px; border: 1px solid #ECE9E3; border-radius: 8px; background: #F5F3EF; font: 500 14px Manrope, sans-serif; color: #77736B; cursor: not-allowed">
+                <span style="font-size: 12px; font-weight: 500; color: #77736B">Calculado apenas para dinheiro.</span>
+              </label>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-radius: 12px; border: 1px solid #ECE9E3">
+              <span style="width: 36px; height: 36px; border-radius: 10px; background: #E3F0EE; color: #2F6F68; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path></svg></span>
+              <span style="display: flex; flex-direction: column; gap: 2px; margin-right: auto; min-width: 0">
+                <span id="rec-wa" style="font-size: 14px; font-weight: 700">Enviar recibo por WhatsApp</span>
+                <span style="font-size: 12px; color: #5B5852">Para (54) 99811-2045 · Carla Menegatti</span>
+              </span>
+              <button type="button" role="switch" aria-checked="true" aria-labelledby="rec-wa" style="width: 44px; height: 26px; padding: 3px; box-sizing: border-box; border: 0; border-radius: 999px; background: #8F6425; display: inline-flex; justify-content: flex-end; cursor: pointer; flex-shrink: 0"><span style="width: 20px; height: 20px; border-radius: 999px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(30,29,27,.25)"></span></button>
+            </div>
+          </div>
+          <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 12px; padding: 16px 28px; border-top: 1px solid #ECE9E3; background: #FAF8F4">
+            <span style="margin-right: auto; display: flex; flex-direction: column">
+              <span style="font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #77736B">Total a receber</span>
+              <span style="font-size: 18px; font-weight: 800; font-variant-numeric: tabular-nums">R$ 380,00</span>
+            </span>
+            <button type="button" style="height: 40px; padding: 0 16px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; color: #2E2C29; font: 700 14px Manrope, sans-serif; cursor: pointer">Cancelar</button>
+            <button type="button" style="display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 18px; border: 0; border-radius: 8px; background: #8F6425; color: #FFFFFF; font: 700 14px Manrope, sans-serif; cursor: pointer">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>
+              Confirmar pagamento
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <span style="font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #5B5852">Variação · estado de sucesso</span>
+      <div style="background: rgba(30,29,27,.45); border-radius: 16px; padding: clamp(16px, 4vw, 48px); display: flex; justify-content: center">
+        <div role="dialog" aria-modal="true" aria-labelledby="d6st" style="position: relative; width: 100%; max-width: 440px; background: #FFFFFF; border-radius: 16px; box-shadow: 0 18px 50px rgba(30,29,27,.14); display: flex; flex-direction: column; align-items: center; text-align: center; gap: 14px; padding: 36px 28px 28px; box-sizing: border-box">
+          <button type="button" aria-label="Fechar" style="position: absolute; top: 12px; right: 12px; width: 40px; height: 40px; border: 0; border-radius: 8px; background: transparent; color: #5B5852; display: inline-flex; align-items: center; justify-content: center; cursor: pointer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button>
+          <span style="width: 64px; height: 64px; border-radius: 999px; background: #E6F2EB; color: #2E7351; display: inline-flex; align-items: center; justify-content: center; box-shadow: 0 0 0 6px #F3F9F5"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg></span>
+          <h3 id="d6st" style="margin: 6px 0 0; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 26px; line-height: 1.2">Pagamento registrado</h3>
+          <p role="status" style="margin: 0; font-size: 14px; line-height: 22px; color: #43413C">R$ 380,00 recebidos via Pix de Carla Menegatti em 19/10/2026.</p>
+          <span style="display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; background: #E3F0EE; color: #2F6F68; font-size: 12px; font-weight: 700"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path></svg>Recibo enviado por WhatsApp</span>
+          <div style="display: flex; gap: 10px; width: 100%; padding-top: 10px">
+            <button type="button" style="flex: 1; height: 40px; padding: 0 16px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; color: #2E2C29; font: 700 14px Manrope, sans-serif; cursor: pointer">Ver lançamento</button>
+            <button type="button" style="flex: 1; height: 40px; padding: 0 18px; border: 0; border-radius: 8px; background: #8F6425; color: #FFFFFF; font: 700 14px Manrope, sans-serif; cursor: pointer">Concluir</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 07 · CONFIRMAR EXCLUSÃO ===================== -->
+    <section id="m7" aria-labelledby="m7t" style="display: flex; flex-direction: column; gap: 20px">
+      <div style="display: flex; flex-direction: column; gap: 6px">
+        <span style="font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #8F6425">07 · Confirmação destrutiva · sm 440 px</span>
+        <h2 id="m7t" style="margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 32px; line-height: 1.15">Confirmar exclusão</h2>
+        <p style="margin: 0; font-size: 14px; color: #5B5852">Exige digitar a palavra de confirmação. À direita, o estado de carregamento após o clique.</p>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 20px">
+        <div style="flex: 1 1 480px; min-width: 0; display: flex; flex-direction: column; gap: 10px">
+          <span style="font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #5B5852">Padrão</span>
+          <div style="background: rgba(30,29,27,.45); border-radius: 16px; padding: clamp(16px, 4vw, 48px); display: flex; justify-content: center; flex: 1">
+            <div role="alertdialog" aria-modal="true" aria-labelledby="d7t" aria-describedby="d7d" style="position: relative; width: 100%; max-width: 440px; background: #FFFFFF; border-radius: 16px; box-shadow: 0 18px 50px rgba(30,29,27,.14); display: flex; flex-direction: column; overflow: hidden">
+              <button type="button" aria-label="Fechar" style="position: absolute; top: 12px; right: 12px; width: 40px; height: 40px; border: 0; border-radius: 8px; background: transparent; color: #5B5852; display: inline-flex; align-items: center; justify-content: center; cursor: pointer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button>
+              <div style="padding: 28px 28px 20px; display: flex; flex-direction: column; gap: 14px">
+                <span style="width: 52px; height: 52px; border-radius: 999px; background: #FAE7E4; color: #A93B30; display: inline-flex; align-items: center; justify-content: center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path><path d="M10 11v6"></path><path d="M14 11v6"></path></svg></span>
+                <h3 id="d7t" style="margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 24px; line-height: 1.2">Excluir lançamento?</h3>
+                <p id="d7d" style="margin: 0; font-size: 14px; line-height: 22px; color: #43413C">O lançamento <strong>“Pacote de fonoterapia · 4 sessões”</strong> de R$ 640,00 será removido do fluxo de caixa e dos relatórios. Esta ação não pode ser desfeita.</p>
+                <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #2E2C29">Digite EXCLUIR para confirmar
+                  <input type="text" value="EXCLUIR" autocomplete="off" style="height: 40px; width: 100%; box-sizing: border-box; padding: 0 12px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 700 14px Manrope, sans-serif; letter-spacing: .08em; color: #1E1D1B">
+                </label>
+              </div>
+              <div style="display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 12px; padding: 16px 28px; border-top: 1px solid #ECE9E3; background: #FAF8F4">
+                <button type="button" style="height: 40px; padding: 0 16px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; color: #2E2C29; font: 700 14px Manrope, sans-serif; cursor: pointer">Cancelar</button>
+                <button type="button" style="display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 18px; border: 0; border-radius: 8px; background: #A93B30; color: #FFFFFF; font: 700 14px Manrope, sans-serif; cursor: pointer">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path></svg>
+                  Excluir
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="flex: 1 1 480px; min-width: 0; display: flex; flex-direction: column; gap: 10px">
+          <span style="font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #5B5852">Carregando</span>
+          <div style="background: rgba(30,29,27,.45); border-radius: 16px; padding: clamp(16px, 4vw, 48px); display: flex; justify-content: center; flex: 1">
+            <div role="alertdialog" aria-modal="true" aria-labelledby="d7lt" aria-busy="true" style="position: relative; width: 100%; max-width: 440px; background: #FFFFFF; border-radius: 16px; box-shadow: 0 18px 50px rgba(30,29,27,.14); display: flex; flex-direction: column; overflow: hidden">
+              <button type="button" aria-label="Fechar" disabled style="position: absolute; top: 12px; right: 12px; width: 40px; height: 40px; border: 0; border-radius: 8px; background: transparent; color: #9E998F; display: inline-flex; align-items: center; justify-content: center; cursor: not-allowed"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button>
+              <div style="padding: 28px 28px 20px; display: flex; flex-direction: column; gap: 14px">
+                <span style="width: 52px; height: 52px; border-radius: 999px; background: #FAE7E4; color: #A93B30; display: inline-flex; align-items: center; justify-content: center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path><path d="M10 11v6"></path><path d="M14 11v6"></path></svg></span>
+                <h3 id="d7lt" style="margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 24px; line-height: 1.2">Excluir lançamento?</h3>
+                <p style="margin: 0; font-size: 14px; line-height: 22px; color: #43413C">O lançamento <strong>“Pacote de fonoterapia · 4 sessões”</strong> de R$ 640,00 será removido do fluxo de caixa e dos relatórios. Esta ação não pode ser desfeita.</p>
+                <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600; color: #77736B">Digite EXCLUIR para confirmar
+                  <input type="text" value="EXCLUIR" disabled style="height: 40px; width: 100%; box-sizing: border-box; padding: 0 12px; border: 1px solid #ECE9E3; border-radius: 8px; background: #F5F3EF; font: 700 14px Manrope, sans-serif; letter-spacing: .08em; color: #77736B">
+                </label>
+              </div>
+              <div style="display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 12px; padding: 16px 28px; border-top: 1px solid #ECE9E3; background: #FAF8F4">
+                <button type="button" disabled style="height: 40px; padding: 0 16px; border: 1px solid #ECE9E3; border-radius: 8px; background: #F5F3EF; color: #77736B; font: 700 14px Manrope, sans-serif; cursor: not-allowed">Cancelar</button>
+                <button type="button" disabled aria-busy="true" style="display: inline-flex; align-items: center; gap: 10px; height: 40px; padding: 0 18px; border: 0; border-radius: 8px; background: #8A3027; color: #FFFFFF; font: 700 14px Manrope, sans-serif; cursor: progress">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="rgba(255,255,255,.35)" stroke-width="2.5"></circle><path d="M21 12a9 9 0 0 0-9-9" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round"></path></svg>
+                  Excluindo…
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 08 · DETALHES DE ATENDIMENTO ===================== -->
+    <section id="m8" aria-labelledby="m8t" style="display: flex; flex-direction: column; gap: 20px">
+      <div style="display: flex; flex-direction: column; gap: 6px">
+        <span style="font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #8F6425">08 · Atendimentos · md 640 px</span>
+        <h2 id="m8t" style="margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 32px; line-height: 1.15">Detalhes de atendimento</h2>
+        <p style="margin: 0; font-size: 14px; color: #5B5852">Visão administrativa da consulta. O conteúdo clínico permanece oculto para perfis sem permissão.</p>
+      </div>
+      <div style="background: rgba(30,29,27,.45); border-radius: 16px; padding: clamp(16px, 4vw, 48px); display: flex; justify-content: center">
+        <div role="dialog" aria-modal="true" aria-labelledby="d8t" style="width: 100%; max-width: 640px; background: #FFFFFF; border-radius: 16px; box-shadow: 0 18px 50px rgba(30,29,27,.14); display: flex; flex-direction: column; overflow: hidden">
+          <div style="display: flex; align-items: flex-start; gap: 16px; padding: 24px 28px 20px; border-bottom: 1px solid #ECE9E3">
+            <div style="display: flex; flex-direction: column; gap: 6px; margin-right: auto; min-width: 0">
+              <h3 id="d8t" style="margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 24px; line-height: 1.2">Detalhes do atendimento</h3>
+              <p style="margin: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 13px; color: #5B5852">
+                <span style="font-variant-numeric: tabular-nums">AT-2026-1019-0187 · Segunda, 19 de outubro de 2026</span>
+                <span style="display: inline-flex; align-items: center; gap: 6px; height: 24px; padding: 0 10px; border-radius: 999px; background: #ECE9E3; color: #5B5852; font-size: 12px; font-weight: 700"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>Concluída</span>
+              </p>
+            </div>
+            <button type="button" aria-label="Fechar" style="width: 40px; height: 40px; margin: -6px -10px 0 0; border: 0; border-radius: 8px; background: transparent; color: #5B5852; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button>
+          </div>
+          <div style="padding: 24px 28px; display: flex; flex-direction: column; gap: 22px">
+            <div style="display: flex; align-items: center; gap: 14px">
+              <span style="width: 48px; height: 48px; border-radius: 999px; background: #F5E9D0; color: #6F4D1D; display: inline-flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 800; flex-shrink: 0">CM</span>
+              <span style="display: flex; flex-direction: column; gap: 2px; margin-right: auto; min-width: 0">
+                <span style="font-size: 16px; font-weight: 700">Carla Menegatti</span>
+                <span style="font-size: 13px; color: #5B5852">37 anos · (54) 99811-2045 · paciente desde mar/2024</span>
+              </span>
+              <a href="Pacientes.dc.html" style="font-size: 13px; font-weight: 700; color: #8F6425; white-space: nowrap">Ver cadastro</a>
+            </div>
+            <dl style="margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(170px, 100%), 1fr)); gap: 1px; background: #ECE9E3; border: 1px solid #ECE9E3; border-radius: 12px; overflow: hidden">
+              <sc-for list="{{apptDetails}}" as="ad" hint-placeholder-count="6">
+                <div style="background: #FFFFFF; padding: 12px 14px; display: flex; flex-direction: column; gap: 4px">
+                  <dt style="font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #77736B">{{ad.k}}</dt>
+                  <dd style="margin: 0; display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums"><span style="width: 8px; height: 8px; border-radius: 999px; background: {{ad.dot}}; display: {{ad.dotDisplay}}"></span>{{ad.v}}</dd>
+                </div>
+              </sc-for>
+            </dl>
+            <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; padding: 16px 18px; border-radius: 12px; background: #FAF8F4; border: 1px solid #ECE9E3">
+              <span style="display: flex; flex-direction: column; margin-right: auto">
+                <span style="font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #77736B">Valor e pagamento</span>
+                <span style="font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 30px; line-height: 1.1; font-variant-numeric: tabular-nums">R$ 380,00</span>
+                <span style="font-size: 12px; color: #5B5852">Pix · 19/10/2026, 09:52 · recibo enviado por WhatsApp</span>
+              </span>
+              <span style="display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 999px; background: #E6F2EB; color: #2E7351; font-size: 12px; font-weight: 700"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>Pago</span>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 10px">
+              <h4 style="margin: 0; font-size: 15px; font-weight: 700">Checklist administrativo <span style="font-weight: 600; color: #5B5852">· 4 de 5</span></h4>
+              <ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px">
+                <sc-for list="{{checklist}}" as="ck" hint-placeholder-count="5">
+                  <li style="display: flex; align-items: center; gap: 10px; min-height: 36px; font-size: 14px; color: {{ck.fg}}">
+                    <span style="width: 22px; height: 22px; border-radius: 999px; background: {{ck.bg}}; box-shadow: {{ck.ring}}; color: #2E7351; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0">
+                      <sc-if value="{{ck.done}}" hint-placeholder-val="{{ true }}"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg></sc-if>
+                    </span>
+                    <span style="font-weight: 600; margin-right: auto">{{ck.label}}</span>
+                    <span style="font-size: 12px; color: #5B5852">{{ck.note}}</span>
+                  </li>
+                </sc-for>
+              </ul>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 14px; padding: 18px; border-radius: 12px; border: 1px dashed #C7C2B9; background: #FAF8F4">
+              <div style="display: flex; align-items: flex-start; gap: 12px">
+                <span style="width: 40px; height: 40px; border-radius: 999px; background: #ECE9E3; color: #43413C; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></span>
+                <span style="display: flex; flex-direction: column; gap: 2px">
+                  <span style="font-size: 14px; font-weight: 700">Registro clínico restrito</span>
+                  <span style="font-size: 13px; line-height: 20px; color: #5B5852">Visível apenas para Dra. Lauren Bertocchi e perfis com permissão de Prontuário clínico.</span>
+                </span>
+              </div>
+              <div aria-hidden="true" style="display: flex; flex-direction: column; gap: 8px; padding-left: 52px">
+                <span style="height: 10px; width: 92%; border-radius: 999px; background: #ECE9E3"></span>
+                <span style="height: 10px; width: 78%; border-radius: 999px; background: #ECE9E3"></span>
+                <span style="height: 10px; width: 55%; border-radius: 999px; background: #ECE9E3"></span>
+              </div>
+            </div>
+          </div>
+          <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 12px; padding: 16px 28px; border-top: 1px solid #ECE9E3; background: #FAF8F4">
+            <button type="button" style="display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 16px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; color: #2E2C29; font: 700 14px Manrope, sans-serif; cursor: pointer">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"></path><rect x="6" y="14" width="12" height="8" rx="1"></rect></svg>
+              Imprimir comprovante
+            </button>
+            <button type="button" style="display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 18px; border: 0; border-radius: 8px; background: #8F6425; color: #FFFFFF; font: 700 14px Manrope, sans-serif; cursor: pointer">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4"></path><path d="M16 2v4"></path><path d="M21 13V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8"></path><path d="M3 10h18"></path><path d="M16 19h6"></path><path d="M19 16v6"></path></svg>
+              Agendar retorno
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== 09 · DRAWER ===================== -->
+    <section id="m9" aria-labelledby="m9t" style="display: flex; flex-direction: column; gap: 20px">
+      <div style="display: flex; flex-direction: column; gap: 6px">
+        <span style="font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #8F6425">09 · Padrão drawer · 480 px à direita</span>
+        <h2 id="m9t" style="margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 32px; line-height: 1.15">Drawer lateral · Filtros avançados</h2>
+        <p style="margin: 0; font-size: 14px; color: #5B5852">Ocupa a altura total da tela, alinhado à direita. Cabeçalho e rodapé fixos; corpo com rolagem. No celular ocupa 100% da largura.</p>
+      </div>
+      <div style="background: rgba(30,29,27,.45); border-radius: 16px; overflow: hidden; display: flex; justify-content: flex-end; min-height: 880px">
+        <aside role="dialog" aria-modal="true" aria-labelledby="d9t" style="width: 100%; max-width: 480px; background: #FFFFFF; box-shadow: -18px 0 50px rgba(30,29,27,.14); display: flex; flex-direction: column">
+          <div style="display: flex; align-items: flex-start; gap: 16px; padding: 24px 24px 20px; border-bottom: 1px solid #ECE9E3">
+            <div style="display: flex; flex-direction: column; gap: 6px; margin-right: auto; min-width: 0">
+              <h3 id="d9t" style="margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; font-size: 24px; line-height: 1.2">Filtros avançados</h3>
+              <p style="margin: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 13px; color: #5B5852">Pacientes · 1.284 cadastros <span style="display: inline-flex; align-items: center; height: 22px; padding: 0 8px; border-radius: 999px; background: #FBF6EC; color: #8F6425; font-size: 11px; font-weight: 800">5 filtros ativos</span></p>
+            </div>
+            <button type="button" aria-label="Fechar filtros" style="width: 40px; height: 40px; margin: -6px -8px 0 0; border: 0; border-radius: 8px; background: transparent; color: #5B5852; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button>
+          </div>
+          <div style="flex: 1; padding: 20px 24px; display: flex; flex-direction: column; gap: 22px; overflow-y: auto">
+            <fieldset style="margin: 0; padding: 0; border: 0; min-width: 0">
+              <legend style="padding: 0 0 10px; font-size: 13px; font-weight: 700; color: #1E1D1B">Situação do cadastro</legend>
+              <div style="display: flex; flex-wrap: wrap; gap: 8px">
+                <label style="display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 14px; border: 1px solid #B5832F; border-radius: 999px; background: #FBF6EC; font-size: 13px; font-weight: 700; cursor: pointer"><input type="checkbox" checked style="margin: 0; width: 16px; height: 16px; accent-color: #8F6425">Ativos</label>
+                <label style="display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 14px; border: 1px solid #DFDBD3; border-radius: 999px; background: #FFFFFF; font-size: 13px; font-weight: 600; color: #43413C; cursor: pointer"><input type="checkbox" style="margin: 0; width: 16px; height: 16px; accent-color: #8F6425">Inativos</label>
+                <label style="display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 14px; border: 1px solid #B5832F; border-radius: 999px; background: #FBF6EC; font-size: 13px; font-weight: 700; cursor: pointer"><input type="checkbox" checked style="margin: 0; width: 16px; height: 16px; accent-color: #8F6425">Novos em outubro</label>
+              </div>
+            </fieldset>
+
+            <fieldset style="margin: 0; padding: 20px 0 0; border: 0; border-top: 1px solid #ECE9E3; min-width: 0">
+              <legend style="float: left; width: 100%; padding: 0 0 10px; font-size: 13px; font-weight: 700; color: #1E1D1B">Especialidade</legend>
+              <div style="clear: both; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr)); gap: 2px 12px">
+                <sc-for list="{{filterSpecs}}" as="fs" hint-placeholder-count="8">
+                  <label style="display: flex; align-items: center; gap: 10px; min-height: 40px; font-size: 14px; font-weight: 600; color: #2E2C29; cursor: pointer">
+                    <input type="checkbox" checked="{{fs.checked}}" style="margin: 0; width: 18px; height: 18px; accent-color: #8F6425">
+                    <span style="width: 8px; height: 8px; border-radius: 999px; background: {{fs.color}}"></span>{{fs.name}}
+                  </label>
+                </sc-for>
+              </div>
+            </fieldset>
+
+            <label style="display: flex; flex-direction: column; gap: 6px; padding-top: 20px; border-top: 1px solid #ECE9E3; font-size: 13px; font-weight: 700; color: #1E1D1B">Profissional
+              <span style="position: relative; display: block">
+                <select style="appearance: none; -webkit-appearance: none; height: 40px; width: 100%; box-sizing: border-box; padding: 0 36px 0 12px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 500 14px Manrope, sans-serif; color: #1E1D1B"><option>Todos os profissionais</option><option>Dra. Lauren Bertocchi</option><option>Dra. Helena Marchetti</option><option>Dr. Rafael Zanella</option><option>Dra. Bianca Toniolo</option><option>Dra. Marina Lazzari</option><option>Dr. Gustavo Pagnussat</option><option>Dra. Júlia Dalmolin</option><option>Ana Paula Schmitt</option></select>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#77736B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="position: absolute; right: 12px; top: 12px; pointer-events: none"><path d="m6 9 6 6 6-6"></path></svg>
+              </span>
+            </label>
+
+            <fieldset style="margin: 0; padding: 20px 0 0; border: 0; border-top: 1px solid #ECE9E3; min-width: 0">
+              <legend style="float: left; width: 100%; padding: 0 0 10px; font-size: 13px; font-weight: 700; color: #1E1D1B">Última consulta</legend>
+              <div style="clear: both; display: flex; flex-direction: column; gap: 12px">
+                <div role="radiogroup" aria-label="Período da última consulta" style="display: flex; padding: 3px; border-radius: 10px; background: #F5F3EF; gap: 2px">
+                  <button type="button" role="radio" aria-checked="false" style="flex: 1; height: 36px; border: 0; border-radius: 8px; background: transparent; color: #5B5852; font: 700 12px Manrope, sans-serif; cursor: pointer">30 dias</button>
+                  <button type="button" role="radio" aria-checked="true" style="flex: 1; height: 36px; border: 0; border-radius: 8px; background: #FFFFFF; color: #1E1D1B; box-shadow: 0 1px 2px rgba(30,29,27,.08); font: 700 12px Manrope, sans-serif; cursor: pointer">90 dias</button>
+                  <button type="button" role="radio" aria-checked="false" style="flex: 1; height: 36px; border: 0; border-radius: 8px; background: transparent; color: #5B5852; font: 700 12px Manrope, sans-serif; cursor: pointer">6 meses</button>
+                  <button type="button" role="radio" aria-checked="false" style="flex: 1; height: 36px; border: 0; border-radius: 8px; background: transparent; color: #5B5852; font: 700 12px Manrope, sans-serif; cursor: pointer">Período</button>
+                </div>
+                <div style="display: flex; gap: 12px">
+                  <label style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; font-size: 12px; font-weight: 600; color: #5B5852">De
+                    <input type="text" value="21/07/2026" style="height: 40px; width: 100%; box-sizing: border-box; padding: 0 12px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 500 14px Manrope, sans-serif; color: #1E1D1B; font-variant-numeric: tabular-nums">
+                  </label>
+                  <label style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; font-size: 12px; font-weight: 600; color: #5B5852">Até
+                    <input type="text" value="19/10/2026" style="height: 40px; width: 100%; box-sizing: border-box; padding: 0 12px; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; font: 500 14px Manrope, sans-serif; color: #1E1D1B; font-variant-numeric: tabular-nums">
+                  </label>
+                </div>
+              </div>
+            </fieldset>
+
+            <fieldset style="margin: 0; padding: 20px 0 0; border: 0; border-top: 1px solid #ECE9E3; min-width: 0">
+              <legend style="float: left; width: 100%; padding: 0 0 10px; font-size: 13px; font-weight: 700; color: #1E1D1B">Faixa etária</legend>
+              <div style="clear: both; display: flex; align-items: center; gap: 12px">
+                <label style="flex: 1; min-width: 0"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Idade mínima</span>
+                  <span style="display: flex; align-items: center; height: 40px; box-sizing: border-box; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; overflow: hidden"><input type="text" value="18" inputmode="numeric" style="flex: 1; min-width: 0; height: 100%; padding: 0 12px; border: 0; background: transparent; font: 600 14px Manrope, sans-serif; color: #1E1D1B"><span style="padding: 0 12px; font-size: 12px; font-weight: 700; color: #5B5852">anos</span></span>
+                </label>
+                <span aria-hidden="true" style="color: #77736B; font-weight: 700">–</span>
+                <label style="flex: 1; min-width: 0"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Idade máxima</span>
+                  <span style="display: flex; align-items: center; height: 40px; box-sizing: border-box; border: 1px solid #DFDBD3; border-radius: 8px; background: #FFFFFF; overflow: hidden"><input type="text" value="65" inputmode="numeric" style="flex: 1; min-width: 0; height: 100%; padding: 0 12px; border: 0; background: transparent; font: 600 14px Manrope, sans-serif; color: #1E1D1B"><span style="padding: 0 12px; font-size: 12px; font-weight: 700; color: #5B5852">anos</span></span>
+                </label>
+              </div>
+            </fieldset>
+
+            <div style="display: flex; flex-direction: column; gap: 10px; padding-top: 20px; border-top: 1px solid #ECE9E3">
+              <span style="font-size: 13px; font-weight: 700; color: #1E1D1B">Tags</span>
+              <div style="display: flex; flex-wrap: wrap; gap: 6px">
+                <span style="display: inline-flex; align-items: center; gap: 4px; height: 28px; padding: 0 4px 0 10px; border-radius: 999px; background: #FBF6EC; color: #6F4D1D; font-size: 12px; font-weight: 700">Primeira consulta<button type="button" aria-label="Remover filtro Primeira consulta" style="width: 22px; height: 22px; border: 0; border-radius: 999px; background: transparent; color: #6F4D1D; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; padding: 0"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button></span>
+                <span style="display: inline-flex; align-items: center; gap: 4px; height: 28px; padding: 0 4px 0 10px; border-radius: 999px; background: #FBF6EC; color: #6F4D1D; font-size: 12px; font-weight: 700">Prefere manhã<button type="button" aria-label="Remover filtro Prefere manhã" style="width: 22px; height: 22px; border: 0; border-radius: 999px; background: transparent; color: #6F4D1D; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; padding: 0"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button></span>
+                <button type="button" style="display: inline-flex; align-items: center; gap: 4px; height: 28px; padding: 0 10px; border: 1px dashed #C7C2B9; border-radius: 999px; background: #FFFFFF; color: #43413C; font: 700 12px Manrope, sans-serif; cursor: pointer"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path><path d="M12 5v14"></path></svg>Adicionar</button>
+              </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 4px; padding-top: 20px; border-top: 1px solid #ECE9E3">
+              <div style="display: flex; align-items: center; gap: 12px; min-height: 44px">
+                <span id="f-pend" style="font-size: 14px; font-weight: 600; margin-right: auto">Somente com pagamento pendente</span>
+                <button type="button" role="switch" aria-checked="false" aria-labelledby="f-pend" style="width: 44px; height: 26px; padding: 3px; box-sizing: border-box; border: 0; border-radius: 999px; background: #C7C2B9; display: inline-flex; justify-content: flex-start; cursor: pointer"><span style="width: 20px; height: 20px; border-radius: 999px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(30,29,27,.25)"></span></button>
+              </div>
+              <div style="display: flex; align-items: center; gap: 12px; min-height: 44px">
+                <span id="f-noappt" style="font-size: 14px; font-weight: 600; margin-right: auto">Sem consulta futura agendada</span>
+                <button type="button" role="switch" aria-checked="true" aria-labelledby="f-noappt" style="width: 44px; height: 26px; padding: 3px; box-sizing: border-box; border: 0; border-radius: 999px; background: #8F6425; display: inline-flex; justify-content: flex-end; cursor: pointer"><span style="width: 20px; height: 20px; border-radius: 999px; background: #FFFFFF; box-shadow: 0 1px 2px rgba(30,29,27,.25)"></span></button>
+              </div>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 12px; padding: 16px 24px; border-top: 1px solid #ECE9E3; background: #FAF8F4">
+            <button type="button" style="margin-right: auto; height: 40px; padding: 0 12px; border: 0; border-radius: 8px; background: transparent; color: #43413C; font: 700 14px Manrope, sans-serif; cursor: pointer">Limpar filtros</button>
+            <button type="button" style="display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 18px; border: 0; border-radius: 8px; background: #8F6425; color: #FFFFFF; font: 700 14px Manrope, sans-serif; cursor: pointer">Ver 214 pacientes</button>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":10400}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const SP = { 'Odontologia': '#B5832F', 'Fonoaudiologia': '#3E7CA8', 'Estética Avançada': '#B0607A', 'Psicologia': '#6E62A6', 'Quiropraxia': '#3F8A72', 'Podologia': '#8A7A3F', 'Fisioterapia': '#C0703A', 'Nutrição': '#5E8A3A' };
+
+    const index = [
+      ['01', 'Novo paciente'], ['02', 'Editar paciente'], ['03', 'Novo profissional'], ['04', 'Editar profissional'],
+      ['05', 'Novo lançamento'], ['06', 'Registrar pagamento'], ['07', 'Confirmar exclusão'], ['08', 'Detalhes de atendimento'], ['09', 'Drawer de filtros']
+    ].map(([n, label], i) => ({ n, label, href: '#m' + (i + 1) }));
+
+    const agendaColors = Object.keys(SP).map(name => {
+      const sel = name === 'Nutrição';
+      return { name: 'Cor de ' + name, hex: SP[name], selected: sel, on: sel ? 'true' : 'false', ring: sel ? '0 0 0 2px #FFFFFF, 0 0 0 4px ' + SP[name] : 'none' };
+    });
+
+    const nutriServices = [
+      ['Consulta nutricional', true], ['Retorno nutricional', true], ['Bioimpedância', true],
+      ['Reeducação alimentar', false], ['Nutrição esportiva', false], ['Nutrição infantil', false]
+    ].map(([name, on]) => ({
+      name, on, off: !on, pressed: on ? 'true' : 'false',
+      border: on ? '1px solid #B5832F' : '1px solid #DFDBD3', bg: on ? '#FBF6EC' : '#FFFFFF', fg: on ? '#6F4D1D' : '#43413C'
+    }));
+
+    const weekDays = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+    const fullDays = ['segunda', 'terça', 'quarta', 'quinta', 'sexta', 'sábado'];
+    const blocks = [['08h – 12h', [1, 0, 1, 0, 0, 1]], ['13h – 17h', [0, 1, 0, 1, 0, 0]], ['17h – 20h', [0, 0, 0, 0, 0, 0]]];
+    const proGrid = blocks.map(([label, row]) => ({
+      label,
+      cells: row.map((v, i) => ({
+        pressed: v ? 'true' : 'false', text: v ? 'Disponível' : '—',
+        aria: fullDays[i] + ', ' + label + (v ? ': disponível' : ': indisponível'),
+        border: v ? '1px solid #DDB872' : '1px solid #ECE9E3', bg: v ? '#F5E9D0' : '#FAF8F4', fg: v ? '#6F4D1D' : '#77736B'
+      }))
+    }));
+
+    const editDays = [
+      ['Segunda', true, '08:00', '18:00', '12:00 – 13:30'],
+      ['Terça', true, '08:00', '18:00', '12:00 – 13:30'],
+      ['Quarta', true, '13:30', '20:00', 'Sem intervalo'],
+      ['Quinta', true, '08:00', '18:00', '12:00 – 13:30'],
+      ['Sexta', true, '08:00', '17:00', '12:00 – 13:30'],
+      ['Sábado', true, '08:00', '12:00', 'Sem intervalo'],
+      ['Domingo', false, '', '', '']
+    ].map(([name, on, start, end, pause]) => ({
+      name, on, off: !on, start, end, pause,
+      checked: on ? 'true' : 'false', swBg: on ? '#8F6425' : '#C7C2B9', swJustify: on ? 'flex-end' : 'flex-start',
+      fg: on ? '#1E1D1B' : '#77736B', rowBg: on ? '#FFFFFF' : '#FAF8F4',
+      aria: 'Atende ' + name.toLowerCase(), ariaStart: name + ', início', ariaEnd: name + ', fim', ariaPause: name + ', intervalo'
+    }));
+
+    const payMethods = [
+      ['Pix', true, 'M3 3h7v7H3z', 'M14 3h7v7h-7zM3 14h7v7H3z', 'M14 14h3v3h-3zM20 14v.01M14 20h.01M17 20h4v-3'],
+      ['Cartão de crédito', false, 'M4 5h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z', 'M2 10h20', 'M6 15h4'],
+      ['Cartão de débito', false, 'M4 5h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z', 'M2 10h20', 'M15 15h3'],
+      ['Dinheiro', false, 'M4 6h16a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2Z', 'M12 9a3 3 0 1 0 0 6a3 3 0 1 0 0-6', 'M6 12h.01M18 12h.01']
+    ].map(([name, sel, d1, d2, d3]) => ({
+      name, selected: sel, on: sel ? 'true' : 'false', d1, d2, d3,
+      border: sel ? '1.5px solid #B5832F' : '1px solid #DFDBD3', bg: sel ? '#FBF6EC' : '#FFFFFF',
+      ring: sel ? '0 0 0 3px rgba(181,131,47,.18)' : 'none',
+      iconBg: sel ? '#FFFFFF' : '#F5F3EF', iconFg: sel ? '#8F6425' : '#43413C'
+    }));
+
+    const apptDetails = [
+      ['Profissional', 'Dra. Lauren Bertocchi', SP['Odontologia']],
+      ['Serviço', 'Manutenção ortodôntica', null],
+      ['Sala', 'Sala 1 · Odontologia', null],
+      ['Início', '09:00', null],
+      ['Término', '09:50', null],
+      ['Duração', '50 min', null]
+    ].map(([k, v, dot]) => ({ k, v, dot: dot || 'transparent', dotDisplay: dot ? 'inline-block' : 'none' }));
+
+    const checklist = [
+      ['Presença confirmada', 'via WhatsApp · 18/10', true],
+      ['Check-in na recepção', '08:52', true],
+      ['Consentimento LGPD assinado', 'mar/2024', true],
+      ['Pagamento registrado', 'Pix · 09:52', true],
+      ['Retorno agendado', 'Pendente', false]
+    ].map(([label, note, done]) => ({
+      label, note, done,
+      bg: done ? '#E6F2EB' : '#FFFFFF', ring: done ? 'none' : 'inset 0 0 0 1.5px #C7C2B9', fg: done ? '#1E1D1B' : '#43413C'
+    }));
+
+    const filterSpecs = Object.keys(SP).map(name => ({ name, color: SP[name], checked: (name === 'Odontologia' || name === 'Fonoaudiologia') ? 'checked' : null }));
+
+    return { index, agendaColors, nutriServices, weekDays, proGrid, editDays, payMethods, apptDetails, checklist, filterSpecs };
+  }
+}
+</script>
+</body>
+</html>
