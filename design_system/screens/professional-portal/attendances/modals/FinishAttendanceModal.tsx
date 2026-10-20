@@ -3,7 +3,7 @@ import { CircleCheckBig, Info } from 'lucide-react';
 import { Button, Checkbox, Modal, Select, Textarea } from '@ds/components';
 import { formatTime, toDateKey } from '@ds/mocks/clinical';
 import type { PortalAppointment } from '@ds/mocks/portal';
-import { PORTAL_TODAY } from '@ds/mocks/portal';
+import { now } from '@core';
 import { addDays } from '../../../agenda/agendaUtils';
 import { weekdayDate } from '../../shared/portalUtils';
 
@@ -24,6 +24,8 @@ export interface FinishAttendanceModalProps {
   /** Minutos decorridos desde o início. */
   elapsedMin: number;
   onConfirm: (result: FinishAttendanceResult) => void;
+  /** Finalização em andamento (serviço). */
+  loading?: boolean;
 }
 
 const RETURN_OPTIONS: { value: ReturnInterval; label: string }[] = [
@@ -45,7 +47,7 @@ export function suggestedReturnFor(service: string): ReturnInterval {
 }
 
 /** Finalização do atendimento com retorno sugerido para a recepção agendar. */
-export function FinishAttendanceModal({ open, onClose, appointment, elapsedMin, onConfirm }: FinishAttendanceModalProps) {
+export function FinishAttendanceModal({ open, onClose, appointment, elapsedMin, onConfirm, loading = false }: FinishAttendanceModalProps) {
   const [returnIn, setReturnIn] = useState<ReturnInterval>('30');
   const [note, setNote] = useState('');
   const [reviewed, setReviewed] = useState(false);
@@ -59,7 +61,7 @@ export function FinishAttendanceModal({ open, onClose, appointment, elapsedMin, 
     setError(undefined);
   }, [open, appointment]);
 
-  const suggestedDate = returnIn === 'sem' ? undefined : toDateKey(addDays(PORTAL_TODAY, Number(returnIn)));
+  const suggestedDate = returnIn === 'sem' ? undefined : toDateKey(addDays(now(), Number(returnIn)));
 
   function confirm() {
     if (!appointment) return;
@@ -82,7 +84,7 @@ export function FinishAttendanceModal({ open, onClose, appointment, elapsedMin, 
           <Button variant="secondary" onClick={onClose}>
             Voltar ao atendimento
           </Button>
-          <Button leftIcon={CircleCheckBig} onClick={confirm}>
+          <Button leftIcon={CircleCheckBig} onClick={confirm} loading={loading}>
             Finalizar
           </Button>
         </>

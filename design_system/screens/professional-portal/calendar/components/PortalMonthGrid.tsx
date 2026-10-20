@@ -2,9 +2,10 @@ import { Hourglass, Lock } from 'lucide-react';
 import { cn } from '@ds/foundations/cn';
 import { formatTime, isSameDay, toDateKey } from '@ds/mocks/clinical';
 import type { BlockRequest, PortalAppointment } from '@ds/mocks/portal';
-import { getMyBlocks } from '@ds/mocks/portal';
+import { activeBlocks } from '../../shared/portalData';
 
 export interface PortalMonthGridProps {
+  /** Profissional logado (somente os próprios bloqueios são marcados). */
   professionalId: string;
   month: Date;
   appointments: PortalAppointment[];
@@ -36,7 +37,7 @@ export function PortalMonthGrid({ professionalId, month, appointments, requests,
     ...Array.from({ length: daysInMonth }, (_, i) => new Date(y, m, i + 1)),
   ];
   while (cells.length % 7 !== 0) cells.push(null);
-  const blocks = getMyBlocks(professionalId, requests);
+  const blocks = activeBlocks(requests, professionalId);
 
   return (
     <div className="overflow-hidden rounded-md border border-graphite-200 bg-white shadow-sm">

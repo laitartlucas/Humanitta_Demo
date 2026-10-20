@@ -1,33 +1,28 @@
 import { useEffect, useMemo, useState } from 'react';
 import { AlertTriangle, Info, Send } from 'lucide-react';
+import { blockRequestService, todayKey as clockTodayKey, useAction } from '@core';
 import { Button, Checkbox, Input, Modal, SegmentedControl, Select, Textarea, useToast } from '@ds/components';
-import { WEEKDAY_NAMES, formatTime, parseDate, toDateKey, toLocalIso } from '@ds/mocks/clinical';
+import { WEEKDAY_NAMES, formatTime, parseDate, toDateKey } from '@ds/mocks/clinical';
 import type { BlockRequest, BlockRequestKind, PortalAppointment, Weekday } from '@ds/mocks/portal';
-import {
-  PORTAL_NOW,
-  PORTAL_PROFESSIONAL_ID,
-  PORTAL_TODAY,
-  findMyConflicts,
-  getMyAppointments,
-  getMyAvailability,
-  getMyBlocks,
-  timeToMinutes,
-} from '@ds/mocks/portal';
+import { activeBlocks, availabilityOf, findConflictsIn, timeToMinutes } from '../../shared/portalData';
+import { useMyAppointments, useMyBlockRequests, useMyProfessional } from '../../shared/usePortalData';
 import { isWaiting, weekdayDate } from '../../shared/portalUtils';
 
 export interface RequestBlockModalProps {
   open: boolean;
   onClose: () => void;
-  /** Recebe a solicitação criada (status 'enviada'). O modal já exibe o toast. */
-  onSubmit: (request: BlockRequest) => void;
-  professionalId?: string;
+  /**
+   * Chamado com a solicitação gravada pelo `blockRequestService.requestBlock` (status 'enviada').
+   * O modal já exibe o toast; a lista se atualiza sozinha pelo core.
+   */
+  onSubmitted?: (request: BlockRequest) => void;
   /** Tipo inicial (padrão 'bloqueio'). */
   initialKind?: BlockRequestKind;
   /** Data inicial AAAA-MM-DD (padrão: hoje da demo). */
   initialDate?: string;
   initialStart?: string;
   initialEnd?: string;
-  /** Consultas consideradas na detecção de conflito (padrão: getMyAppointments). */
+  /** Consultas consideradas na detecção de conflito (padrão: as do profissional logado). */
   appointments?: PortalAppointment[];
   /** Solicitações existentes (para evitar bloqueio duplicado). */
   existingRequests?: BlockRequest[];
@@ -46,13 +41,13 @@ interface Errors {
 
 /**
  * Solicitação de bloqueio de horário ou de alteração de disponibilidade.
- * O profissional SOLICITA; a administração aprova (o servidor valida a permissão 'solicitar').
+ * O profissional SOLICITA (status 'enviada'); a administração aprova. Enquanto pendente, nada
+ * muda na agenda da recepção — só bloqueios APROVADOS entram em `findConflicts` do core.
  */
 export function RequestBlockModal({
   open,
   onClose,
-  onSubmit,
-  professionalId = PORTAL_PROFESSIONAL_ID,
+  onSubmitted,
   initialKind = 'bloqueio',
   initialDate,
   initialStart,
@@ -61,7 +56,11 @@ export function RequestBlockModal({
   existingRequests,
 }: RequestBlockModalProps) {
   const { toast } = useToast();
-  const todayKey = toDateKey(PORTAL_TODAY);
+  const { professionalId, professional } = useMyProfessional();
+  const ownAppointments = useMyAppointments();
+  const ownRequests = useMyBlockRequests();
+  const submit = useAction(blockRequestService.requestBlock);
+  const todayKey = clockTodayKey();
   const [kind, setKind] = useState<BlockRequestKind>(initialKind);
   const [date, setDate] = useState(initialDate ?? todayKey);
   const [allDay, setAllDay] = useState(false);
@@ -87,10 +86,12 @@ export function RequestBlockModal({
     setAck(false);
     setErrors({});
     setSending(false);
+    submit.clearError();
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- clearError muda a cada render
   }, [open, initialKind, initialDate, initialStart, initialEnd, todayKey]);
 
-  const myAppointments = useMemo(() => appointments ?? getMyAppointments(professionalId), [appointments, professionalId]);
-  const availability = useMemo(() => getMyAvailability(professionalId), [professionalId]);
+  const myAppointments = appointments ?? ownAppointments;
+  const availability = useMemo(() => availabilityOf(professional), [professional]);
 
   const effStart = allDay ? '00:00' : start;
   const effEnd = allDay ? '23:59' : end;
@@ -99,7 +100,7 @@ export function RequestBlockModal({
   /** Bloqueio: consultas no período. Disponibilidade: consultas futuras fora do novo horário. */
   const conflicts = useMemo<PortalAppointment[]>(() => {
     if (!timeValid || !date) return [];
-    if (kind === 'bloqueio') return findMyConflicts(professionalId, date, effStart, effEnd, myAppointments);
+    if (kind === 'bloqueio') return findConflictsIn(myAppointments, professionalId, date, effStart, effEnd);
     return myAppointments.filter((a) => {
       const d = new Date(a.start);
       if (d.getDay() !== weekday || toDateKey(d) < date || !isWaiting(a.status)) return false;
@@ -110,10 +111,10 @@ export function RequestBlockModal({
 
   const overlapping = useMemo(() => {
     if (kind !== 'bloqueio' || !timeValid) return undefined;
-    return getMyBlocks(professionalId, existingRequests).find(
+    return activeBlocks(existingRequests ?? ownRequests, professionalId).find(
       (b) => b.date === date && timeToMinutes(b.start) < timeToMinutes(effEnd) && timeToMinutes(b.end) > timeToMinutes(effStart),
     );
-  }, [kind, timeValid, professionalId, existingRequests, date, effStart, effEnd]);
+  }, [kind, timeValid, professionalId, existingRequests, ownRequests, date, effStart, effEnd]);
 
   const outsideHours = useMemo(() => {
     if (kind !== 'bloqueio' || !date) return false;
@@ -135,14 +136,13 @@ export function RequestBlockModal({
     return e;
   }
 
-  function handleSubmit() {
+  async function handleSubmit() {
     const e = validate();
     setErrors(e);
     if (Object.keys(e).length > 0) return;
     setSending(true);
-    const request: BlockRequest = {
-      id: `req-${Date.now()}`,
-      professionalId,
+    // O serviço grava com o professionalId da SESSÃO (o cliente não informa de quem é o pedido).
+    const created = await submit.run({
       kind,
       date,
       start: allDay ? '08:00' : start,
@@ -151,23 +151,22 @@ export function RequestBlockModal({
       weekday: kind === 'disponibilidade' ? weekday : undefined,
       reason,
       note: note.trim() || undefined,
-      status: 'enviada',
-      createdAt: toLocalIso(PORTAL_NOW),
-    };
-    window.setTimeout(() => {
-      onSubmit(request);
-      toast({
-        tone: 'warning',
-        title: 'Solicitação enviada — aguardando aprovação',
-        description:
-          kind === 'bloqueio'
-            ? `${weekdayDate(date)} · ${allDay ? 'dia inteiro' : `${start}–${end}`}. Você será avisada quando a administração responder.`
-            : `${WEEKDAY_NAMES[weekday]}s ${start}–${end}. A grade só muda após a aprovação.`,
-      });
-      setSending(false);
-      onClose();
-    }, 450);
+    });
+    setSending(false);
+    if (!created) return; // erro já virou toast; campos inline abaixo
+    toast({
+      tone: 'warning',
+      title: 'Solicitação enviada — aguardando aprovação',
+      description:
+        kind === 'bloqueio'
+          ? `${weekdayDate(date)} · ${allDay ? 'dia inteiro' : `${start}–${end}`}. Você será avisado(a) quando a administração responder.`
+          : `${WEEKDAY_NAMES[weekday]}s ${start}–${end}. A grade só muda após a aprovação.`,
+    });
+    onSubmitted?.(created);
+    onClose();
   }
+
+  const serviceErrors = submit.error?.fields ?? {};
 
   const reasons = kind === 'bloqueio' ? BLOCK_REASONS : AVAILABILITY_REASONS;
 
@@ -266,7 +265,7 @@ export function RequestBlockModal({
             value={reason}
             onChange={(e) => setReason(e.target.value)}
             options={reasons.map((r) => ({ value: r, label: r }))}
-            error={errors.reason}
+            error={errors.reason ?? serviceErrors.reason}
           />
           <Textarea
             label="Observação para a administração (opcional)"

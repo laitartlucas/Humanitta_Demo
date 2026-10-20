@@ -1,16 +1,11 @@
-import type { Professional, Specialty } from '@ds/mocks/types';
+import type { Professional, Specialty } from '@core';
+import { useRooms, useSpecialties } from '@core';
 import { Input, Select } from '@ds/components';
-import { ALL_SPECIALTIES, ROOM_USAGE, SPECIALTY_NAMES, rooms } from '@ds/mocks/clinical';
+import type { ProfessionalInput } from '../professionalActions';
 
-export interface ProfessionalFormValues {
-  name: string;
-  title: string;
-  specialty: Specialty | '';
-  registry: string;
-  roomId: string;
-}
+export type ProfessionalFormValues = ProfessionalInput;
 
-export type ProfessionalFormErrors = Partial<Record<keyof ProfessionalFormValues, string>>;
+export type ProfessionalFormErrors = Partial<Record<keyof ProfessionalFormValues | 'accessEmail', string>>;
 
 export const EMPTY_PROFESSIONAL_FORM: ProfessionalFormValues = {
   name: '',
@@ -24,9 +19,10 @@ export function professionalToForm(p: Professional): ProfessionalFormValues {
   return { name: p.name, title: p.title, specialty: p.specialty, registry: p.registry ?? '', roomId: p.roomId ?? '' };
 }
 
+/** Validação imediata do formulário (o serviço revalida as mesmas regras). */
 export function validateProfessionalForm(v: ProfessionalFormValues): ProfessionalFormErrors {
   const e: ProfessionalFormErrors = {};
-  if (v.name.trim().split(/\s+/).length < 2) e.name = 'Informe nome e sobrenome.';
+  if (v.name.trim().split(/\s+/).filter(Boolean).length < 2) e.name = 'Informe nome e sobrenome.';
   if (!v.title.trim()) e.title = 'Informe o cargo ou título profissional.';
   if (!v.specialty) e.specialty = 'Selecione a especialidade.';
   if (!v.roomId) e.roomId = 'Selecione a sala de atendimento.';
@@ -41,8 +37,18 @@ export interface ProfessionalFormFieldsProps {
   disabled?: boolean;
 }
 
+/** Campos do cadastro. Especialidades e salas vêm das Configurações da clínica (core). */
 export function ProfessionalFormFields({ idPrefix, values, errors, onChange, disabled }: ProfessionalFormFieldsProps) {
+  const specialties = useSpecialties();
+  const rooms = useRooms();
   const set = <K extends keyof ProfessionalFormValues>(k: K, v: ProfessionalFormValues[K]) => onChange({ ...values, [k]: v });
+  // Mantém a opção atual visível mesmo se tiver sido desativada nas Configurações.
+  const specialtyOptions = specialties
+    .filter((s) => s.active || s.id === values.specialty)
+    .map((s) => ({ value: s.id, label: s.active ? s.name : `${s.name} (inativa)` }));
+  const roomOptions = rooms
+    .filter((r) => r.active || r.id === values.roomId)
+    .map((r) => ({ value: r.id, label: `${r.name} — ${r.label}${r.active ? '' : ' (inativa)'}` }));
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
       <div className="sm:col-span-2">
@@ -73,7 +79,7 @@ export function ProfessionalFormFields({ idPrefix, values, errors, onChange, dis
         placeholder="Selecione"
         value={values.specialty}
         onChange={(e) => set('specialty', e.target.value as Specialty)}
-        options={ALL_SPECIALTIES.map((s) => ({ value: s, label: SPECIALTY_NAMES[s] }))}
+        options={specialtyOptions}
         error={errors.specialty}
         disabled={disabled}
         required
@@ -93,7 +99,7 @@ export function ProfessionalFormFields({ idPrefix, values, errors, onChange, dis
         placeholder="Selecione"
         value={values.roomId}
         onChange={(e) => set('roomId', e.target.value)}
-        options={rooms.map((r) => ({ value: r.id, label: `${r.name} — ${ROOM_USAGE[r.id]}` }))}
+        options={roomOptions}
         error={errors.roomId}
         disabled={disabled}
         required

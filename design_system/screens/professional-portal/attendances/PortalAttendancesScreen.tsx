@@ -13,57 +13,51 @@ import {
   ShieldCheck,
   Stethoscope,
   Timer,
+  UserX,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { Avatar, Badge, Button, Card, Drawer, EmptyState, PageHeader, ProgressBar, SearchInput, StatusBadge, Tabs, Textarea, useToast } from '@ds/components';
 import { cn } from '@ds/foundations/cn';
-import { formatDate, formatTime, getRoomName, toLocalIso } from '@ds/mocks/clinical';
+import { attendanceService, now as clockNow, todayKey as clockTodayKey, useAction, useAttendances } from '@core';
+import { formatDate, formatTime } from '@ds/mocks/clinical';
 import type { PortalAppointment, PortalAttendanceRecord } from '@ds/mocks/portal';
 import {
-  PORTAL_NOW,
-  PORTAL_PROFESSIONAL_ID,
-  getMyAppointmentById,
-  getMyAttendanceHistory,
-  getMyPatients,
-  getMyTodayAppointments,
-} from '@ds/mocks/portal';
-import { getProfessionalById } from '@ds/mocks/clinical';
-import { AccessDenied, AttendanceHistoryList, ScopeBadge, isWaiting, minutesBetween, normalize, plural, timeRange, weekdayDate } from '../shared';
+  AccessDenied,
+  AttendanceHistoryList,
+  ScopeBadge,
+  attendanceHistory,
+  isWaiting,
+  minutesBetween,
+  normalize,
+  plural,
+  timeRange,
+  useMyAppointments,
+  useMyClinicalRecords,
+  useMyPatientsById,
+  useMyProfessional,
+  useRestrictedMarkers,
+  useRoomName,
+  weekdayDate,
+} from '../shared';
+import { finishAttendanceWithReturn } from '../shared/portalActions';
+import { CLINICAL_FIELDS, EMPTY_DRAFT, composeClinicalSummary, parseClinicalSummary, type ClinicalDraft, type ClinicalField } from './clinicalDraft';
 import { FinishAttendanceModal } from './modals';
 import type { FinishAttendanceResult } from './modals';
 
 export interface PortalAttendancesScreenProps {
-  /** Profissional logado (padrão 'prof-lauren'). */
-  professionalId?: string;
   /** Abre direto num atendimento (ex.: vindo do "Iniciar" do dashboard/agenda). */
   initialAppointmentId?: string;
   /** Com initialAppointmentId: inicia automaticamente se estiver aguardando e não houver outro em andamento. */
   autoStart?: boolean;
   /** Abre o paciente em Meus Pacientes. */
   onOpenPatient?: (patientId: string) => void;
+  /** Volta para a lista (container limpa o id da URL). */
+  onBackToList?: () => void;
 }
 
 type TabId = 'hoje' | 'historico';
 
-type ClinicalField = 'queixa' | 'procedimento' | 'evolucao' | 'conduta';
-type ClinicalDraft = Record<ClinicalField, string>;
-
-const CLINICAL_FIELDS: { key: ClinicalField; label: string; rows: number }[] = [
-  { key: 'queixa', label: 'Queixa / motivo da consulta', rows: 2 },
-  { key: 'procedimento', label: 'Procedimento realizado', rows: 3 },
-  { key: 'evolucao', label: 'Evolução', rows: 3 },
-  { key: 'conduta', label: 'Conduta e orientações', rows: 2 },
-];
-
-const EMPTY_DRAFT: ClinicalDraft = { queixa: '', procedimento: '', evolucao: '', conduta: '' };
 const DEMO_PLACEHOLDER = '[Registro demonstrativo — não usar dados reais]';
-
-/** Início real dos atendimentos já em curso / concluídos hoje (coerente com agora = 10:24). */
-const INITIAL_STARTED: Record<string, string> = {
-  'ag-101': '2026-10-19T08:03:00',
-  'ag-103': '2026-10-19T09:02:00',
-  'pl-101': '2026-10-19T10:04:00',
-};
 
 function mmss(totalSec: number): string {
   const m = Math.floor(totalSec / 60);
@@ -120,22 +114,28 @@ function QueueSection({ title, icon: Icon, items, selectedId, onSelect, empty }:
 }
 
 /**
- * Meus Atendimentos — fila do dia (iniciar/finalizar), registro clínico restrito e histórico autorizado.
- * Somente atendimentos da profissional logada; o registro clínico é DEMONSTRATIVO.
+ * Meus Atendimentos — fila do dia (iniciar/finalizar via `attendanceService`), registro clínico
+ * restrito e histórico autorizado. Somente atendimentos do profissional logado; o serviço recusa
+ * (403) qualquer atendimento de outro profissional. Registro clínico DEMONSTRATIVO.
  */
-export function PortalAttendancesScreen({
-  professionalId = PORTAL_PROFESSIONAL_ID,
-  initialAppointmentId,
-  autoStart = false,
-  onOpenPatient,
-}: PortalAttendancesScreenProps) {
+export function PortalAttendancesScreen({ initialAppointmentId, autoStart = false, onOpenPatient, onBackToList }: PortalAttendancesScreenProps) {
   const { toast } = useToast();
-  const prof = getProfessionalById(professionalId);
-  const patientsById = useMemo(() => new Map(getMyPatients(professionalId).map((p) => [p.id, p])), [professionalId]);
+  const { professional: prof } = useMyProfessional();
+  const { byId: patientsById } = useMyPatientsById();
+  const roomName = useRoomName();
+  const mine = useMyAppointments();
+  const attendances = useAttendances();
+  const records = useMyClinicalRecords();
+  const restricted = useRestrictedMarkers();
+  const startAction = useAction(attendanceService.startAttendance);
+  const finishAction = useAction(finishAttendanceWithReturn);
+  const draftAction = useAction(attendanceService.saveClinicalRecord, { success: 'Rascunho salvo' });
+  const noShowAction = useAction(attendanceService.markNoShow, { success: 'Falta registrada' });
 
-  const [list, setList] = useState<PortalAppointment[]>(() => getMyTodayAppointments(professionalId).map((a) => ({ ...a })));
-  const [startedAt, setStartedAt] = useState<Record<string, string>>(INITIAL_STARTED);
-  const [finishedAt, setFinishedAt] = useState<Record<string, string>>({ 'ag-101': '2026-10-19T08:41:00', 'ag-103': '2026-10-19T09:53:00' });
+  const todayKeyValue = clockTodayKey();
+  const list = useMemo(() => mine.filter((a) => a.start.startsWith(todayKeyValue)), [mine, todayKeyValue]);
+  const attendanceByAppt = useMemo(() => new Map(attendances.map((at) => [at.appointmentId, at])), [attendances]);
+  const recordByAppt = useMemo(() => new Map(records.map((r) => [r.appointmentId, r])), [records]);
   const [drafts, setDrafts] = useState<Record<string, ClinicalDraft>>({});
   const [tab, setTab] = useState<TabId>('hoje');
   const [denied, setDenied] = useState(false);
@@ -144,14 +144,16 @@ export function PortalAttendancesScreen({
   const [historyOpen, setHistoryOpen] = useState<PortalAttendanceRecord | null>(null);
   const panelRef = useRef<HTMLDivElement>(null);
 
-  /** Relógio da demo: parte de 10:24 e avança em tempo real (cronômetro em segundos). */
+  /** Relógio da demo: parte do "agora" do core (10:24) e avança em tempo real (cronômetro em segundos). */
+  const clockAtMount = useRef(clockNow());
   const mountedAt = useRef(Date.now());
   const [tick, setTick] = useState(0);
   useEffect(() => {
     const t = window.setInterval(() => setTick((n) => n + 1), 1000);
     return () => window.clearInterval(t);
   }, []);
-  const now = useMemo(() => new Date(PORTAL_NOW.getTime() + (Date.now() - mountedAt.current)), [tick]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- `tick` força o recálculo a cada segundo
+  const now = useMemo(() => new Date(clockAtMount.current.getTime() + (Date.now() - mountedAt.current)), [tick]);
 
   const inProgress = list.find((a) => a.status === 'em_atendimento');
   const [selectedId, setSelectedId] = useState<string | null>(() => {
@@ -162,8 +164,8 @@ export function PortalAttendancesScreen({
   // Atendimento fora do escopo (URL/ID de outro profissional) → 403.
   useEffect(() => {
     if (!initialAppointmentId) return;
-    const mine = getMyAppointmentById(professionalId, initialAppointmentId);
-    if (!mine) {
+    const own = mine.find((a) => a.id === initialAppointmentId);
+    if (!own) {
       setDenied(true);
       return;
     }
@@ -177,7 +179,7 @@ export function PortalAttendancesScreen({
       if (target && isWaiting(target.status) && !list.some((a) => a.status === 'em_atendimento')) start(target);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initialAppointmentId, professionalId]);
+  }, [initialAppointmentId]);
 
   const selected = list.find((a) => a.id === selectedId) ?? null;
   const selectedPatient = selected ? patientsById.get(selected.patientId) : undefined;
@@ -192,7 +194,7 @@ export function PortalAttendancesScreen({
     [list],
   );
 
-  const history = useMemo(() => getMyAttendanceHistory(professionalId, { includeRestricted: true }), [professionalId]);
+  const history = useMemo(() => attendanceHistory(mine, records, clockAtMount.current, { restricted }), [mine, records, restricted]);
   const historyRows = useMemo(() => {
     const q = normalize(historyQuery.trim());
     return history.filter((r) => !q || normalize(`${r.patientName} ${r.service ?? ''}`).includes(q));
@@ -206,24 +208,33 @@ export function PortalAttendancesScreen({
     }
   }
 
-  function start(a: PortalAppointment) {
+  async function start(a: PortalAppointment) {
     const busy = list.find((x) => x.status === 'em_atendimento' && x.id !== a.id);
     if (busy) {
       toast({ tone: 'warning', title: 'Já existe um atendimento em andamento', description: `Finalize ${busy.patientName} antes de iniciar o próximo.` });
       return;
     }
-    const iso = toLocalIso(now);
-    setStartedAt((m) => ({ ...m, [a.id]: iso }));
-    setList((l) => l.map((x) => (x.id === a.id ? { ...x, status: 'em_atendimento' } : x)));
+    const at = await startAction.run(a.id);
+    if (!at) return; // 403/409 já viraram toast
     setSelectedId(a.id);
-    toast({ tone: 'success', title: 'Atendimento iniciado', description: `${a.patientName} · ${getRoomName(a.roomId)} · ${formatTime(now)}` });
+    toast({
+      tone: 'success',
+      title: 'Atendimento iniciado',
+      description: `${a.patientName} · ${roomName(a.roomId)} · ${at.startedAt ? formatTime(at.startedAt) : formatTime(now)}`,
+    });
   }
 
-  function finish(result: FinishAttendanceResult) {
+  async function finish(result: FinishAttendanceResult) {
     const a = list.find((x) => x.id === result.appointmentId);
     if (!a) return;
-    setFinishedAt((m) => ({ ...m, [a.id]: toLocalIso(now) }));
-    setList((l) => l.map((x) => (x.id === a.id ? { ...x, status: 'concluida' } : x)));
+    const draft = drafts[a.id] ?? parseClinicalSummary(recordByAppt.get(a.id)?.summary);
+    const done = await finishAction.run(a.id, {
+      summary: composeClinicalSummary(draft),
+      patientName: a.patientName,
+      suggestedDate: result.suggestedDate,
+      hasNoteToReception: Boolean(result.noteToReception),
+    });
+    if (!done) return;
     setFinishOpen(false);
     toast({
       tone: 'success',
@@ -237,7 +248,16 @@ export function PortalAttendancesScreen({
   }
 
   function setField(id: string, key: ClinicalField, value: string) {
-    setDrafts((d) => ({ ...d, [id]: { ...(d[id] ?? EMPTY_DRAFT), [key]: value } }));
+    setDrafts((d) => ({ ...d, [id]: { ...(d[id] ?? parseClinicalSummary(recordByAppt.get(id)?.summary)), [key]: value } }));
+  }
+
+  async function saveDraft(id: string, draft: ClinicalDraft) {
+    const summary = composeClinicalSummary(draft);
+    if (!summary) {
+      toast({ tone: 'warning', title: 'Nada para salvar', description: 'Preencha ao menos um campo do registro.' });
+      return;
+    }
+    await draftAction.run(id, summary);
   }
 
   if (denied) {
@@ -247,17 +267,22 @@ export function PortalAttendancesScreen({
         <AccessDenied
           description="Este atendimento não está vinculado ao seu cadastro. Você só pode abrir os seus próprios atendimentos."
           backLabel="Voltar aos meus atendimentos"
-          onBack={() => setDenied(false)}
+          onBack={() => {
+            setDenied(false);
+            onBackToList?.();
+          }}
         />
       </div>
     );
   }
 
-  const selStarted = selected ? startedAt[selected.id] : undefined;
+  const selAttendance = selected ? attendanceByAppt.get(selected.id) : undefined;
+  const selStarted = selAttendance?.startedAt;
+  const selFinished = selAttendance?.finishedAt;
   const elapsedSec = selStarted ? Math.max(0, Math.floor((now.getTime() - new Date(selStarted).getTime()) / 1000)) : 0;
   const elapsedMin = Math.floor(elapsedSec / 60);
   const editable = selected?.status === 'em_atendimento';
-  const draft = selected ? drafts[selected.id] ?? EMPTY_DRAFT : EMPTY_DRAFT;
+  const draft = selected ? (drafts[selected.id] ?? parseClinicalSummary(recordByAppt.get(selected.id)?.summary)) : EMPTY_DRAFT;
   const auditAt = `${formatDate(now, { day: '2-digit', month: '2-digit', year: 'numeric' })} ${formatTime(now)}`;
 
   return (
@@ -319,7 +344,7 @@ export function PortalAttendancesScreen({
                         </span>
                         <span className="inline-flex items-center gap-1">
                           <DoorOpen size={14} strokeWidth={1.75} aria-hidden="true" />
-                          {getRoomName(selected.roomId)}
+                          {roomName(selected.roomId)}
                         </span>
                         {selectedPatient && <span>{selectedPatient.age} anos</span>}
                       </p>
@@ -367,18 +392,31 @@ export function PortalAttendancesScreen({
                       <p className="min-w-0 flex-1 text-body-sm text-graphite-700">
                         {inProgress
                           ? `Finalize o atendimento de ${inProgress.patientName} para iniciar este.`
-                          : 'Quando o paciente entrar na sala, inicie o atendimento para liberar o registro.'}
+                          : selAttendance?.checkInAt
+                            ? `Paciente na recepção desde ${formatTime(selAttendance.checkInAt)}. Inicie quando ele entrar na sala.`
+                            : 'Quando o paciente entrar na sala, inicie o atendimento para liberar o registro.'}
                       </p>
-                      <Button leftIcon={Play} onClick={() => start(selected)} disabled={Boolean(inProgress)}>
-                        Iniciar atendimento
-                      </Button>
+                      <div className="flex flex-wrap gap-2">
+                        <Button
+                          variant="ghost"
+                          leftIcon={UserX}
+                          onClick={() => noShowAction.run(selected.id)}
+                          loading={noShowAction.loading}
+                          disabled={Boolean(selAttendance?.checkInAt)}
+                        >
+                          Registrar falta
+                        </Button>
+                        <Button leftIcon={Play} onClick={() => start(selected)} disabled={Boolean(inProgress)} loading={startAction.loading}>
+                          Iniciar atendimento
+                        </Button>
+                      </div>
                     </div>
                   )}
 
                   {selected.status === 'concluida' && (
                     <p className="rounded-md bg-graphite-50 px-4 py-3 text-body-sm text-graphite-700">
-                      Finalizado às {finishedAt[selected.id] ? formatTime(finishedAt[selected.id]) : '—'}
-                      {selStarted && finishedAt[selected.id] ? ` · duração de ${minutesBetween(selStarted, new Date(finishedAt[selected.id]))} min` : ''}.
+                      Finalizado às {selFinished ? formatTime(selFinished) : '—'}
+                      {selStarted && selFinished ? ` · duração de ${minutesBetween(selStarted, new Date(selFinished))} min` : ''}.
                     </p>
                   )}
                 </Card>
@@ -431,12 +469,7 @@ export function PortalAttendancesScreen({
                       Auditoria: acesso de {prof?.name ?? 'profissional'} em {auditAt} · Chrome/Windows · registrado no log da clínica.
                     </p>
                     {editable && (
-                      <Button
-                        variant="secondary"
-                        size="sm"
-                        leftIcon={Save}
-                        onClick={() => toast({ tone: 'success', title: 'Rascunho salvo', description: 'Registro demonstrativo salvo apenas nesta sessão.' })}
-                      >
+                      <Button variant="secondary" size="sm" leftIcon={Save} loading={draftAction.loading} onClick={() => saveDraft(selected.id, draft)}>
                         Salvar rascunho
                       </Button>
                     )}
@@ -481,6 +514,7 @@ export function PortalAttendancesScreen({
         appointment={selected}
         elapsedMin={elapsedMin}
         onConfirm={finish}
+        loading={finishAction.loading}
       />
 
       <Drawer

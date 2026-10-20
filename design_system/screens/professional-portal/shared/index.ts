@@ -17,3 +17,5 @@ export { AttendanceHistoryList } from './AttendanceHistoryList';
 export type { AttendanceHistoryListProps } from './AttendanceHistoryList';
 export { ScopeInfoCard } from './ScopeInfoCard';
 export type { ScopeInfoCardProps } from './ScopeInfoCard';
+export * from './portalData';
+export * from './usePortalData';

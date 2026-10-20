@@ -2,9 +2,10 @@ import type { ReactNode } from 'react';
 import { Coffee, Hourglass, Lock, Plus } from 'lucide-react';
 import { StatusBadge } from '@ds/components';
 import { cn } from '@ds/foundations/cn';
-import { formatTime, getRoomName } from '@ds/mocks/clinical';
+import { formatTime } from '@ds/mocks/clinical';
 import type { BlockRequest, PortalAppointment, PortalSlot, PortalSlotState } from '@ds/mocks/portal';
-import { timeToMinutes } from '@ds/mocks/portal';
+import { timeToMinutes } from './portalData';
+import { useRoomName } from './usePortalData';
 import { endTimeOf } from './portalUtils';
 
 type GapState = Exclude<PortalSlotState, 'ocupado'>;
@@ -71,6 +72,7 @@ const GAP_META: Record<GapState, { title: string; cls: string; icon: typeof Lock
  * pendentes e intervalo. Empilha em uma coluna — funciona igual no celular e no desktop.
  */
 export function DayTimeline({ appointments, slots, requests = [], now, onSelectAppointment, renderAction, compact = false, className }: DayTimelineProps) {
+  const roomName = useRoomName();
   const items = buildItems(appointments, slots);
   const nowMinute = now ? now.getHours() * 60 + now.getMinutes() : -1;
   const nowIndex = now ? items.findIndex((it) => it.minute > nowMinute) : -1;
@@ -122,7 +124,7 @@ export function DayTimeline({ appointments, slots, requests = [], now, onSelectA
             <span className={cn('block truncate font-bold text-graphite-900', a.status === 'cancelada' && 'line-through')}>{a.patientName}</span>
             <span className="block truncate text-caption font-medium text-graphite-600">
               {a.service}
-              {!compact && ` · ${getRoomName(a.roomId)}`}
+              {!compact && ` · ${roomName(a.roomId)}`}
             </span>
           </>
         );
