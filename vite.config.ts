@@ -15,6 +15,20 @@ export default defineConfig({
       { find: '@modules', replacement: r('./src/modules') },
     ],
   },
+  build: {
+    rollupOptions: {
+      output: {
+        // Bibliotecas em chunks próprios: o código da aplicação muda a cada PR, os vendors não (melhor cache).
+        manualChunks(id) {
+          if (!id.includes('node_modules')) return undefined;
+          if (/[\\/]node_modules[\\/](react|react-dom|scheduler)[\\/]/.test(id)) return 'vendor-react';
+          if (/[\\/]node_modules[\\/](react-router|react-router-dom|@remix-run)[\\/]/.test(id)) return 'vendor-router';
+          if (id.includes('lucide-react')) return 'vendor-icons';
+          return 'vendor';
+        },
+      },
+    },
+  },
   test: {
     environment: 'node',
     include: ['tests/**/*.test.ts'],

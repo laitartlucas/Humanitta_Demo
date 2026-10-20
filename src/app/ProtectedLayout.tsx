@@ -27,6 +27,8 @@ export function ProtectedLayout() {
 
   const role = user.role;
   const home = HOME_BY_ROLE[role];
+  // "/" não pertence a nenhum módulo: vai direto para a tela inicial do perfil.
+  if (location.pathname === '/') return <Navigate to={ROUTE_PATHS[home]} replace />;
   const handle = [...matches].reverse().map((m) => m.handle).find(isRouteHandle);
   const routeId = handle?.routeId;
   const allowed = routeId ? NAV_BY_ROLE[role].includes(routeId) : false;
@@ -67,11 +69,4 @@ export function ProtectedLayout() {
       )}
     </AppShell>
   );
-}
-
-/** "/" → tela inicial do perfil. */
-export function HomeRedirect() {
-  const { user } = useSession();
-  if (!user) return <Navigate to={LOGIN_PATH} replace />;
-  return <Navigate to={ROUTE_PATHS[HOME_BY_ROLE[user.role]]} replace />;
 }

@@ -5,7 +5,7 @@
  */
 import { createBrowserRouter, type RouteObject } from 'react-router-dom';
 import { MODULES } from './moduleRegistry';
-import { HomeRedirect, ProtectedLayout, type RouteHandle } from './ProtectedLayout';
+import { ProtectedLayout, type RouteHandle } from './ProtectedLayout';
 import { LoginPage } from './LoginPage';
 import { LOGIN_PATH } from './routes';
 
@@ -21,7 +21,8 @@ export const routes: RouteObject[] = [
   { path: LOGIN_PATH, element: <LoginPage /> },
   {
     element: <ProtectedLayout />,
-    children: [{ index: true, element: <HomeRedirect /> }, ...moduleRoutes, { path: '*', element: null }],
+    // "/" é redirecionado pelo ProtectedLayout para a tela inicial do perfil.
+    children: [{ index: true, element: null }, ...moduleRoutes, { path: '*', element: null }],
   },
 ];
 
