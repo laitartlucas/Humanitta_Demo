@@ -1,13 +1,13 @@
-import type { Appointment } from '@ds/mocks/types';
+import { DEMO_NOW, type AppointmentRecord } from '@core';
 import { cn } from '@ds/foundations/cn';
-import { DEMO_NOW, SPECIALTY_HEX, WEEKDAY_SHORT, formatTime, isSameDay, toDateKey } from '@ds/mocks/clinical';
+import { SPECIALTY_HEX, WEEKDAY_SHORT, formatTime, isSameDay, toDateKey } from '@ds/mocks/clinical';
 import { addDays, startOfMonth, startOfWeek } from '../agendaUtils';
 
 export interface MonthViewProps {
   date: Date;
-  appointments: Appointment[];
+  appointments: AppointmentRecord[];
   onSelectDay: (d: Date) => void;
-  onSelectAppointment: (a: Appointment) => void;
+  onSelectAppointment: (a: AppointmentRecord) => void;
 }
 
 const ORDER = [1, 2, 3, 4, 5, 6, 0];
@@ -70,7 +70,7 @@ export function MonthView({ date, appointments, onSelectDay, onSelectAppointment
                       onClick={() => onSelectAppointment(a)}
                       className={cn(
                         'flex w-full items-center gap-1.5 truncate rounded-xs px-1.5 py-0.5 text-left text-xs hover:bg-graphite-50 focus-visible:shadow-focus focus-visible:outline-none',
-                        a.status === 'cancelada' && 'text-graphite-400 line-through',
+                        (a.status === 'cancelada' || a.status === 'reagendada') && 'text-graphite-400 line-through',
                       )}
                     >
                       <span aria-hidden="true" className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ backgroundColor: SPECIALTY_HEX[a.specialty] }} />

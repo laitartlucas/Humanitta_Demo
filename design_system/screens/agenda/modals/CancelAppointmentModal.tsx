@@ -1,14 +1,17 @@
 import { useEffect, useState } from 'react';
 import { AlertTriangle } from 'lucide-react';
-import type { Appointment } from '@ds/mocks/types';
+import type { AppError, AppointmentRecord } from '@core';
 import { Button, Modal, Select, Switch, Textarea } from '@ds/components';
 import { formatDate, formatTime } from '@ds/mocks/clinical';
 
 export interface CancelAppointmentModalProps {
-  appointment: Appointment | null;
+  appointment: AppointmentRecord | null;
   open: boolean;
   onClose: () => void;
-  onConfirm: (appointment: Appointment, reason: string, notify: boolean) => void;
+  /** Envia ao serviço da Agenda. Devolve o agendamento cancelado ou `undefined` em caso de erro. */
+  onConfirm: (appointment: AppointmentRecord, reason: string, notify: boolean) => Promise<AppointmentRecord | undefined>;
+  error?: AppError | null;
+  saving?: boolean;
 }
 
 const REASONS = [
@@ -19,20 +22,18 @@ const REASONS = [
   'Outro motivo',
 ];
 
-export function CancelAppointmentModal({ appointment, open, onClose, onConfirm }: CancelAppointmentModalProps) {
+export function CancelAppointmentModal({ appointment, open, onClose, onConfirm, error, saving = false }: CancelAppointmentModalProps) {
   const [reason, setReason] = useState('');
   const [details, setDetails] = useState('');
   const [notify, setNotify] = useState(true);
-  const [error, setError] = useState<string | undefined>();
-  const [saving, setSaving] = useState(false);
+  const [localError, setLocalError] = useState<string | undefined>();
 
   useEffect(() => {
     if (open) {
       setReason('');
       setDetails('');
       setNotify(true);
-      setError(undefined);
-      setSaving(false);
+      setLocalError(undefined);
     }
   }, [open]);
 
@@ -41,14 +42,10 @@ export function CancelAppointmentModal({ appointment, open, onClose, onConfirm }
   function submit() {
     if (!appointment) return;
     if (!reason) {
-      setError('Selecione o motivo do cancelamento.');
+      setLocalError('Selecione o motivo do cancelamento.');
       return;
     }
-    setSaving(true);
-    window.setTimeout(() => {
-      onConfirm(appointment, details ? `${reason} — ${details}` : reason, notify);
-      setSaving(false);
-    }, 500);
+    void onConfirm(appointment, details.trim() ? `${reason} — ${details.trim()}` : reason, notify);
   }
 
   return (
@@ -83,10 +80,10 @@ export function CancelAppointmentModal({ appointment, open, onClose, onConfirm }
           value={reason}
           onChange={(e) => {
             setReason(e.target.value);
-            setError(undefined);
+            setLocalError(undefined);
           }}
           options={REASONS.map((r) => ({ value: r, label: r }))}
-          error={error}
+          error={localError ?? error?.fields?.reason}
           required
         />
         <Textarea
