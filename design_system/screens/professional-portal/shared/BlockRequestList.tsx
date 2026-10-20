@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { CalendarOff, CheckCircle2, Clock3, Hourglass, Inbox, XCircle } from 'lucide-react';
 import { Badge, EmptyState } from '@ds/components';
 import type { BadgeTone } from '@ds/components';
@@ -27,6 +28,10 @@ export interface BlockRequestListProps {
   /** Mostra no máximo N itens (padrão: todos). */
   limit?: number;
   className?: string;
+  /** Ações por solicitação (ex.: "Retirar" no portal, "Aprovar/Recusar" na administração). */
+  renderActions?: (r: BlockRequest) => ReactNode;
+  /** Texto do estado vazio (padrão: visão do profissional). */
+  emptyDescription?: string;
 }
 
 function periodLabel(r: BlockRequest): string {
@@ -38,7 +43,13 @@ function periodLabel(r: BlockRequest): string {
 }
 
 /** Lista "Minhas solicitações" (bloqueios e alterações de disponibilidade). */
-export function BlockRequestList({ requests, limit, className }: BlockRequestListProps) {
+export function BlockRequestList({
+  requests,
+  limit,
+  className,
+  renderActions,
+  emptyDescription = 'Quando você pedir um bloqueio ou alteração de horário, o andamento aparece aqui.',
+}: BlockRequestListProps) {
   const items = limit ? requests.slice(0, limit) : requests;
   if (items.length === 0) {
     return (
@@ -46,7 +57,7 @@ export function BlockRequestList({ requests, limit, className }: BlockRequestLis
         compact
         icon={Inbox}
         title="Nenhuma solicitação"
-        description="Quando você pedir um bloqueio ou alteração de horário, o andamento aparece aqui."
+        description={emptyDescription}
         className={className}
       />
     );
@@ -82,6 +93,7 @@ export function BlockRequestList({ requests, limit, className }: BlockRequestLis
               Enviada em {formatDate(r.createdAt, { day: '2-digit', month: '2-digit' })}
               {r.decidedBy && r.decidedAt ? ` · ${r.status === 'aprovada' ? 'aprovada' : 'analisada'} por ${r.decidedBy} em ${formatDate(r.decidedAt, { day: '2-digit', month: '2-digit' })}` : ' · em análise pela administração'}
             </p>
+            {renderActions?.(r)}
           </li>
         );
       })}

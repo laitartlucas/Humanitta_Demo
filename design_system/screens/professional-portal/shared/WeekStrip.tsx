@@ -1,11 +1,13 @@
 import { Hourglass, Lock } from 'lucide-react';
 import { cn } from '@ds/foundations/cn';
 import { WEEKDAY_SHORT, isSameDay, toDateKey } from '@ds/mocks/clinical';
+import type { Professional } from '@core';
 import type { BlockRequest, PortalAppointment } from '@ds/mocks/portal';
-import { getMyDaySlots } from '@ds/mocks/portal';
+import { daySlots } from './portalData';
 
 export interface WeekStripProps {
-  professionalId: string;
+  /** Profissional dono da agenda (grade de horários vem do cadastro). */
+  professional: Pick<Professional, 'id' | 'workingHours'> | undefined;
   days: Date[];
   appointments: PortalAppointment[];
   requests?: BlockRequest[];
@@ -19,13 +21,13 @@ export interface WeekStripProps {
  * Semana compacta: um botão por dia com nº de consultas, ocupação (barra + %) e marcadores
  * de bloqueio aprovado / pendente. Grade 3×2 no celular, 6 colunas a partir de sm.
  */
-export function WeekStrip({ professionalId, days, appointments, requests, today, selected, onSelect, className }: WeekStripProps) {
+export function WeekStrip({ professional, days, appointments, requests, today, selected, onSelect, className }: WeekStripProps) {
   return (
     <ul className={cn('grid grid-cols-3 gap-2 sm:grid-cols-6', className)} aria-label="Resumo da semana">
       {days.map((d) => {
         const key = toDateKey(d);
         const dayAppts = appointments.filter((a) => a.start.startsWith(key) && a.status !== 'cancelada');
-        const slots = getMyDaySlots(professionalId, key, { appointments, requests });
+        const slots = daySlots(professional, key, appointments, requests);
         const workable = slots.filter((s) => s.state !== 'intervalo');
         const busy = workable.filter((s) => s.state === 'ocupado').length;
         const pct = workable.length ? Math.round((busy / workable.length) * 100) : 0;

@@ -4,24 +4,34 @@ import type { LucideIcon } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { Avatar, Badge, Button, Card, DataTable, Drawer, EmptyState, FilterChip, PageHeader, SearchInput, SegmentedControl, StatusBadge } from '@ds/components';
 import type { DataTableColumn } from '@ds/components';
+import { now as clockNow } from '@core';
 import { formatTime, toDateKey } from '@ds/mocks/clinical';
 import type { PortalPatient } from '@ds/mocks/portal';
-import {
-  PORTAL_NOW,
-  PORTAL_PROFESSIONAL_ID,
-  PORTAL_TODAY,
-  getMyAppointmentsWithPatient,
-  getMyAttendanceHistory,
-  getMyPatients,
-} from '@ds/mocks/portal';
 import { addDays } from '../../agenda/agendaUtils';
-import { AttendanceHistoryList, ScopeBadge, ScopeInfoCard, isWaiting, normalize, plural, weekdayDate } from '../shared';
+import {
+  AccessDenied,
+  AttendanceHistoryList,
+  ScopeBadge,
+  ScopeInfoCard,
+  attendanceHistory,
+  isWaiting,
+  normalize,
+  plural,
+  useMyAppointments,
+  useMyClinicalRecords,
+  useMyPatientsById,
+  useRestrictedMarkers,
+  weekdayDate,
+} from '../shared';
 
 export interface PortalPatientsScreenProps {
-  /** Profissional logado (padrão 'prof-lauren'). */
-  professionalId?: string;
-  /** Abre direto a ficha de um paciente vinculado (ignorado se não estiver no escopo). */
+  /**
+   * Abre direto a ficha de um paciente vinculado. Fora do escopo (paciente sem consulta com o
+   * profissional logado) → "Acesso não autorizado".
+   */
   initialPatientId?: string;
+  /** Volta para a lista (container limpa o id da URL). */
+  onBackToList?: () => void;
   /** "Iniciar atendimento" na ficha, quando há consulta hoje (App navega para Meus Atendimentos). */
   onStartAttendance?: (appointmentId: string) => void;
 }
@@ -37,6 +47,8 @@ const FILTERS: { id: QuickFilter; label: string }[] = [
   { id: 'sem_retorno', label: 'Sem retorno marcado' },
 ];
 
+const PORTAL_NOW = clockNow();
+const PORTAL_TODAY = new Date(PORTAL_NOW.getFullYear(), PORTAL_NOW.getMonth(), PORTAL_NOW.getDate());
 const todayKey = toDateKey(PORTAL_TODAY);
 const weekLimit = toDateKey(addDays(PORTAL_TODAY, 7));
 
@@ -63,17 +75,28 @@ function InfoRow({ icon: Icon, label, children }: { icon: LucideIcon; label: str
   );
 }
 
-/** Meus Pacientes — somente pacientes vinculados às consultas da profissional, com dados mínimos. */
-export function PortalPatientsScreen({ professionalId = PORTAL_PROFESSIONAL_ID, initialPatientId, onStartAttendance }: PortalPatientsScreenProps) {
-  const patients = useMemo(() => getMyPatients(professionalId), [professionalId]);
+/**
+ * Meus Pacientes — somente pacientes vinculados às consultas do profissional logado
+ * (`useMyPatients`, dados mínimos). Nada de saldo, CPF, e-mail, endereço ou prontuário alheio.
+ */
+export function PortalPatientsScreen({ initialPatientId, onBackToList, onStartAttendance }: PortalPatientsScreenProps) {
+  const { patients } = useMyPatientsById();
+  const myAppointments = useMyAppointments();
+  const records = useMyClinicalRecords();
+  const restricted = useRestrictedMarkers();
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState<QuickFilter>('todos');
   const [mode, setMode] = useState<ViewMode>('cards');
   const [openId, setOpenId] = useState<string | null>(null);
+  const [denied, setDenied] = useState(false);
 
   useEffect(() => {
-    if (initialPatientId && patients.some((p) => p.id === initialPatientId)) setOpenId(initialPatientId);
-  }, [initialPatientId, patients]);
+    if (!initialPatientId) return;
+    if (patients.some((p) => p.id === initialPatientId)) setOpenId(initialPatientId);
+    else setDenied(true);
+    // Só ao chegar pela URL: mudanças posteriores no banco não reabrem a ficha.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialPatientId]);
 
   const counts = useMemo(() => {
     const c = {} as Record<QuickFilter, number>;
@@ -89,10 +112,13 @@ export function PortalPatientsScreen({ professionalId = PORTAL_PROFESSIONAL_ID, 
   }, [patients, filter, query]);
 
   const open = patients.find((p) => p.id === openId) ?? null;
-  const openAppts = useMemo(() => (open ? getMyAppointmentsWithPatient(professionalId, open.id) : []), [open, professionalId]);
+  const openAppts = useMemo(
+    () => (open ? myAppointments.filter((a) => a.patientId === open.id).sort((a, b) => b.start.localeCompare(a.start)) : []),
+    [open, myAppointments],
+  );
   const openHistory = useMemo(
-    () => (open ? getMyAttendanceHistory(professionalId, { includeRestricted: true, patientId: open.id }) : []),
-    [open, professionalId],
+    () => (open ? attendanceHistory(myAppointments, records, PORTAL_NOW, { restricted, patientId: open.id }) : []),
+    [open, myAppointments, records, restricted],
   );
   const upcoming = openAppts.filter((a) => (isWaiting(a.status) || a.status === 'em_atendimento') && new Date(a.start).getTime() + a.durationMin * 60000 > PORTAL_NOW.getTime()).reverse();
   const todayAppt = upcoming.find((a) => a.start.startsWith(todayKey));
@@ -131,6 +157,22 @@ export function PortalPatientsScreen({ professionalId = PORTAL_PROFESSIONAL_ID, 
         ),
     },
   ];
+
+  if (denied) {
+    return (
+      <div className="flex flex-col gap-6">
+        <PageHeader title="Meus pacientes" breadcrumb={['Portal do Profissional', 'Meus pacientes']} />
+        <AccessDenied
+          description="Este paciente não está vinculado às suas consultas. Você só pode abrir pacientes atendidos por você."
+          backLabel="Voltar aos meus pacientes"
+          onBack={() => {
+            setDenied(false);
+            onBackToList?.();
+          }}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-6">
@@ -175,7 +217,15 @@ export function PortalPatientsScreen({ professionalId = PORTAL_PROFESSIONAL_ID, 
             </p>
           </div>
 
-          {rows.length === 0 ? (
+          {patients.length === 0 ? (
+            <Card>
+              <EmptyState
+                icon={UserRound}
+                title="Nenhum paciente vinculado"
+                description="Quando a recepção agendar consultas com você, os pacientes aparecem aqui."
+              />
+            </Card>
+          ) : rows.length === 0 ? (
             <Card>
               <EmptyState
                 icon={SearchX}

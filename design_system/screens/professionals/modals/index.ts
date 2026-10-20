@@ -4,3 +4,7 @@ export { EditProfessionalModal } from './EditProfessionalModal';
 export type { EditProfessionalModalProps } from './EditProfessionalModal';
 export { ProfessionalFormFields } from './ProfessionalFormFields';
 export type { ProfessionalFormValues, ProfessionalFormErrors, ProfessionalFormFieldsProps } from './ProfessionalFormFields';
+export { GrantAccessModal } from './GrantAccessModal';
+export type { GrantAccessModalProps } from './GrantAccessModal';
+export { RefuseRequestModal } from './RefuseRequestModal';
+export type { RefuseRequestModalProps } from './RefuseRequestModal';

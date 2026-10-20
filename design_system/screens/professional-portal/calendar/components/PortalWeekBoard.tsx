@@ -2,11 +2,13 @@ import { Hourglass, Lock } from 'lucide-react';
 import { STATUS_ICON, STATUS_LABEL } from '@ds/components';
 import { cn } from '@ds/foundations/cn';
 import { WEEKDAY_SHORT, formatTime, isSameDay, toDateKey } from '@ds/mocks/clinical';
+import type { Professional } from '@core';
 import type { BlockRequest, PortalAppointment } from '@ds/mocks/portal';
-import { getMyBlocks, getMyDaySlots } from '@ds/mocks/portal';
+import { activeBlocks, daySlots } from '../../shared/portalData';
 
 export interface PortalWeekBoardProps {
-  professionalId: string;
+  /** Profissional logado (grade de horários do cadastro compartilhado). */
+  professional: Pick<Professional, 'id' | 'workingHours'> | undefined;
   days: Date[];
   /** Consultas já filtradas (status). */
   appointments: PortalAppointment[];
@@ -22,14 +24,14 @@ export interface PortalWeekBoardProps {
  * Semana em colunas (Seg–Sáb). 1 coluna no celular, 2 em sm, 3 no tablet e 6 a partir de xl.
  * Cada dia mostra consultas, bloqueios (aprovados/pendentes) e quantos horários seguem livres.
  */
-export function PortalWeekBoard({ professionalId, days, appointments, allAppointments, requests, today, onSelectAppointment, onSelectDay }: PortalWeekBoardProps) {
-  const blocks = getMyBlocks(professionalId, requests);
+export function PortalWeekBoard({ professional, days, appointments, allAppointments, requests, today, onSelectAppointment, onSelectDay }: PortalWeekBoardProps) {
+  const blocks = professional ? activeBlocks(requests, professional.id) : [];
   return (
     <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6">
       {days.map((d) => {
         const key = toDateKey(d);
         const dayAppts = appointments.filter((a) => a.start.startsWith(key)).sort((a, b) => a.start.localeCompare(b.start));
-        const slots = getMyDaySlots(professionalId, key, { appointments: allAppointments, requests });
+        const slots = daySlots(professional, key, allAppointments, requests);
         const free = slots.filter((s) => s.state === 'livre').length;
         const busy = slots.filter((s) => s.state === 'ocupado').length;
         const dayBlocks = blocks.filter((b) => b.date === key);

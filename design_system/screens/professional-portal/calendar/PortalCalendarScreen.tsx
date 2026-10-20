@@ -1,22 +1,32 @@
 import { useMemo, useState } from 'react';
-import { CalendarCheck, CalendarX2, ChevronLeft, ChevronRight, Hourglass, Info, Lock, Play } from 'lucide-react';
+import { CalendarCheck, CalendarX2, ChevronLeft, ChevronRight, Hourglass, Info, Lock, Play, Undo2 } from 'lucide-react';
 import type { AppointmentStatus } from '@ds/mocks/types';
-import { canAccess } from '@ds/access';
+import { blockRequestService, now as clockNow, useAction, useCan } from '@core';
 import { Button, Card, EmptyState, IconButton, Input, PageHeader, SegmentedControl, Select } from '@ds/components';
 import { STATUS_NAMES, isSameDay, parseDate, toDateKey } from '@ds/mocks/clinical';
-import type { BlockRequest, PortalAppointment } from '@ds/mocks/portal';
-import { MY_BLOCK_REQUESTS, PORTAL_NOW, PORTAL_PROFESSIONAL_ID, PORTAL_TODAY, getMyAppointments, getMyBlockRequests, getMyDaySlots } from '@ds/mocks/portal';
+import type { PortalAppointment } from '@ds/mocks/portal';
 import { addDays, addMonths, weekDays } from '../../agenda/agendaUtils';
-import { BlockRequestList, DayTimeline, PortalAppointmentDrawer, RequestChangeButton, ScopeBadge, isWaiting, longDate, plural } from '../shared';
+import {
+  BlockRequestList,
+  DayTimeline,
+  PortalAppointmentDrawer,
+  RequestChangeButton,
+  ScopeBadge,
+  daySlots as buildDaySlots,
+  isWaiting,
+  longDate,
+  plural,
+  useMyAppointments,
+  useMyBlockRequests,
+  useMyProfessional,
+} from '../shared';
 import { PortalMonthGrid, PortalWeekBoard } from './components';
 import { RequestBlockModal } from './modals';
 
 export type PortalCalendarView = 'dia' | 'semana' | 'mes';
 
 export interface PortalCalendarScreenProps {
-  /** Profissional logado (padrão 'prof-lauren'). */
-  professionalId?: string;
-  /** Permissão de solicitar bloqueio (padrão: derivado de canAccess('profissional','bloqueio_horario','solicitar')). */
+  /** Permissão de solicitar bloqueio (padrão: `useCan('bloqueio_horario', 'solicitar')` da sessão). */
   canRequestChanges?: boolean;
   /** "Iniciar atendimento" no detalhe da consulta (App navega para Meus Atendimentos). */
   onStartAttendance?: (appointmentId: string) => void;
@@ -73,25 +83,30 @@ function Legend() {
 }
 
 /**
- * Minha Agenda — somente as consultas da profissional logada.
+ * Minha Agenda — somente as consultas do profissional logado (`useAppointments` com escopo próprio).
  * Sem criação de agendamentos (feito pela recepção); bloqueios são SOLICITADOS.
  */
 export function PortalCalendarScreen({
-  professionalId = PORTAL_PROFESSIONAL_ID,
-  canRequestChanges = canAccess('profissional', 'bloqueio_horario', 'solicitar'),
+  canRequestChanges,
   onStartAttendance,
   onOpenPatient,
   initialView = 'dia',
-  initialDate = PORTAL_TODAY,
+  initialDate,
 }: PortalCalendarScreenProps) {
+  const PORTAL_NOW = useMemo(() => clockNow(), []);
+  const PORTAL_TODAY = useMemo(() => new Date(PORTAL_NOW.getFullYear(), PORTAL_NOW.getMonth(), PORTAL_NOW.getDate()), [PORTAL_NOW]);
+  const canRequestBySession = useCan('bloqueio_horario', 'solicitar');
+  const canRequest = canRequestChanges ?? canRequestBySession;
+  const { professionalId, professional } = useMyProfessional();
   const [view, setView] = useState<PortalCalendarView>(initialView);
-  const [date, setDate] = useState<Date>(initialDate);
+  const [date, setDate] = useState<Date>(initialDate ?? PORTAL_TODAY);
   const [status, setStatus] = useState<StatusFilter>('todos');
   const [selected, setSelected] = useState<PortalAppointment | null>(null);
-  const [requests, setRequests] = useState<BlockRequest[]>(() => getMyBlockRequests(professionalId, MY_BLOCK_REQUESTS));
+  const requests = useMyBlockRequests();
+  const withdraw = useAction(blockRequestService.withdrawBlockRequest, { success: 'Solicitação retirada' });
   const [modal, setModal] = useState<{ open: boolean; date?: string }>({ open: false });
 
-  const all = useMemo(() => getMyAppointments(professionalId), [professionalId]);
+  const all = useMyAppointments();
   const filtered = useMemo(() => (status === 'todos' ? all : all.filter((a) => a.status === status)), [all, status]);
 
   const dateKey = toDateKey(date);
@@ -99,7 +114,7 @@ export function PortalCalendarScreen({
   const days = weekDays(date);
 
   const dayAppts = filtered.filter((a) => a.start.startsWith(dateKey));
-  const daySlots = useMemo(() => getMyDaySlots(professionalId, dateKey, { appointments: all, requests }), [professionalId, dateKey, all, requests]);
+  const daySlots = useMemo(() => buildDaySlots(professional, dateKey, all, requests), [professional, dateKey, all, requests]);
   const freeCount = daySlots.filter((s) => s.state === 'livre').length;
   const busyCount = daySlots.filter((s) => s.state === 'ocupado').length;
   const blockedCount = daySlots.filter((s) => s.state === 'bloqueado' || s.state === 'pendente').length;
@@ -136,7 +151,7 @@ export function PortalCalendarScreen({
         breadcrumb={['Portal do Profissional', 'Minha agenda']}
         subtitle="Suas consultas, horários livres e bloqueios. Novos agendamentos são feitos pela recepção."
         actions={
-          <RequestChangeButton enabled={canRequestChanges} onClick={() => setModal({ open: true, date: dateKey >= toDateKey(PORTAL_TODAY) ? dateKey : undefined })} />
+          <RequestChangeButton enabled={canRequest} onClick={() => setModal({ open: true, date: dateKey >= toDateKey(PORTAL_TODAY) ? dateKey : undefined })} />
         }
       />
 
@@ -239,7 +254,7 @@ export function PortalCalendarScreen({
           )}
           {view === 'semana' && (
             <PortalWeekBoard
-              professionalId={professionalId}
+              professional={professional}
               days={days}
               appointments={filtered}
               allAppointments={all}
@@ -269,9 +284,26 @@ export function PortalCalendarScreen({
           description={pendingCount ? `${plural(pendingCount, 'solicitação aguardando', 'solicitações aguardando')} aprovação` : 'Bloqueios e alterações de horário'}
           className="self-start"
         >
-          <BlockRequestList requests={requests} />
-          <RequestChangeButton enabled={canRequestChanges} onClick={() => setModal({ open: true })} label="Nova solicitação" fullWidth />
-          {!canRequestChanges && (
+          <BlockRequestList
+            requests={requests}
+            renderActions={(r) =>
+              r.status === 'enviada' ? (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  leftIcon={Undo2}
+                  loading={withdraw.loading}
+                  onClick={() => withdraw.run(r.id)}
+                  className="self-start"
+                  aria-label={`Retirar solicitação de ${r.date}`}
+                >
+                  Retirar solicitação
+                </Button>
+              ) : null
+            }
+          />
+          <RequestChangeButton enabled={canRequest} onClick={() => setModal({ open: true })} label="Nova solicitação" fullWidth />
+          {!canRequest && (
             <p className="text-caption text-graphite-500">
               Solicitações desativadas pela administração para o seu perfil.
             </p>
@@ -282,7 +314,6 @@ export function PortalCalendarScreen({
       <PortalAppointmentDrawer
         appointment={selected}
         onClose={() => setSelected(null)}
-        professionalId={professionalId}
         onStartAttendance={
           onStartAttendance
             ? (id) => {
@@ -297,8 +328,6 @@ export function PortalCalendarScreen({
       <RequestBlockModal
         open={modal.open}
         onClose={() => setModal({ open: false })}
-        onSubmit={(r) => setRequests((list) => [r, ...list])}
-        professionalId={professionalId}
         initialDate={modal.date}
         appointments={all}
         existingRequests={requests}
