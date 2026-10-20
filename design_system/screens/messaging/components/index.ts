@@ -8,3 +8,6 @@ export { PatientPanel } from './PatientPanel';
 export type { PatientPanelProps } from './PatientPanel';
 export { TransferMenu } from './TransferMenu';
 export type { TransferMenuProps } from './TransferMenu';
+export type { TransferTarget } from './TransferMenu';
+export { SimulateIncoming } from './SimulateIncoming';
+export type { SimulateIncomingProps } from './SimulateIncoming';

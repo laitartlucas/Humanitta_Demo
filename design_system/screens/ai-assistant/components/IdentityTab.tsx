@@ -1,9 +1,10 @@
 import { Card, Input, SegmentedControl, Switch, Textarea } from '@ds/components';
-import type { AiAssistantConfig, AiTone } from '@ds/mocks/business';
+import type { AiTone } from '@ds/mocks/business';
+import type { AiSettings } from '@modules/ai-assistant/settings';
 
 export interface AiTabProps {
-  config: AiAssistantConfig;
-  onChange: (patch: Partial<AiAssistantConfig>) => void;
+  config: AiSettings;
+  onChange: (patch: Partial<AiSettings>) => void;
 }
 
 const TONE_OPTIONS: { value: AiTone; label: string }[] = [
@@ -24,6 +25,7 @@ function isTone(v: string): v is AiTone {
 
 export function IdentityTab({ config, onChange }: AiTabProps) {
   return (
+    <div className="flex flex-col gap-6">
     <Card title="Identidade do assistente" description="Como o assistente se apresenta aos pacientes no WhatsApp.">
       <div className="flex flex-col gap-5">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -71,5 +73,22 @@ export function IdentityTab({ config, onChange }: AiTabProps) {
         />
       </div>
     </Card>
+    <Card title="Atendimento humanizado" description="Como a clínica quer que o assistente se comporte com os pacientes.">
+      <div className="flex flex-col gap-4">
+        <Textarea
+          label="Descrição"
+          rows={2}
+          value={config.description}
+          onChange={(e) => onChange({ description: e.target.value })}
+          hint="Usada quando o paciente pede informações gerais."
+          maxLength={240}
+        />
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <Textarea label="Personalidade" rows={3} value={config.personality} onChange={(e) => onChange({ personality: e.target.value })} maxLength={240} />
+          <Textarea label="Objetivo" rows={3} value={config.objective} onChange={(e) => onChange({ objective: e.target.value })} maxLength={240} />
+        </div>
+      </div>
+    </Card>
+    </div>
   );
 }

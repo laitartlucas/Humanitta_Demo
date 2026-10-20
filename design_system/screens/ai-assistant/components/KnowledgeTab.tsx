@@ -3,6 +3,8 @@ import type { FormEvent } from 'react';
 import { BookOpen, Pencil, Plus, Trash2 } from 'lucide-react';
 import { Button, Card, EmptyState, IconButton, Input, Switch, Textarea } from '@ds/components';
 import type { AiFaq } from '@ds/mocks/business';
+import { newId } from '@core';
+import { CustomRepliesCard } from './CustomRepliesCard';
 import type { AiTabProps } from './IdentityTab';
 
 interface Draft {
@@ -30,7 +32,7 @@ export function KnowledgeTab({ config, onChange }: AiTabProps) {
       .map((k) => k.trim().toLowerCase())
       .filter(Boolean);
     const faq: AiFaq = {
-      id: draft.id ?? `faq-${Date.now()}`,
+      id: draft.id ?? newId('faq'),
       question: draft.question.trim(),
       answer: draft.answer.trim(),
       keywords,
@@ -44,6 +46,7 @@ export function KnowledgeTab({ config, onChange }: AiTabProps) {
   };
 
   return (
+    <div className="flex flex-col gap-6">
     <Card
       title="Base de conhecimento (FAQ)"
       description="Respostas que o assistente usa quando identifica as palavras-chave."
@@ -114,5 +117,7 @@ export function KnowledgeTab({ config, onChange }: AiTabProps) {
         </ul>
       )}
     </Card>
+    <CustomRepliesCard config={config} onChange={onChange} />
+    </div>
   );
 }
