@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type ReactNode } from 'react';
+import { useMemo, useState, type ReactNode } from 'react';
 import {
   ArrowLeft,
   CalendarClock,
@@ -13,14 +13,32 @@ import {
   Mail,
   MapPin,
   MessageCircle,
+  NotebookPen,
   Pencil,
   Phone,
+  RotateCcw,
   ShieldCheck,
+  Stethoscope,
   Trash2,
+  UserMinus,
   UserX,
   Wallet,
 } from 'lucide-react';
-import type { ActivityEvent, Appointment, Patient, PaymentStatus } from '@ds/mocks/types';
+import { ROLE_LABEL } from '@ds/access';
+import {
+  DEMO_NOW,
+  useAccessContext,
+  useActivity,
+  useCan,
+  useConversations,
+  useQuery,
+  useRooms,
+  type ActivityEvent,
+  type AppointmentRecord,
+  type Attendance,
+  type AttendanceStatus,
+  type FinancialEntryRecord,
+} from '@core';
 import {
   Avatar,
   Badge,
@@ -30,43 +48,36 @@ import {
   EmptyState,
   KpiCard,
   PaymentStatusBadge,
+  SegmentedControl,
   SpecialtyTag,
   StatusBadge,
   Tabs,
   useToast,
+  type BadgeTone,
 } from '@ds/components';
 import { cn } from '@ds/foundations/cn';
+import { PAYMENT_METHOD_LABEL } from '@ds/mocks/business';
+import { CHANNEL_NAMES, formatCurrency, formatDate, formatTime } from '@ds/mocks/clinical';
 import {
-  CHANNEL_NAMES,
-  DEMO_NOW,
-  ageFrom,
-  appointments,
-  formatCurrency,
-  formatDate,
-  formatTime,
-  getAppointmentsByPatient,
-  getPatientById,
-  getRoomName,
-  patients,
-} from '@ds/mocks/clinical';
-import { DeletePatientDialog, EditPatientModal } from './modals';
+  buildPatientHistory,
+  selectPatientAttendances,
+  selectPatientDetail,
+  selectPatientFinance,
+} from './data/patientData';
+import { useInitialLoading } from './data/useInitialLoading';
+import { DeletePatientDialog, EditPatientModal, type PatientStatusAction } from './modals';
 
 export interface PatientProfileScreenProps {
   patientId?: string;
   onBack?: () => void;
+  /** Leva à Agenda para marcar consulta (exibido só a quem edita a agenda). */
   onNewAppointment?: (patientId: string) => void;
+  /** Abre a Central WhatsApp (exibido só a perfis com acesso ao WhatsApp). */
+  onOpenWhatsApp?: () => void;
 }
 
-type TabId = 'visao' | 'agendamentos' | 'historico' | 'documentos' | 'financeiro' | 'dados';
-
-interface FinanceRow {
-  id: string;
-  date: string;
-  description: string;
-  method: string;
-  amount: number;
-  status: PaymentStatus;
-}
+type TabId = 'visao' | 'agendamentos' | 'historico' | 'atendimentos' | 'documentos' | 'financeiro' | 'dados';
+type ApptView = 'proximas' | 'anteriores' | 'todas';
 
 const DOCS = [
   { id: 'd1', name: 'Termo de consentimento (LGPD)', kind: 'PDF · 120 KB', date: '2024-02-10' },
@@ -85,6 +96,14 @@ const DOT: Record<ActivityEvent['tone'], string> = {
   gold: 'bg-gold-500',
 };
 
+const ATTENDANCE_STATUS: Record<AttendanceStatus, { label: string; tone: BadgeTone }> = {
+  aguardando: { label: 'Aguardando', tone: 'info' },
+  em_andamento: { label: 'Em andamento', tone: 'warning' },
+  finalizado: { label: 'Finalizado', tone: 'success' },
+  faltou: { label: 'Faltou', tone: 'danger' },
+  cancelado: { label: 'Cancelado', tone: 'neutral' },
+};
+
 function InfoItem({ icon: Icon, label, children }: { icon: typeof Phone; label: string; children: ReactNode }) {
   return (
     <div className="flex items-start gap-3">
@@ -97,73 +116,48 @@ function InfoItem({ icon: Icon, label, children }: { icon: typeof Phone; label: 
   );
 }
 
-function financeFrom(appts: Appointment[], patient: Patient): FinanceRow[] {
-  const methods = ['Pix', 'Cartão de crédito', 'Cartão de débito', 'Dinheiro'];
-  const rows: FinanceRow[] = appts
-    .filter((a) => a.status === 'concluida' || a.status === 'em_atendimento')
-    .map((a, i) => ({
-      id: `fin-${a.id}`,
-      date: a.start,
-      description: a.service,
-      method: methods[i % methods.length],
-      amount: a.price,
-      status: a.status === 'concluida' ? 'pago' : 'pendente',
-    }));
-  if (patient.balance > 0) {
-    rows.push({
-      id: 'fin-saldo',
-      date: '2026-10-05T10:00:00',
-      description: 'Parcela de pacote de sessões',
-      method: 'Boleto',
-      amount: patient.balance,
-      status: 'atrasado',
-    });
-  }
-  return rows.sort((a, b) => b.date.localeCompare(a.date));
-}
-
-function historyFrom(appts: Appointment[], patient: Patient): ActivityEvent[] {
-  const ev: ActivityEvent[] = [
-    { id: 'h-cad', who: 'Recepção', what: 'cadastrou o paciente e registrou consentimento LGPD.', at: `${patient.createdAt}T09:00:00`, tone: 'gold' },
-  ];
-  appts.forEach((a) => {
-    const when = `${formatDate(a.start)} às ${formatTime(a.start)}`;
-    if (a.channel === 'assistente_ia')
-      ev.push({ id: `h-ia-${a.id}`, who: 'Assistente IA', what: `agendou ${a.service} para ${when} via WhatsApp.`, at: a.start, tone: 'ai' });
-    if (a.status === 'confirmada') ev.push({ id: `h-c-${a.id}`, who: 'Recepção', what: `confirmou presença em ${when}.`, at: a.start, tone: 'success' });
-    if (a.status === 'reagendada') ev.push({ id: `h-r-${a.id}`, who: 'Recepção', what: `reagendou consulta para ${when}.`, at: a.start, tone: 'info' });
-    if (a.status === 'cancelada') ev.push({ id: `h-x-${a.id}`, who: 'Paciente', what: `cancelou a consulta de ${when}.`, at: a.start, tone: 'danger' });
-    if (a.status === 'faltou') ev.push({ id: `h-f-${a.id}`, who: 'Sistema', what: `registrou falta em ${when}.`, at: a.start, tone: 'warning' });
-    if (a.status === 'concluida') ev.push({ id: `h-ok-${a.id}`, who: a.professionalName, what: `finalizou atendimento (${a.service}).`, at: a.start, tone: 'neutral' });
-  });
-  return ev.sort((a, b) => b.at.localeCompare(a.at));
-}
-
-export function PatientProfileScreen({ patientId = 'pac-01', onBack, onNewAppointment }: PatientProfileScreenProps) {
+export function PatientProfileScreen({ patientId, onBack, onNewAppointment, onOpenWhatsApp }: PatientProfileScreenProps) {
   const { toast } = useToast();
-  const [patient, setPatient] = useState<Patient | undefined>(() => getPatientById(patientId) ?? patients[0]);
+  const ctx = useAccessContext();
+  const loading = useInitialLoading();
+  const lookup = useQuery((s, c) => selectPatientDetail(s, c, patientId), [patientId]);
+  const attendances = useQuery((s, c) => (patientId ? selectPatientAttendances(s, c, patientId) : []), [patientId]);
+  const finance = useQuery((s, c) => (patientId ? selectPatientFinance(s, c, patientId) : null), [patientId]);
+  const activity = useActivity();
+  const rooms = useRooms();
+  const conversations = useConversations();
+  const canEdit = useCan('pacientes_cadastro', 'editar');
+  const canSchedule = useCan('agenda_clinica', 'editar') && Boolean(onNewAppointment);
+  const canMessage = useCan('whatsapp', 'editar') && Boolean(onOpenWhatsApp);
+  const canSeeAttendances = useCan('atendimentos', 'proprio');
+
   const [tab, setTab] = useState<TabId>('visao');
+  const [apptView, setApptView] = useState<ApptView>('proximas');
   const [editOpen, setEditOpen] = useState(false);
-  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [statusAction, setStatusAction] = useState<PatientStatusAction | null>(null);
   const [deleted, setDeleted] = useState(false);
 
-  useEffect(() => {
-    setPatient(getPatientById(patientId));
-    setDeleted(false);
-    setTab('visao');
-  }, [patientId]);
+  const detail = lookup.status === 'ok' ? lookup.detail : null;
+  const appts = useMemo(() => detail?.appointments ?? [], [detail]);
+  const history = useMemo(
+    () => (detail ? buildPatientHistory(detail.row, appts, attendances, detail.record ? activity : []) : []),
+    [detail, appts, attendances, activity],
+  );
 
-  const appts = useMemo(() => (patient ? getAppointmentsByPatient(patient.id, appointments) : []), [patient]);
-  const finance = useMemo(() => (patient ? financeFrom(appts, patient) : []), [appts, patient]);
-  const history = useMemo(() => (patient ? historyFrom(appts, patient) : []), [appts, patient]);
-
-  if (!patient || deleted) {
+  if (deleted || lookup.status !== 'ok' || !detail) {
+    const forbidden = !deleted && lookup.status === 'forbidden';
     return (
       <Card>
         <EmptyState
-          icon={UserX}
-          title={deleted ? 'Paciente excluído' : 'Paciente não encontrado'}
-          description={deleted ? 'O cadastro foi removido desta demonstração.' : 'Verifique o link ou volte para a lista.'}
+          icon={forbidden ? Lock : UserX}
+          title={deleted ? 'Paciente excluído' : forbidden ? 'Acesso não autorizado' : 'Paciente não encontrado'}
+          description={
+            deleted
+              ? 'O cadastro foi removido desta demonstração.'
+              : forbidden
+                ? 'Este cadastro não faz parte do seu perfil de acesso. Somente pacientes vinculados aos seus atendimentos podem ser consultados.'
+                : 'Verifique o link ou volte para a lista.'
+          }
           action={
             onBack ? (
               <Button variant="secondary" leftIcon={ArrowLeft} onClick={onBack}>
@@ -176,25 +170,37 @@ export function PatientProfileScreen({ patientId = 'pac-01', onBack, onNewAppoin
     );
   }
 
-  const upcoming = appts.filter((a) => new Date(a.start) >= DEMO_NOW && a.status !== 'cancelada').reverse();
-  const past = appts.filter((a) => new Date(a.start) < DEMO_NOW);
-  const totalPaid = finance.filter((f) => f.status === 'pago').reduce((s, f) => s + f.amount, 0);
-  const attendance = past.length ? Math.round((past.filter((a) => a.status === 'concluida' || a.status === 'em_atendimento').length / past.length) * 100) : 100;
+  const { row, record } = detail;
+  const nowMs = DEMO_NOW.getTime();
+  const upcoming = appts.filter((a) => new Date(a.start).getTime() >= nowMs && !['cancelada', 'reagendada', 'faltou', 'concluida'].includes(a.status));
+  const past = appts.filter((a) => new Date(a.start).getTime() < nowMs).reverse();
+  const listed = apptView === 'proximas' ? upcoming : apptView === 'anteriores' ? past : [...appts].reverse();
+  const counted = past.filter((a) => a.status !== 'cancelada' && a.status !== 'reagendada');
+  const attendanceRate = counted.length
+    ? Math.round((counted.filter((a) => a.status === 'concluida' || a.status === 'em_atendimento').length / counted.length) * 100)
+    : 100;
+  const cancellations = appts.filter((a) => a.status === 'cancelada').length;
+  const roomName = (id: string) => rooms.find((r) => r.id === id)?.name ?? '—';
+  const conversation = conversations.find((c) => c.patientId === row.id);
+  const preferredChannel = conversation ? 'WhatsApp' : appts[appts.length - 1]?.channel ? CHANNEL_NAMES[appts[appts.length - 1].channel!] : 'WhatsApp';
+  const byAppointment = new Map(appts.map((a) => [a.id, a]));
 
   const tabs = [
     { id: 'visao', label: 'Visão geral', icon: LayoutGrid },
     { id: 'agendamentos', label: 'Agendamentos', icon: CalendarClock, count: appts.length },
     { id: 'historico', label: 'Histórico administrativo', icon: History },
-    { id: 'documentos', label: 'Documentos', icon: FileText, count: DOCS.length },
-    { id: 'financeiro', label: 'Financeiro', icon: Wallet },
-    { id: 'dados', label: 'Dados cadastrais', icon: IdCard },
+    ...(canSeeAttendances ? [{ id: 'atendimentos', label: 'Atendimentos', icon: Stethoscope, count: attendances.length }] : []),
+    ...(record ? [{ id: 'documentos', label: 'Documentos', icon: FileText, count: DOCS.length }] : []),
+    ...(finance ? [{ id: 'financeiro', label: 'Financeiro', icon: Wallet }] : []),
+    ...(record ? [{ id: 'dados', label: 'Dados cadastrais', icon: IdCard }] : []),
   ];
+  const activeTab: TabId = tabs.some((t) => t.id === tab) ? tab : 'visao';
 
   const apptColumns = [
     {
       key: 'date',
       header: 'Data',
-      render: (a: Appointment) => (
+      render: (a: AppointmentRecord) => (
         <div className="tabular-nums">
           <div className="font-semibold text-graphite-900">{formatDate(a.start)}</div>
           <div className="text-xs text-graphite-500">
@@ -206,29 +212,74 @@ export function PatientProfileScreen({ patientId = 'pac-01', onBack, onNewAppoin
     {
       key: 'service',
       header: 'Serviço',
-      render: (a: Appointment) => (
+      render: (a: AppointmentRecord) => (
         <div className="min-w-0">
           <div className="truncate text-graphite-900">{a.service}</div>
           <SpecialtyTag specialty={a.specialty} variant="dot" />
         </div>
       ),
     },
-    { key: 'prof', header: 'Profissional', hideBelow: 'md' as const, render: (a: Appointment) => a.professionalName },
-    { key: 'room', header: 'Sala', hideBelow: 'lg' as const, render: (a: Appointment) => getRoomName(a.roomId) },
-    { key: 'status', header: 'Status', render: (a: Appointment) => <StatusBadge status={a.status} /> },
+    { key: 'prof', header: 'Profissional', hideBelow: 'md' as const, render: (a: AppointmentRecord) => a.professionalName },
+    { key: 'room', header: 'Sala', hideBelow: 'lg' as const, render: (a: AppointmentRecord) => roomName(a.roomId) },
+    {
+      key: 'status',
+      header: 'Status',
+      render: (a: AppointmentRecord) => (
+        <div className="flex flex-col items-start gap-1">
+          <StatusBadge status={a.status} />
+          {a.status === 'cancelada' && a.cancelReason && <span className="text-xs text-graphite-500">{a.cancelReason}</span>}
+        </div>
+      ),
+    },
+  ];
+
+  const attendanceColumns = [
+    {
+      key: 'date',
+      header: 'Consulta',
+      render: (at: Attendance) => {
+        const a = byAppointment.get(at.appointmentId);
+        return (
+          <div className="min-w-0">
+            <div className="font-semibold tabular-nums text-graphite-900">{a ? `${formatDate(a.start)} · ${formatTime(a.start)}` : '—'}</div>
+            <div className="truncate text-xs text-graphite-500">{a?.service ?? 'Atendimento'}</div>
+          </div>
+        );
+      },
+    },
+    { key: 'prof', header: 'Profissional', hideBelow: 'md' as const, render: (at: Attendance) => byAppointment.get(at.appointmentId)?.professionalName ?? '—' },
+    {
+      key: 'times',
+      header: 'Chegada · início · fim',
+      hideBelow: 'lg' as const,
+      render: (at: Attendance) => (
+        <span className="tabular-nums text-graphite-700">
+          {[at.checkInAt, at.startedAt, at.finishedAt].map((t) => (t ? formatTime(t) : '—')).join(' · ')}
+        </span>
+      ),
+    },
+    {
+      key: 'status',
+      header: 'Situação',
+      render: (at: Attendance) => (
+        <Badge tone={ATTENDANCE_STATUS[at.status].tone} dot>
+          {ATTENDANCE_STATUS[at.status].label}
+        </Badge>
+      ),
+    },
   ];
 
   const financeColumns = [
-    { key: 'date', header: 'Data', render: (f: FinanceRow) => <span className="tabular-nums">{formatDate(f.date)}</span> },
-    { key: 'desc', header: 'Descrição', render: (f: FinanceRow) => f.description },
-    { key: 'method', header: 'Forma', hideBelow: 'md' as const, render: (f: FinanceRow) => f.method },
+    { key: 'date', header: 'Data', render: (f: FinancialEntryRecord) => <span className="tabular-nums">{formatDate(f.date)}</span> },
+    { key: 'desc', header: 'Descrição', render: (f: FinancialEntryRecord) => f.description },
+    { key: 'method', header: 'Forma', hideBelow: 'md' as const, render: (f: FinancialEntryRecord) => (f.method ? PAYMENT_METHOD_LABEL[f.method] : '—') },
     {
       key: 'amount',
       header: 'Valor',
       align: 'right' as const,
-      render: (f: FinanceRow) => <span className="font-semibold tabular-nums">{formatCurrency(f.amount)}</span>,
+      render: (f: FinancialEntryRecord) => <span className="font-semibold tabular-nums">{formatCurrency(f.amount)}</span>,
     },
-    { key: 'status', header: 'Situação', render: (f: FinanceRow) => <PaymentStatusBadge status={f.status} /> },
+    { key: 'status', header: 'Situação', render: (f: FinancialEntryRecord) => <PaymentStatusBadge status={f.status} /> },
   ];
 
   const restrictedNotice = (
@@ -240,7 +291,7 @@ export function PatientProfileScreen({ patientId = 'pac-01', onBack, onNewAppoin
         <p className="font-bold text-graphite-900">Prontuário clínico restrito</p>
         <p className="text-graphite-600">
           Evoluções, diagnósticos e anexos clínicos são visíveis apenas ao profissional responsável. Este perfil exibe somente
-          dados administrativos (perfil: Administradora).
+          dados administrativos (perfil: {ROLE_LABEL[ctx.role]}).
         </p>
       </div>
     </div>
@@ -263,19 +314,21 @@ export function PatientProfileScreen({ patientId = 'pac-01', onBack, onNewAppoin
           className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full border-[1.5px] border-gold-300"
         />
         <div className="relative flex flex-col gap-5 md:flex-row md:items-center">
-          <Avatar name={patient.name} size="xl" ring />
+          <Avatar name={row.name} size="xl" ring />
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-center gap-2">
-              <h1 className="font-display text-display-md text-graphite-900">{patient.name}</h1>
-              <Badge tone={patient.status === 'ativo' ? 'success' : 'neutral'} dot>
-                {patient.status === 'ativo' ? 'Ativo' : 'Inativo'}
+              <h1 className="font-display text-display-md text-graphite-900">{row.name}</h1>
+              <Badge tone={row.status === 'ativo' ? 'success' : 'neutral'} dot>
+                {row.status === 'ativo' ? 'Ativo' : 'Inativo'}
               </Badge>
             </div>
             <p className="mt-1 text-sm text-graphite-500">
-              {ageFrom(patient.birthDate)} anos · {patient.city} – RS · paciente desde {formatDate(patient.createdAt, { month: 'long', year: 'numeric' })}
+              {row.age} anos
+              {row.city ? ` · ${row.city} – RS` : ''}
+              {row.createdAt ? ` · paciente desde ${formatDate(row.createdAt, { month: 'long', year: 'numeric' })}` : ''}
             </p>
             <div className="mt-2 flex flex-wrap gap-1.5">
-              {patient.tags.map((t) => (
+              {row.tags.map((t) => (
                 <Badge key={t} tone="neutral" size="sm">
                   {t}
                 </Badge>
@@ -283,42 +336,86 @@ export function PatientProfileScreen({ patientId = 'pac-01', onBack, onNewAppoin
             </div>
           </div>
           <div className="flex flex-wrap gap-2">
-            <Button
-              variant="secondary"
-              leftIcon={MessageCircle}
-              onClick={() => toast({ tone: 'success', title: 'Conversa aberta', description: `WhatsApp de ${patient.name} (simulação).` })}
-            >
-              WhatsApp
-            </Button>
-            <Button variant="secondary" leftIcon={Pencil} onClick={() => setEditOpen(true)}>
-              Editar
-            </Button>
-            <Button
-              leftIcon={CalendarPlus}
-              onClick={() =>
-                onNewAppointment
-                  ? onNewAppointment(patient.id)
-                  : toast({ tone: 'info', title: 'Abra a Agenda', description: 'Escolha um horário livre para agendar.' })
-              }
-            >
-              Agendar
-            </Button>
+            {canMessage && (
+              <Button variant="secondary" leftIcon={MessageCircle} onClick={() => onOpenWhatsApp?.()}>
+                WhatsApp
+              </Button>
+            )}
+            {canEdit && record && (
+              <Button variant="secondary" leftIcon={Pencil} onClick={() => setEditOpen(true)}>
+                Editar
+              </Button>
+            )}
+            {canSchedule && (
+              <Button
+                leftIcon={CalendarPlus}
+                disabled={row.status === 'inativo'}
+                title={row.status === 'inativo' ? 'Reative o cadastro para agendar.' : undefined}
+                onClick={() => onNewAppointment?.(row.id)}
+              >
+                Agendar
+              </Button>
+            )}
           </div>
         </div>
       </section>
 
-      <Tabs items={tabs} value={tab} onChange={(id) => setTab(id as TabId)} ariaLabel="Seções do perfil do paciente" />
+      {row.status === 'inativo' && (
+        <div className="flex flex-wrap items-center justify-between gap-3 rounded-md border border-graphite-200 bg-graphite-50 p-4 text-sm" role="status">
+          <p className="text-graphite-700">
+            <span className="font-bold text-graphite-900">Cadastro inativo.</span> O histórico foi preservado; o paciente não aparece entre os ativos.
+          </p>
+          {canEdit && record && (
+            <Button variant="secondary" size="sm" leftIcon={RotateCcw} onClick={() => setStatusAction('reactivate')}>
+              Reativar
+            </Button>
+          )}
+        </div>
+      )}
 
-      {tab === 'visao' && (
+      <Tabs items={tabs} value={activeTab} onChange={(id) => setTab(id as TabId)} ariaLabel="Seções do perfil do paciente" />
+
+      {activeTab === 'visao' && (
         <div className="flex flex-col gap-6">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-            <KpiCard label="Próxima consulta" value={upcoming[0] ? formatDate(upcoming[0].start, { day: '2-digit', month: '2-digit' }) : '—'} icon={CalendarClock} footer={upcoming[0] ? `${formatTime(upcoming[0].start)} · ${upcoming[0].professionalName}` : 'Sem agendamento futuro'} />
-            <KpiCard label="Consultas registradas" value={String(appts.length)} icon={History} />
-            <KpiCard label="Assiduidade" value={`${attendance}%`} icon={ShieldCheck} tone="success" progress={attendance} />
-            <KpiCard label="Saldo em aberto" value={formatCurrency(patient.balance)} icon={CreditCard} tone={patient.balance > 0 ? 'warning' : 'gold'} />
+            <KpiCard
+              loading={loading}
+              label="Próxima consulta"
+              value={upcoming[0] ? formatDate(upcoming[0].start, { day: '2-digit', month: '2-digit' }) : '—'}
+              icon={CalendarClock}
+              footer={upcoming[0] ? `${formatTime(upcoming[0].start)} · ${upcoming[0].professionalName}` : 'Sem agendamento futuro'}
+            />
+            <KpiCard loading={loading} label="Consultas registradas" value={String(appts.length)} icon={History} footer={`${cancellations} cancelada(s)`} />
+            <KpiCard loading={loading} label="Assiduidade" value={`${attendanceRate}%`} icon={ShieldCheck} tone="success" progress={attendanceRate} />
+            {row.balance !== undefined ? (
+              <KpiCard
+                loading={loading}
+                label="Saldo em aberto"
+                value={formatCurrency(row.balance)}
+                icon={CreditCard}
+                tone={row.balance > 0 ? 'warning' : 'gold'}
+              />
+            ) : (
+              <KpiCard loading={loading} label="Última visita" value={row.lastVisit ? formatDate(row.lastVisit, { day: '2-digit', month: '2-digit' }) : '—'} icon={CalendarClock} />
+            )}
           </div>
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-            <Card className="lg:col-span-2" title="Próximos agendamentos" action={<Button variant="ghost" size="sm" onClick={() => setTab('agendamentos')}>Ver todos</Button>}>
+            <Card
+              className="lg:col-span-2"
+              title="Próximos agendamentos"
+              action={
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => {
+                    setApptView('proximas');
+                    setTab('agendamentos');
+                  }}
+                >
+                  Ver todos
+                </Button>
+              }
+            >
               {upcoming.length === 0 ? (
                 <p className="text-sm text-graphite-500">Nenhum agendamento futuro.</p>
               ) : (
@@ -339,9 +436,10 @@ export function PatientProfileScreen({ patientId = 'pac-01', onBack, onNewAppoin
             </Card>
             <Card title="Contato">
               <dl className="flex flex-col gap-3">
-                <InfoItem icon={Phone} label="WhatsApp">{patient.phone}</InfoItem>
-                <InfoItem icon={Mail} label="E-mail">{patient.email ?? 'Não informado'}</InfoItem>
-                <InfoItem icon={MapPin} label="Cidade">{patient.city} – RS</InfoItem>
+                <InfoItem icon={Phone} label="WhatsApp">{row.phone}</InfoItem>
+                {!row.minimal && <InfoItem icon={Mail} label="E-mail">{row.email ?? 'Não informado'}</InfoItem>}
+                {!row.minimal && <InfoItem icon={MapPin} label="Cidade">{row.city} – RS</InfoItem>}
+                {record?.adminNote && <InfoItem icon={NotebookPen} label="Observação administrativa">{record.adminNote}</InfoItem>}
               </dl>
             </Card>
           </div>
@@ -349,43 +447,96 @@ export function PatientProfileScreen({ patientId = 'pac-01', onBack, onNewAppoin
         </div>
       )}
 
-      {tab === 'agendamentos' && (
-        <Card padding="none" title="Agendamentos" description="Histórico e próximos horários do paciente">
+      {activeTab === 'agendamentos' && (
+        <Card
+          padding="none"
+          title="Agendamentos"
+          description="Histórico e próximos horários do paciente"
+          action={
+            <SegmentedControl
+              ariaLabel="Período dos agendamentos"
+              size="sm"
+              value={apptView}
+              onChange={(v) => setApptView(v as ApptView)}
+              options={[
+                { value: 'proximas', label: `Próximas (${upcoming.length})` },
+                { value: 'anteriores', label: `Anteriores (${past.length})` },
+                { value: 'todas', label: 'Todas' },
+              ]}
+            />
+          }
+        >
           <DataTable
             columns={apptColumns}
-            rows={appts}
+            rows={listed}
             rowKey={(a) => a.id}
+            loading={loading}
             caption="Agendamentos do paciente"
-            empty={<EmptyState icon={CalendarClock} title="Sem agendamentos" description="Este paciente ainda não tem consultas registradas." />}
+            empty={
+              <EmptyState
+                icon={CalendarClock}
+                title={apptView === 'proximas' ? 'Sem consultas futuras' : 'Sem agendamentos'}
+                description={
+                  apptView === 'proximas' ? 'Nenhuma consulta marcada a partir de hoje.' : 'Nenhuma consulta registrada neste período.'
+                }
+                action={
+                  canSchedule && row.status === 'ativo' ? (
+                    <Button variant="secondary" leftIcon={CalendarPlus} onClick={() => onNewAppointment?.(row.id)}>
+                      Agendar consulta
+                    </Button>
+                  ) : undefined
+                }
+              />
+            }
           />
         </Card>
       )}
 
-      {tab === 'historico' && (
+      {activeTab === 'historico' && (
         <div className="flex flex-col gap-4">
           <Card title="Histórico administrativo" description="Eventos de cadastro, agendamento e comunicação — sem conteúdo clínico">
-            <ol className="flex flex-col">
-              {history.map((e, i) => (
-                <li key={e.id} className="relative flex gap-3 pb-5 last:pb-0">
-                  {i < history.length - 1 && <span aria-hidden="true" className="absolute left-[5px] top-4 h-full w-px bg-graphite-100" />}
-                  <span aria-hidden="true" className={cn('mt-1.5 h-[11px] w-[11px] shrink-0 rounded-full ring-4 ring-white', DOT[e.tone])} />
-                  <div className="min-w-0">
-                    <p className="text-sm text-graphite-700">
-                      <span className="font-semibold text-graphite-900">{e.who}</span> {e.what}
-                    </p>
-                    <time dateTime={e.at} className="text-xs text-graphite-500">
-                      {formatDate(e.at)}
-                    </time>
-                  </div>
-                </li>
-              ))}
-            </ol>
+            {history.length === 0 ? (
+              <p className="text-sm text-graphite-500">Nenhum evento registrado.</p>
+            ) : (
+              <ol className="flex flex-col">
+                {history.map((e, i) => (
+                  <li key={e.id} className="relative flex gap-3 pb-5 last:pb-0">
+                    {i < history.length - 1 && <span aria-hidden="true" className="absolute left-[5px] top-4 h-full w-px bg-graphite-100" />}
+                    <span aria-hidden="true" className={cn('mt-1.5 h-[11px] w-[11px] shrink-0 rounded-full ring-4 ring-white', DOT[e.tone])} />
+                    <div className="min-w-0">
+                      <p className="text-sm text-graphite-700">
+                        <span className="font-semibold text-graphite-900">{e.who}</span> {e.what}
+                      </p>
+                      <time dateTime={e.at} className="text-xs text-graphite-500">
+                        {formatDate(e.at)}
+                      </time>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            )}
           </Card>
           {restrictedNotice}
         </div>
       )}
 
-      {tab === 'documentos' && (
+      {activeTab === 'atendimentos' && (
+        <div className="flex flex-col gap-4">
+          <Card padding="none" title="Atendimentos" description="Chegada, início e fim de cada atendimento — o conteúdo clínico fica no prontuário restrito">
+            <DataTable
+              columns={attendanceColumns}
+              rows={attendances}
+              rowKey={(at) => at.id}
+              loading={loading}
+              caption="Atendimentos do paciente"
+              empty={<EmptyState icon={Stethoscope} title="Sem atendimentos" description="Nenhum atendimento registrado para este paciente." />}
+            />
+          </Card>
+          {restrictedNotice}
+        </div>
+      )}
+
+      {activeTab === 'documentos' && (
         <Card title="Documentos demonstrativos" description="Arquivos fictícios para fins de demonstração">
           <ul className="grid grid-cols-1 gap-3 md:grid-cols-2">
             {DOCS.map((d) => (
@@ -418,18 +569,25 @@ export function PatientProfileScreen({ patientId = 'pac-01', onBack, onNewAppoin
         </Card>
       )}
 
-      {tab === 'financeiro' && (
+      {activeTab === 'financeiro' && finance && (
         <div className="flex flex-col gap-4">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-            <KpiCard label="Total pago" value={formatCurrency(totalPaid)} icon={Wallet} tone="success" />
-            <KpiCard label="Em aberto" value={formatCurrency(patient.balance)} icon={CreditCard} tone={patient.balance > 0 ? 'warning' : 'gold'} />
-            <KpiCard label="Lançamentos" value={String(finance.length)} icon={FileText} />
+            <KpiCard loading={loading} label="Total pago" value={formatCurrency(finance.totalPaid)} icon={Wallet} tone="success" />
+            <KpiCard
+              loading={loading}
+              label="Em aberto"
+              value={formatCurrency(row.balance ?? finance.open)}
+              icon={CreditCard}
+              tone={(row.balance ?? finance.open) > 0 ? 'warning' : 'gold'}
+            />
+            <KpiCard loading={loading} label="Lançamentos" value={String(finance.entries.length)} icon={FileText} />
           </div>
           <Card padding="none" title="Lançamentos" description="Valores fictícios de demonstração">
             <DataTable
               columns={financeColumns}
-              rows={finance}
+              rows={finance.entries}
               rowKey={(f) => f.id}
+              loading={loading}
               caption="Lançamentos financeiros do paciente"
               empty={<EmptyState icon={Wallet} title="Sem lançamentos" description="Nenhum pagamento registrado para este paciente." />}
             />
@@ -437,57 +595,70 @@ export function PatientProfileScreen({ patientId = 'pac-01', onBack, onNewAppoin
         </div>
       )}
 
-      {tab === 'dados' && (
+      {activeTab === 'dados' && record && (
         <Card
           title="Dados cadastrais"
           action={
-            <div className="flex gap-2">
-              <Button variant="ghost" size="sm" leftIcon={Trash2} className="text-danger" onClick={() => setDeleteOpen(true)}>
-                Excluir
-              </Button>
-              <Button variant="secondary" size="sm" leftIcon={Pencil} onClick={() => setEditOpen(true)}>
-                Editar
-              </Button>
-            </div>
+            canEdit ? (
+              <div className="flex gap-2">
+                {row.status === 'ativo' ? (
+                  <Button variant="ghost" size="sm" leftIcon={UserMinus} className="text-danger" onClick={() => setStatusAction('deactivate')}>
+                    Desativar
+                  </Button>
+                ) : (
+                  <Button variant="ghost" size="sm" leftIcon={RotateCcw} onClick={() => setStatusAction('reactivate')}>
+                    Reativar
+                  </Button>
+                )}
+                {appts.length === 0 && (
+                  <Button variant="ghost" size="sm" leftIcon={Trash2} className="text-danger" onClick={() => setStatusAction('delete')}>
+                    Excluir
+                  </Button>
+                )}
+                <Button variant="secondary" size="sm" leftIcon={Pencil} onClick={() => setEditOpen(true)}>
+                  Editar
+                </Button>
+              </div>
+            ) : undefined
           }
         >
           <dl className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            <InfoItem icon={IdCard} label="Nome completo">{patient.name}</InfoItem>
+            <InfoItem icon={IdCard} label="Nome completo">{record.name}</InfoItem>
             <InfoItem icon={CalendarClock} label="Data de nascimento">
-              {formatDate(patient.birthDate)} ({ageFrom(patient.birthDate)} anos)
+              {formatDate(`${record.birthDate}T12:00:00`)} ({row.age} anos)
             </InfoItem>
-            <InfoItem icon={Phone} label="WhatsApp / telefone">{patient.phone}</InfoItem>
-            <InfoItem icon={Mail} label="E-mail">{patient.email ?? 'Não informado'}</InfoItem>
-            <InfoItem icon={MapPin} label="Cidade">{patient.city} – RS</InfoItem>
-            <InfoItem icon={History} label="Cadastrado em">{formatDate(patient.createdAt)}</InfoItem>
-            <InfoItem icon={MessageCircle} label="Canal preferido">
-              {appts[0]?.channel ? CHANNEL_NAMES[appts[0].channel] : 'WhatsApp'}
-            </InfoItem>
+            <InfoItem icon={Phone} label="WhatsApp / telefone">{record.phone}</InfoItem>
+            <InfoItem icon={Mail} label="E-mail">{record.email ?? 'Não informado'}</InfoItem>
+            <InfoItem icon={MapPin} label="Cidade">{record.city} – RS</InfoItem>
+            <InfoItem icon={History} label="Cadastrado em">{formatDate(`${record.createdAt}T12:00:00`)}</InfoItem>
+            <InfoItem icon={MessageCircle} label="Canal preferido">{preferredChannel}</InfoItem>
             <InfoItem icon={ShieldCheck} label="Consentimento LGPD">Registrado</InfoItem>
+            <InfoItem icon={IdCard} label="Código do paciente">{record.id}</InfoItem>
+            <div className="sm:col-span-2 lg:col-span-3">
+              <InfoItem icon={NotebookPen} label="Observação administrativa">{record.adminNote ?? 'Nenhuma'}</InfoItem>
+            </div>
           </dl>
         </Card>
       )}
 
-      <EditPatientModal
-        open={editOpen}
-        patient={patient}
-        onClose={() => setEditOpen(false)}
-        onSave={(p) => {
-          setPatient(p);
-          setEditOpen(false);
-          toast({ tone: 'success', title: 'Cadastro atualizado', description: p.name });
-        }}
-      />
-      <DeletePatientDialog
-        open={deleteOpen}
-        patient={patient}
-        onClose={() => setDeleteOpen(false)}
-        onConfirm={(p) => {
-          setDeleteOpen(false);
-          setDeleted(true);
-          toast({ tone: 'danger', title: 'Paciente excluído', description: p.name });
-        }}
-      />
+      {record && (
+        <>
+          <EditPatientModal open={editOpen} patient={record} onClose={() => setEditOpen(false)} onSaved={() => setEditOpen(false)} />
+          <DeletePatientDialog
+            open={statusAction !== null}
+            patient={record}
+            action={statusAction ?? 'deactivate'}
+            onClose={() => setStatusAction(null)}
+            onDone={(action) => {
+              setStatusAction(null);
+              if (action === 'delete') {
+                if (onBack) onBack();
+                else setDeleted(true);
+              }
+            }}
+          />
+        </>
+      )}
     </div>
   );
 }
