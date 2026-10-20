@@ -6,9 +6,10 @@ export interface DeleteEntryDialogProps {
   entry: FinancialEntry | null;
   onClose: () => void;
   onConfirm: (id: string) => void;
+  loading?: boolean;
 }
 
-export function DeleteEntryDialog({ entry, onClose, onConfirm }: DeleteEntryDialogProps) {
+export function DeleteEntryDialog({ entry, onClose, onConfirm, loading }: DeleteEntryDialogProps) {
   return (
     <ConfirmDialog
       open={entry !== null}
@@ -16,6 +17,7 @@ export function DeleteEntryDialog({ entry, onClose, onConfirm }: DeleteEntryDial
       onConfirm={() => {
         if (entry) onConfirm(entry.id);
       }}
+      loading={loading}
       tone="danger"
       title="Excluir lançamento?"
       description={

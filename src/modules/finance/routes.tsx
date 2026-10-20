@@ -1,9 +1,11 @@
 /** Agente 06 — Financeiro. Dono: Agente 06. */
 import { FinanceScreen } from '@ds/screens/finance';
 import type { ModuleDefinition } from '@app/types';
+import { useAppNavigate } from '@app/navigation';
 
 function FinancePage() {
-  return <FinanceScreen />;
+  const go = useAppNavigate();
+  return <FinanceScreen onOpenPatient={(patientId) => go('pacientes', patientId)} />;
 }
 
 export const financeModule: ModuleDefinition = {
