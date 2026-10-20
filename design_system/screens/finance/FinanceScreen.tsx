@@ -2,13 +2,15 @@ import { useMemo, useState } from 'react';
 import {
   ArrowDownCircle,
   ArrowUpCircle,
+  BadgeCheck,
   CheckCircle2,
   Clock,
   Download,
   HandCoins,
+  Lock,
+  PieChart,
   Plus,
   Scale,
-  Trash2,
   Wallet,
 } from 'lucide-react';
 import {
@@ -17,126 +19,298 @@ import {
   Card,
   DataTable,
   DonutChart,
-  FilterChip,
+  EmptyState,
   HorizontalBarList,
-  IconButton,
   KpiCard,
   LineChart,
   PaymentStatusBadge,
-  SearchInput,
   SegmentedControl,
   SPECIALTY_COLOR,
   SPECIALTY_LABEL,
   Tabs,
   useToast,
+  type DataTableColumn,
 } from '@ds/components';
-import type { FinancialEntry, PaymentMethod, PaymentStatus } from '@ds/mocks/types';
+import { todayKey, useAction, useCan, usePatients, useProfessionals, type PaymentStatus } from '@core';
 import {
-  financeSummary,
-  financialEntries,
   formatCurrency,
   formatCurrencyCompact,
   formatDateBR,
-  monthlyCashFlow,
   PAYMENT_METHOD_COLOR,
   PAYMENT_METHOD_LABEL,
   PAYMENT_STATUS_LABEL,
-  revenueByPaymentMethod,
-  revenueBySpecialty,
 } from '@ds/mocks/business';
-import { DeleteEntryDialog, NewEntryModal, RegisterPaymentModal } from './modals';
+import {
+  computeTotals,
+  createFinanceEntry,
+  deleteFinanceEntry,
+  entriesToCsv,
+  expensesByCategory,
+  filterRows,
+  fortnights,
+  generatePayout,
+  monthShortLabel,
+  monthlySeries,
+  paymentHistory,
+  payoutsByProfessional,
+  percentChange,
+  presetRange,
+  previousRange,
+  rangeLabel,
+  rangeShortLabel,
+  receivableByStatus,
+  receivedByMethod,
+  registerFinancePayment,
+  revenueBySpecialty,
+  reverseFinanceEntry,
+  statusTotals,
+  updateFinanceEntry,
+  type DateRange,
+  type EntryDraft,
+  type FinanceRow,
+  type PaymentInput,
+  type PayoutLine,
+  type PeriodPreset,
+} from '@modules/finance/domain';
+import { useBillableAppointments, useFinanceRows, usePayoutStatement } from '@modules/finance/hooks';
+import { EMPTY_FILTERS, EntriesPanel, PayoutStatementCard, PeriodPicker, SummaryTile, type ListFilters, type ListMode } from './components';
+import { DeleteEntryDialog, EntryDetailsDrawer, NewEntryModal, RegisterPaymentModal, ReverseEntryDialog } from './modals';
 
-type FinanceTab = 'visao' | 'receitas' | 'despesas' | 'receber' | 'repasses';
-type StatusFilter = 'todos' | PaymentStatus;
+type FinanceTab = 'visao' | ListMode;
 
-const TYPE_LABEL: Record<FinancialEntry['type'], string> = {
-  receita: 'Receita',
-  despesa: 'Despesa',
-  repasse: 'Repasse',
+const TABS: FinanceTab[] = ['visao', 'receitas', 'despesas', 'receber', 'repasses', 'pagamentos'];
+
+/** Filtro fixo de cada aba de lista. */
+const TAB_SCOPE: Record<ListMode, { types?: FinanceRow['type'][]; openOnly?: boolean }> = {
+  receitas: { types: ['receita'] },
+  despesas: { types: ['despesa'] },
+  receber: { types: ['receita'], openOnly: true },
+  repasses: { types: ['repasse'] },
+  pagamentos: {},
 };
+
+const STATUS_COLOR: Record<PaymentStatus, string> = {
+  pago: '#2E7351',
+  pendente: '#9A5F0E',
+  atrasado: '#A93B30',
+  estornado: '#9E998F',
+};
+
+const NEUTRAL_COLOR = '#9E998F';
 
 function formatDelta(v: number): string {
   return `${v > 0 ? '+' : ''}${v.toLocaleString('pt-BR', { maximumFractionDigits: 1 })}%`;
 }
 
 function isFinanceTab(v: string): v is FinanceTab {
-  return ['visao', 'receitas', 'despesas', 'receber', 'repasses'].includes(v);
+  return (TABS as string[]).includes(v);
 }
 
-export function FinanceScreen() {
+function downloadCsv(filename: string, content: string): void {
+  const url = URL.createObjectURL(new Blob([content], { type: 'text/csv;charset=utf-8' }));
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+export interface FinanceScreenProps {
+  /** Abre a ficha do paciente (rota decidida pelo container do módulo). */
+  onOpenPatient?: (patientId: string) => void;
+}
+
+/**
+ * Financeiro: indicadores, receitas, despesas, contas a receber, repasses e histórico de pagamentos.
+ * Lê o banco compartilhado (`@core`) e escreve pelas operações do módulo (`@modules/finance/domain`).
+ */
+export function FinanceScreen({ onOpenPatient }: FinanceScreenProps) {
   const { toast } = useToast();
+  const today = todayKey();
+  const canView = useCan('financeiro', 'ver');
+  const canWriteFinance = useCan('financeiro', 'editar');
+  const canWritePayouts = useCan('repasses', 'editar');
+
+  const rows = useFinanceRows();
+  const professionals = useProfessionals();
+  const patients = usePatients();
+  const billable = useBillableAppointments();
+
   const [tab, setTab] = useState<FinanceTab>('visao');
-  const [entries, setEntries] = useState<FinancialEntry[]>(financialEntries);
+  const [preset, setPreset] = useState<PeriodPreset>('mes_atual');
+  const [custom, setCustom] = useState<DateRange>(() => presetRange('mes_atual', today));
+  const [filters, setFilters] = useState<ListFilters>(EMPTY_FILTERS);
   const [chartMode, setChartMode] = useState<'linha' | 'barras'>('linha');
-  const [query, setQuery] = useState('');
-  const [statusFilter, setStatusFilter] = useState<StatusFilter>('todos');
-  const [newOpen, setNewOpen] = useState(false);
-  const [toPay, setToPay] = useState<FinancialEntry | null>(null);
-  const [toDelete, setToDelete] = useState<FinancialEntry | null>(null);
+  const periods = useMemo(() => fortnights(today, 6), [today]);
+  const [payoutPeriodId, setPayoutPeriodId] = useState(() => periods[1]?.id ?? periods[0].id);
+
+  const [formOpen, setFormOpen] = useState(false);
+  const [editing, setEditing] = useState<FinanceRow | null>(null);
+  const [details, setDetails] = useState<FinanceRow | null>(null);
+  const [toPay, setToPay] = useState<FinanceRow | null>(null);
+  const [toReverse, setToReverse] = useState<FinanceRow | null>(null);
+  const [toDelete, setToDelete] = useState<FinanceRow | null>(null);
+  const [generatingId, setGeneratingId] = useState<string | null>(null);
+
+  const create = useAction(createFinanceEntry, { success: 'Lançamento criado' });
+  const update = useAction(updateFinanceEntry, { success: 'Lançamento atualizado' });
+  const pay = useAction(registerFinancePayment, { success: 'Baixa registrada' });
+  const reverse = useAction(reverseFinanceEntry, { success: 'Lançamento estornado' });
+  const remove = useAction(deleteFinanceEntry, { success: 'Lançamento excluído' });
+  const payout = useAction(generatePayout, { success: 'Repasse gerado' });
+
+  const range = useMemo(() => presetRange(preset, today, custom), [preset, today, custom]);
+  const prevRange = useMemo(() => previousRange(range), [range]);
+  const isMonth = preset === 'mes_atual' || preset === 'mes_anterior';
+  const periodWord = isMonth ? 'do mês' : 'do período';
+
+  const totals = useMemo(() => computeTotals(rows, range), [rows, range]);
+  const prevTotals = useMemo(() => computeTotals(rows, prevRange), [rows, prevRange]);
+  const series = useMemo(() => monthlySeries(rows, range.to.slice(0, 7), 12), [rows, range]);
+  const bySpecialty = useMemo(() => revenueBySpecialty(rows, range, professionals), [rows, range, professionals]);
+  const byMethod = useMemo(() => receivedByMethod(rows, range), [rows, range]);
+  const byStatus = useMemo(() => receivableByStatus(rows, range), [rows, range]);
+  const byCategory = useMemo(() => expensesByCategory(rows, range), [rows, range]);
+  const byProfessional = useMemo(() => payoutsByProfessional(rows, range), [rows, range]);
+  const revenueStatus = useMemo(() => statusTotals(rows, 'receita', range), [rows, range]);
+  const expenseStatus = useMemo(() => statusTotals(rows, 'despesa', range), [rows, range]);
+
+  const payoutPeriod = periods.find((p) => p.id === payoutPeriodId) ?? periods[0];
+  const payoutLines = usePayoutStatement(payoutPeriod.range);
+  const profName = useMemo(() => new Map(professionals.map((p) => [p.id, p.name])), [professionals]);
+
+  const periodRows = useMemo(() => filterRows(rows, { range }), [rows, range]);
+
+  const tabRows = useMemo(() => {
+    if (tab === 'visao') return periodRows;
+    const ui = {
+      query: filters.query,
+      status: filters.status,
+      category: filters.category || undefined,
+      professionalId: filters.professionalId || undefined,
+      method: filters.method || undefined,
+    };
+    if (tab === 'pagamentos') return paymentHistory(filterRows(rows, ui), range);
+    return filterRows(rows, { ...TAB_SCOPE[tab], ...ui, range, sort: filters.sort });
+  }, [tab, rows, periodRows, filters, range]);
 
   const counts = useMemo(
     () => ({
-      receitas: entries.filter((e) => e.type === 'receita').length,
-      despesas: entries.filter((e) => e.type === 'despesa').length,
-      receber: entries.filter((e) => e.type === 'receita' && (e.status === 'pendente' || e.status === 'atrasado')).length,
-      repasses: entries.filter((e) => e.type === 'repasse').length,
+      receitas: periodRows.filter((e) => e.type === 'receita').length,
+      despesas: periodRows.filter((e) => e.type === 'despesa').length,
+      receber: periodRows.filter((e) => e.type === 'receita' && (e.effective === 'pendente' || e.effective === 'atrasado')).length,
+      repasses: periodRows.filter((e) => e.type === 'repasse').length,
+      pagamentos: paymentHistory(rows, range).length,
     }),
-    [entries],
+    [periodRows, rows, range],
   );
 
-  const tabRows = useMemo(() => {
-    let rows = entries;
-    if (tab === 'receitas') rows = rows.filter((e) => e.type === 'receita');
-    if (tab === 'despesas') rows = rows.filter((e) => e.type === 'despesa');
-    if (tab === 'repasses') rows = rows.filter((e) => e.type === 'repasse');
-    if (tab === 'receber') rows = rows.filter((e) => e.type === 'receita' && (e.status === 'pendente' || e.status === 'atrasado'));
-    if (statusFilter !== 'todos') rows = rows.filter((e) => e.status === statusFilter);
-    const q = query.trim().toLowerCase();
-    if (q) {
-      rows = rows.filter((e) =>
-        [e.description, e.category, e.patientName ?? '', e.professionalName ?? ''].some((s) => s.toLowerCase().includes(q)),
-      );
+  if (!canView) {
+    return (
+      <EmptyState
+        icon={Lock}
+        title="Acesso restrito"
+        description="O financeiro geral não faz parte do seu perfil de acesso. Fale com a administração da clínica."
+      />
+    );
+  }
+
+  const canWrite = (r: FinanceRow) => (r.type === 'repasse' ? canWritePayouts : canWriteFinance);
+  const allowedTypes = [...(canWriteFinance ? (['receita', 'despesa'] as const) : []), ...(canWritePayouts ? (['repasse'] as const) : [])];
+  const prevCaption = `vs. ${rangeShortLabel(prevRange)}`;
+
+  const delta = (cur: number, prev: number) => {
+    const pct = percentChange(cur, prev);
+    return pct === null ? undefined : { value: formatDelta(pct), trend: pct >= 0 ? ('up' as const) : ('down' as const), caption: prevCaption };
+  };
+  const noBase = (prev: number) =>
+    percentChange(1, prev) === null ? <span className="text-[12px] text-graphite-500">Sem lançamentos em {rangeShortLabel(prevRange)} para comparar</span> : undefined;
+
+  const openNew = () => {
+    create.clearError();
+    setEditing(null);
+    setFormOpen(true);
+  };
+  const openEdit = (r: FinanceRow) => {
+    update.clearError();
+    setDetails(null);
+    setEditing(r);
+    setFormOpen(true);
+  };
+  const openPay = (r: FinanceRow) => {
+    pay.clearError();
+    setDetails(null);
+    setToPay(r);
+  };
+  const openReverse = (r: FinanceRow) => {
+    setDetails(null);
+    setToReverse(r);
+  };
+
+  const handleSave = async (draft: EntryDraft) => {
+    if (editing) {
+      const { type: _type, status: _status, ...patch } = draft;
+      if (await update.run(editing.id, patch)) setFormOpen(false);
+    } else if (await create.run(draft)) {
+      setFormOpen(false);
     }
-    return [...rows].sort((a, b) => b.date.localeCompare(a.date));
-  }, [entries, tab, statusFilter, query]);
-
-  const tabTotal = tabRows.reduce((s, e) => s + e.amount, 0);
-
-  const handleSave = (entry: FinancialEntry) => {
-    setEntries((list) => [entry, ...list]);
-    setNewOpen(false);
-    toast({ tone: 'success', title: 'Lançamento criado', description: `${entry.description} — ${formatCurrency(entry.amount)}` });
   };
 
-  const handlePay = (id: string, payment: { method: PaymentMethod; date: string }) => {
-    setEntries((list) => list.map((e) => (e.id === id ? { ...e, status: 'pago', method: payment.method } : e)));
-    setToPay(null);
-    toast({ tone: 'success', title: 'Baixa registrada', description: `Pago via ${PAYMENT_METHOD_LABEL[payment.method]} em ${formatDateBR(payment.date)}.` });
+  const handlePay = async (id: string, payment: PaymentInput) => {
+    const done = await pay.run(id, payment);
+    if (done) {
+      setToPay(null);
+      toast({ tone: 'info', title: `${PAYMENT_METHOD_LABEL[payment.method]} em ${formatDateBR(payment.paidAt)}`, description: `${done.description} — ${formatCurrency(done.amount)}` });
+    }
   };
 
-  const handleDelete = (id: string) => {
-    setEntries((list) => list.filter((e) => e.id !== id));
+  const handleReverse = async (id: string) => {
+    await reverse.run(id);
+    setToReverse(null);
+  };
+
+  const handleDelete = async (id: string) => {
+    await remove.run(id);
     setToDelete(null);
-    toast({ tone: 'info', title: 'Lançamento excluído' });
   };
 
-  const columns = [
+  const handleGenerate = async (line: PayoutLine) => {
+    setGeneratingId(line.professionalId);
+    await payout.run({ professionalId: line.professionalId, period: payoutPeriod.range, periodLabel: payoutPeriod.label });
+    setGeneratingId(null);
+  };
+
+  const handleExport = () => {
+    if (tabRows.length === 0) {
+      toast({ tone: 'info', title: 'Nada para exportar', description: 'Não há lançamentos com o período e os filtros atuais.' });
+      return;
+    }
+    downloadCsv(`humanitta-financeiro-${tab}-${range.from}_${range.to}.csv`, entriesToCsv(tabRows));
+    toast({
+      tone: 'success',
+      title: 'Exportação concluída',
+      description: `${tabRows.length} ${tabRows.length === 1 ? 'lançamento' : 'lançamentos'} em CSV (dados fictícios de demonstração).`,
+    });
+  };
+
+  const recentColumns: DataTableColumn<FinanceRow>[] = [
     {
       key: 'date',
       header: 'Data',
       width: '108px',
-      render: (r: FinancialEntry) => <span className="tabular-nums text-graphite-700">{formatDateBR(r.date)}</span>,
+      render: (r) => <span className="tabular-nums text-graphite-700">{formatDateBR(r.date)}</span>,
     },
     {
       key: 'description',
       header: 'Descrição',
-      render: (r: FinancialEntry) => (
+      render: (r) => (
         <div className="flex min-w-0 flex-col">
           <span className="truncate font-semibold text-graphite-900">{r.description}</span>
           <span className="truncate text-[12px] text-graphite-500">
-            {TYPE_LABEL[r.type]} · {r.category}
+            {r.category}
             {r.patientName ? ` · ${r.patientName}` : ''}
-            {r.professionalName && r.type === 'repasse' ? ` · ${r.professionalName}` : ''}
           </span>
         </div>
       ),
@@ -144,74 +318,48 @@ export function FinanceScreen() {
     {
       key: 'method',
       header: 'Forma',
-      hideBelow: 'md' as const,
-      render: (r: FinancialEntry) => <span className="text-graphite-700">{r.method ? PAYMENT_METHOD_LABEL[r.method] : '—'}</span>,
+      hideBelow: 'md',
+      render: (r) => <span className="text-graphite-700">{r.method ? PAYMENT_METHOD_LABEL[r.method] : '—'}</span>,
     },
-    {
-      key: 'due',
-      header: 'Vencimento',
-      hideBelow: 'lg' as const,
-      render: (r: FinancialEntry) => <span className="tabular-nums text-graphite-700">{r.dueDate ? formatDateBR(r.dueDate) : '—'}</span>,
-    },
-    {
-      key: 'status',
-      header: 'Situação',
-      render: (r: FinancialEntry) => <PaymentStatusBadge status={r.status} />,
-    },
+    { key: 'status', header: 'Situação', render: (r) => <PaymentStatusBadge status={r.effective} /> },
     {
       key: 'amount',
       header: 'Valor',
-      align: 'right' as const,
-      render: (r: FinancialEntry) => (
-        <span className={`font-semibold tabular-nums ${r.type === 'receita' ? 'text-success' : 'text-graphite-900'}`}>
+      align: 'right',
+      render: (r) => (
+        <span className={`font-semibold tabular-nums ${r.effective === 'estornado' ? 'text-graphite-400 line-through' : r.type === 'receita' ? 'text-success' : 'text-graphite-900'}`}>
           {r.type === 'receita' ? '+ ' : '− '}
           {formatCurrency(r.amount)}
         </span>
       ),
     },
-    {
-      key: 'actions',
-      header: 'Ações',
-      align: 'right' as const,
-      width: '104px',
-      render: (r: FinancialEntry) => (
-        <div className="flex justify-end gap-1">
-          {(r.status === 'pendente' || r.status === 'atrasado') && (
-            <IconButton icon={CheckCircle2} label={`Registrar pagamento de ${r.description}`} size="sm" onClick={() => setToPay(r)} />
-          )}
-          <IconButton icon={Trash2} label={`Excluir ${r.description}`} size="sm" onClick={() => setToDelete(r)} />
-        </div>
-      ),
-    },
   ];
 
-  const specialtyTotal = revenueBySpecialty.reduce((s, r) => s + r.value, 0);
-
-  const statusChips: { value: StatusFilter; label: string }[] = [
-    { value: 'todos', label: 'Todos' },
-    ...(['pago', 'pendente', 'atrasado', 'estornado'] as PaymentStatus[]).map((s) => ({ value: s, label: PAYMENT_STATUS_LABEL[s] })),
-  ];
+  const specialtyTotal = bySpecialty.reduce((s, r) => s + r.value, 0);
+  const statusTotal = byStatus.reduce((s, r) => s + r.value, 0);
+  const seriesLabel = `${monthShortLabel(series[0].month)} a ${monthShortLabel(series[series.length - 1].month)}`;
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div>
-          <p className="text-overline uppercase tracking-[.08em] text-graphite-500">Outubro de 2026</p>
+          <p className="text-overline uppercase tracking-[.08em] text-graphite-500">{rangeLabel(range)}</p>
           <p className="mt-1 text-[14px] text-graphite-600">
             Controle de receitas, despesas, contas a receber e repasses aos profissionais.
           </p>
         </div>
-        <div className="flex flex-wrap gap-2">
-          <Button
-            variant="secondary"
-            leftIcon={Download}
-            onClick={() => toast({ tone: 'info', title: 'Exportação simulada', description: 'Na versão final, o extrato seria baixado em CSV.' })}
-          >
-            Exportar
-          </Button>
-          <Button leftIcon={Plus} onClick={() => setNewOpen(true)}>
-            Novo lançamento
-          </Button>
+        <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-end">
+          <PeriodPicker preset={preset} onPresetChange={setPreset} custom={custom} onCustomChange={setCustom} />
+          <div className="flex flex-wrap gap-2">
+            <Button variant="secondary" leftIcon={Download} onClick={handleExport}>
+              Exportar
+            </Button>
+            {allowedTypes.length > 0 && (
+              <Button leftIcon={Plus} onClick={openNew}>
+                Novo lançamento
+              </Button>
+            )}
+          </div>
         </div>
       </div>
 
@@ -221,7 +369,7 @@ export function FinanceScreen() {
         onChange={(id) => {
           if (isFinanceTab(id)) {
             setTab(id);
-            setStatusFilter('todos');
+            setFilters(EMPTY_FILTERS);
           }
         }}
         items={[
@@ -230,6 +378,7 @@ export function FinanceScreen() {
           { id: 'despesas', label: 'Despesas', count: counts.despesas },
           { id: 'receber', label: 'A receber', count: counts.receber },
           { id: 'repasses', label: 'Repasses', count: counts.repasses },
+          { id: 'pagamentos', label: 'Pagamentos', count: counts.pagamentos },
         ]}
       />
 
@@ -237,33 +386,38 @@ export function FinanceScreen() {
         <>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
             <KpiCard
-              label="Receita do mês"
-              value={formatCurrency(financeSummary.revenue)}
+              label={`Receita ${periodWord}`}
+              value={formatCurrency(totals.revenue)}
               icon={Wallet}
               tone="gold"
-              delta={{ value: formatDelta(financeSummary.deltas.revenue), trend: 'up', caption: 'vs. set/2026' }}
+              delta={delta(totals.revenue, prevTotals.revenue)}
+              footer={noBase(prevTotals.revenue)}
             />
             <KpiCard
-              label="Despesas do mês"
-              value={formatCurrency(financeSummary.expenses)}
+              label={`Despesas ${periodWord}`}
+              value={formatCurrency(totals.expenses)}
               icon={ArrowDownCircle}
               tone="warning"
-              delta={{ value: formatDelta(financeSummary.deltas.expenses), trend: 'up', caption: 'vs. set/2026' }}
+              invertDelta
+              delta={delta(totals.expenses, prevTotals.expenses)}
+              footer={noBase(prevTotals.expenses) ?? <span className="text-[12px] text-graphite-500">{formatCurrency(totals.payable)} a pagar</span>}
             />
             <KpiCard
-              label="Saldo do mês"
-              value={formatCurrency(financeSummary.balance)}
+              label={`Saldo ${periodWord}`}
+              value={formatCurrency(totals.balance)}
               icon={Scale}
               tone="success"
-              delta={{ value: formatDelta(financeSummary.deltas.balance), trend: 'up', caption: 'vs. set/2026' }}
+              delta={delta(totals.balance, prevTotals.balance)}
+              footer={<span className="text-[12px] text-graphite-500">Receitas − despesas − {formatCurrency(totals.payouts)} em repasses</span>}
             />
             <KpiCard
               label="A receber"
-              value={formatCurrency(financeSummary.receivable)}
+              value={formatCurrency(totals.receivable)}
               icon={Clock}
               tone="ai"
-              delta={{ value: formatDelta(financeSummary.deltas.receivable), trend: 'down', caption: 'vs. set/2026' }}
-              footer={<span className="text-[12px] text-danger">{formatCurrency(financeSummary.overdue)} em atraso</span>}
+              invertDelta
+              delta={delta(totals.receivable, prevTotals.receivable)}
+              footer={<span className="text-[12px] text-danger">{formatCurrency(totals.overdueReceivable)} em atraso</span>}
             />
           </div>
 
@@ -271,7 +425,7 @@ export function FinanceScreen() {
             <Card
               className="xl:col-span-2"
               title="Fluxo de caixa"
-              description="Receitas e despesas dos últimos 12 meses"
+              description={`Receitas e despesas pagas · ${seriesLabel} · regime de competência`}
               action={
                 <SegmentedControl
                   size="sm"
@@ -287,63 +441,67 @@ export function FinanceScreen() {
             >
               {chartMode === 'linha' ? (
                 <LineChart
-                  ariaLabel="Receitas e despesas mensais, novembro de 2025 a outubro de 2026"
-                  labels={monthlyCashFlow.map((m) => m.month)}
+                  ariaLabel={`Receitas e despesas mensais, ${seriesLabel}`}
+                  labels={series.map((m) => monthShortLabel(m.month))}
                   height={260}
                   formatValue={formatCurrencyCompact}
                   series={[
-                    { name: 'Receitas', color: '#B5832F', points: monthlyCashFlow.map((m) => m.revenue) },
-                    { name: 'Despesas', color: '#77736B', points: monthlyCashFlow.map((m) => m.expenses), dashed: true },
+                    { name: 'Receitas', color: '#B5832F', points: series.map((m) => m.revenue) },
+                    { name: 'Despesas', color: '#77736B', points: series.map((m) => m.expenses), dashed: true },
                   ]}
                 />
               ) : (
                 <BarChart
-                  ariaLabel="Saldo mensal, novembro de 2025 a outubro de 2026"
+                  ariaLabel={`Saldo mensal (receitas − despesas − repasses), ${seriesLabel}`}
                   height={260}
                   formatValue={formatCurrencyCompact}
-                  data={monthlyCashFlow.map((m, i) => ({
-                    label: m.month,
-                    value: m.revenue - m.expenses,
-                    highlight: i === monthlyCashFlow.length - 1,
-                  }))}
+                  data={series.map((m, i) => ({ label: monthShortLabel(m.month), value: m.balance, highlight: i === series.length - 1 }))}
                 />
               )}
             </Card>
 
-            <Card title="Receita por especialidade" description="Outubro de 2026">
-              <div className="flex flex-col items-center gap-5">
-                <DonutChart
-                  centerLabel="Total"
-                  centerValue={formatCurrencyCompact(specialtyTotal)}
-                  data={revenueBySpecialty.map((r) => ({
-                    label: SPECIALTY_LABEL[r.specialty],
-                    value: r.value,
-                    color: SPECIALTY_COLOR[r.specialty],
-                  }))}
-                />
-                <ul className="grid w-full grid-cols-1 gap-2 text-[13px] sm:grid-cols-2 xl:grid-cols-1">
-                  {revenueBySpecialty.map((r) => (
-                    <li key={r.specialty} className="flex items-center gap-2">
-                      <span aria-hidden="true" className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: SPECIALTY_COLOR[r.specialty] }} />
-                      <span className="flex-1 truncate text-graphite-700">{SPECIALTY_LABEL[r.specialty]}</span>
-                      <span className="font-semibold tabular-nums text-graphite-900">{formatCurrency(r.value)}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+            <Card title="Receita por especialidade" description={`Recebido · ${rangeLabel(range)}`}>
+              {specialtyTotal > 0 ? (
+                <div className="flex flex-col items-center gap-5">
+                  <DonutChart
+                    centerLabel="Total"
+                    centerValue={formatCurrencyCompact(specialtyTotal)}
+                    data={bySpecialty.map((r) => ({
+                      label: r.key === 'sem_vinculo' ? 'Sem profissional' : SPECIALTY_LABEL[r.key],
+                      value: r.value,
+                      color: r.key === 'sem_vinculo' ? NEUTRAL_COLOR : SPECIALTY_COLOR[r.key],
+                    }))}
+                  />
+                  <ul className="grid w-full grid-cols-1 gap-2 text-[13px] sm:grid-cols-2 xl:grid-cols-1">
+                    {bySpecialty.map((r) => (
+                      <li key={r.key} className="flex items-center gap-2">
+                        <span
+                          aria-hidden="true"
+                          className="h-2.5 w-2.5 shrink-0 rounded-full"
+                          style={{ background: r.key === 'sem_vinculo' ? NEUTRAL_COLOR : SPECIALTY_COLOR[r.key] }}
+                        />
+                        <span className="flex-1 truncate text-graphite-700">{r.key === 'sem_vinculo' ? 'Sem profissional' : SPECIALTY_LABEL[r.key]}</span>
+                        <span className="font-semibold tabular-nums text-graphite-900">{formatCurrency(r.value)}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) : (
+                <EmptyState compact icon={PieChart} title="Sem receitas recebidas" description="Nenhuma receita paga no período selecionado." />
+              )}
             </Card>
           </div>
 
           <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
-            <Card title="Formas de pagamento" description="Recebido em outubro">
-              <HorizontalBarList
-                formatValue={formatCurrency}
-                data={revenueByPaymentMethod.map((p) => ({
-                  label: PAYMENT_METHOD_LABEL[p.method],
-                  value: p.value,
-                  color: PAYMENT_METHOD_COLOR[p.method],
-                }))}
-              />
+            <Card title="Formas de pagamento" description={`Recebido · ${rangeLabel(range)}`}>
+              {byMethod.length > 0 ? (
+                <HorizontalBarList
+                  formatValue={formatCurrency}
+                  data={byMethod.map((p) => ({ label: PAYMENT_METHOD_LABEL[p.key], value: p.value, color: PAYMENT_METHOD_COLOR[p.key] }))}
+                />
+              ) : (
+                <EmptyState compact icon={Wallet} title="Sem recebimentos" description="Nenhuma baixa de receita no período." />
+              )}
             </Card>
             <Card
               className="xl:col-span-2"
@@ -355,90 +513,151 @@ export function FinanceScreen() {
                 </Button>
               }
             >
-              <DataTable<FinancialEntry>
-                caption="Movimentações recentes de outubro de 2026"
-                columns={columns.filter((c) => c.key !== 'due' && c.key !== 'actions')}
-                rows={[...entries].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 6)}
+              <DataTable<FinanceRow>
+                caption={`Movimentações recentes — ${rangeLabel(range)}`}
+                columns={recentColumns}
+                rows={periodRows.slice(0, 6)}
                 rowKey={(r) => r.id}
+                onRowClick={setDetails}
+                empty={<EmptyState compact icon={Wallet} title="Sem movimentações" description="Nenhum lançamento no período selecionado." />}
               />
             </Card>
           </div>
 
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-            <SummaryTile icon={ArrowUpCircle} label="Receitas lançadas" value={sumBy(entries, 'receita')} />
-            <SummaryTile icon={ArrowDownCircle} label="Despesas lançadas" value={sumBy(entries, 'despesa')} />
-            <SummaryTile icon={HandCoins} label="Repasses do mês" value={sumBy(entries, 'repasse')} />
+          <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+            <Card title="Situação dos recebimentos" description={`Receitas lançadas · ${rangeLabel(range)}`}>
+              {statusTotal > 0 ? (
+                <DonutChart
+                  centerLabel="Receitas"
+                  centerValue={formatCurrencyCompact(statusTotal)}
+                  formatValue={formatCurrency}
+                  data={byStatus.map((s) => ({
+                    label: PAYMENT_STATUS_LABEL[s.key],
+                    value: s.value,
+                    color: STATUS_COLOR[s.key],
+                  }))}
+                />
+              ) : (
+                <EmptyState compact icon={PieChart} title="Sem receitas" description="Nenhuma receita lançada no período." />
+              )}
+            </Card>
+            <Card
+              title="Repasses por profissional"
+              description={rangeLabel(range)}
+              action={
+                <Button variant="ghost" size="sm" onClick={() => setTab('repasses')}>
+                  Ver repasses
+                </Button>
+              }
+            >
+              {byProfessional.length > 0 ? (
+                <HorizontalBarList
+                  formatValue={formatCurrency}
+                  data={byProfessional.map((p) => ({ label: profName.get(p.key) ?? 'Profissional', value: p.value, color: '#B5832F' }))}
+                />
+              ) : (
+                <EmptyState compact icon={HandCoins} title="Sem repasses" description="Nenhum repasse lançado no período." />
+              )}
+            </Card>
+          </div>
+
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            <SummaryTile icon={ArrowUpCircle} label="Receitas lançadas" value={totals.launchedRevenue} caption="Exceto estornadas" />
+            <SummaryTile icon={ArrowDownCircle} label="Despesas lançadas" value={totals.launchedExpenses} caption={`${formatCurrency(totals.overduePayable)} vencidas a pagar`} />
+            <SummaryTile icon={HandCoins} label={`Repasses ${periodWord}`} value={totals.launchedPayouts} caption={`${formatCurrency(totals.payouts)} já pagos`} />
+            <SummaryTile
+              icon={BadgeCheck}
+              label="Pagamentos registrados"
+              value={totals.paymentsTotal}
+              caption={`${totals.paymentsCount} ${totals.paymentsCount === 1 ? 'baixa' : 'baixas'} no período`}
+            />
           </div>
         </>
       )}
 
-      {tab !== 'visao' && (
-        <Card padding="none">
-          <div className="flex flex-col gap-4 border-b border-graphite-100 p-4 sm:p-5 lg:flex-row lg:items-center lg:justify-between">
-            <div className="w-full lg:max-w-sm">
-              <SearchInput
-                aria-label="Buscar lançamentos"
-                placeholder="Buscar por descrição, paciente ou profissional"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-              />
-            </div>
-            <div className="flex flex-wrap gap-2" role="group" aria-label="Filtrar por situação">
-              {statusChips.map((c) => (
-                <FilterChip key={c.value} label={c.label} active={statusFilter === c.value} onClick={() => setStatusFilter(c.value)} />
-              ))}
-            </div>
-          </div>
-          <DataTable<FinancialEntry>
-            caption="Lançamentos financeiros"
-            columns={columns}
-            rows={tabRows}
-            rowKey={(r) => r.id}
-            empty={
-              <div className="py-10 text-center text-[14px] text-graphite-500">
-                Nenhum lançamento encontrado com os filtros atuais.
-              </div>
-            }
-          />
-          <div className="flex flex-col gap-1 border-t border-graphite-100 p-4 text-[13px] sm:flex-row sm:items-center sm:justify-between sm:px-5">
-            <span className="text-graphite-500">
-              {tabRows.length} {tabRows.length === 1 ? 'lançamento' : 'lançamentos'}
-            </span>
-            <span className="text-graphite-700">
-              Total filtrado: <strong className="tabular-nums text-graphite-900">{formatCurrency(tabTotal)}</strong>
-            </span>
-          </div>
-        </Card>
+      {tab === 'receitas' && (
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+          <SummaryTile icon={CheckCircle2} label="Recebido" value={revenueStatus.paid} />
+          <SummaryTile icon={Clock} label="A receber no prazo" value={revenueStatus.open} />
+          <SummaryTile icon={Clock} label="Vencido" value={revenueStatus.overdue} danger />
+        </div>
       )}
 
-      <p className="text-[12px] text-graphite-500">Ambiente de demonstração — todos os valores são fictícios.</p>
+      {tab === 'despesas' && (
+        <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 xl:grid-cols-1">
+            <SummaryTile icon={CheckCircle2} label="Pago" value={expenseStatus.paid} />
+            <SummaryTile icon={Clock} label="A pagar no prazo" value={expenseStatus.open} />
+            <SummaryTile icon={Clock} label="Vencido" value={expenseStatus.overdue} danger />
+          </div>
+          <Card className="xl:col-span-2" title="Despesas por categoria" description={`Exceto estornadas · ${rangeLabel(range)}`}>
+            {byCategory.length > 0 ? (
+              <HorizontalBarList formatValue={formatCurrency} data={byCategory.map((c) => ({ label: c.key, value: c.value, color: '#77736B' }))} />
+            ) : (
+              <EmptyState compact icon={ArrowDownCircle} title="Sem despesas" description="Nenhuma despesa lançada no período." />
+            )}
+          </Card>
+        </div>
+      )}
+
+      {tab === 'repasses' && (
+        <PayoutStatementCard
+          lines={payoutLines}
+          periods={periods}
+          periodId={payoutPeriod.id}
+          onPeriodChange={setPayoutPeriodId}
+          today={today}
+          canGenerate={canWritePayouts}
+          generatingId={generatingId}
+          onGenerate={handleGenerate}
+        />
+      )}
+
+      {tab !== 'visao' && (
+        <EntriesPanel
+          mode={tab}
+          rows={tabRows}
+          filters={filters}
+          onFiltersChange={setFilters}
+          professionals={professionals}
+          canWrite={canWrite}
+          canPay={canWriteFinance}
+          onOpen={setDetails}
+          onPay={openPay}
+          onEdit={openEdit}
+          onReverse={openReverse}
+          onDelete={setToDelete}
+        />
+      )}
+
+      <p className="text-[12px] text-graphite-500">Ambiente de demonstração — todos os valores são fictícios. Nenhum pagamento real é processado.</p>
 
       <NewEntryModal
-        open={newOpen}
-        onClose={() => setNewOpen(false)}
+        open={formOpen}
+        onClose={() => setFormOpen(false)}
         onSave={handleSave}
+        entry={editing}
         defaultType={tab === 'despesas' ? 'despesa' : tab === 'repasses' ? 'repasse' : 'receita'}
+        today={today}
+        patients={patients}
+        professionals={professionals}
+        billable={billable}
+        allowedTypes={allowedTypes}
+        saving={editing ? update.loading : create.loading}
+        serverErrors={(editing ? update.error : create.error)?.fields}
       />
-      <RegisterPaymentModal entry={toPay} onClose={() => setToPay(null)} onConfirm={handlePay} />
-      <DeleteEntryDialog entry={toDelete} onClose={() => setToDelete(null)} onConfirm={handleDelete} />
-    </div>
-  );
-}
-
-function sumBy(entries: FinancialEntry[], type: FinancialEntry['type']): number {
-  return entries.filter((e) => e.type === type && e.status !== 'estornado').reduce((s, e) => s + e.amount, 0);
-}
-
-function SummaryTile({ icon: Icon, label, value }: { icon: typeof Wallet; label: string; value: number }) {
-  return (
-    <div className="flex items-center gap-3 rounded-md border border-graphite-200 bg-white p-4 shadow-sm">
-      <span className="flex h-10 w-10 items-center justify-center rounded-full bg-gold-50 text-gold-600">
-        <Icon size={20} strokeWidth={1.75} aria-hidden="true" />
-      </span>
-      <div className="flex flex-col">
-        <span className="text-[12px] font-semibold text-graphite-500">{label}</span>
-        <span className="text-[18px] font-bold tabular-nums text-graphite-900">{formatCurrency(value)}</span>
-      </div>
+      <RegisterPaymentModal entry={toPay} onClose={() => setToPay(null)} onConfirm={handlePay} today={today} saving={pay.loading} serverErrors={pay.error?.fields} />
+      <ReverseEntryDialog entry={toReverse} onClose={() => setToReverse(null)} onConfirm={handleReverse} loading={reverse.loading} />
+      <DeleteEntryDialog entry={toDelete} onClose={() => setToDelete(null)} onConfirm={handleDelete} loading={remove.loading} />
+      <EntryDetailsDrawer
+        entry={details ? (rows.find((r) => r.id === details.id) ?? null) : null}
+        onClose={() => setDetails(null)}
+        canEdit={canWriteFinance || canWritePayouts}
+        onPay={openPay}
+        onEdit={openEdit}
+        onReverse={openReverse}
+        onOpenPatient={onOpenPatient}
+      />
     </div>
   );
 }
