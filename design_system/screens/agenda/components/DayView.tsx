@@ -1,33 +1,29 @@
 import { CalendarX2 } from 'lucide-react';
-import type { Appointment, Professional } from '@ds/mocks/types';
+import { DEMO_NOW, type AppointmentRecord, type Professional } from '@core';
+import { isBookableMinute, type DayAvailability } from '@modules/agenda/agendaRules';
 import { AppointmentCard, Avatar, Button, EmptyState } from '@ds/components';
 import { cn } from '@ds/foundations/cn';
-import { DEMO_NOW, isSameDay, toDateKey } from '@ds/mocks/clinical';
+import { isSameDay, toDateKey } from '@ds/mocks/clinical';
 import { HOURS, HOUR_HEIGHT, heightFor, layoutOverlaps, pad, topFor } from '../agendaUtils';
+import { STRIPED, UnavailableBlock } from './UnavailableBlock';
 
 export interface DayViewProps {
   date: Date;
-  appointments: Appointment[];
+  appointments: AppointmentRecord[];
   professionals: Professional[];
-  onSelectAppointment: (a: Appointment) => void;
-  onSlotClick: (dateKey: string, time: string, professionalId?: string) => void;
+  onSelectAppointment: (a: AppointmentRecord) => void;
+  /** Ausente = somente visualização (slots não clicáveis). */
+  onSlotClick?: (dateKey: string, time: string, professionalId?: string) => void;
+  /** Disponibilidade do profissional na data (clínica ∩ expediente, almoço, bloqueios). */
+  availability: (professionalId: string, dateKey: string) => DayAvailability;
 }
 
-function isWorking(p: Professional, d: Date, hour: number): boolean {
-  return p.workingHours.some((w) => {
-    if (w.weekday !== d.getDay()) return false;
-    const [sh] = w.start.split(':').map(Number);
-    const [eh] = w.end.split(':').map(Number);
-    return hour >= sh && hour < eh;
-  });
-}
-
-export function DayView({ date, appointments, professionals, onSelectAppointment, onSlotClick }: DayViewProps) {
+export function DayView({ date, appointments, professionals, onSelectAppointment, onSlotClick, availability }: DayViewProps) {
   const key = toDateKey(date);
   const dayAppts = appointments.filter((a) => a.start.startsWith(key)).sort((a, b) => a.start.localeCompare(b.start));
-  const columns = professionals.filter(
-    (p) => p.workingHours.some((w) => w.weekday === date.getDay()) || dayAppts.some((a) => a.professionalId === p.id),
-  );
+  const columns = professionals
+    .map((p) => ({ p, day: availability(p.id, key) }))
+    .filter(({ p, day }) => day.window !== null || dayAppts.some((a) => a.professionalId === p.id));
   const gridHeight = HOURS.length * HOUR_HEIGHT;
   const today = isSameDay(date, DEMO_NOW);
   const nowTop = ((DEMO_NOW.getHours() - HOURS[0]) * 60 + DEMO_NOW.getMinutes()) * (HOUR_HEIGHT / 60);
@@ -55,9 +51,11 @@ export function DayView({ date, appointments, professionals, onSelectAppointment
               title="Dia livre"
               description="Nenhum agendamento para esta data."
               action={
-                <Button size="sm" onClick={() => onSlotClick(key, '09:00')}>
-                  Agendar horário
-                </Button>
+                onSlotClick && (
+                  <Button size="sm" onClick={() => onSlotClick(key, '09:00')}>
+                    Agendar horário
+                  </Button>
+                )
               }
             />
           </div>
@@ -77,7 +75,7 @@ export function DayView({ date, appointments, professionals, onSelectAppointment
             role="row"
           >
             <div role="columnheader" aria-label="Horário" />
-            {columns.map((p) => (
+            {columns.map(({ p }) => (
               <div key={p.id} role="columnheader" className="flex items-center gap-2 border-l border-graphite-100 px-3 py-3">
                 <Avatar name={p.name} size="sm" />
                 <div className="min-w-0">
@@ -99,40 +97,48 @@ export function DayView({ date, appointments, professionals, onSelectAppointment
               ))}
             </div>
 
-            {columns.map((p) => {
+            {columns.map(({ p, day }) => {
               const laid = layoutOverlaps(dayAppts.filter((a) => a.professionalId === p.id));
               return (
                 <div key={p.id} role="gridcell" className="relative border-l border-graphite-100" style={{ height: gridHeight }}>
-                  {HOURS.map((h, i) => {
-                    const working = isWorking(p, date, h);
-                    return (
-                      <div key={h} className="absolute inset-x-0" style={{ top: i * HOUR_HEIGHT, height: HOUR_HEIGHT }}>
-                        {[0, 30].map((m) =>
-                          working ? (
-                            <button
-                              key={m}
-                              type="button"
-                              onClick={() => onSlotClick(key, `${pad(h)}:${pad(m)}`, p.id)}
-                              className={cn(
-                                'block h-1/2 w-full hover:bg-gold-50 focus-visible:bg-gold-50 focus-visible:outline-none',
-                                m === 0 ? 'border-t border-graphite-100' : 'border-t border-dashed border-graphite-100/70',
-                              )}
-                              aria-label={`Novo agendamento com ${p.name} às ${pad(h)}:${pad(m)}`}
-                            />
-                          ) : (
-                            <div
-                              key={m}
-                              aria-hidden="true"
-                              className={cn(
-                                'h-1/2 w-full bg-graphite-50 bg-[repeating-linear-gradient(135deg,transparent,transparent_6px,rgba(199,194,185,.25)_6px,rgba(199,194,185,.25)_7px)]',
-                                m === 0 && 'border-t border-graphite-100',
-                              )}
-                            />
-                          ),
-                        )}
-                      </div>
-                    );
-                  })}
+                  {HOURS.map((h, i) => (
+                    <div key={h} className="absolute inset-x-0" style={{ top: i * HOUR_HEIGHT, height: HOUR_HEIGHT }}>
+                      {[0, 30].map((m) =>
+                        isBookableMinute(day, h * 60 + m) && onSlotClick ? (
+                          <button
+                            key={m}
+                            type="button"
+                            onClick={() => onSlotClick(key, `${pad(h)}:${pad(m)}`, p.id)}
+                            className={cn(
+                              'block h-1/2 w-full hover:bg-gold-50 focus-visible:bg-gold-50 focus-visible:outline-none',
+                              m === 0 ? 'border-t border-graphite-100' : 'border-t border-dashed border-graphite-100/70',
+                            )}
+                            aria-label={`Novo agendamento com ${p.name} às ${pad(h)}:${pad(m)}`}
+                          />
+                        ) : (
+                          <div
+                            key={m}
+                            aria-hidden="true"
+                            className={cn(
+                              'h-1/2 w-full',
+                              isBookableMinute(day, h * 60 + m)
+                                ? m === 0
+                                  ? 'border-t border-graphite-100'
+                                  : 'border-t border-dashed border-graphite-100/70'
+                                : cn(STRIPED, m === 0 && 'border-t border-graphite-100'),
+                            )}
+                          />
+                        ),
+                      )}
+                    </div>
+                  ))}
+
+                  {day.unavailable.map((u) => (
+                    <UnavailableBlock key={`${u.kind}-${u.start}`} range={u} />
+                  ))}
+                  {day.pending.map((u) => (
+                    <UnavailableBlock key={`pend-${u.start}`} range={{ ...u, kind: 'pendente' }} />
+                  ))}
 
                   {today && nowTop > 0 && nowTop < gridHeight && (
                     <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 z-[5] h-0.5 bg-gold-500" style={{ top: nowTop }} />
@@ -152,7 +158,7 @@ export function DayView({ date, appointments, professionals, onSelectAppointment
                       <AppointmentCard
                         appointment={appt}
                         variant={appt.durationMin < 40 ? 'compact' : 'block'}
-                      dense={appt.durationMin < 75}
+                        dense={appt.durationMin < 75}
                         onClick={() => onSelectAppointment(appt)}
                       />
                     </div>

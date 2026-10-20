@@ -2,32 +2,45 @@ import type { ReactNode } from 'react';
 import {
   CalendarClock,
   CheckCircle2,
-  CircleCheckBig,
   Clock,
   DoorOpen,
+  Eye,
+  History,
+  LogIn,
   MessageCircle,
   Pencil,
-  Play,
   Stethoscope,
+  UserCheck,
   UserX,
   Wallet,
   XCircle,
 } from 'lucide-react';
-import type { Appointment } from '@ds/mocks/types';
+import type { AppointmentRecord, Attendance } from '@core';
 import { Avatar, Badge, Button, Modal, SpecialtyTag, StatusBadge } from '@ds/components';
-import { CHANNEL_NAMES, addMinutes, formatCurrency, formatDate, formatTime, getRoomName } from '@ds/mocks/clinical';
+import { CHANNEL_NAMES, addMinutes, formatCurrency, formatDate, formatTime } from '@ds/mocks/clinical';
 
 export interface AppointmentDetailsModalProps {
-  appointment: Appointment | null;
+  appointment: AppointmentRecord | null;
   open: boolean;
   onClose: () => void;
-  onConfirm: (a: Appointment) => void;
-  onStart: (a: Appointment) => void;
-  onComplete: (a: Appointment) => void;
-  onNoShow: (a: Appointment) => void;
-  onEdit: (a: Appointment) => void;
-  onReschedule: (a: Appointment) => void;
-  onCancel: (a: Appointment) => void;
+  /** Perfil pode alterar a agenda (`agenda_clinica ≥ editar`). Sem isso, só visualização. */
+  canEdit: boolean;
+  /** Ações disponíveis para o status/horário atual (calculadas pela tela com as regras da Agenda). */
+  actions: { confirm: boolean; checkIn: boolean; noShow: boolean; edit: boolean; reschedule: boolean; cancel: boolean };
+  roomLabel: string;
+  attendance?: Attendance;
+  /** Agendamento de origem (`rescheduledFrom`) e o novo horário criado a partir deste, se houver. */
+  previous?: AppointmentRecord;
+  next?: AppointmentRecord;
+  onOpenAppointment: (id: string) => void;
+  /** Nome da ação em andamento (para o estado de carregamento do botão). */
+  busy?: 'confirm' | 'checkIn' | 'noShow' | null;
+  onConfirm: (a: AppointmentRecord) => void;
+  onCheckIn: (a: AppointmentRecord) => void;
+  onNoShow: (a: AppointmentRecord) => void;
+  onEdit: (a: AppointmentRecord) => void;
+  onReschedule: (a: AppointmentRecord) => void;
+  onCancel: (a: AppointmentRecord) => void;
 }
 
 function Row({ icon: Icon, label, children }: { icon: typeof Clock; label: string; children: ReactNode }) {
@@ -44,21 +57,30 @@ function Row({ icon: Icon, label, children }: { icon: typeof Clock; label: strin
   );
 }
 
+const when = (a: AppointmentRecord) => `${formatDate(a.start)} às ${formatTime(a.start)}`;
+
 export function AppointmentDetailsModal({
   appointment: a,
   open,
   onClose,
+  canEdit,
+  actions,
+  roomLabel,
+  attendance,
+  previous,
+  next,
+  onOpenAppointment,
+  busy = null,
   onConfirm,
-  onStart,
-  onComplete,
+  onCheckIn,
   onNoShow,
   onEdit,
   onReschedule,
   onCancel,
 }: AppointmentDetailsModalProps) {
   if (!a) return null;
-  const closed = a.status === 'cancelada' || a.status === 'concluida' || a.status === 'faltou';
   const end = addMinutes(a.start, a.durationMin);
+  const hasPrimary = canEdit && (actions.confirm || actions.checkIn || actions.reschedule || actions.cancel);
 
   return (
     <Modal
@@ -69,32 +91,27 @@ export function AppointmentDetailsModal({
       description={`${formatDate(a.start, { weekday: 'long', day: 'numeric', month: 'long' })} · ${formatTime(a.start)}–${formatTime(end)}`}
       footer={
         <div className="flex w-full flex-col-reverse gap-2 sm:flex-row sm:flex-wrap sm:justify-end">
-          {!closed && (
+          {canEdit && actions.cancel && (
             <Button variant="ghost" leftIcon={XCircle} onClick={() => onCancel(a)} className="text-danger sm:mr-auto">
               Cancelar consulta
             </Button>
           )}
-          {!closed && a.status !== 'em_atendimento' && (
-            <Button variant="secondary" leftIcon={CalendarClock} onClick={() => onReschedule(a)}>
+          {canEdit && actions.reschedule && (
+            <Button variant={actions.confirm || actions.checkIn ? 'secondary' : 'primary'} leftIcon={CalendarClock} onClick={() => onReschedule(a)}>
               Reagendar
             </Button>
           )}
-          {(a.status === 'agendada' || a.status === 'reagendada') && (
-            <Button leftIcon={CheckCircle2} onClick={() => onConfirm(a)}>
+          {canEdit && actions.confirm && (
+            <Button leftIcon={CheckCircle2} onClick={() => onConfirm(a)} loading={busy === 'confirm'} variant={actions.checkIn ? 'secondary' : 'primary'}>
               Confirmar presença
             </Button>
           )}
-          {a.status === 'confirmada' && (
-            <Button leftIcon={Play} onClick={() => onStart(a)}>
-              Iniciar atendimento
+          {canEdit && actions.checkIn && (
+            <Button leftIcon={LogIn} onClick={() => onCheckIn(a)} loading={busy === 'checkIn'}>
+              Registrar chegada
             </Button>
           )}
-          {a.status === 'em_atendimento' && (
-            <Button leftIcon={CircleCheckBig} onClick={() => onComplete(a)}>
-              Concluir atendimento
-            </Button>
-          )}
-          {closed && (
+          {!hasPrimary && (
             <Button variant="secondary" onClick={onClose}>
               Fechar
             </Button>
@@ -115,6 +132,16 @@ export function AppointmentDetailsModal({
                   {CHANNEL_NAMES[a.channel]}
                 </Badge>
               )}
+              {attendance?.checkInAt && (
+                <Badge tone="success" icon={UserCheck} size="sm">
+                  Chegou às {attendance.checkInAt.slice(11, 16)}
+                </Badge>
+              )}
+              {!canEdit && (
+                <Badge tone="neutral" icon={Eye} size="sm">
+                  Somente visualização
+                </Badge>
+              )}
             </div>
           </div>
         </div>
@@ -127,12 +154,50 @@ export function AppointmentDetailsModal({
             {a.service} · {a.durationMin} min
           </Row>
           <Row icon={DoorOpen} label="Sala">
-            {getRoomName(a.roomId)}
+            {roomLabel}
           </Row>
           <Row icon={Wallet} label="Valor (demonstração)">
-            <span className="tabular-nums">{formatCurrency(a.price)}</span>
+            <span className="tabular-nums">{a.price ? formatCurrency(a.price) : 'R$ [definir]'}</span>
           </Row>
         </dl>
+
+        {a.status === 'em_atendimento' && (
+          <p className="rounded-sm border border-graphite-200 p-3 text-sm text-graphite-700">
+            Em atendimento com {a.professionalName}. A conclusão é registrada pelo profissional no Portal.
+          </p>
+        )}
+
+        {a.cancelReason && (
+          <div className="rounded-sm border border-danger-bg bg-danger-bg/50 p-3 text-sm text-graphite-700">
+            <span className="block text-xs font-semibold text-danger">Motivo do cancelamento</span>
+            {a.cancelReason}
+          </div>
+        )}
+
+        {(previous || next) && (
+          <div className="flex flex-col gap-1 rounded-sm border border-graphite-200 p-3 text-sm text-graphite-700">
+            <span className="flex items-center gap-1.5 text-xs font-semibold text-graphite-500">
+              <History size={14} strokeWidth={1.75} aria-hidden="true" />
+              Histórico de reagendamento
+            </span>
+            {previous && (
+              <span>
+                Reagendada de {when(previous)}.{' '}
+                <Button variant="link" size="sm" onClick={() => onOpenAppointment(previous.id)}>
+                  Ver original
+                </Button>
+              </span>
+            )}
+            {next && (
+              <span>
+                Novo horário: {when(next)} com {next.professionalName}.{' '}
+                <Button variant="link" size="sm" onClick={() => onOpenAppointment(next.id)}>
+                  Ver novo horário
+                </Button>
+              </span>
+            )}
+          </div>
+        )}
 
         {a.notes && (
           <div className="rounded-sm border border-graphite-200 p-3 text-sm text-graphite-700">
@@ -141,13 +206,15 @@ export function AppointmentDetailsModal({
           </div>
         )}
 
-        {!closed && (
+        {canEdit && (actions.edit || actions.noShow) && (
           <div className="flex flex-wrap gap-2 border-t border-graphite-100 pt-4">
-            <Button variant="secondary" size="sm" leftIcon={Pencil} onClick={() => onEdit(a)}>
-              Editar
-            </Button>
-            {a.status !== 'em_atendimento' && (
-              <Button variant="secondary" size="sm" leftIcon={UserX} onClick={() => onNoShow(a)}>
+            {actions.edit && (
+              <Button variant="secondary" size="sm" leftIcon={Pencil} onClick={() => onEdit(a)}>
+                Editar
+              </Button>
+            )}
+            {actions.noShow && (
+              <Button variant="secondary" size="sm" leftIcon={UserX} onClick={() => onNoShow(a)} loading={busy === 'noShow'}>
                 Marcar falta
               </Button>
             )}
