@@ -49,7 +49,8 @@ export const REPORT_LIBRARY: ReportDefinition[] = [
     requires: 'operational',
     build: (s, ctx, f) => {
       const r = buildReport(s, ctx, f);
-      const a = r.appointments;
+      // Mesma base das variações da tela: intervalo comparável (mês em andamento: 1–hoje × mesmos dias).
+      const a = r.appointmentsCompared;
       const p = r.appointmentsPrevious;
       const rows: (string | number)[][] = [
         ['Agendamentos', a.total, p.total, fmtDelta(compare(a.total, p.total).deltaPct)],
@@ -60,21 +61,22 @@ export const REPORT_LIBRARY: ReportDefinition[] = [
         ['Faltas', a.noShow, p.noShow, ''],
         ['Taxa de cancelamento', csvPercent(a.cancelRate), csvPercent(p.cancelRate), ''],
         ['Taxa de faltas', csvPercent(a.noShowRate), csvPercent(p.noShowRate), ''],
-        ['Atendimentos finalizados', r.attendances.finished, r.attendancesPrevious.finished, ''],
-        ['Taxa de conclusão', csvPercent(r.attendances.completionRate), csvPercent(r.attendancesPrevious.completionRate), ''],
-        ['Ocupação da agenda', csvPercent(r.occupancy.currentRatio), csvPercent(r.occupancy.previousRatio), fmtDelta(r.occupancy.deltaPct)],
+        ['Atendimentos finalizados', r.attendancesCompared.finished, r.attendancesPrevious.finished, ''],
+        ['Taxa de conclusão', csvPercent(r.attendancesCompared.completionRate), csvPercent(r.attendancesPrevious.completionRate), ''],
+        ['Ocupação da agenda', csvPercent(r.occupancy.comparedRatio), csvPercent(r.occupancy.previousRatio), fmtDelta(r.occupancy.deltaPct)],
       ];
-      if (r.finance && r.financePrevious) {
+      const fc = r.financeCompared;
+      if (fc && r.financePrevious) {
         rows.push(
-          ['Receitas recebidas (R$)', csvDecimal(r.finance.revenue), csvDecimal(r.financePrevious.revenue), ''],
-          ['Despesas pagas (R$)', csvDecimal(r.finance.expenses), csvDecimal(r.financePrevious.expenses), ''],
-          ['Repasses pagos (R$)', csvDecimal(r.finance.payouts), csvDecimal(r.financePrevious.payouts), ''],
-          ['Resultado (R$)', csvDecimal(r.finance.result), csvDecimal(r.financePrevious.result), ''],
+          ['Receitas recebidas (R$)', csvDecimal(fc.revenue), csvDecimal(r.financePrevious.revenue), ''],
+          ['Despesas pagas (R$)', csvDecimal(fc.expenses), csvDecimal(r.financePrevious.expenses), ''],
+          ['Repasses pagos (R$)', csvDecimal(fc.payouts), csvDecimal(r.financePrevious.payouts), ''],
+          ['Resultado (R$)', csvDecimal(fc.result), csvDecimal(r.financePrevious.result), ''],
         );
       }
       return {
         filename: `resumo-${fileSuffix(f)}`,
-        headers: ['Indicador', `Período (${describeRange(r.range)})`, `Anterior (${describeRange(r.previous)})`, 'Variação'],
+        headers: ['Indicador', `Período (${describeRange(r.compared)})`, `Anterior (${describeRange(r.previous)})`, 'Variação'],
         rows,
       };
     },

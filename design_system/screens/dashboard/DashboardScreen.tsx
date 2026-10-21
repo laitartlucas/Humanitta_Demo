@@ -38,6 +38,7 @@ import {
 import { cn } from '@ds/foundations/cn';
 import { formatCurrency, formatDate, formatTime, relativeTime, toDateKey } from '@ds/mocks/clinical';
 import type { DashboardData, DashboardPeriod, UpcomingAppointment } from '@modules/dashboard/dashboardData';
+import { comparisonCaption } from '@core';
 
 export type DashboardRoute = 'agenda' | 'pacientes' | 'atendimentos' | 'whatsapp' | 'financeiro';
 
@@ -125,7 +126,8 @@ function periodCopy(data: DashboardData) {
         faturamento: `Faturamento · ${formatDate(`${data.range.from}T12:00:00`, { month: 'short' }).replace('.', '')}`,
         scope: month.charAt(0).toUpperCase() + month.slice(1),
         inline: `na agenda de ${month}`,
-        vs: `vs. ${prevMonth}`,
+        // Mês em andamento: compara 1–hoje com os mesmos dias do mês anterior e diz isso na legenda.
+        vs: data.comparison.partial ? comparisonCaption(data.comparison) : `vs. ${prevMonth}`,
       };
   }
 }
@@ -274,7 +276,7 @@ export function DashboardScreen({
       value={ap.total.toLocaleString('pt-BR')}
       icon={CalendarCheck}
       loading={loading}
-      delta={{ ...countDelta(ap.total, data.previousTotal), caption: copy.vs }}
+      delta={{ ...countDelta(data.comparedTotal, data.previousTotal), caption: copy.vs }}
       footer={
         <span className="text-graphite-600">
           {plural(ap.confirmed, 'confirmada', 'confirmadas')} · {plural(ap.cancelled, 'cancelada', 'canceladas')}
@@ -303,7 +305,7 @@ export function DashboardScreen({
         icon={Wallet}
         loading={loading}
         delta={(() => {
-          const d = percentDelta(data.revenue.value, data.revenue.previous);
+          const d = percentDelta(data.revenue.compared, data.revenue.previous);
           return d ? { ...d, caption: copy.vs } : undefined;
         })()}
         footer={

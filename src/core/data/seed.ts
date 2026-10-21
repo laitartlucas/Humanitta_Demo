@@ -8,7 +8,8 @@
  * - lançamentos financeiros e conversas ganham `patientId`/`professionalId` reais (`pac-`, `prof-`);
  * - usuários: um por perfil administrativo + um por profissional (cada um com `professionalId`);
  * - v2 (integração): histórico determinístico set–out/2026 + fechamentos nov/25–ago/26 (history.ts),
- *   reagendamento ag-004 → ag-404 encadeado e mensagem m-0802 sem menção a prontuário.
+ *   reagendamento ag-004 → ag-404 encadeado e mensagem m-0802 sem menção a prontuário;
+ * - v3: despesas de set/2026 detalhadas no calendário de outubro (comparativo por mesmos dias).
  *
  * Todos os dados são FICTÍCIOS, exceto o nome/registro da Dra. Lauren Bertocchi (informação pública).
  */
@@ -61,7 +62,7 @@ import type {
 import { buildHistory } from './history';
 
 /** Incrementar sempre que o formato do `Database` mudar (força nova semente no navegador). */
-export const SCHEMA_VERSION = 2;
+export const SCHEMA_VERSION = 3;
 
 /** Preço demonstrativo das consultas extras do portal (que nasceram sem valor). */
 const DEMO_PRICE_BY_SERVICE: Record<string, number> = {

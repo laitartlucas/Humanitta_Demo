@@ -9,11 +9,13 @@
  *    intervalo de almoço e consultas já existentes (sem conflito). Status: concluída / faltou / cancelada.
  * 2. Uma receita PAGA por consulta concluída, vinculada por `appointmentId` (sem duplicidade).
  * 3. Fechamentos mensais consolidados de nov/2025 a ago/2026 (receita e despesa), com os valores de
- *    `monthlyCashFlow` do design, e a despesa consolidada de set/2026.
+ *    `monthlyCashFlow` do design. Em set/2026 (mês com histórico detalhado) as despesas seguem o MESMO
+ *    calendário e categorias das despesas de outubro (proporcionais ao total do design), para que o
+ *    comparativo "1–19 out × 1–19 set" compare despesas equivalentes.
  *
  * Tudo é FICTÍCIO e marcado como demonstração.
  */
-import { monthlyCashFlow } from '@ds/mocks/business';
+import { financialEntries as baseEntries, monthlyCashFlow } from '@ds/mocks/business';
 import type { PaymentMethod } from '@ds/mocks/types';
 import type { AppointmentRecord, FinancialEntryRecord, PatientRecord, Professional } from '../domain';
 
@@ -178,18 +180,40 @@ export function buildHistory(
         paidAt: last,
       });
     }
-    entries.push({
-      id: `fe-hist-desp-${ym}`,
-      type: 'despesa',
-      description: `Fechamento de despesas — ${m.month} (consolidado)`,
-      category: 'Histórico consolidado',
-      amount: m.expenses,
-      date: last,
-      dueDate: last,
-      method: 'boleto',
-      status: 'pago',
-      paidAt: last,
-    });
+    if (ym < '2026-09') {
+      entries.push({
+        id: `fe-hist-desp-${ym}`,
+        type: 'despesa',
+        description: `Fechamento de despesas — ${m.month} (consolidado)`,
+        category: 'Histórico consolidado',
+        amount: m.expenses,
+        date: last,
+        dueDate: last,
+        method: 'boleto',
+        status: 'pago',
+        paidAt: last,
+      });
+      continue;
+    }
+    // set/2026: despesas detalhadas no calendário de outubro, escaladas para o total do design.
+    const template = baseEntries.filter((e) => e.type === 'despesa');
+    const templateTotal = template.reduce((t, e) => t + e.amount, 0);
+    for (const e of template) {
+      const day = (e.dueDate ?? e.date).slice(8, 10);
+      const date = `${ym}-${day}`;
+      entries.push({
+        id: `fe-hist-desp-${ym}-${e.id}`,
+        type: 'despesa',
+        description: e.description.replace('outubro', 'setembro'),
+        category: e.category,
+        amount: Math.round((e.amount / templateTotal) * m.expenses * 100) / 100,
+        date,
+        dueDate: date,
+        method: e.method,
+        status: 'pago',
+        paidAt: date,
+      });
+    }
   }
 
   return { appointments, financialEntries: entries };

@@ -63,10 +63,10 @@ Legenda: **UI** = verificado pela interface no build de produção; **T** = cobe
 
 ### 2.2 Parcialmente funcionais / limitações conhecidas
 
-- **Comparativo "mês atual"** (Financeiro/Relatórios) compara o mês parcial com o mês anterior inteiro (ex.: −44%). Regra dos agentes 06/08; sugerido comparar o mesmo número de dias.
+- ~~Comparativo "mês atual" contra o mês anterior inteiro~~ — **corrigido na rodada de ajustes finais (§7)**.
 - **Título da Agenda** quebra em 2 linhas em telas ≤1440 px — comportamento do design original (mesmas classes), não alterado.
-- **Agenda × paciente pré-selecionado**: "Agendar" na ficha do paciente abre a Agenda sem pré-selecionar (CR 03 §8).
-- **Feriados, preferências do sistema, CPF/endereço do paciente, vigência de disponibilidade, `serviceId` nos agendamentos**: não existem no modelo (CRs 03, 04, 08) — as telas não simulam o que não grava.
+- ~~Agenda sem paciente pré-selecionado~~ — **corrigido na rodada de ajustes finais (§7)**.
+- **Feriados** — melhoria futura registrada em §7.3. **Preferências do sistema, CPF/endereço do paciente, vigência de disponibilidade, `serviceId` nos agendamentos**: não existem no modelo (CRs 03, 04, 08) — as telas não simulam o que não grava.
 - **Exportação em PDF**: desabilitada ("em breve"), sem biblioteca.
 - **`DataTable` com `srOnlyHeader`** pode gerar rolagem horizontal; contornado localmente pelo Agente 05 (CR 05 §5).
 
@@ -109,7 +109,7 @@ desenvolvimento 2 críticas (vitest→tinypool) e altas de tailwind/vite — exi
 
 ---
 
-## 4. Dados de demonstração (semente v2)
+## 4. Dados de demonstração (semente v3)
 
 | Coleção | Registros | Observação |
 |---|---|---|
@@ -117,7 +117,7 @@ desenvolvimento 2 críticas (vitest→tinypool) e altas de tailwind/vite — exi
 | Pacientes / Profissionais | 12 / 8 | da Etapa 1 |
 | Agendamentos | 419 | 01/09–24/10/2026 + histórico da Dra. Lauren; 320 concluídos, 24 faltas, 28 cancelados, 45 em aberto |
 | Atendimentos / Prontuários | 345 / 320 | derivados das consultas |
-| Lançamentos | 357 | 1 receita por consulta concluída do histórico + fechamentos nov/25–ago/26 + semente original |
+| Lançamentos | 365 | 1 receita por consulta concluída do histórico + despesas de set/26 detalhadas + fechamentos nov/25–ago/26 + semente original |
 | Conversas / Mensagens | 9 / 25 | WhatsApp simulado |
 
 Histórico gerado por PRNG com semente fixa (`src/core/data/history.ts`): sempre os mesmos IDs e valores; sem conflito de horário (testado).
@@ -145,3 +145,69 @@ Restauração: `?reset-demo` na URL — validada em todos os testes E2E.
 
 Limitações do ambiente estático: dados por navegador (`localStorage`), sem login real, WhatsApp e IA simulados, relógio da demo
 a partir de 19/10/2026 10:24. **Não é um sistema pronto para produção clínica.**
+
+---
+
+## 7. Rodada de ajustes finais (21/10/2026)
+
+Branch `integracao/agent-09`. A `main` foi mesclada por você em `3d29fb9` com o conteúdo de `0d4e3bc` (idêntico);
+**os ajustes abaixo ainda não estão na `main`** e não foram publicados.
+
+### 7.1 Comparativo mensal com o mesmo intervalo de dias
+
+- Regra única no core: `src/core/periods.ts` → `comparablePeriods(range, hoje)`. Se o período é formado por meses
+  inteiros e está em andamento, compara **do dia 1 até hoje** com **os mesmos dias** do período anterior, limitado ao fim
+  de cada mês (ex.: 1–31/03 → 1–28/02; 29/02 em ano bissexto; janeiro → dezembro do ano anterior). Mês fechado e
+  intervalo livre continuam como antes.
+- **Financeiro** (`FinanceScreen`): as variações de receita, despesas, saldo e a receber usam o intervalo comparável;
+  os valores exibidos continuam sendo os do mês. Legenda: **"1–19 out vs. 1–19 set"**.
+- **Dashboard** (filtro "Mês"): consultas e faturamento comparados pelo mesmo intervalo, com a mesma legenda. "Dia" e
+  "Semana" não mudaram (já comparavam períodos equivalentes).
+- **Relatórios**: KPIs das abas Visão geral, Agendamentos, Atendimentos e Financeiro e o CSV "Resumo do período" usam o
+  intervalo comparável; o cabeçalho mostra **"01/10/2026 a 19/10/2026 vs. 01/09/2026 a 19/09/2026"**. O gráfico de
+  evolução dia a dia continua comparando com o mês anterior inteiro (é uma série por dia, não uma variação).
+- Semente v3: as despesas de set/2026 passaram a ser lançamentos detalhados no mesmo calendário das despesas de outubro
+  (o fechamento único em 28/09 deixava "1–19 set" sem despesa). Total de setembro mantido (R$ 20.830, valor do design).
+- Efeito na demonstração: receita **−44,3% → −3,7%** (1–19 out × 1–19 set).
+
+### 7.2 Paciente pré-selecionado na Agenda
+
+- Ficha do paciente → **Agendar** abre a Agenda com o formulário "Novo agendamento" e o paciente já selecionado.
+- O ID vai no **estado da navegação** (`AgendaNavState`, `src/app/navigation.ts`), nunca na URL. O estado é consumido ao
+  abrir (não reabre ao recarregar nem ao voltar). Abrir a Agenda pelo menu continua sem pré-seleção.
+- O paciente pode ser trocado no formulário; conflitos de horário, expediente e salas continuam validados; a criação usa
+  os serviços compartilhados (mesmo `patientId`, nenhum cadastro novo). Perfis sem `agenda_clinica ≥ editar` não veem o
+  formulário (o botão "Agendar" também não aparece para eles).
+
+### 7.3 Feriados — melhoria futura (não implementado)
+
+Proposta para uma próxima etapa: `ClinicSettings.holidays?: { date; label; allDay; start?; end? }[]` editável em
+Configurações › Horários, respeitado pela Agenda (`checkSlot`), pelo Portal (grade de horários) e pelo Assistente IA
+(`findAvailableSlots`), junto com **bloqueios de agenda da clínica** (ex.: recesso, manutenção de sala) além dos
+bloqueios por profissional que já existem. Exige incremento de `SCHEMA_VERSION`.
+
+### 7.4 Segurança
+
+- `npm audit --omit=dev`: continuam **2 moderadas** em `react-router` 6.30.6 (última versão 6; correção só na v7, major).
+  Avaliação: injeção em hidratação SSR **não se aplica** (sem SSR); open redirect por barra invertida só é explorável com
+  destino controlado pelo usuário. O único ponto assim era o retorno pós-login (`location.state.from`), agora
+  **restrito a caminhos internos do perfil e sem `\` ou `//`**.
+- Defeito antigo corrigido no mesmo ponto: o retorno à página pedida antes do login nunca funcionava (a tela de login
+  redirecionava para o início ao detectar a sessão). Agora volta à página pedida, quando permitida.
+
+### 7.5 Testes desta rodada (executados nesta máquina)
+
+| Comando | Resultado |
+|---|---|
+| `npm run typecheck` | 0 erros |
+| `npm test` | **245/245** (+8: `tests/integration/periods.test.ts`) |
+| `npm run build` | OK, sem avisos |
+| `npm run test:e2e` | **17/17** (+3: `tests/e2e/adjustments.spec.ts` — paciente pré-selecionado, legendas do comparativo, retorno pós-login) |
+
+### 7.6 Riscos residuais
+
+- As despesas de outubro na semente original do design são menores que as de setembro do design; o comparativo
+  "1–19 out × 1–19 set" mostra despesas −47% (dado real da semente, não erro de período).
+- A comparação "Semana" do Dashboard (semana atual × semana passada inteira) não foi alterada, por pedido.
+- Navegadores que já abriram a demo recarregam a semente automaticamente (`SCHEMA_VERSION` 3); o GitHub Pages pode servir
+  o `index.html` em cache por alguns minutos após uma publicação.

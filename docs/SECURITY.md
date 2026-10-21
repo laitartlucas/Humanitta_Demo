@@ -36,7 +36,7 @@ Atualizações aplicadas sem mudança de versão major: `react-router-dom` 6.26.
 
 | Escopo | Resultado | Pacotes | Risco residual |
 |---|---|---|---|
-| **Produção** (`npm audit --omit=dev`) | **2 moderadas** | `react-router` / `react-router-dom` 6.30.6 (open redirect com barra invertida em `<Link>`/`useNavigate`; injeção em hidratação SSR) | Baixo: a app só navega para caminhos internos constantes e não usa SSR. Correção completa só na v7 (major) |
+| **Produção** (`npm audit --omit=dev`) | **2 moderadas** | `react-router` / `react-router-dom` 6.30.6 (open redirect com barra invertida em `<Link>`/`useNavigate`; injeção em hidratação SSR) | Baixo: não há SSR; o único destino vindo de fora (retorno pós-login) aceita só caminhos internos do perfil, sem `\` nem `//` (21/10/2026). 6.30.6 é a última versão 6; correção completa só na v7 (major) |
 | Desenvolvimento | 2 críticas | `vitest` 2.1.9 → `tinypool` (prototype pollution nas opções do worker) | Só no executor de testes local/CI; corrigido no vitest 5 (major) |
 | Desenvolvimento | altas/moderadas | `tailwindcss` 3.4.10 → `braces`, `micromatch`, `chokidar`, `fast-glob`, `postcss-selector-parser`; `vite`/`esbuild` (servidor de dev) | Só em tempo de build/dev; correções exigem Tailwind 4 / Vite 8 (major). **Tailwind mantido em 3.4.10**: a 3.4.19 não reduzia os alertas e alterava o CSS gerado |
 

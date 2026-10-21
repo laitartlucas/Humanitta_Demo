@@ -1,7 +1,7 @@
 /** Agente 03 — Pacientes. Rotas e containers do módulo (dono: Agente 03). */
 import { useParams } from 'react-router-dom';
 import { PatientProfileScreen, PatientsScreen } from '@ds/screens/patients';
-import { useAppNavigate } from '@app/navigation';
+import { useAppNavigate, useOpenNewAppointment } from '@app/navigation';
 import type { ModuleDefinition } from '@app/types';
 
 function PatientsPage() {
@@ -12,13 +12,14 @@ function PatientsPage() {
 function PatientProfilePage() {
   const { patientId } = useParams();
   const go = useAppNavigate();
+  const openNewAppointment = useOpenNewAppointment();
   return (
     <PatientProfileScreen
       key={patientId}
       patientId={patientId}
       onBack={() => go('pacientes')}
-      // A Agenda ainda não recebe o paciente pré-selecionado (ver docs/change-requests/03-pacientes.md).
-      onNewAppointment={() => go('agenda')}
+      // Abre "Novo agendamento" na Agenda com este paciente já selecionado (CR 03 §8).
+      onNewAppointment={(id) => openNewAppointment(id)}
       onOpenWhatsApp={() => go('whatsapp')}
     />
   );
