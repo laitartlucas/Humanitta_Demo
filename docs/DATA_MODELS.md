@@ -85,9 +85,11 @@ conversations ◄── messages    financialEntries ──(professionalId)─�
 `src/core/data/seed.ts` → `createSeed()` monta o banco a partir de `design_system/mocks/*`:
 
 - 12 pacientes, 8 profissionais, 11 usuários (3 administrativos + 8 profissionais), 8 especialidades, 10 serviços, 7 salas;
-- 64 agendamentos: os da clínica (12 a 24/10/2026) **+** as consultas extras da Dra. Lauren (histórico e próximas semanas);
-- 17 atendimentos derivados das consultas concluídas/em andamento/faltas; 14 prontuários demonstrativos das concluídas;
-- 30 lançamentos, 9 conversas com 25 mensagens, 4 solicitações de bloqueio, 6 eventos de atividade, configuração da IA e da clínica.
+- **Semente v2 (`SCHEMA_VERSION = 2`, Agente 09):** 419 agendamentos — os da Etapa 1 (12–24/10/2026), as consultas extras da Dra. Lauren e um **histórico determinístico** de 01/09 a 17/10/2026 (`src/core/data/history.ts`, sem conflitos de horário);
+- 345 atendimentos e 320 prontuários demonstrativos derivados das consultas;
+- 357 lançamentos: os 30 da Etapa 1, uma receita paga por consulta concluída do histórico (com `appointmentId`) e fechamentos consolidados nov/25–ago/26 (`monthlyCashFlow`);
+- 9 conversas com 25 mensagens, 4 solicitações de bloqueio, 6 eventos de atividade, configuração da IA e da clínica;
+- `createSeed({ history: false })` devolve só a semente base (64 agendamentos, 30 lançamentos), usada em testes de regra exata.
 
 Usuários de demonstração:
 

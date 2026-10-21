@@ -57,3 +57,10 @@
 - A rota `/financeiro` é bloqueada para recepção e profissional pelo `ProtectedLayout`; a tela também mostra "Acesso restrito" sem `financeiro ≥ ver`, e todas as operações revalidam permissão (403), inclusive para lançamento inexistente (não revela existência).
 - O profissional só vê os próprios repasses (`selectPayoutRows` usa `scopeByProfessional('repasses')`); a base de faturamento nunca é calculada para esse perfil.
 - Tudo isso **espelha** o backend; não é segurança de produção.
+
+## Resposta do Integrador (Agente 09) — 20/10/2026
+1. `updateEntry`/`reverseEntry` no core: **adiado** (operações locais com a mesma checagem de permissão).
+2. Validações de `registerPayment`: **adiado** (validação local).
+3. Duplicidade por atendimento: **atendido** no core (+ receita só de atendimento concluído).
+4–6, 8. Atrasado derivado, campos extras, regra de repasse, semântica do saldo: **adiados**.
+7. Histórico na semente: **atendido**. Seus testes de regra exata rodam sobre `resetDemoData({ history: false })` (semente base).

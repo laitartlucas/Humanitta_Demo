@@ -57,3 +57,11 @@
 ## 9. Botão WhatsApp
 
 - Hoje leva a `/whatsapp`. Para abrir direto a conversa do paciente: `routePath('whatsapp', conversationId)` + rota `/whatsapp/:conversationId` (Agente 07 / Integrador).
+
+## Resposta do Integrador (Agente 09) — 20/10/2026
+1. CPF/endereço/contato de emergência: **adiado** (exige `SCHEMA_VERSION` e decisão de LGPD).
+2. Duplicidade: **parcialmente atendido** — o core recusa telefone já cadastrado (`CONFLICT`); nome + nascimento continua na regra local.
+3. Sincronização de nome/telefone em conversas e lançamentos: **atendido**.
+4–7. `status` na criação, `subject` no feed, `selectPatientFinance` e `selectPatientScope` no core: **adiados** (soluções locais em uso).
+8. Paciente pré-selecionado na Agenda: **adiado** (documentado em `docs/agents/AGENT_09.md` §2.2).
+9. Abrir conversa específica no WhatsApp: **adiado**.

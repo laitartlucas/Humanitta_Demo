@@ -59,3 +59,9 @@ Imports restantes de `@ds/mocks/*` são apenas tipos, formatadores e rótulos (p
 
 ## 4. Segurança (lembrete)
 O login de perfil é só demonstração. As checagens de `useCan` e dos serviços espelham o 403 do servidor; o backend real deve derivar `role` e `professional_id` do token e aplicar RLS.
+
+## Resposta do Integrador (Agente 09) — 20/10/2026
+- 2.1–2.6 (status do profissional, vários serviços, intervalo por dia, contato/preferências, histórico restrito no core, vigência): **adiados** — soluções locais em uso; exigem mudança de modelo.
+- 2.7 check-boundaries: **atendido**.
+- Transições de atendimento chamadas pelo Portal agora são validadas no core (consulta pendente, no dia, um em andamento por profissional).
+- Card de profissional: botões e barra de filtros corrigidos para não estourar a largura (desktop e tablet).

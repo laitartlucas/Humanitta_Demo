@@ -24,3 +24,12 @@ Agenda (criar/reagendar/editar). Sem o item 1, Portal e Assistente IA que chamar
 ## Impacto em outros agentes
 
 04 (Portal) e 07 (IA) passam a ter as mesmas regras ao agendar. 08 (Configurações) controla horários e salas que alimentam essas regras. Nenhuma mudança de formato do `Database`.
+
+## Resposta do Integrador (Agente 09) — 20/10/2026
+1. Regras de sala/expediente no core: **adiado** — continuam em `@modules/agenda` (`checkSlot`), já usadas pela Agenda e pelo agendamento via WhatsApp. Conflito de profissional e bloqueio aprovado seguem no core.
+2. `rescheduleAppointment` com `roomId`: **adiado** (a solução local cobre a tela).
+3. `confirmAppointment` só `agendada`: **atendido**.
+4. Agenda no menu do Financeiro: **não alterado** — o menu por perfil segue o design (`PERMISSIONS.md` §1). Decisão de produto pendente.
+5. Sábado/Sala 7/expediente do Dr. Gustavo: **não alterado** — dados "a confirmar com a clínica".
+6. `check-boundaries --untracked-files=all`: **atendido**.
+- Regra de falta (só após o horário) aplicada no core para todos os módulos.

@@ -58,3 +58,10 @@
 ## 10. Promoção de utilitários
 
 - `findAvailableSlots` (`src/modules/messaging/availability.ts`) é útil para Agenda/Portal; candidato a seletor do core (`selectAvailableSlots`).
+
+## Resposta do Integrador (Agente 09) — 20/10/2026
+1–3, 6, 7, 10. Status da conversa, etiquetas, mensagens de sistema, `receiveMessage`, campos humanizados da IA, `selectAvailableSlots` no core: **adiados** (soluções locais gravam no mesmo banco).
+4. Relógio/ordem das mensagens: **atendido** no core (`isoAfter`).
+5. Guarda da IA: **atendido** — `appendAiMessage` recusa conversa fora do modo IA.
+8. Assistente IA no menu da recepção: **não alterado** (menu do design); decisão de produto pendente.
+9. Mensagem `m-0802`: **atendido** (texto administrativo).

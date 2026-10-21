@@ -19,3 +19,7 @@
   pagamento ("registrou pagamento de R$ …"), visíveis à recepção (`pacientes_financeiro = ver`, então ok).
   Se no futuro algum evento ganhar dado financeiro geral ou clínico, o feed precisará de um campo de
   `feature` por evento para o core filtrar por perfil.
+
+## Resposta do Integrador (Agente 09) — 20/10/2026
+- **Atendido.** Semente v2 traz fechamentos consolidados nov/25–ago/26 (`monthlyCashFlow`, categoria "Histórico consolidado") e receitas por atendimento em set–out/26 (`src/core/data/history.ts`). O gráfico 3M/6M/12M e o comparativo do KPI passam a ter base.
+- Feed de atividades sem escopo: mantido; anotado para quando houver evento com dado sensível.

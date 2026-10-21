@@ -49,3 +49,12 @@ O módulo 05 já bloqueia todos esses casos em `flow.ts` (testado), mas **outro 
 ## Impacto em outros agentes
 
 Itens 1, 2 e 7 alteram o core/semente (Integrador). Itens 3 e 6 são oportunidades de reuso para 06 e 04; nenhum arquivo deles foi alterado.
+
+## Resposta do Integrador (Agente 09) — 20/10/2026
+1. Transições no core: **atendido** (check-in/início/falta; cancelar consulta → atendimento `cancelado`). Falta só após o horário (regra da Agenda); teste ajustado.
+2. Registro clínico estruturado: **adiado** (formato rotulado em `summary` mantido).
+3. Vínculo financeiro na semente: **atendido** — receitas do histórico têm `appointmentId`; o core recusa 2ª receita por atendimento.
+4. Relógio: **atendido** — avança em tempo real no navegador (fixo nos testes).
+5. `DataTable` `relative`: **adiado** (contorno local funciona).
+6. Promoção de `model.ts`/`flow.ts` ao core: **adiado**.
+7. `ag-404` encadeado a `ag-004`: **atendido**.

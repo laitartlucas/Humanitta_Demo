@@ -60,6 +60,9 @@ Este pedido reúne as dependências encontradas ao implementar Relatórios e Con
 - Envio real de e-mail/SMS/WhatsApp, upload de logotipo, convites de usuário e senhas: tudo simulado ou desabilitado e identificado como demonstração.
 - Permissão específica de exportação: hoje exportar exige o mesmo nível de visualização do relatório (`relatorios_operacionais`/`relatorios_financeiros ≥ ver`, mais `pacientes_cadastro`/`whatsapp` conforme o caso). Se for necessário separar "ver" de "exportar", falta uma `Feature` nova.
 
-## Resposta do Integrador
 
-_(pendente)_
+## Resposta do Integrador (Agente 09) — 20/10/2026
+1. `serviceId` nos agendamentos: **adiado** (agrupamento por nome continua).
+2. `appointmentId` nas receitas: **atendido** para o histórico gerado e novos lançamentos vinculados.
+3–6. Preferências/feriados, autoproteção no serviço, situação do profissional, relatórios do profissional no menu: **adiados**.
+7. Bundle: **atendido** com chunks por módulo (`vite.config.ts`); `React.lazy` por rota fica como evolução.
