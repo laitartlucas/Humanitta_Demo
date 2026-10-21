@@ -8,3 +8,5 @@ export { PermissionsSection } from './PermissionsSection';
 export { NotificationsSection } from './NotificationsSection';
 export { VisualIdentitySection } from './VisualIdentitySection';
 export { IntegrationsSection } from './IntegrationsSection';
+export { BlockRequestsSection } from './BlockRequestsSection';
+export { SystemInfoSection } from './SystemInfoSection';

@@ -4,14 +4,23 @@ import { Button } from '@ds/components';
 import { cn } from '@ds/foundations/cn';
 import { TRANSFER_TARGETS } from '@ds/mocks/business';
 
+export interface TransferTarget {
+  id: string;
+  label: string;
+  description: string;
+}
+
 export interface TransferMenuProps {
   onTransfer: (target: { id: string; label: string }) => void;
   currentTarget?: string;
   compact?: boolean;
+  /** Setores e colaboradores disponíveis (padrão: setores de demonstração). */
+  targets?: TransferTarget[];
+  disabled?: boolean;
 }
 
 /** Menu de transferência da conversa para um setor/pessoa (simulado). */
-export function TransferMenu({ onTransfer, currentTarget, compact = false }: TransferMenuProps) {
+export function TransferMenu({ onTransfer, currentTarget, compact = false, targets = TRANSFER_TARGETS, disabled = false }: TransferMenuProps) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const menuId = useId();
@@ -42,6 +51,7 @@ export function TransferMenu({ onTransfer, currentTarget, compact = false }: Tra
         aria-expanded={open}
         aria-controls={menuId}
         aria-label={compact ? 'Transferir conversa' : undefined}
+        disabled={disabled}
         onClick={() => setOpen((o) => !o)}
       >
         {compact ? <span className="sr-only sm:not-sr-only">Transferir</span> : 'Transferir'}
@@ -51,10 +61,10 @@ export function TransferMenu({ onTransfer, currentTarget, compact = false }: Tra
           id={menuId}
           role="menu"
           aria-label="Transferir conversa para"
-          className="absolute right-0 top-full z-30 mt-2 w-72 rounded-md border border-graphite-200 bg-white p-1.5 shadow-md"
+          className="absolute right-0 top-full z-30 mt-2 max-h-80 w-72 overflow-y-auto rounded-md border border-graphite-200 bg-white p-1.5 shadow-md"
         >
           <p className="px-3 pb-1 pt-2 text-overline uppercase tracking-[.08em] text-graphite-500">Transferir para</p>
-          {TRANSFER_TARGETS.map((t) => (
+          {targets.map((t) => (
             <button
               key={t.id}
               type="button"

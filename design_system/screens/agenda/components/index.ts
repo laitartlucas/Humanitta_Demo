@@ -8,3 +8,7 @@ export { AgendaSidebar } from './AgendaSidebar';
 export type { AgendaSidebarProps } from './AgendaSidebar';
 export { AgendaToolbar } from './AgendaToolbar';
 export type { AgendaToolbarProps } from './AgendaToolbar';
+export { UnavailableBlock } from './UnavailableBlock';
+export type { UnavailableBlockProps } from './UnavailableBlock';
+export { AgendaSearchResults } from './AgendaSearchResults';
+export type { AgendaSearchResultsProps } from './AgendaSearchResults';

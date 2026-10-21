@@ -1,72 +1,92 @@
 import { useEffect, useState, type FormEvent } from 'react';
-import type { Appointment } from '@ds/mocks/types';
+import type { AppError, AppointmentRecord, Professional, RoomRecord, ServiceRecord } from '@core';
+import type { AgendaEditPatch } from '@modules/agenda/agendaService';
+import { useSlotIssues } from '@modules/agenda/hooks';
 import { Button, Input, Modal, Select, Textarea } from '@ds/components';
-import { CHANNEL_NAMES, SERVICES_BY_SPECIALTY, SPECIALTY_NAMES, professionals } from '@ds/mocks/clinical';
+import { CHANNEL_NAMES, SPECIALTY_NAMES } from '@ds/mocks/clinical';
 
 export interface EditAppointmentModalProps {
-  appointment: Appointment | null;
+  appointment: AppointmentRecord | null;
   open: boolean;
   onClose: () => void;
-  onSave: (updated: Appointment) => void;
+  /** Envia ao serviço da Agenda. Devolve o agendamento salvo ou `undefined` em caso de erro. */
+  onSave: (id: string, patch: AgendaEditPatch) => Promise<AppointmentRecord | undefined>;
+  professionals: Professional[];
+  services: ServiceRecord[];
+  rooms: RoomRecord[];
+  error?: AppError | null;
+  saving?: boolean;
 }
 
-type Channel = NonNullable<Appointment['channel']>;
+type Channel = NonNullable<AppointmentRecord['channel']>;
 
 const DURATIONS = ['30', '40', '45', '50', '60', '90'];
 
-export function EditAppointmentModal({ appointment, open, onClose, onSave }: EditAppointmentModalProps) {
+export function EditAppointmentModal({ appointment, open, onClose, onSave, professionals, services, rooms, error, saving = false }: EditAppointmentModalProps) {
   const [professionalId, setProfessionalId] = useState('');
   const [service, setService] = useState('');
+  const [roomId, setRoomId] = useState('');
   const [duration, setDuration] = useState('50');
   const [price, setPrice] = useState('');
   const [channel, setChannel] = useState<Channel>('presencial');
   const [notes, setNotes] = useState('');
-  const [priceError, setPriceError] = useState<string | undefined>();
-  const [saving, setSaving] = useState(false);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string | undefined>>({});
 
   useEffect(() => {
     if (open && appointment) {
       setProfessionalId(appointment.professionalId);
       setService(appointment.service);
+      setRoomId(appointment.roomId);
       setDuration(String(appointment.durationMin));
       setPrice(appointment.price.toFixed(2).replace('.', ','));
       setChannel(appointment.channel ?? 'presencial');
       setNotes(appointment.notes ?? '');
-      setPriceError(undefined);
-      setSaving(false);
+      setFieldErrors({});
     }
   }, [open, appointment]);
 
-  if (!appointment) return null;
-  const prof = professionals.find((p) => p.id === professionalId);
-  const serviceOptions = prof ? SERVICES_BY_SPECIALTY[prof.specialty] : [];
-  const durationOptions = DURATIONS.includes(duration) ? DURATIONS : [...DURATIONS, duration];
+  useEffect(() => {
+    if (error?.fields) setFieldErrors((e) => ({ ...e, ...error.fields }));
+  }, [error]);
 
-  function handleSubmit(e?: FormEvent) {
+  const prof = professionals.find((p) => p.id === professionalId);
+  const changesSchedule =
+    !!appointment && (professionalId !== appointment.professionalId || roomId !== appointment.roomId || Number(duration) !== appointment.durationMin);
+  const issues = useSlotIssues(
+    appointment && prof && changesSchedule
+      ? { professionalId: prof.id, start: appointment.start, durationMin: Number(duration), roomId: roomId || undefined, ignoreIds: [appointment.id] }
+      : null,
+  );
+
+  if (!appointment) return null;
+  const serviceOptions = prof ? services.filter((sv) => sv.active && sv.specialty === prof.specialty).map((sv) => sv.name) : [];
+  const durationOptions = DURATIONS.includes(duration) ? DURATIONS : [...DURATIONS, duration];
+  const profChanged = professionalId !== appointment.professionalId;
+  const roomOptions = rooms.filter((r) => r.active || r.id === roomId);
+
+  async function handleSubmit(e?: FormEvent) {
     e?.preventDefault();
     if (!appointment || !prof) return;
     const value = Number(price.replace(/\./g, '').replace(',', '.'));
     if (Number.isNaN(value) || value < 0) {
-      setPriceError('Informe um valor válido.');
+      setFieldErrors((f) => ({ ...f, price: 'Informe um valor válido.' }));
       return;
     }
-    setSaving(true);
-    window.setTimeout(() => {
-      onSave({
-        ...appointment,
-        professionalId: prof.id,
-        professionalName: prof.name,
-        specialty: prof.specialty,
-        roomId: prof.roomId ?? appointment.roomId,
-        service,
-        durationMin: Number(duration),
-        price: value,
-        channel,
-        notes: notes || undefined,
-      });
-      setSaving(false);
-    }, 500);
+    const sv = services.find((x) => x.name === service && x.specialty === prof.specialty);
+    await onSave(appointment.id, {
+      professionalId: profChanged ? prof.id : undefined,
+      service,
+      serviceId: sv?.id,
+      roomId,
+      durationMin: Number(duration),
+      price: value,
+      channel,
+      notes: notes.trim() || undefined,
+    });
   }
+
+  const startIssue = fieldErrors.start ?? issues.find((i) => i.field === 'start')?.message;
+  const roomIssue = fieldErrors.roomId ?? issues.find((i) => i.field === 'roomId')?.message;
 
   return (
     <Modal
@@ -94,9 +114,19 @@ export function EditAppointmentModal({ appointment, open, onClose, onSave }: Edi
           onChange={(e) => {
             const p = professionals.find((x) => x.id === e.target.value);
             setProfessionalId(e.target.value);
-            if (p && !SERVICES_BY_SPECIALTY[p.specialty].includes(service)) setService(SERVICES_BY_SPECIALTY[p.specialty][0]);
+            setFieldErrors({});
+            if (!p) return;
+            const opts = services.filter((sv) => sv.active && sv.specialty === p.specialty);
+            if (!opts.some((sv) => sv.name === service) && opts[0]) {
+              setService(opts[0].name);
+              setDuration(String(opts[0].durationMin));
+            }
+            const room = rooms.find((r) => r.id === p.roomId);
+            setRoomId(p.id === appointment.professionalId ? appointment.roomId : room?.active ? room.id : '');
           }}
           options={professionals.map((p) => ({ value: p.id, label: `${p.name} — ${SPECIALTY_NAMES[p.specialty]}` }))}
+          error={fieldErrors.professionalId}
+          hint={profChanged ? 'Trocar o profissional cria um novo agendamento no mesmo horário; o original fica como reagendado.' : undefined}
         />
         <Select
           id="ea-service"
@@ -104,13 +134,30 @@ export function EditAppointmentModal({ appointment, open, onClose, onSave }: Edi
           value={service}
           onChange={(e) => setService(e.target.value)}
           options={(serviceOptions.includes(service) ? serviceOptions : [service, ...serviceOptions]).map((s) => ({ value: s, label: s }))}
+          error={fieldErrors.service}
         />
         <Select
           id="ea-duration"
           label="Duração"
           value={duration}
-          onChange={(e) => setDuration(e.target.value)}
+          onChange={(e) => {
+            setDuration(e.target.value);
+            setFieldErrors((f) => ({ ...f, start: undefined, durationMin: undefined }));
+          }}
           options={durationOptions.map((d) => ({ value: d, label: `${d} minutos` }))}
+          error={fieldErrors.durationMin ?? startIssue}
+        />
+        <Select
+          id="ea-room"
+          label="Sala"
+          placeholder="Selecione a sala"
+          value={roomId}
+          onChange={(e) => {
+            setRoomId(e.target.value);
+            setFieldErrors((f) => ({ ...f, roomId: undefined }));
+          }}
+          options={roomOptions.map((r) => ({ value: r.id, label: `${r.name} · ${r.active ? r.label : 'inativa'}` }))}
+          error={roomIssue}
         />
         <Select
           id="ea-channel"
@@ -125,7 +172,7 @@ export function EditAppointmentModal({ appointment, open, onClose, onSave }: Edi
           inputMode="decimal"
           value={price}
           onChange={(e) => setPrice(e.target.value)}
-          error={priceError}
+          error={fieldErrors.price}
           hint="Valor fictício de demonstração."
         />
         <div className="sm:col-span-2">

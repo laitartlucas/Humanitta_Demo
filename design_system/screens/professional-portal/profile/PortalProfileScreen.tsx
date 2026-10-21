@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   BadgeCheck,
   CalendarClock,
@@ -8,40 +8,47 @@ import {
   KeyRound,
   Laptop,
   Lock,
-  LogOut,
   Save,
   ShieldCheck,
-  Smartphone,
   SlidersHorizontal,
-  Tablet,
   Undo2,
   UserRound,
   Wallet,
 } from 'lucide-react';
-import { canAccess } from '@ds/access';
+import { blockRequestService, now as clockNow, settingsService, useAction, useCan, useMyPayouts, useSpecialties } from '@core';
 import { Avatar, Badge, Button, Card, Input, PageHeader, Select, SpecialtyTag, Switch, Tabs, Textarea, useToast } from '@ds/components';
 import { cn } from '@ds/foundations/cn';
-import { WEEKDAY_NAMES, formatCurrency, formatDate, getProfessionalById, getRoomName } from '@ds/mocks/clinical';
-import type { ActiveSession, BlockRequest } from '@ds/mocks/portal';
-import { MY_BLOCK_REQUESTS, MY_PAYOUT_SUMMARY, MY_SESSIONS, PORTAL_PROFESSIONAL_ID, getMyAvailability, getMyBlockRequests } from '@ds/mocks/portal';
+import { WEEKDAY_NAMES, formatCurrency, formatDate, formatTime } from '@ds/mocks/clinical';
 import { RequestBlockModal } from '../calendar/modals';
-import { BlockRequestList, RequestChangeButton, ScopeBadge, weekdayDate } from '../shared';
+import {
+  BlockRequestList,
+  RequestChangeButton,
+  ScopeBadge,
+  availabilityOf,
+  payoutSummary,
+  useMyAppointments,
+  useMyBlockRequests,
+  useMyProfessional,
+  useRoomName,
+  weekdayDate,
+} from '../shared';
 
 export type PortalProfileTab = 'dados' | 'disponibilidade' | 'preferencias' | 'seguranca';
 
 export interface PortalProfileScreenProps {
-  /** Profissional logado (padrão 'prof-lauren'). */
-  professionalId?: string;
-  /** Permissão de solicitar alteração de disponibilidade (padrão: derivado de canAccess). */
+  /** Permissão de solicitar alteração de disponibilidade (padrão: `useCan` da sessão). */
   canRequestChanges?: boolean;
   initialTab?: PortalProfileTab;
 }
 
+/**
+ * Campos editáveis pelo PRÓPRIO profissional. O core (`settingsService.updateOwnProfile`) só aceita
+ * título de apresentação e foto; nome, registro, especialidade, sala, papel e permissões ficam com
+ * a administração. As preferências não têm armazenamento no core (ver CR 04) e valem para a sessão.
+ */
 interface ProfileForm {
-  displayName: string;
-  email: string;
-  phone: string;
-  bio: string;
+  title: string;
+  avatarUrl: string;
   remindDay: boolean;
   dailySummary: boolean;
   checkinAlert: boolean;
@@ -50,11 +57,7 @@ interface ProfileForm {
   twoFactor: boolean;
 }
 
-const INITIAL_FORM: ProfileForm = {
-  displayName: 'Dra. Lauren Bertocchi',
-  email: 'lauren.demo@humanitta.exemplo',
-  phone: '(54) 99100-0900',
-  bio: 'Ortodontista e clínica geral, responsável técnica da Odontologia na Humanittá.',
+const DEFAULT_PREFS: Omit<ProfileForm, 'title' | 'avatarUrl'> = {
   remindDay: true,
   dailySummary: true,
   checkinAlert: true,
@@ -63,51 +66,69 @@ const INITIAL_FORM: ProfileForm = {
   twoFactor: false,
 };
 
-function sessionIcon(s: ActiveSession) {
-  if (/iphone/i.test(s.device)) return Smartphone;
-  if (/ipad/i.test(s.device)) return Tablet;
-  return Laptop;
-}
+const AVATAR_URL = /^https:\/\/\S+$/i;
 
 /** Meu Perfil — dados profissionais, disponibilidade (leitura), preferências e segurança. */
-export function PortalProfileScreen({
-  professionalId = PORTAL_PROFESSIONAL_ID,
-  canRequestChanges = canAccess('profissional', 'bloqueio_horario', 'solicitar'),
-  initialTab = 'dados',
-}: PortalProfileScreenProps) {
+export function PortalProfileScreen({ canRequestChanges, initialTab = 'dados' }: PortalProfileScreenProps) {
   const { toast } = useToast();
-  const prof = getProfessionalById(professionalId);
-  const availability = useMemo(() => getMyAvailability(professionalId), [professionalId]);
+  const { professional: prof, user } = useMyProfessional();
+  const canRequestBySession = useCan('bloqueio_horario', 'solicitar');
+  const canRequest = canRequestChanges ?? canRequestBySession;
+  const roomName = useRoomName();
+  const specialties = useSpecialties();
+  const availability = useMemo(() => availabilityOf(prof), [prof]);
+  const requests = useMyBlockRequests();
+  const myAppointments = useMyAppointments();
+  const payouts = useMyPayouts();
+  const payout = useMemo(() => payoutSummary(payouts, myAppointments, clockNow()), [payouts, myAppointments]);
+  const updateProfile = useAction(settingsService.updateOwnProfile);
+  const withdraw = useAction(blockRequestService.withdrawBlockRequest, { success: 'Solicitação retirada' });
 
+  const fromProfessional = useMemo<ProfileForm>(
+    () => ({ title: prof?.title ?? '', avatarUrl: prof?.avatarUrl ?? '', ...DEFAULT_PREFS }),
+    // Só ao trocar de profissional: salvar não deve apagar as preferências da sessão.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [prof?.id],
+  );
   const [tab, setTab] = useState<PortalProfileTab>(initialTab);
-  const [saved, setSaved] = useState<ProfileForm>(INITIAL_FORM);
-  const [form, setForm] = useState<ProfileForm>(INITIAL_FORM);
-  const [saving, setSaving] = useState(false);
-  const [requests, setRequests] = useState<BlockRequest[]>(() => getMyBlockRequests(professionalId, MY_BLOCK_REQUESTS));
+  const [saved, setSaved] = useState<ProfileForm>(fromProfessional);
+  const [form, setForm] = useState<ProfileForm>(fromProfessional);
   const [modalOpen, setModalOpen] = useState(false);
-  const [sessions, setSessions] = useState<ActiveSession[]>(MY_SESSIONS);
   const [pwd, setPwd] = useState({ current: '', next: '', confirm: '' });
   const [pwdErrors, setPwdErrors] = useState<{ current?: string; next?: string; confirm?: string }>({});
 
+  useEffect(() => {
+    setSaved(fromProfessional);
+    setForm(fromProfessional);
+  }, [fromProfessional]);
+
   const dirty = (Object.keys(form) as (keyof ProfileForm)[]).some((k) => form[k] !== saved[k]);
-  const emailError = form.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email) ? 'Informe um e-mail válido.' : undefined;
+  const titleError = !form.title.trim() ? 'Informe como você quer ser apresentado(a).' : updateProfile.error?.fields?.title;
+  const avatarError = form.avatarUrl && !AVATAR_URL.test(form.avatarUrl) ? 'Use um endereço https:// de imagem.' : undefined;
+  const specialtyName = prof ? (specialties.find((s) => s.id === prof.specialty)?.name ?? prof.specialty) : '';
 
   function set<K extends keyof ProfileForm>(key: K, value: ProfileForm[K]) {
     setForm((f) => ({ ...f, [key]: value }));
   }
 
-  function save() {
-    if (emailError || !form.displayName.trim()) {
+  async function save() {
+    if (titleError || avatarError) {
       setTab('dados');
       toast({ tone: 'danger', title: 'Revise os campos destacados', description: 'Há informações inválidas em Dados profissionais.' });
       return;
     }
-    setSaving(true);
-    window.setTimeout(() => {
-      setSaved(form);
-      setSaving(false);
-      toast({ tone: 'success', title: 'Perfil atualizado', description: 'Suas alterações foram salvas (demonstração).' });
-    }, 500);
+    const profileChanged = form.title !== saved.title || form.avatarUrl !== saved.avatarUrl;
+    if (profileChanged) {
+      // O serviço grava no cadastro do profissional DA SESSÃO; papel e permissões não são aceitos.
+      const updated = await updateProfile.run({ title: form.title.trim(), avatarUrl: form.avatarUrl.trim() || undefined });
+      if (!updated) return;
+    }
+    setSaved(form);
+    toast({
+      tone: 'success',
+      title: 'Perfil atualizado',
+      description: profileChanged ? 'Título e foto salvos no seu cadastro.' : 'Preferências aplicadas nesta sessão (demonstração).',
+    });
   }
 
   function discard() {
@@ -129,6 +150,7 @@ export function PortalProfileScreen({
 
   if (!prof) return null;
 
+  const saving = updateProfile.loading;
   const pendingAvail = requests.filter((r) => r.status === 'enviada').length;
   const approvedBlocks = requests.filter((r) => r.kind === 'bloqueio' && r.status === 'aprovada');
 
@@ -142,10 +164,10 @@ export function PortalProfileScreen({
           <path d="M120 0v120A120 120 0 0 1 0 0z" fill="#F5E9D0" />
         </svg>
         <div className="relative flex flex-col gap-4 sm:flex-row sm:items-center">
-          <Avatar name={prof.name} size="xl" ring />
+          <Avatar name={prof.name} src={prof.avatarUrl} size="xl" ring />
           <div className="flex min-w-0 flex-1 flex-col gap-1">
             <h2 id="profile-name" className="font-display text-[28px] font-semibold leading-[34px] text-graphite-900">
-              {saved.displayName}
+              {prof.name}
             </h2>
             <p className="text-body text-graphite-600">{prof.title}</p>
             <div className="mt-1 flex flex-wrap items-center gap-2">
@@ -157,7 +179,7 @@ export function PortalProfileScreen({
               <SpecialtyTag specialty={prof.specialty} variant="chip" />
               {prof.roomId && (
                 <Badge tone="neutral" icon={DoorOpen}>
-                  {getRoomName(prof.roomId)}
+                  {roomName(prof.roomId)}
                 </Badge>
               )}
               <ScopeBadge label="Perfil: Profissional de saúde" />
@@ -184,17 +206,35 @@ export function PortalProfileScreen({
           <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1fr)_340px]">
             <Card title="Dados profissionais" description="Informações exibidas para a equipe e nos lembretes aos pacientes.">
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                <Input label="Nome de exibição" required value={form.displayName} onChange={(e) => set('displayName', e.target.value)} error={!form.displayName.trim() ? 'Informe o nome de exibição.' : undefined} />
+                <Input label="Nome de exibição" value={prof.name} readOnly hint="Alterado somente pela administração." leftIcon={Lock} />
                 <Input label="Registro profissional" value={prof.registry ?? '—'} readOnly hint="Alterado somente pela administração." leftIcon={Lock} />
-                <Input label="E-mail profissional" type="email" value={form.email} onChange={(e) => set('email', e.target.value)} error={emailError} autoComplete="email" />
-                <Input label="Telefone profissional" type="tel" value={form.phone} onChange={(e) => set('phone', e.target.value)} hint="Não é exibido aos pacientes." autoComplete="tel" />
+                <Input
+                  label="Título / apresentação"
+                  required
+                  maxLength={80}
+                  value={form.title}
+                  onChange={(e) => set('title', e.target.value)}
+                  error={titleError}
+                  hint="Ex.: Ortodontista · Clínica geral"
+                />
+                <Input
+                  label="Foto (endereço da imagem)"
+                  type="url"
+                  value={form.avatarUrl}
+                  onChange={(e) => set('avatarUrl', e.target.value)}
+                  error={avatarError}
+                  hint="Opcional · https://… Sem foto, usamos suas iniciais."
+                  autoComplete="photo"
+                />
+                <Input label="E-mail de acesso" type="email" value={user?.email ?? '—'} readOnly leftIcon={Lock} hint="Usuário de demonstração · alterado pela administração." />
+                <Input label="Telefone profissional" type="tel" value="" disabled placeholder="Não cadastrado" hint="Campo previsto — ainda sem suporte no cadastro (demonstração)." />
                 <Textarea
                   label="Apresentação curta"
                   rows={3}
-                  maxLength={240}
-                  value={form.bio}
-                  onChange={(e) => set('bio', e.target.value)}
-                  hint={`${form.bio.length}/240 · usada em lembretes e no site da clínica.`}
+                  value=""
+                  disabled
+                  placeholder="Em breve: texto usado em lembretes e no site da clínica."
+                  hint="Campo previsto — ainda sem suporte no cadastro (demonstração)."
                   wrapperClassName="md:col-span-2"
                 />
               </div>
@@ -210,11 +250,21 @@ export function PortalProfileScreen({
                   <dd className="font-semibold text-graphite-900">{prof.title}</dd>
                 </div>
                 <div>
+                  <dt className="text-caption text-graphite-500">Especialidade</dt>
+                  <dd className="font-semibold text-graphite-900">{specialtyName}</dd>
+                </div>
+                <div>
                   <dt className="text-caption text-graphite-500">Sala</dt>
-                  <dd className="font-semibold text-graphite-900">{prof.roomId ? `${getRoomName(prof.roomId)} · Odontologia` : '—'}</dd>
+                  <dd className="font-semibold text-graphite-900">{prof.roomId ? `${roomName(prof.roomId)} · ${specialtyName}` : '—'}</dd>
+                </div>
+                <div>
+                  <dt className="text-caption text-graphite-500">Perfil de acesso</dt>
+                  <dd className="font-semibold text-graphite-900">Profissional de saúde · somente os próprios registros</dd>
                 </div>
               </dl>
-              <p className="text-caption text-graphite-500">Para alterar nome, registro, especialidades ou sala, fale com a administração.</p>
+              <p className="text-caption text-graphite-500">
+                Para alterar nome, registro, especialidades, sala ou permissões, fale com a administração.
+              </p>
             </Card>
           </div>
         )}
@@ -224,7 +274,7 @@ export function PortalProfileScreen({
             <Card
               title="Horário de atendimento"
               description="Somente leitura. Alterações passam pela aprovação da administração."
-              action={<RequestChangeButton enabled={canRequestChanges} onClick={() => setModalOpen(true)} label="Solicitar alteração" icon={Clock3} size="sm" />}
+              action={<RequestChangeButton enabled={canRequest} onClick={() => setModalOpen(true)} label="Solicitar alteração" icon={Clock3} size="sm" />}
             >
               <div className="overflow-x-auto">
                 <table className="w-full min-w-[420px] text-body-sm">
@@ -270,17 +320,26 @@ export function PortalProfileScreen({
                   </ul>
                 )}
               </div>
-              {!canRequestChanges && <p className="text-caption text-graphite-500">Solicitações desativadas pela administração para o seu perfil.</p>}
+              {!canRequest && <p className="text-caption text-graphite-500">Solicitações desativadas pela administração para o seu perfil.</p>}
             </Card>
             <Card title="Minhas solicitações" description="Andamento dos seus pedidos" className="self-start">
-              <BlockRequestList requests={requests} />
+              <BlockRequestList
+                requests={requests}
+                renderActions={(r) =>
+                  r.status === 'enviada' ? (
+                    <Button variant="ghost" size="sm" leftIcon={Undo2} loading={withdraw.loading} onClick={() => withdraw.run(r.id)} className="self-start">
+                      Retirar solicitação
+                    </Button>
+                  ) : null
+                }
+              />
             </Card>
           </div>
         )}
 
         {tab === 'preferencias' && (
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-            <Card title="Notificações" description="Como o portal avisa você.">
+            <Card title="Notificações" description="Como o portal avisa você. Preferências valem para esta sessão (demonstração).">
               <div className="flex flex-col divide-y divide-graphite-100">
                 <Switch className="py-3" label="Lembrete da agenda do dia" description="Resumo às 07:30 com suas consultas." checked={form.remindDay} onChange={(v) => set('remindDay', v)} />
                 <Switch className="py-3" label="Resumo semanal por e-mail" description="Toda sexta, com a agenda da próxima semana." checked={form.dailySummary} onChange={(v) => set('dailySummary', v)} />
@@ -318,7 +377,7 @@ export function PortalProfileScreen({
 
         {tab === 'seguranca' && (
           <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
-            <Card title="Alterar senha" description="Use uma senha exclusiva para o sistema da clínica.">
+            <Card title="Alterar senha" description="Demonstração: o acesso é por perfil fictício, sem senha real. O formulário mostra apenas as regras.">
               <form
                 className="grid grid-cols-1 gap-4"
                 noValidate
@@ -346,28 +405,30 @@ export function PortalProfileScreen({
                 />
               </Card>
 
-              <Card title="Meus repasses" description={`Resumo de ${MY_PAYOUT_SUMMARY.monthLabel}`} action={<Badge tone="gold">Valores fictícios</Badge>}>
+              <Card title="Meus repasses" description={`Resumo de ${payout.monthLabel}`} action={<Badge tone="gold">Valores fictícios</Badge>}>
                 <div className="flex items-center gap-4">
                   <span aria-hidden="true" className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-gold-50 text-gold-600 ring-1 ring-gold-200">
                     <Wallet size={22} strokeWidth={1.75} />
                   </span>
                   <div>
                     <p className="text-overline uppercase text-graphite-500">Previsto no mês</p>
-                    <p className="font-display text-kpi tabular-nums text-graphite-900">{formatCurrency(MY_PAYOUT_SUMMARY.expected)}</p>
+                    <p className="font-display text-kpi tabular-nums text-graphite-900">{formatCurrency(payout.expected)}</p>
                   </div>
                 </div>
                 <dl className="grid grid-cols-1 gap-3 text-body-sm sm:grid-cols-3">
                   <div>
                     <dt className="text-caption text-graphite-500">Atendimentos</dt>
-                    <dd className="font-bold tabular-nums text-graphite-900">{MY_PAYOUT_SUMMARY.attendances}</dd>
+                    <dd className="font-bold tabular-nums text-graphite-900">{payout.attendances}</dd>
                   </div>
                   <div>
                     <dt className="text-caption text-graphite-500">Mês anterior</dt>
-                    <dd className="font-bold tabular-nums text-graphite-900">{formatCurrency(MY_PAYOUT_SUMMARY.lastMonthPaid)}</dd>
+                    <dd className="font-bold tabular-nums text-graphite-900">{formatCurrency(payout.lastMonthPaid)}</dd>
                   </div>
                   <div>
                     <dt className="text-caption text-graphite-500">Próximo repasse</dt>
-                    <dd className="font-bold tabular-nums text-graphite-900">{formatDate(MY_PAYOUT_SUMMARY.nextPaymentDate, { day: '2-digit', month: '2-digit' })}</dd>
+                    <dd className="font-bold tabular-nums text-graphite-900">
+                      {payout.nextPaymentDate ? formatDate(payout.nextPaymentDate, { day: '2-digit', month: '2-digit' }) : '—'}
+                    </dd>
                   </div>
                 </dl>
                 <p className="text-caption text-graphite-500">Detalhamento e comprovantes com o financeiro da clínica. O financeiro geral não é exibido no portal.</p>
@@ -376,44 +437,27 @@ export function PortalProfileScreen({
 
             <Card title="Sessões ativas" description="Dispositivos conectados à sua conta." className="xl:col-span-2">
               <ul className="flex flex-col divide-y divide-graphite-100">
-                {sessions.map((s) => {
-                  const Icon = sessionIcon(s);
-                  return (
-                    <li key={s.id} className="flex flex-wrap items-center gap-3 py-3">
-                      <span aria-hidden="true" className="flex h-10 w-10 shrink-0 items-center justify-center rounded-sm bg-graphite-50 text-graphite-600">
-                        <Icon size={18} strokeWidth={1.75} />
-                      </span>
-                      <div className="min-w-0 flex-1">
-                        <p className="font-semibold text-graphite-900">
-                          {s.device}
-                          {s.current && (
-                            <Badge tone="success" size="sm" className="ml-2 align-middle">
-                              Este dispositivo
-                            </Badge>
-                          )}
-                        </p>
-                        <p className="text-caption text-graphite-500">
-                          {s.location} · {s.lastActive}
-                        </p>
-                      </div>
-                      {!s.current && (
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          leftIcon={LogOut}
-                          aria-label={`Encerrar sessão ${s.device}`}
-                          onClick={() => {
-                            setSessions((list) => list.filter((x) => x.id !== s.id));
-                            toast({ tone: 'success', title: 'Sessão encerrada', description: s.device });
-                          }}
-                        >
-                          Encerrar
-                        </Button>
-                      )}
-                    </li>
-                  );
-                })}
+                <li className="flex flex-wrap items-center gap-3 py-3">
+                  <span aria-hidden="true" className="flex h-10 w-10 shrink-0 items-center justify-center rounded-sm bg-graphite-50 text-graphite-600">
+                    <Laptop size={18} strokeWidth={1.75} />
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <p className="font-semibold text-graphite-900">
+                      Este navegador
+                      <Badge tone="success" size="sm" className="ml-2 align-middle">
+                        Este dispositivo
+                      </Badge>
+                    </p>
+                    <p className="text-caption text-graphite-500">
+                      Sessão de demonstração · {user?.name ?? prof.name}
+                      {user?.lastAccess ? ` · último acesso ${formatDate(user.lastAccess, { day: '2-digit', month: '2-digit' })} ${formatTime(user.lastAccess)}` : ''}
+                    </p>
+                  </div>
+                </li>
               </ul>
+              <p className="text-caption text-graphite-500">
+                Na demonstração não há login real: para sair, use “Sair” no menu. No produto, as sessões vêm do servidor.
+              </p>
             </Card>
           </div>
         )}
@@ -438,14 +482,7 @@ export function PortalProfileScreen({
         </div>
       )}
 
-      <RequestBlockModal
-        open={modalOpen}
-        onClose={() => setModalOpen(false)}
-        onSubmit={(r) => setRequests((list) => [r, ...list])}
-        professionalId={professionalId}
-        initialKind="disponibilidade"
-        existingRequests={requests}
-      />
+      <RequestBlockModal open={modalOpen} onClose={() => setModalOpen(false)} initialKind="disponibilidade" existingRequests={requests} />
     </div>
   );
 }

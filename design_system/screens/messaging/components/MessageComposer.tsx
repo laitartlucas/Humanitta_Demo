@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { KeyboardEvent } from 'react';
-import { Bot, Paperclip, SendHorizontal, Zap } from 'lucide-react';
+import { Archive, Bot, Eye, Paperclip, SendHorizontal, Zap } from 'lucide-react';
 import { Button, IconButton } from '@ds/components';
 import { QUICK_REPLIES } from '@ds/mocks/business';
 
@@ -9,11 +9,40 @@ export interface MessageComposerProps {
   onSend: (text: string) => void;
   onTakeOver: () => void;
   onAttach?: () => void;
+  /** Conversa finalizada: mostra a opção de reabrir no lugar do campo. */
+  closed?: boolean;
+  onReopen?: () => void;
+  /** Perfil sem `whatsapp ≥ editar`: somente leitura. */
+  readOnly?: boolean;
+  sending?: boolean;
 }
 
-export function MessageComposer({ mode, onSend, onTakeOver, onAttach }: MessageComposerProps) {
+export function MessageComposer({ mode, onSend, onTakeOver, onAttach, closed = false, onReopen, readOnly = false, sending = false }: MessageComposerProps) {
   const [text, setText] = useState('');
   const [showQuick, setShowQuick] = useState(false);
+
+  if (readOnly) {
+    return (
+      <div className="flex items-start gap-2 border-t border-graphite-200 bg-graphite-50 p-4 text-[13px] text-graphite-600">
+        <Eye size={18} className="mt-0.5 shrink-0 text-graphite-400" aria-hidden="true" />
+        Seu perfil pode visualizar esta conversa, mas não responder.
+      </div>
+    );
+  }
+
+  if (closed) {
+    return (
+      <div className="flex flex-col gap-3 border-t border-graphite-200 bg-graphite-50 p-4 sm:flex-row sm:items-center">
+        <span className="flex flex-1 items-start gap-2 text-[13px] text-graphite-700">
+          <Archive size={18} className="mt-0.5 shrink-0 text-graphite-400" aria-hidden="true" />
+          Conversa finalizada. Reabra para voltar a atender este contato.
+        </span>
+        <Button size="sm" variant="secondary" onClick={onReopen}>
+          Reabrir conversa
+        </Button>
+      </div>
+    );
+  }
 
   if (mode === 'ia') {
     return (
@@ -31,7 +60,7 @@ export function MessageComposer({ mode, onSend, onTakeOver, onAttach }: MessageC
 
   const send = () => {
     const t = text.trim();
-    if (!t) return;
+    if (!t || sending) return;
     onSend(t);
     setText('');
     setShowQuick(false);

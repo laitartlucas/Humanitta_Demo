@@ -1,48 +1,61 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ArrowRight, MessageCircle } from 'lucide-react';
-import type { Appointment } from '@ds/mocks/types';
-import { Button, Input, Modal, Switch, TimeSlot } from '@ds/components';
+import { nowIso, type AppError, type AppointmentRecord, type RoomRecord } from '@core';
+import type { RescheduleOptions } from '@modules/agenda/agendaService';
+import { useAgendaSlots } from '@modules/agenda/hooks';
+import { Button, Input, Modal, Select, Switch, TimeSlot } from '@ds/components';
 import { formatDate, formatTime, toDateKey } from '@ds/mocks/clinical';
-import { buildIso, slotsFor } from '../agendaUtils';
+import { buildIso } from '../agendaUtils';
 
 export interface RescheduleModalProps {
-  appointment: Appointment | null;
-  appointments: Appointment[];
+  appointment: AppointmentRecord | null;
+  rooms: RoomRecord[];
   open: boolean;
   onClose: () => void;
-  onReschedule: (appointment: Appointment, newStartIso: string, notify: boolean) => void;
+  /** Envia ao serviço da Agenda. Devolve o novo agendamento ou `undefined` em caso de erro. */
+  onReschedule: (
+    appointment: AppointmentRecord,
+    newStartIso: string,
+    opts: RescheduleOptions,
+    notify: boolean,
+  ) => Promise<AppointmentRecord | undefined>;
+  error?: AppError | null;
+  saving?: boolean;
 }
 
-export function RescheduleModal({ appointment, appointments, open, onClose, onReschedule }: RescheduleModalProps) {
+export function RescheduleModal({ appointment, rooms, open, onClose, onReschedule, error, saving = false }: RescheduleModalProps) {
   const [dateKey, setDateKey] = useState('');
   const [time, setTime] = useState<string | null>(null);
+  const [roomId, setRoomId] = useState('');
   const [notify, setNotify] = useState(true);
-  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     if (open && appointment) {
       setDateKey(toDateKey(new Date(appointment.start)));
       setTime(null);
+      const current = rooms.find((r) => r.id === appointment.roomId);
+      setRoomId(current?.active ? current.id : '');
       setNotify(true);
-      setSaving(false);
     }
-  }, [open, appointment]);
+  }, [open, appointment, rooms]);
 
-  const slots = useMemo(
-    () => (appointment && dateKey ? slotsFor(appointments, appointment.professionalId, dateKey, appointment.id) : []),
-    [appointments, appointment, dateKey],
-  );
+  const slots = useAgendaSlots({
+    professionalId: appointment?.professionalId,
+    dateKey,
+    durationMin: appointment?.durationMin ?? 30,
+    roomId: roomId || undefined,
+    ignoreIds: appointment ? [appointment.id] : [],
+    notBefore: nowIso(),
+  });
 
   if (!appointment) return null;
-  const free = slots.filter((s) => !s.busy).length;
+  const free = slots.filter((s) => s.state === 'livre').length;
+  const sameRoom = roomId === appointment.roomId;
+  const roomError = error?.fields?.roomId ?? (!roomId ? 'A sala atual está inativa. Escolha outra sala.' : undefined);
 
   function submit() {
-    if (!appointment || !time) return;
-    setSaving(true);
-    window.setTimeout(() => {
-      onReschedule(appointment, buildIso(dateKey, time), notify);
-      setSaving(false);
-    }, 500);
+    if (!appointment || !time || !roomId) return;
+    void onReschedule(appointment, buildIso(dateKey, time), { roomId }, notify);
   }
 
   return (
@@ -57,7 +70,7 @@ export function RescheduleModal({ appointment, appointments, open, onClose, onRe
           <Button variant="secondary" onClick={onClose} disabled={saving}>
             Voltar
           </Button>
-          <Button onClick={submit} disabled={!time} loading={saving}>
+          <Button onClick={submit} disabled={!time || !roomId} loading={saving}>
             Confirmar reagendamento
           </Button>
         </>
@@ -76,16 +89,32 @@ export function RescheduleModal({ appointment, appointments, open, onClose, onRe
           </span>
         </div>
 
-        <Input
-          id="rs-date"
-          type="date"
-          label="Nova data"
-          value={dateKey}
-          onChange={(e) => {
-            setDateKey(e.target.value);
-            setTime(null);
-          }}
-        />
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <Input
+            id="rs-date"
+            type="date"
+            label="Nova data"
+            value={dateKey}
+            onChange={(e) => {
+              setDateKey(e.target.value);
+              setTime(null);
+            }}
+            error={error?.fields?.start}
+          />
+          <Select
+            id="rs-room"
+            label="Sala"
+            placeholder="Selecione a sala"
+            value={roomId}
+            onChange={(e) => {
+              setRoomId(e.target.value);
+              setTime(null);
+            }}
+            options={rooms.filter((r) => r.active).map((r) => ({ value: r.id, label: `${r.name} · ${r.label}` }))}
+            error={roomError}
+            hint={!roomError && sameRoom ? 'Mesma profissional e sala.' : undefined}
+          />
+        </div>
 
         <fieldset>
           <legend className="mb-2 text-sm font-semibold text-graphite-800">
@@ -93,16 +122,20 @@ export function RescheduleModal({ appointment, appointments, open, onClose, onRe
             <span className="font-normal text-graphite-500">· {free} livres</span>
           </legend>
           {slots.length === 0 ? (
-            <p className="text-sm text-graphite-500">Selecione uma data válida.</p>
+            <p className="text-sm text-graphite-500">
+              {dateKey ? 'Sem atendimento nesta data (clínica fechada ou fora do expediente do profissional).' : 'Selecione uma data válida.'}
+            </p>
           ) : (
             <div className="grid grid-cols-3 gap-2 sm:grid-cols-5 md:grid-cols-6">
               {slots.map((s) => (
-                <TimeSlot
-                  key={s.time}
-                  time={s.time}
-                  state={s.busy ? 'ocupado' : time === s.time ? 'selecionado' : 'livre'}
-                  onClick={s.busy ? undefined : () => setTime(s.time)}
-                />
+                <span key={s.time} title={s.reason}>
+                  <TimeSlot
+                    time={s.time}
+                    state={s.state === 'livre' && time === s.time ? 'selecionado' : s.state}
+                    onClick={s.state === 'livre' ? () => setTime(s.time) : undefined}
+                    className="w-full"
+                  />
+                </span>
               ))}
             </div>
           )}

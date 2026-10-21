@@ -17,10 +17,10 @@
 |---|---|---|
 | UI | React 18.3 · TypeScript 5.5 (strict) · Tailwind 3.4 · lucide-react | Inalterado da Etapa 1 |
 | Build | Vite 5.4 | Aliases `@ds`, `@core`, `@app`, `@modules` |
-| Roteamento | **react-router-dom 6.26.2** (data router) | Única dependência de runtime adicionada |
+| Roteamento | **react-router-dom 6.30.6** (data router, **hash**) | Única dependência de runtime adicionada; hash para hospedagem estática |
 | Estado | Store próprio (`useSyncExternalStore`) | Sem dependência; ~40 linhas |
 | Persistência | `localStorage` (demonstrativo) | Chave `humanitta:demo:db` versionada |
-| Testes | **vitest 2.1.9** (dev) | Testes de contrato do core |
+| Testes | **vitest 2.1.9** + **Playwright 1.64.1** (dev) | Contrato do core, módulos, integração e E2E no build de produção |
 
 ## 3. Visão em camadas
 
@@ -92,7 +92,7 @@ humanitta-design-system/
 
 ## 5. Roteamento
 
-URLs reais (antes era um roteador em memória). Mapa único em `src/app/routes.ts`:
+URLs com **hash** (`/#/agenda`): a demonstração é publicada em hospedagem estática (GitHub Pages), sem fallback de SPA. Os caminhos abaixo vêm depois do `#`. Mapa único em `src/app/routes.ts`:
 
 | AppRoute | URL | Módulo |
 |---|---|---|
@@ -123,7 +123,8 @@ URLs reais (antes era um roteador em memória). Mapa único em `src/app/routes.t
 - `db` (`src/core/store/database.ts`) é um `Store<Database>` imutável. `setState` substitui a referência → `useSyncExternalStore` re-renderiza só quem lê a fatia alterada.
 - A persistência grava o estado inteiro em `localStorage` (`humanitta:demo:db`) com debounce de 150 ms.
 - **Versão de esquema**: `SCHEMA_VERSION` em `seed.ts`. Mudou o formato do `Database`? Incremente → navegadores recarregam a semente.
-- **Restaurar a demonstração**: abrir qualquer URL com `?reset-demo` ou chamar `resetDemoData()`.
+- **Restaurar a demonstração**: abrir qualquer URL com `?reset-demo` antes do `#` ou chamar `resetDemoData()` (`{ history: false }` = semente base, para testes de regra exata).
+- **Relógio**: `core/clock.ts` começa em 19/10/2026 10:24 e avança em tempo real no navegador (máx. 8 h); fixo nos testes (Node).
 - Sessão demo: store separado (`humanitta:demo:session`) que guarda só `userId`.
 
 ## 7. Perfis, sessão e Portal do Profissional

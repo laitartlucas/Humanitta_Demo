@@ -4,3 +4,7 @@ export { RegisterPaymentModal } from './RegisterPaymentModal';
 export type { RegisterPaymentModalProps } from './RegisterPaymentModal';
 export { DeleteEntryDialog } from './DeleteEntryDialog';
 export type { DeleteEntryDialogProps } from './DeleteEntryDialog';
+export { ReverseEntryDialog } from './ReverseEntryDialog';
+export type { ReverseEntryDialogProps } from './ReverseEntryDialog';
+export { EntryDetailsDrawer } from './EntryDetailsDrawer';
+export type { EntryDetailsDrawerProps } from './EntryDetailsDrawer';

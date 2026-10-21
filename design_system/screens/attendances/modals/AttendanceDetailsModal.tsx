@@ -1,16 +1,32 @@
 import type { ReactNode } from 'react';
-import { CircleCheckBig, Clock, DoorOpen, Lock, LogIn, Play, Stethoscope, Wallet } from 'lucide-react';
-import type { Appointment } from '@ds/mocks/types';
-import { Avatar, Badge, Button, Modal, SpecialtyTag, StatusBadge, Textarea } from '@ds/components';
-import { CHANNEL_NAMES, addMinutes, formatCurrency, formatTime, getPatientById, getRoomName, ageFrom } from '@ds/mocks/clinical';
+import {
+  CalendarDays,
+  CircleCheckBig,
+  Clock,
+  DoorOpen,
+  Info,
+  LogIn,
+  Play,
+  Stethoscope,
+  Tag,
+  Timer,
+  UserX,
+  Wallet,
+  type LucideIcon,
+} from 'lucide-react';
+import { Avatar, Badge, Button, Modal, PaymentStatusBadge, SpecialtyTag, StatusBadge } from '@ds/components';
+import { addMinutes, formatCurrency, formatDate, formatTime } from '@ds/mocks/clinical';
+import type { AttendanceActionsAvailability, AttendanceView } from '@modules/attendances/model';
+import { durationLabel, Timeline, timelineFor } from '../components/Timeline';
 
 export interface AttendanceActions {
-  onCheckIn: (a: Appointment) => void;
-  onStart: (a: Appointment) => void;
-  onFinish: (a: Appointment) => void;
+  onCheckIn: (v: AttendanceView) => void;
+  onStart: (v: AttendanceView) => void;
+  onFinish: (v: AttendanceView) => void;
+  onNoShow: (v: AttendanceView) => void;
 }
 
-function Item({ icon: Icon, label, children }: { icon: typeof Clock; label: string; children: ReactNode }) {
+function Item({ icon: Icon, label, children }: { icon: LucideIcon; label: string; children: ReactNode }) {
   return (
     <div className="flex items-start gap-3">
       <Icon size={16} strokeWidth={1.75} aria-hidden="true" className="mt-0.5 shrink-0 text-graphite-500" />
@@ -23,164 +39,166 @@ function Item({ icon: Icon, label, children }: { icon: typeof Clock; label: stri
 }
 
 export interface AttendanceDetailsContentProps {
-  appointment: Appointment;
-  checkedIn: boolean;
-  startedAt?: string;
+  view: AttendanceView;
+  /** Conteúdo extra abaixo da linha do tempo (checklist, registro demonstrativo). */
+  children?: ReactNode;
 }
 
 /** Conteúdo compartilhado entre o drawer e o modal de detalhes do atendimento. */
-export function AttendanceDetailsContent({ appointment: a, checkedIn, startedAt }: AttendanceDetailsContentProps) {
-  const patient = getPatientById(a.patientId);
+export function AttendanceDetailsContent({ view: v, children }: AttendanceDetailsContentProps) {
+  const a = v.appointment;
+  const end = formatTime(addMinutes(a.start, a.durationMin));
+  const subtitle = [v.patient.age !== undefined ? `${v.patient.age} anos` : null, v.patient.city].filter(Boolean).join(' · ') || 'Paciente';
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center gap-4">
-        <Avatar name={a.patientName} size="lg" />
+        <Avatar name={v.patient.name} size="lg" ring />
         <div className="min-w-0">
-          <p className="font-display text-2xl leading-tight text-graphite-900">{a.patientName}</p>
-          <p className="text-sm text-graphite-500">
-            {patient ? `${ageFrom(patient.birthDate)} anos · ${patient.city}` : 'Paciente'}
-          </p>
+          <p className="font-display text-2xl leading-tight text-graphite-900">{v.patient.name}</p>
+          <p className="text-sm text-graphite-500">{subtitle}</p>
           <div className="mt-1.5 flex flex-wrap gap-1.5">
             <StatusBadge status={a.status} />
-            {checkedIn && a.status !== 'em_atendimento' && a.status !== 'concluida' && (
+            {v.stage === 'na_recepcao' && (
               <Badge tone="gold" icon={LogIn} size="sm">
                 Na recepção
               </Badge>
             )}
+            <SpecialtyTag specialty={v.specialty} variant="chip" />
           </div>
         </div>
       </div>
 
       <dl className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <Item icon={Clock} label="Horário">
-          {formatTime(a.start)}–{formatTime(addMinutes(a.start, a.durationMin))} · {a.durationMin} min
+        <Item icon={CalendarDays} label="Data">
+          {formatDate(a.start, { weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric' })}
         </Item>
-        <Item icon={Stethoscope} label="Profissional">
-          {a.professionalName}
+        <Item icon={Clock} label="Horário">
+          {formatTime(a.start)}–{end} · {a.durationMin} min previstos
+        </Item>
+        <Item icon={Stethoscope} label="Profissional responsável">
+          {v.professionalName}
+        </Item>
+        <Item icon={Tag} label="Especialidade · serviço">
+          {v.specialtyName} · {v.service}
         </Item>
         <Item icon={DoorOpen} label="Sala">
-          {getRoomName(a.roomId)}
+          {v.roomName}
+          {v.roomLabel ? ` · ${v.roomLabel}` : ''}
         </Item>
-        <Item icon={Wallet} label="Valor (demonstração)">
-          {formatCurrency(a.price)}
+        <Item icon={Timer} label="Duração">
+          {v.realDurationMin !== undefined
+            ? `${durationLabel(v.realDurationMin)} (real)`
+            : v.startedAt
+              ? `Em andamento desde ${formatTime(v.startedAt)}`
+              : `${a.durationMin} min previstos`}
         </Item>
+        {v.price !== null && (
+          <Item icon={Wallet} label="Valor (demonstração)">
+            {formatCurrency(v.price)}
+          </Item>
+        )}
+        {v.billing !== undefined && (
+          <Item icon={Wallet} label="Cobrança">
+            {v.billing ? (
+              <span className="inline-flex items-center gap-2">
+                <PaymentStatusBadge status={v.billing.status} size="sm" />
+                {formatCurrency(v.billing.amount)}
+              </span>
+            ) : v.stage === 'concluido' ? (
+              'Sem lançamento — disponível para o Financeiro'
+            ) : (
+              'Gerada após a conclusão'
+            )}
+          </Item>
+        )}
       </dl>
 
-      <div className="flex flex-wrap items-center gap-2 text-sm text-graphite-600">
-        <SpecialtyTag specialty={a.specialty} variant="chip" />
-        <span>{a.service}</span>
-        {a.channel && <span className="text-graphite-400">· origem: {CHANNEL_NAMES[a.channel]}</span>}
-        {startedAt && <span className="text-graphite-400">· iniciado às {formatTime(startedAt)}</span>}
-      </div>
-
-      <section aria-labelledby={`clinical-${a.id}`} className="rounded-md border border-graphite-200 bg-graphite-50 p-4">
-        <div className="mb-3 flex items-start gap-3">
-          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-gold-300 bg-white text-gold-600">
-            <Lock size={16} strokeWidth={1.75} aria-hidden="true" />
+      {a.notes && (
+        <p className="flex items-start gap-2 rounded-md border border-graphite-200 p-3 text-sm text-graphite-700">
+          <Info size={16} strokeWidth={1.75} aria-hidden="true" className="mt-0.5 shrink-0 text-graphite-500" />
+          <span>
+            <span className="font-semibold text-graphite-900">Observação administrativa: </span>
+            {a.notes}
           </span>
-          <div>
-            <h3 id={`clinical-${a.id}`} className="text-sm font-bold text-graphite-900">
-              Registro clínico restrito
-            </h3>
-            <p className="text-xs text-graphite-500">
-              Somente {a.professionalName} pode registrar evolução. Seu perfil (Administradora) tem acesso apenas administrativo.
-            </p>
-          </div>
-        </div>
-        <fieldset disabled className="flex flex-col gap-3">
-          <legend className="sr-only">Campos clínicos bloqueados</legend>
-          <Textarea
-            id={`clinical-evolution-${a.id}`}
-            label="Evolução do atendimento"
-            rows={3}
-            placeholder="Acesso restrito ao profissional responsável"
-            disabled
-            aria-describedby={`clinical-${a.id}`}
-          />
-          <Textarea
-            id={`clinical-plan-${a.id}`}
-            label="Conduta / plano terapêutico"
-            rows={2}
-            placeholder="Acesso restrito ao profissional responsável"
-            disabled
-          />
-        </fieldset>
+        </p>
+      )}
+
+      <section aria-labelledby={`att-timeline-${v.id}`}>
+        <h3 id={`att-timeline-${v.id}`} className="mb-3 text-sm font-bold text-graphite-900">
+          Linha do tempo
+        </h3>
+        <Timeline steps={timelineFor(v)} />
       </section>
+
+      {children}
     </div>
   );
 }
 
 export function AttendanceFooterActions({
-  appointment: a,
-  checkedIn,
+  view: v,
+  available,
+  loadingId,
   onCheckIn,
   onStart,
   onFinish,
-}: AttendanceActions & { appointment: Appointment; checkedIn: boolean }) {
-  const waiting = a.status === 'agendada' || a.status === 'confirmada' || a.status === 'reagendada';
+  onNoShow,
+}: AttendanceActions & { view: AttendanceView; available: AttendanceActionsAvailability; loadingId?: string | null }) {
+  const busy = loadingId === v.id;
   return (
     <>
-      {waiting && !checkedIn && (
-        <Button variant="secondary" leftIcon={LogIn} onClick={() => onCheckIn(a)}>
+      {available.noShow && (
+        <Button variant="ghost" leftIcon={UserX} onClick={() => onNoShow(v)} disabled={busy}>
+          Registrar falta
+        </Button>
+      )}
+      {available.checkIn && (
+        <Button variant="secondary" leftIcon={LogIn} onClick={() => onCheckIn(v)} loading={busy}>
           Registrar chegada
         </Button>
       )}
-      {waiting && (
-        <Button leftIcon={Play} onClick={() => onStart(a)}>
+      {available.start && (
+        <Button leftIcon={Play} onClick={() => onStart(v)} loading={busy}>
           Iniciar atendimento
         </Button>
       )}
-      {a.status === 'em_atendimento' && (
-        <Button leftIcon={CircleCheckBig} onClick={() => onFinish(a)}>
-          Finalizar atendimento
+      {available.finish && (
+        <Button leftIcon={CircleCheckBig} onClick={() => onFinish(v)} disabled={busy}>
+          Concluir atendimento
         </Button>
       )}
     </>
   );
 }
 
-export interface AttendanceDetailsModalProps extends AttendanceActions {
-  appointment: Appointment | null;
+export interface AttendanceDetailsModalProps {
+  view: AttendanceView | null;
   open: boolean;
   onClose: () => void;
-  checkedIn: boolean;
-  startedAt?: string;
+  /** Ação secundária opcional (ex.: abrir a ficha). */
+  extraAction?: ReactNode;
 }
 
-export function AttendanceDetailsModal({
-  appointment,
-  open,
-  onClose,
-  checkedIn,
-  startedAt,
-  onCheckIn,
-  onStart,
-  onFinish,
-}: AttendanceDetailsModalProps) {
-  if (!appointment) return null;
+/** Consulta rápida de um atendimento (histórico), sem ações de fluxo. */
+export function AttendanceDetailsModal({ view, open, onClose, extraAction }: AttendanceDetailsModalProps) {
+  if (!view) return null;
   return (
     <Modal
       open={open}
       onClose={onClose}
       size="md"
       title="Atendimento"
-      description={`${appointment.service} · ${getRoomName(appointment.roomId)}`}
+      description={`${view.service} · ${view.roomName}`}
       footer={
         <>
+          {extraAction}
           <Button variant="secondary" onClick={onClose}>
             Fechar
           </Button>
-          <AttendanceFooterActions
-            appointment={appointment}
-            checkedIn={checkedIn}
-            onCheckIn={onCheckIn}
-            onStart={onStart}
-            onFinish={onFinish}
-          />
         </>
       }
     >
-      <AttendanceDetailsContent appointment={appointment} checkedIn={checkedIn} startedAt={startedAt} />
+      <AttendanceDetailsContent view={view} />
     </Modal>
   );
 }

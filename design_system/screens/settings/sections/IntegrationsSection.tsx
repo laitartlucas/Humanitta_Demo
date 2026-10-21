@@ -1,9 +1,8 @@
-import { useState } from 'react';
-import { CalendarDays, FileText, Instagram, Mail, MessageCircle, Plug, CreditCard } from 'lucide-react';
+import { CalendarDays, CreditCard, FileText, FlaskConical, Instagram, Mail, MessageCircle, Plug } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
-import { Badge, Button, Card, useToast } from '@ds/components';
-import { integrations as initialIntegrations } from '@ds/mocks/business';
+import { Badge, Button, Card } from '@ds/components';
 import type { IntegrationSetting } from '@ds/mocks/business';
+import { settingsService, useAction, useCan, useClinicSettings } from '@core';
 
 const ICONS: Record<string, LucideIcon> = {
   whatsapp: MessageCircle,
@@ -14,28 +13,36 @@ const ICONS: Record<string, LucideIcon> = {
   instagram: Instagram,
 };
 
-const STATUS: Record<IntegrationSetting['status'], { label: string; tone: 'success' | 'neutral' | 'gold' }> = {
-  conectado: { label: 'Conectado', tone: 'success' },
-  desconectado: { label: 'Desconectado', tone: 'neutral' },
-  em_breve: { label: 'Em breve', tone: 'gold' },
+/** Na demonstração nenhuma integração é real: "conectado" significa "simulado ativo". */
+const STATUS: Record<IntegrationSetting['status'], { label: string; tone: 'ai' | 'neutral' | 'gold' }> = {
+  conectado: { label: 'Simulação ativa', tone: 'ai' },
+  desconectado: { label: 'Não conectado', tone: 'neutral' },
+  em_breve: { label: 'Integração futura', tone: 'gold' },
 };
 
+/** Configurações › Integrações — estado simulado em `clinicSettings.integrations`. */
 export function IntegrationsSection() {
-  const { toast } = useToast();
-  const [items, setItems] = useState<IntegrationSetting[]>(initialIntegrations);
+  const settings = useClinicSettings();
+  const canEdit = useCan('configuracoes', 'editar');
+  const update = useAction(settingsService.updateClinicSettings, { success: 'Integração simulada atualizada' });
+  const items = settings.integrations;
 
   const toggle = (it: IntegrationSetting) => {
-    const next = it.status === 'conectado' ? 'desconectado' : 'conectado';
-    setItems((l) => l.map((x) => (x.id === it.id ? { ...x, status: next } : x)));
-    toast({
-      tone: next === 'conectado' ? 'success' : 'info',
-      title: next === 'conectado' ? `${it.name} conectado` : `${it.name} desconectado`,
-      description: 'Integração simulada — nenhuma conexão real foi feita.',
-    });
+    const next: IntegrationSetting['status'] = it.status === 'conectado' ? 'desconectado' : 'conectado';
+    void update.run({ integrations: items.map((x) => (x.id === it.id ? { ...x, status: next } : x)) });
   };
 
   return (
-    <Card title="Integrações" description="Conecte serviços externos. Na demonstração, todas as conexões são simuladas.">
+    <Card title="Integrações" description="Serviços externos. Nesta demonstração nenhuma conexão real é feita.">
+      <p role="note" className="mb-4 flex items-start gap-3 rounded-md border border-ai/20 bg-ai-bg px-4 py-3 text-body-sm text-ai">
+        <FlaskConical size={18} strokeWidth={1.75} aria-hidden="true" className="mt-0.5 shrink-0" />
+        <span>
+          <strong>Ambiente de demonstração.</strong>{' '}
+          <span className="text-graphite-800">
+            “Simulação ativa” apenas habilita o comportamento simulado dentro do sistema. Nenhuma mensagem, e-mail, nota fiscal ou cobrança é enviada.
+          </span>
+        </span>
+      </p>
       <ul className="grid grid-cols-1 gap-4 md:grid-cols-2">
         {items.map((it) => {
           const Icon = ICONS[it.id] ?? Plug;
@@ -62,8 +69,13 @@ export function IntegrationsSection() {
                     Disponível em breve
                   </Button>
                 ) : (
-                  <Button size="sm" variant={it.status === 'conectado' ? 'secondary' : 'primary'} onClick={() => toggle(it)}>
-                    {it.status === 'conectado' ? 'Desconectar' : 'Conectar'}
+                  <Button
+                    size="sm"
+                    variant={it.status === 'conectado' ? 'secondary' : 'primary'}
+                    disabled={!canEdit || update.loading}
+                    onClick={() => toggle(it)}
+                  >
+                    {it.status === 'conectado' ? 'Desativar simulação' : 'Ativar simulação'}
                   </Button>
                 )}
               </div>

@@ -11,6 +11,7 @@ import {
   DoorOpen,
   Hourglass,
   Play,
+  Sparkles,
   Stethoscope,
   Users,
   UserX,
@@ -19,26 +20,38 @@ import type { PortalRouteId } from '@ds/layouts/nav';
 import { Avatar, Badge, Button, Card, KpiCard, MiniCalendar, ProgressBar, TimeSlot, useToast } from '@ds/components';
 import type { TimeSlotState } from '@ds/components';
 import { cn } from '@ds/foundations/cn';
-import { formatTime, getProfessionalById, getRoomName, isSameDay, toDateKey } from '@ds/mocks/clinical';
+import { now as clockNow, useActivity, useSpecialties } from '@core';
+import { formatTime, isSameDay, relativeTime, toDateKey } from '@ds/mocks/clinical';
 import type { PortalAppointment, PortalSlotState } from '@ds/mocks/portal';
-import {
-  MY_BLOCK_REQUESTS,
-  PORTAL_NOW,
-  PORTAL_PROFESSIONAL_ID,
-  PORTAL_TODAY,
-  getMyAppointments,
-  getMyAttendanceHistory,
-  getMyDaySlots,
-  getMyNextAppointment,
-  getMyPatients,
-  timeToMinutes,
-} from '@ds/mocks/portal';
 import { weekDays } from '../../agenda/agendaUtils';
-import { DayTimeline, PortalAppointmentDrawer, ScopeBadge, WeekStrip, greeting, longDate, minutesBetween, plural, timeRange, weekdayDate } from '../shared';
+import {
+  DayTimeline,
+  PortalAppointmentDrawer,
+  ScopeBadge,
+  WeekStrip,
+  attendanceHistory,
+  daySlots,
+  greeting,
+  longDate,
+  minutesBetween,
+  nextWaitingAppointment,
+  plural,
+  timeRange,
+  timeToMinutes,
+  useMyAppointments,
+  useMyBlockRequests,
+  useMyClinicalRecords,
+  useMyPatientsById,
+  useMyProfessional,
+  useRoomName,
+  weekdayDate,
+} from '../shared';
 
+/**
+ * O profissional exibido é SEMPRE o da sessão (useMyProfessional) — não há prop de id,
+ * para que nenhum container consiga mostrar a agenda de outra pessoa.
+ */
 export interface PortalDashboardScreenProps {
-  /** Profissional logado (padrão 'prof-lauren'). */
-  professionalId?: string;
   /** Navegação entre as rotas do portal. */
   onNavigate?: (route: PortalRouteId) => void;
   /** "Iniciar"/"Continuar" atendimento — App abre Meus Atendimentos com este id. */
@@ -66,31 +79,39 @@ function QuarterCircle({ className }: { className?: string }) {
 }
 
 /** Meu Dashboard — visão do dia da profissional logada (somente os próprios registros). */
-export function PortalDashboardScreen({
-  professionalId = PORTAL_PROFESSIONAL_ID,
-  onNavigate,
-  onStartAttendance,
-  onOpenPatient,
-}: PortalDashboardScreenProps) {
+export function PortalDashboardScreen({ onNavigate, onStartAttendance, onOpenPatient }: PortalDashboardScreenProps) {
   const { toast } = useToast();
-  const prof = getProfessionalById(professionalId);
+  const { professional: prof, user } = useMyProfessional();
+  const PORTAL_NOW = useMemo(() => clockNow(), []);
+  const PORTAL_TODAY = useMemo(() => new Date(PORTAL_NOW.getFullYear(), PORTAL_NOW.getMonth(), PORTAL_NOW.getDate()), [PORTAL_NOW]);
   const [calMonth, setCalMonth] = useState<Date>(new Date(PORTAL_TODAY.getFullYear(), PORTAL_TODAY.getMonth(), 1));
   const [slotDay, setSlotDay] = useState<Date>(PORTAL_TODAY);
   const [selected, setSelected] = useState<PortalAppointment | null>(null);
 
-  const all = useMemo(() => getMyAppointments(professionalId), [professionalId]);
+  const all = useMyAppointments();
+  const requests = useMyBlockRequests();
+  const records = useMyClinicalRecords();
+  const { byId: patientsById } = useMyPatientsById();
+  const specialties = useSpecialties();
+  const activity = useActivity();
+  const roomName = useRoomName();
   const todayKey = toDateKey(PORTAL_TODAY);
   const today = useMemo(() => all.filter((a) => a.start.startsWith(todayKey)), [all, todayKey]);
-  const todaySlots = useMemo(() => getMyDaySlots(professionalId, todayKey, { appointments: all }), [professionalId, todayKey, all]);
-  const patientsById = useMemo(() => new Map(getMyPatients(professionalId).map((p) => [p.id, p])), [professionalId]);
-  const history = useMemo(() => getMyAttendanceHistory(professionalId).slice(0, 5), [professionalId]);
+  const todaySlots = useMemo(() => daySlots(prof, todayKey, all, requests), [prof, todayKey, all, requests]);
+  const history = useMemo(() => attendanceHistory(all, records, PORTAL_NOW).slice(0, 5), [all, records, PORTAL_NOW]);
+  /** Atividades do próprio profissional (feitas por ele ou que o citam). */
+  const myActivity = useMemo(() => {
+    if (!prof) return [];
+    return activity.filter((ev) => ev.who === user?.name || ev.who === prof.name || ev.what.includes(prof.name)).slice(0, 5);
+  }, [activity, prof, user]);
+  const specialtyName = prof ? (specialties.find((s) => s.id === prof.specialty)?.name ?? prof.specialty) : '';
 
   const active = today.filter((a) => a.status !== 'cancelada');
   const confirmed = today.filter((a) => a.status === 'confirmada').length;
   const pending = today.filter((a) => a.status === 'agendada').length;
   const done = today.filter((a) => a.status === 'concluida').length;
   const inProgress = today.find((a) => a.status === 'em_atendimento');
-  const next = getMyNextAppointment(professionalId, PORTAL_NOW, all);
+  const next = nextWaitingAppointment(all, PORTAL_NOW);
   const nextIsToday = next ? next.start.startsWith(todayKey) : false;
 
   const markedDays = useMemo(() => {
@@ -104,13 +125,13 @@ export function PortalDashboardScreen({
   const slotList = useMemo(() => {
     const isToday = isSameDay(slotDay, PORTAL_TODAY);
     const nowMin = PORTAL_NOW.getHours() * 60 + PORTAL_NOW.getMinutes();
-    return getMyDaySlots(professionalId, slotDayKey, { appointments: all })
+    return daySlots(prof, slotDayKey, all, requests)
       .filter((s) => !isToday || timeToMinutes(s.time) + 30 > nowMin)
       .flatMap((s) => {
         const state = SLOT_TO_TIMESLOT[s.state];
         return state ? [{ time: s.time, state }] : [];
       });
-  }, [professionalId, slotDay, slotDayKey, all]);
+  }, [prof, slotDay, slotDayKey, all, requests, PORTAL_TODAY, PORTAL_NOW]);
   const freeSlots = slotList.filter((s) => s.state === 'livre').length;
 
   const todayPatients = useMemo(() => {
@@ -133,7 +154,7 @@ export function PortalDashboardScreen({
       >
         <QuarterCircle className="pointer-events-none absolute -right-1 -top-1 hidden sm:block" />
         <div className="relative flex flex-col gap-5 md:flex-row md:items-center">
-          <Avatar name={prof?.name ?? 'Profissional'} size="xl" ring />
+          <Avatar name={prof?.name ?? 'Profissional'} src={prof?.avatarUrl} size="xl" ring />
           <div className="flex min-w-0 flex-1 flex-col gap-1.5">
             <p className="text-overline uppercase text-gold-600">Portal do Profissional</p>
             <h2 id="portal-welcome" className="font-display text-[30px] font-semibold leading-[36px] text-graphite-900 md:text-display-lg">
@@ -149,7 +170,7 @@ export function PortalDashboardScreen({
               {prof?.registry && <Badge tone="gold">{prof.registry}</Badge>}
               {prof?.roomId && (
                 <Badge tone="neutral" icon={DoorOpen}>
-                  {getRoomName(prof.roomId)} · Odontologia
+                  {roomName(prof.roomId)} · {specialtyName}
                 </Badge>
               )}
             </div>
@@ -167,7 +188,7 @@ export function PortalDashboardScreen({
 
       {/* KPIs */}
       <section aria-label="Resumo de hoje" className="grid grid-cols-2 gap-3 md:gap-4 xl:grid-cols-4">
-        <KpiCard label="Consultas hoje" value={String(active.length)} icon={CalendarCheck2} footer={<span className="text-caption text-graphite-500">{plural(freeSlotsToday(todaySlots), 'horário livre', 'horários livres')} a partir de agora</span>} />
+        <KpiCard label="Consultas hoje" value={String(active.length)} icon={CalendarCheck2} footer={<span className="text-caption text-graphite-500">{plural(freeSlotsToday(todaySlots, PORTAL_NOW), 'horário livre', 'horários livres')} a partir de agora</span>} />
         <KpiCard label="Confirmadas" value={String(confirmed)} icon={CheckCheck} tone="success" footer={<span className="text-caption text-graphite-500">pelo paciente ou recepção</span>} />
         <KpiCard label="Pendentes" value={String(pending)} icon={Hourglass} tone="warning" footer={<span className="text-caption text-graphite-500">aguardando confirmação</span>} />
         <KpiCard label="Concluídas" value={String(done)} icon={ClipboardCheck} progress={active.length ? (done / active.length) * 100 : 0} />
@@ -224,7 +245,7 @@ export function PortalDashboardScreen({
                     </span>
                     <span className="inline-flex items-center gap-1">
                       <DoorOpen size={14} strokeWidth={1.75} aria-hidden="true" />
-                      {getRoomName(next.roomId)}
+                      {roomName(next.roomId)}
                     </span>
                   </p>
                   <div className="mt-1 flex flex-wrap gap-1.5">
@@ -268,7 +289,11 @@ export function PortalDashboardScreen({
               </Button>
             }
           >
-            <DayTimeline compact appointments={today} slots={todaySlots} requests={MY_BLOCK_REQUESTS} now={PORTAL_NOW} onSelectAppointment={setSelected} />
+            {today.length === 0 && todaySlots.length === 0 ? (
+              <p className="rounded-md border border-dashed border-graphite-200 p-4 text-body-sm text-graphite-500">Sem expediente hoje.</p>
+            ) : (
+              <DayTimeline compact appointments={today} slots={todaySlots} requests={requests} now={PORTAL_NOW} onSelectAppointment={setSelected} />
+            )}
           </Card>
         </div>
 
@@ -276,10 +301,10 @@ export function PortalDashboardScreen({
         <div className="flex min-w-0 flex-col gap-6">
           <Card as="section" aria-labelledby="week-title" title={<span id="week-title">Esta semana</span>} description="Consultas e ocupação por dia">
             <WeekStrip
-              professionalId={professionalId}
+              professional={prof}
               days={weekDays(PORTAL_TODAY)}
               appointments={all}
-              requests={MY_BLOCK_REQUESTS}
+              requests={requests}
               today={PORTAL_TODAY}
               selected={slotDay}
               onSelect={(d) => {
@@ -338,6 +363,7 @@ export function PortalDashboardScreen({
               </Button>
             }
           >
+            {todayPatients.length === 0 && <p className="text-body-sm text-graphite-500">Nenhum paciente com consulta hoje.</p>}
             <ul className="flex flex-col divide-y divide-graphite-100">
               {todayPatients.map((a) => {
                 const p = patientsById.get(a.patientId);
@@ -372,6 +398,29 @@ export function PortalDashboardScreen({
               })}
             </ul>
           </Card>
+
+          <Card
+            as="section"
+            aria-labelledby="my-activity-title"
+            title={<span id="my-activity-title">Minhas atividades recentes</span>}
+            description="Somente eventos ligados a você"
+          >
+            {myActivity.length === 0 ? (
+              <p className="text-body-sm text-graphite-500">Nenhuma atividade recente.</p>
+            ) : (
+              <ul className="flex flex-col divide-y divide-graphite-100">
+                {myActivity.map((ev) => (
+                  <li key={ev.id} className="flex items-start gap-3 py-2.5">
+                    <Sparkles size={16} strokeWidth={1.75} aria-hidden="true" className="mt-0.5 shrink-0 text-gold-600" />
+                    <span className="min-w-0 flex-1 text-body-sm text-graphite-700">
+                      <span className="font-bold text-graphite-900">{ev.who}</span> {ev.what}
+                    </span>
+                    <span className="shrink-0 text-caption tabular-nums text-graphite-500">{relativeTime(ev.at, PORTAL_NOW)}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </Card>
         </div>
       </div>
 
@@ -387,6 +436,7 @@ export function PortalDashboardScreen({
             </Button>
           }
         >
+          {history.length === 0 && <p className="text-body-sm text-graphite-500">Ainda não há atendimentos concluídos.</p>}
           <ul className="flex flex-col divide-y divide-graphite-100">
             {history.map((h) => (
               <li key={h.id} className="flex flex-wrap items-center gap-x-3 gap-y-1 py-2.5">
@@ -411,12 +461,15 @@ export function PortalDashboardScreen({
 
         <Card as="section" aria-labelledby="profile-shortcut-title" className="relative overflow-hidden">
           <div className="flex items-center gap-4">
-            <Avatar name={prof?.name ?? 'Profissional'} size="lg" ring />
+            <Avatar name={prof?.name ?? 'Profissional'} src={prof?.avatarUrl} size="lg" ring />
             <div className="min-w-0">
               <h3 id="profile-shortcut-title" className="truncate text-[15px] font-bold text-graphite-900">
                 {prof?.name}
               </h3>
-              <p className="text-body-sm text-graphite-600">{prof?.title}</p>
+              <p className="text-body-sm text-graphite-600">
+                {prof?.title}
+                {specialtyName ? ` · ${specialtyName}` : ''}
+              </p>
             </div>
           </div>
           <ul className="flex flex-col gap-2 text-body-sm text-graphite-700">
@@ -438,7 +491,6 @@ export function PortalDashboardScreen({
       <PortalAppointmentDrawer
         appointment={selected}
         onClose={() => setSelected(null)}
-        professionalId={professionalId}
         onStartAttendance={
           startHandler
             ? (id) => {
@@ -453,7 +505,7 @@ export function PortalDashboardScreen({
   );
 }
 
-function freeSlotsToday(slots: { time: string; state: PortalSlotState }[]): number {
-  const nowMin = PORTAL_NOW.getHours() * 60 + PORTAL_NOW.getMinutes();
+function freeSlotsToday(slots: { time: string; state: PortalSlotState }[], at: Date): number {
+  const nowMin = at.getHours() * 60 + at.getMinutes();
   return slots.filter((s) => s.state === 'livre' && timeToMinutes(s.time) >= nowMin).length;
 }

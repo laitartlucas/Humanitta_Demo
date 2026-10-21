@@ -145,7 +145,17 @@ Rejeite o branch se: `check:boundaries` falhar; houver import de mocks para dado
 | Pagamento registrado | Financeiro → `registerPayment` | Pacientes (saldo), Dashboard, Relatórios |
 | Mudança de matriz | Configurações → `setPermission` | Todos (`useCan`, serviços) |
 
-## 8. Restaurar dados
+## 8. Testes de integração e E2E (Agente 09)
+
+```bash
+npm test                 # unitários + contrato + integração (tests/integration)
+npm run test:e2e         # Playwright: build de produção servido como GitHub Pages (desktop, tablet, smartphone)
+npm run verify:full      # verify + E2E
+```
+
+Relatório da integração das 8 branches: [`docs/agents/AGENT_09.md`](agents/AGENT_09.md). Publicação: [`docs/DEPLOY.md`](DEPLOY.md).
+
+## 9. Restaurar dados
 
 - Navegador: abra `http://localhost:5173/?reset-demo`.
 - Código/teste: `resetDemoData()`.

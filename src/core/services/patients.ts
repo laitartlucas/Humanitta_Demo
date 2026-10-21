@@ -1,6 +1,6 @@
 import type { ID, PatientRecord } from '../domain';
 import { assertCan, type AccessContext } from '../access/accessContext';
-import { conflict, validation } from '../errors/AppError';
+import { AppError, conflict, validation } from '../errors/AppError';
 import { newId, repositories as r } from '../repositories';
 import { todayKey } from '../clock';
 import { logActivity } from './activity';
@@ -9,6 +9,16 @@ const ov = () => r.clinicSettings.get().permissionOverrides;
 
 export type PatientInput = Pick<PatientRecord, 'name' | 'birthDate' | 'phone' | 'city'> &
   Partial<Pick<PatientRecord, 'email' | 'tags' | 'adminNote' | 'alerts'>>;
+
+const digits = (phone: string) => phone.replace(/\D/g, '');
+
+/** Telefone já usado por outro cadastro (CR 03 §2). */
+function assertUniquePhone(phone: string | undefined, ignoreId?: string) {
+  if (!phone) return;
+  const d = digits(phone);
+  const other = r.patients.list().find((p) => p.id !== ignoreId && digits(p.phone) === d);
+  if (other) throw new AppError('CONFLICT', `Telefone já cadastrado para ${other.name}.`, { phone: 'Telefone já cadastrado.' });
+}
 
 function validate(input: Partial<PatientInput>, partial: boolean) {
   const f: Record<string, string> = {};
@@ -22,6 +32,7 @@ function validate(input: Partial<PatientInput>, partial: boolean) {
 export function createPatient(ctx: AccessContext, input: PatientInput): PatientRecord {
   assertCan(ctx, 'pacientes_cadastro', 'editar', ov());
   validate(input, false);
+  assertUniquePhone(input.phone);
   const patient = r.patients.create({
     id: newId('pac'),
     ...input,
@@ -38,10 +49,18 @@ export function createPatient(ctx: AccessContext, input: PatientInput): PatientR
 export function updatePatient(ctx: AccessContext, id: ID, patch: Partial<PatientInput & Pick<PatientRecord, 'status'>>): PatientRecord {
   assertCan(ctx, 'pacientes_cadastro', 'editar', ov());
   validate(patch, true);
+  assertUniquePhone(patch.phone, id);
   const updated = r.patients.update(id, patch);
   if (patch.name) {
-    // Mantém os nomes desnormalizados coerentes.
+    // Mantém os nomes desnormalizados coerentes em todos os módulos (CR 03 §3).
     r.appointments.list().filter((a) => a.patientId === id).forEach((a) => r.appointments.update(a.id, { patientName: updated.name }));
+    r.financialEntries.list().filter((e) => e.patientId === id).forEach((e) => r.financialEntries.update(e.id, { patientName: updated.name }));
+  }
+  if (patch.name || patch.phone) {
+    r.conversations
+      .list()
+      .filter((c) => c.patientId === id)
+      .forEach((c) => r.conversations.update(c.id, { contactName: updated.name, phone: updated.phone }));
   }
   return updated;
 }

@@ -2,16 +2,16 @@ import type { ReactNode } from 'react';
 import { AlertTriangle, CalendarClock, Clock, DoorOpen, Info, MessageSquareText, Phone, Play, Stethoscope, UserRound } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { Badge, Button, Drawer, StatusBadge } from '@ds/components';
-import { CHANNEL_NAMES, getRoomName, isSameDay } from '@ds/mocks/clinical';
+import { now } from '@core';
+import { CHANNEL_NAMES, isSameDay } from '@ds/mocks/clinical';
 import type { PortalAppointment } from '@ds/mocks/portal';
-import { PORTAL_PROFESSIONAL_ID, PORTAL_TODAY, getMyPatientById } from '@ds/mocks/portal';
+import { useMyPatientsById, useRoomName } from './usePortalData';
 import { isWaiting, timeRange, weekdayDate } from './portalUtils';
 import { ScopeBadge } from './ScopeBadge';
 
 export interface PortalAppointmentDrawerProps {
   appointment: PortalAppointment | null;
   onClose: () => void;
-  professionalId?: string;
   onStartAttendance?: (appointmentId: string) => void;
   onOpenPatient?: (patientId: string) => void;
 }
@@ -26,16 +26,18 @@ function Row({ icon: Icon, label, children }: { icon: LucideIcon; label: string;
   );
 }
 
-/** Detalhes de uma consulta do profissional — sem valores financeiros. */
+/** Detalhes de uma consulta do profissional logado — sem valores financeiros. */
 export function PortalAppointmentDrawer({
   appointment: a,
   onClose,
-  professionalId = PORTAL_PROFESSIONAL_ID,
   onStartAttendance,
   onOpenPatient,
 }: PortalAppointmentDrawerProps) {
-  const patient = a ? getMyPatientById(professionalId, a.patientId) : undefined;
-  const isToday = a ? isSameDay(new Date(a.start), PORTAL_TODAY) : false;
+  // Paciente só aparece se estiver vinculado ao profissional logado (escopo do core).
+  const { byId } = useMyPatientsById();
+  const roomName = useRoomName();
+  const patient = a ? byId.get(a.patientId) : undefined;
+  const isToday = a ? isSameDay(new Date(a.start), now()) : false;
   const canStart = Boolean(a && isToday && isWaiting(a.status) && onStartAttendance);
   const inProgress = a?.status === 'em_atendimento';
 
@@ -77,7 +79,7 @@ export function PortalAppointmentDrawer({
               <span className="tabular-nums">{timeRange(a)}</span> · {a.durationMin} min
             </Row>
             <Row icon={DoorOpen} label="Sala">
-              {getRoomName(a.roomId)}
+              {roomName(a.roomId)}
             </Row>
             <Row icon={CalendarClock} label="Agendado via">
               {a.channel ? CHANNEL_NAMES[a.channel] : 'Recepção'}

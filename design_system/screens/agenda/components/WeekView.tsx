@@ -1,18 +1,26 @@
-import type { Appointment } from '@ds/mocks/types';
+import { DEMO_NOW, type AppointmentRecord } from '@core';
+import { isBookableMinute, type DayAvailability } from '@modules/agenda/agendaRules';
 import { AppointmentCard } from '@ds/components';
 import { cn } from '@ds/foundations/cn';
-import { DEMO_NOW, WEEKDAY_SHORT, isSameDay, toDateKey } from '@ds/mocks/clinical';
-import { HOURS, HOUR_HEIGHT, heightFor, layoutOverlaps, pad, topFor, weekDays } from '../agendaUtils';
+import { WEEKDAY_SHORT, isSameDay, toDateKey } from '@ds/mocks/clinical';
+import { DAY_END_HOUR, DAY_START_HOUR, HOURS, HOUR_HEIGHT, heightFor, layoutOverlaps, pad, topFor, weekDays } from '../agendaUtils';
+import { STRIPED, UnavailableBlock } from './UnavailableBlock';
 
 export interface WeekViewProps {
   date: Date;
-  appointments: Appointment[];
-  onSelectAppointment: (a: Appointment) => void;
-  onSlotClick: (dateKey: string, time: string) => void;
+  appointments: AppointmentRecord[];
+  onSelectAppointment: (a: AppointmentRecord) => void;
+  /** Ausente = somente visualização (slots não clicáveis). */
+  onSlotClick?: (dateKey: string, time: string) => void;
   onSelectDay?: (d: Date) => void;
+  /**
+   * Disponibilidade de cada dia: da clínica (funcionamento e almoço) ou, com filtro de
+   * profissional, do próprio profissional (expediente e bloqueios).
+   */
+  availability: (dateKey: string) => DayAvailability;
 }
 
-export function WeekView({ date, appointments, onSelectAppointment, onSlotClick, onSelectDay }: WeekViewProps) {
+export function WeekView({ date, appointments, onSelectAppointment, onSlotClick, onSelectDay, availability }: WeekViewProps) {
   const days = weekDays(date);
   const gridHeight = HOURS.length * HOUR_HEIGHT;
   const nowTop = ((DEMO_NOW.getHours() - HOURS[0]) * 60 + DEMO_NOW.getMinutes()) * (HOUR_HEIGHT / 60);
@@ -71,6 +79,7 @@ export function WeekView({ date, appointments, onSelectAppointment, onSlotClick,
             const dayAppts = appointments.filter((a) => a.start.startsWith(key));
             const laid = layoutOverlaps(dayAppts);
             const today = isSameDay(d, DEMO_NOW);
+            const day = availability(key);
             return (
               <div
                 key={key}
@@ -80,19 +89,39 @@ export function WeekView({ date, appointments, onSelectAppointment, onSlotClick,
               >
                 {HOURS.map((h, i) => (
                   <div key={h} className="absolute inset-x-0" style={{ top: i * HOUR_HEIGHT, height: HOUR_HEIGHT }}>
-                    {[0, 30].map((m) => (
-                      <button
-                        key={m}
-                        type="button"
-                        onClick={() => onSlotClick(key, `${pad(h)}:${pad(m)}`)}
-                        className={cn(
-                          'block h-1/2 w-full hover:bg-gold-50 focus-visible:bg-gold-50 focus-visible:outline-none',
-                          m === 0 ? 'border-t border-graphite-100' : 'border-t border-dashed border-graphite-100/70',
-                        )}
-                        aria-label={`Novo agendamento em ${d.toLocaleDateString('pt-BR')} às ${pad(h)}:${pad(m)}`}
-                      />
-                    ))}
+                    {[0, 30].map((m) => {
+                      const bookable = isBookableMinute(day, h * 60 + m);
+                      const line = m === 0 ? 'border-t border-graphite-100' : 'border-t border-dashed border-graphite-100/70';
+                      return bookable && onSlotClick ? (
+                        <button
+                          key={m}
+                          type="button"
+                          onClick={() => onSlotClick(key, `${pad(h)}:${pad(m)}`)}
+                          className={cn('block h-1/2 w-full hover:bg-gold-50 focus-visible:bg-gold-50 focus-visible:outline-none', line)}
+                          aria-label={`Novo agendamento em ${d.toLocaleDateString('pt-BR')} às ${pad(h)}:${pad(m)}`}
+                        />
+                      ) : (
+                        <div key={m} aria-hidden="true" className={cn('h-1/2 w-full', bookable ? line : cn(STRIPED, m === 0 && 'border-t border-graphite-100'))} />
+                      );
+                    })}
                   </div>
+                ))}
+
+                {day.window === null && (
+                  <UnavailableBlock
+                    range={{
+                      start: DAY_START_HOUR * 60,
+                      end: DAY_END_HOUR * 60,
+                      kind: 'fechado',
+                      label: day.closedReason === 'clinica_fechada' ? 'Clínica fechada' : 'Sem expediente',
+                    }}
+                  />
+                )}
+                {day.unavailable.map((u) => (
+                  <UnavailableBlock key={`${u.kind}-${u.start}`} range={u} />
+                ))}
+                {day.pending.map((u) => (
+                  <UnavailableBlock key={`pend-${u.start}`} range={{ ...u, kind: 'pendente' }} />
                 ))}
 
                 {today && nowTop > 0 && nowTop < gridHeight && (

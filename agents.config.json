@@ -37,21 +37,33 @@
       "slug": "dashboard",
       "name": "Dashboard",
       "branch": "agent/01-dashboard",
-      "owns": ["design_system/screens/dashboard/**", "src/modules/dashboard/**", "tests/modules/dashboard/**"]
+      "owns": [
+        "design_system/screens/dashboard/**",
+        "src/modules/dashboard/**",
+        "tests/modules/dashboard/**"
+      ]
     },
     {
       "id": "02",
       "slug": "agenda",
       "name": "Agenda",
       "branch": "agent/02-agenda",
-      "owns": ["design_system/screens/agenda/**", "src/modules/agenda/**", "tests/modules/agenda/**"]
+      "owns": [
+        "design_system/screens/agenda/**",
+        "src/modules/agenda/**",
+        "tests/modules/agenda/**"
+      ]
     },
     {
       "id": "03",
       "slug": "pacientes",
       "name": "Pacientes",
       "branch": "agent/03-pacientes",
-      "owns": ["design_system/screens/patients/**", "src/modules/patients/**", "tests/modules/patients/**"]
+      "owns": [
+        "design_system/screens/patients/**",
+        "src/modules/patients/**",
+        "tests/modules/patients/**"
+      ]
     },
     {
       "id": "04",
@@ -72,14 +84,22 @@
       "slug": "atendimentos",
       "name": "Atendimentos",
       "branch": "agent/05-atendimentos",
-      "owns": ["design_system/screens/attendances/**", "src/modules/attendances/**", "tests/modules/attendances/**"]
+      "owns": [
+        "design_system/screens/attendances/**",
+        "src/modules/attendances/**",
+        "tests/modules/attendances/**"
+      ]
     },
     {
       "id": "06",
       "slug": "financeiro",
       "name": "Financeiro",
       "branch": "agent/06-financeiro",
-      "owns": ["design_system/screens/finance/**", "src/modules/finance/**", "tests/modules/finance/**"]
+      "owns": [
+        "design_system/screens/finance/**",
+        "src/modules/finance/**",
+        "tests/modules/finance/**"
+      ]
     },
     {
       "id": "07",
@@ -108,6 +128,25 @@
         "tests/modules/reports/**",
         "tests/modules/settings/**"
       ]
+    },
+    {
+      "id": "09",
+      "slug": "engenharia-plataforma",
+      "name": "Engenharia de Plataforma (integração, testes E2E, segurança e deploy)",
+      "branch": "integracao/agent-09",
+      "owns": [
+        "tests/e2e/**",
+        "tests/integration/**",
+        "playwright.config.ts",
+        ".github/**",
+        "vercel.json",
+        "docs/agents/AGENT_09.md",
+        "docs/SECURITY.md",
+        "docs/DEPLOY.md",
+        "scripts/serve-pages.mjs"
+      ],
+      "worktree": false,
+      "note": "Trabalha na pasta principal do repositório (branch integracao/agent-09); não recebe worktree próprio."
     }
   ],
   "sharedRequestFile": "docs/change-requests/<id-do-agente>-<assunto>.md"

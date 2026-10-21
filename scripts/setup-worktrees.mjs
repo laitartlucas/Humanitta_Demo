@@ -33,6 +33,7 @@ const base = config.baseBranch;
 
 for (const agent of config.agents) {
   if (only && !only.includes(agent.id)) continue;
+  if (agent.worktree === false) continue;
   const dir = resolve(root, `${agent.id}-${agent.slug}`);
   if (existsSync(dir)) {
     console.log(`• ${agent.id} ${agent.name}: já existe em ${dir}`);

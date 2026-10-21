@@ -1,0 +1,44 @@
+# Humanittá Gestão — integração contínua (Agente 09).
+# Roda em todo push/PR: typecheck strict, testes (unitários + integração), build e E2E no
+# build de produção servido como GitHub Pages. Nas branches de agente, valida as fronteiras.
+name: CI
+
+on:
+  push:
+    branches: [main, 'integracao/**', 'agent/**']
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # check-boundaries compara com o merge-base de main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+      - name: Fronteiras do agente
+        if: startsWith(github.ref_name, 'agent/')
+        run: |
+          git fetch origin main:main || true
+          npm run check:boundaries
+      - name: Navegador para E2E
+        run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e
+        env:
+          CI: 'true'
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-results
+          path: test-results/
+          retention-days: 7

@@ -1,6 +1,8 @@
 /**
  * Agente 04 — Portal do Profissional. Dono: Agente 04.
- * O `professionalId` vem SEMPRE da sessão (useAccessContext), nunca da URL nem de props externas.
+ * O `professionalId` vem SEMPRE da sessão: as telas leem o profissional logado pelos hooks do core
+ * (useMyProfessional / useAppointments com escopo próprio) e não aceitam id por prop nem pela URL.
+ * O `key` por profissional zera o estado de interface ao trocar de perfil no login demonstrativo.
  */
 import { useParams } from 'react-router-dom';
 import {
@@ -26,7 +28,6 @@ function PortalDashboardPage() {
   return (
     <PortalDashboardScreen
       key={professionalId}
-      professionalId={professionalId}
       onNavigate={(route) => go(route)}
       onStartAttendance={(id) => go('meus-atendimentos', id)}
       onOpenPatient={(id) => go('meus-pacientes', id)}
@@ -41,7 +42,6 @@ function PortalCalendarPage() {
   return (
     <PortalCalendarScreen
       key={professionalId}
-      professionalId={professionalId}
       canRequestChanges={canRequest}
       onStartAttendance={(id) => go('meus-atendimentos', id)}
       onOpenPatient={(id) => go('meus-pacientes', id)}
@@ -56,8 +56,8 @@ function PortalPatientsPage() {
   return (
     <PortalPatientsScreen
       key={`${professionalId}:${patientId ?? 'lista'}`}
-      professionalId={professionalId}
       initialPatientId={patientId}
+      onBackToList={() => go('meus-pacientes')}
       onStartAttendance={(id) => go('meus-atendimentos', id)}
     />
   );
@@ -70,8 +70,8 @@ function PortalAttendancesPage() {
   return (
     <PortalAttendancesScreen
       key={`${professionalId}:${appointmentId ?? 'lista'}`}
-      professionalId={professionalId}
       initialAppointmentId={appointmentId}
+      onBackToList={() => go('meus-atendimentos')}
       onOpenPatient={(id) => go('meus-pacientes', id)}
     />
   );
@@ -80,7 +80,7 @@ function PortalAttendancesPage() {
 function PortalProfilePage() {
   const professionalId = useMyProfessionalId();
   const canRequest = useCan('bloqueio_horario', 'solicitar');
-  return <PortalProfileScreen key={professionalId} professionalId={professionalId} canRequestChanges={canRequest} />;
+  return <PortalProfileScreen key={professionalId} canRequestChanges={canRequest} />;
 }
 
 export const portalModule: ModuleDefinition = {
