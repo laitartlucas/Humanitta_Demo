@@ -66,3 +66,7 @@ Este pedido reúne as dependências encontradas ao implementar Relatórios e Con
 2. `appointmentId` nas receitas: **atendido** para o histórico gerado e novos lançamentos vinculados.
 3–6. Preferências/feriados, autoproteção no serviço, situação do profissional, relatórios do profissional no menu: **adiados**.
 7. Bundle: **atendido** com chunks por módulo (`vite.config.ts`); `React.lazy` por rota fica como evolução.
+
+### Atualização (21/10/2026)
+- Comparativo do mês em andamento: `buildReport` usa `comparablePeriods` do core (1–hoje × mesmos dias); novos campos `compared`, `previousChart`, `appointmentsCompared`, `attendancesCompared`, `financeCompared`, `occupancy.comparedRatio`.
+- §3 Feriados: segue **adiado**, registrado como melhoria futura em `docs/agents/AGENT_09.md` §7.3.

@@ -52,6 +52,11 @@ import {
 export interface AgendaScreenProps {
   /** Visualização inicial (padrão: semana). */
   initialView?: AgendaView;
+  /**
+   * Abre "Novo agendamento" ao montar, com estes dados pré-preenchidos (ex.: paciente vindo da ficha).
+   * Ignorado se o perfil não puder editar a agenda. O usuário pode trocar o paciente no formulário.
+   */
+  initialNewAppointment?: NewAppointmentPrefill;
 }
 
 type ModalState =
@@ -77,13 +82,15 @@ function periodLabel(view: AgendaView, date: Date): string {
 const describe = (a: AppointmentRecord) => `${a.patientName} · ${formatDate(a.start)} às ${formatTime(a.start)}`;
 
 /** Agenda da clínica: leitura por `useAppointments` (core) e escrita pelo serviço da Agenda. */
-export function AgendaScreen({ initialView = 'semana' }: AgendaScreenProps) {
+export function AgendaScreen({ initialView = 'semana', initialNewAppointment }: AgendaScreenProps) {
   const { toast } = useToast();
   const [view, setView] = useState<AgendaView>(initialView);
   const [date, setDate] = useState<Date>(() => parseKey(todayKey()));
   const [filters, setFilters] = useState<AgendaFilters>(EMPTY_FILTERS);
   const [query, setQuery] = useState('');
-  const [modal, setModal] = useState<ModalState>({ kind: 'none' });
+  const [modal, setModal] = useState<ModalState>(() =>
+    initialNewAppointment ? { kind: 'new', prefill: initialNewAppointment } : { kind: 'none' },
+  );
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState<'confirm' | 'checkIn' | 'noShow' | null>(null);
 
@@ -294,7 +301,7 @@ export function AgendaScreen({ initialView = 'semana' }: AgendaScreenProps) {
       />
 
       <NewAppointmentModal
-        open={modal.kind === 'new'}
+        open={canEdit && modal.kind === 'new'}
         prefill={modal.kind === 'new' ? modal.prefill : undefined}
         patients={patients}
         professionals={professionals}

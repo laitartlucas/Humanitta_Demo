@@ -199,7 +199,7 @@ export function ReportsScreen({ initialTab = 'geral' }: ReportsScreenProps) {
               />
             </div>
             <span className="text-[12px] text-graphite-500" aria-live="polite">
-              {describeRange(reportFilters.range)} vs. {describeRange(report.previous)}
+              {describeRange(report.compared)} vs. {describeRange(report.previous)}
             </span>
           </div>
           {summaryDef && (
@@ -322,8 +322,10 @@ interface TabProps {
 
 function OverviewTab({ report: r, loading, onOpen }: TabProps & { onOpen: (t: ReportsTab) => void }) {
   const a = r.appointments;
+  const ac = r.appointmentsCompared; // base das variações (intervalo comparável)
   const p = r.appointmentsPrevious;
   const fin = r.finance;
+  const finCmp = r.financeCompared;
   const finPrev = r.financePrevious;
   const attendanceDonut = [
     { label: 'Realizadas', value: a.done, color: CHART_SUCCESS },
@@ -334,11 +336,11 @@ function OverviewTab({ report: r, loading, onOpen }: TabProps & { onOpen: (t: Re
   return (
     <>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <Kpi label="Consultas" value={INT.format(a.total)} icon={CalendarCheck} tone="gold" deltaPct={deltaOf(a.total, p.total)} loading={loading} />
+        <Kpi label="Consultas" value={INT.format(a.total)} icon={CalendarCheck} tone="gold" deltaPct={deltaOf(ac.total, p.total)} loading={loading} />
         {fin && finPrev ? (
-          <Kpi label="Faturamento" value={formatCurrency(fin.revenue)} icon={Wallet} tone="success" deltaPct={deltaOf(fin.revenue, finPrev.revenue)} loading={loading} />
+          <Kpi label="Faturamento" value={formatCurrency(fin.revenue)} icon={Wallet} tone="success" deltaPct={deltaOf(finCmp?.revenue ?? fin.revenue, finPrev.revenue)} loading={loading} />
         ) : (
-          <Kpi label="Realizadas" value={INT.format(a.done)} icon={CheckCircle2} tone="success" deltaPct={deltaOf(a.done, p.done)} loading={loading} />
+          <Kpi label="Realizadas" value={INT.format(a.done)} icon={CheckCircle2} tone="success" deltaPct={deltaOf(ac.done, p.done)} loading={loading} />
         )}
         <Kpi
           label="Ocupação"
@@ -355,7 +357,7 @@ function OverviewTab({ report: r, loading, onOpen }: TabProps & { onOpen: (t: Re
           icon={UserX}
           tone="warning"
           invert
-          deltaPct={a.noShowRate === null ? null : deltaOf(a.noShowRate, p.noShowRate)}
+          deltaPct={ac.noShowRate === null ? null : deltaOf(ac.noShowRate, p.noShowRate)}
           loading={loading}
           footer={<span className="text-[12px] text-graphite-500">Menos faltas é melhor</span>}
         />
@@ -371,7 +373,7 @@ function OverviewTab({ report: r, loading, onOpen }: TabProps & { onOpen: (t: Re
             <Card
               className="xl:col-span-2"
               title="Evolução de consultas"
-              description={`${describeRange(r.range)} comparado a ${describeRange(r.previous)}`}
+              description={`${describeRange(r.range)} comparado a ${describeRange(r.previousChart)}`}
               action={
                 <Button size="sm" variant="ghost" onClick={() => onOpen('agendamentos')}>
                   Detalhar
@@ -456,22 +458,23 @@ function OverviewTab({ report: r, loading, onOpen }: TabProps & { onOpen: (t: Re
 
 function AppointmentsTab({ report: r, loading, filters }: TabProps & { filters: ReportFilters }) {
   const a = r.appointments;
+  const ac = r.appointmentsCompared;
   const p = r.appointmentsPrevious;
   return (
     <>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
-        <Kpi label="Total de agendamentos" value={INT.format(a.total)} icon={CalendarCheck} deltaPct={deltaOf(a.total, p.total)} loading={loading} />
-        <Kpi label="Confirmados" value={INT.format(a.confirmed)} icon={UserCheck} tone="success" deltaPct={deltaOf(a.confirmed, p.confirmed)} loading={loading} />
-        <Kpi label="Pendentes de confirmação" value={INT.format(a.scheduled)} icon={Clock} tone="warning" deltaPct={deltaOf(a.scheduled, p.scheduled)} loading={loading} />
-        <Kpi label="Realizados" value={INT.format(a.done)} icon={CheckCircle2} tone="success" deltaPct={deltaOf(a.done, p.done)} loading={loading} />
-        <Kpi label="Cancelados" value={INT.format(a.cancelled)} icon={CalendarX} tone="warning" invert deltaPct={deltaOf(a.cancelled, p.cancelled)} loading={loading} />
+        <Kpi label="Total de agendamentos" value={INT.format(a.total)} icon={CalendarCheck} deltaPct={deltaOf(ac.total, p.total)} loading={loading} />
+        <Kpi label="Confirmados" value={INT.format(a.confirmed)} icon={UserCheck} tone="success" deltaPct={deltaOf(ac.confirmed, p.confirmed)} loading={loading} />
+        <Kpi label="Pendentes de confirmação" value={INT.format(a.scheduled)} icon={Clock} tone="warning" deltaPct={deltaOf(ac.scheduled, p.scheduled)} loading={loading} />
+        <Kpi label="Realizados" value={INT.format(a.done)} icon={CheckCircle2} tone="success" deltaPct={deltaOf(ac.done, p.done)} loading={loading} />
+        <Kpi label="Cancelados" value={INT.format(a.cancelled)} icon={CalendarX} tone="warning" invert deltaPct={deltaOf(ac.cancelled, p.cancelled)} loading={loading} />
         <Kpi
           label="Taxa de cancelamento"
           value={fmtRatio(a.cancelRate)}
           icon={Percent}
           tone="ai"
           invert
-          deltaPct={deltaOf(a.cancelRate, p.cancelRate)}
+          deltaPct={deltaOf(ac.cancelRate, p.cancelRate)}
           loading={loading}
           footer={
             <span className="text-[12px] text-graphite-500">
@@ -482,7 +485,7 @@ function AppointmentsTab({ report: r, loading, filters }: TabProps & { filters: 
       </div>
       {filters.status && <Note>Filtrando pelo status “{STATUS_NAMES[filters.status]}”: os demais contadores ficam zerados.</Note>}
 
-      <Card title="Evolução por período" description={`${describeRange(r.range)} comparado a ${describeRange(r.previous)}`}>
+      <Card title="Evolução por período" description={`${describeRange(r.range)} comparado a ${describeRange(r.previousChart)}`}>
         {a.total === 0 && p.total === 0 ? (
           <ChartEmpty />
         ) : (
@@ -516,12 +519,13 @@ function AppointmentsTab({ report: r, loading, filters }: TabProps & { filters: 
 
 function AttendancesTab({ report: r, loading }: TabProps) {
   const at = r.attendances;
+  const atc = r.attendancesCompared;
   const prev = r.attendancesPrevious;
   return (
     <>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
-        <Kpi label="Atendimentos registrados" value={INT.format(at.registered)} icon={Users} deltaPct={deltaOf(at.registered, prev.registered)} loading={loading} />
-        <Kpi label="Concluídos" value={INT.format(at.finished)} icon={CheckCircle2} tone="success" deltaPct={deltaOf(at.finished, prev.finished)} loading={loading} />
+        <Kpi label="Atendimentos registrados" value={INT.format(at.registered)} icon={Users} deltaPct={deltaOf(atc.registered, prev.registered)} loading={loading} />
+        <Kpi label="Concluídos" value={INT.format(at.finished)} icon={CheckCircle2} tone="success" deltaPct={deltaOf(atc.finished, prev.finished)} loading={loading} />
         <Kpi label="Em andamento" value={INT.format(at.inProgress)} icon={Clock} tone="ai" loading={loading} />
         <Kpi
           label="Pendentes"
@@ -541,10 +545,10 @@ function AttendancesTab({ report: r, loading }: TabProps) {
           icon={Ban}
           tone="warning"
           invert
-          deltaPct={deltaOf(at.noShow + at.cancelled, prev.noShow + prev.cancelled)}
+          deltaPct={deltaOf(atc.noShow + atc.cancelled, prev.noShow + prev.cancelled)}
           loading={loading}
         />
-        <Kpi label="Taxa de conclusão" value={fmtRatio(at.completionRate)} icon={Percent} tone="success" deltaPct={deltaOf(at.completionRate, prev.completionRate)} loading={loading} />
+        <Kpi label="Taxa de conclusão" value={fmtRatio(at.completionRate)} icon={Percent} tone="success" deltaPct={deltaOf(atc.completionRate, prev.completionRate)} loading={loading} />
       </div>
       <Note>Indicadores administrativos do ciclo de atendimento (check-in, início e fim). Nenhum conteúdo de prontuário é lido.</Note>
 
@@ -574,21 +578,22 @@ function AttendancesTab({ report: r, loading }: TabProps) {
 
 function FinanceTab({ report: r, loading, filters }: TabProps & { filters: ReportFilters }) {
   const f = r.finance;
+  const fc = r.financeCompared ?? r.finance;
   const p = r.financePrevious;
-  if (!f || !p || !r.financeEvolution) return null;
+  if (!f || !fc || !p || !r.financeEvolution) return null;
   const methodData = f.byMethod.map((m) => ({ label: m.label, value: m.value, color: PAYMENT_METHOD_COLOR[m.id as PaymentMethod] ?? CHART_GRAPHITE }));
   return (
     <>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
-        <Kpi label="Receitas recebidas" value={formatCurrency(f.revenue)} icon={TrendingUp} tone="success" deltaPct={deltaOf(f.revenue, p.revenue)} loading={loading} footer={<span className="text-[12px] text-graphite-500">{INT.format(f.receivedCount)} recebimentos</span>} />
-        <Kpi label="Despesas pagas" value={formatCurrency(f.expenses)} icon={TrendingDown} tone="warning" invert deltaPct={deltaOf(f.expenses, p.expenses)} loading={loading} />
-        <Kpi label="Repasses pagos" value={formatCurrency(f.payouts)} icon={Users} tone="ai" deltaPct={deltaOf(f.payouts, p.payouts)} loading={loading} />
+        <Kpi label="Receitas recebidas" value={formatCurrency(f.revenue)} icon={TrendingUp} tone="success" deltaPct={deltaOf(fc.revenue, p.revenue)} loading={loading} footer={<span className="text-[12px] text-graphite-500">{INT.format(f.receivedCount)} recebimentos</span>} />
+        <Kpi label="Despesas pagas" value={formatCurrency(f.expenses)} icon={TrendingDown} tone="warning" invert deltaPct={deltaOf(fc.expenses, p.expenses)} loading={loading} />
+        <Kpi label="Repasses pagos" value={formatCurrency(f.payouts)} icon={Users} tone="ai" deltaPct={deltaOf(fc.payouts, p.payouts)} loading={loading} />
         <Kpi
           label="Resultado"
           value={formatCurrency(f.result)}
           icon={Wallet}
           tone={f.result >= 0 ? 'success' : 'warning'}
-          deltaPct={p.result === 0 ? null : ((f.result - p.result) / Math.abs(p.result)) * 100}
+          deltaPct={p.result === 0 ? null : ((fc.result - p.result) / Math.abs(p.result)) * 100}
           loading={loading}
           footer={<span className="text-[12px] text-graphite-500">Receitas − despesas − repasses (pagos)</span>}
         />

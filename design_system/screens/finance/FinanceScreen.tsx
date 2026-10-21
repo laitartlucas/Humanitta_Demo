@@ -31,7 +31,7 @@ import {
   useToast,
   type DataTableColumn,
 } from '@ds/components';
-import { todayKey, useAction, useCan, usePatients, useProfessionals, type PaymentStatus } from '@core';
+import { comparablePeriods, comparisonCaption, todayKey, useAction, useCan, usePatients, useProfessionals, type PaymentStatus } from '@core';
 import {
   formatCurrency,
   formatCurrencyCompact,
@@ -55,7 +55,6 @@ import {
   payoutsByProfessional,
   percentChange,
   presetRange,
-  previousRange,
   rangeLabel,
   rangeShortLabel,
   receivableByStatus,
@@ -162,12 +161,18 @@ export function FinanceScreen({ onOpenPatient }: FinanceScreenProps) {
   const payout = useAction(generatePayout, { success: 'Repasse gerado' });
 
   const range = useMemo(() => presetRange(preset, today, custom), [preset, today, custom]);
-  const prevRange = useMemo(() => previousRange(range), [range]);
+  // Mês em andamento: compara 1–hoje com os mesmos dias do período anterior (regra única do core).
+  const comparison = useMemo(() => comparablePeriods(range, today), [range, today]);
+  const prevRange = comparison.previous;
   const isMonth = preset === 'mes_atual' || preset === 'mes_anterior';
   const periodWord = isMonth ? 'do mês' : 'do período';
 
   const totals = useMemo(() => computeTotals(rows, range), [rows, range]);
   const prevTotals = useMemo(() => computeTotals(rows, prevRange), [rows, prevRange]);
+  const cmpTotals = useMemo(
+    () => (comparison.partial ? computeTotals(rows, comparison.current) : totals),
+    [rows, comparison, totals],
+  );
   const series = useMemo(() => monthlySeries(rows, range.to.slice(0, 7), 12), [rows, range]);
   const bySpecialty = useMemo(() => revenueBySpecialty(rows, range, professionals), [rows, range, professionals]);
   const byMethod = useMemo(() => receivedByMethod(rows, range), [rows, range]);
@@ -219,7 +224,7 @@ export function FinanceScreen({ onOpenPatient }: FinanceScreenProps) {
 
   const canWrite = (r: FinanceRow) => (r.type === 'repasse' ? canWritePayouts : canWriteFinance);
   const allowedTypes = [...(canWriteFinance ? (['receita', 'despesa'] as const) : []), ...(canWritePayouts ? (['repasse'] as const) : [])];
-  const prevCaption = `vs. ${rangeShortLabel(prevRange)}`;
+  const prevCaption = comparison.partial ? comparisonCaption(comparison) : `vs. ${rangeShortLabel(prevRange)}`;
 
   const delta = (cur: number, prev: number) => {
     const pct = percentChange(cur, prev);
@@ -390,7 +395,7 @@ export function FinanceScreen({ onOpenPatient }: FinanceScreenProps) {
               value={formatCurrency(totals.revenue)}
               icon={Wallet}
               tone="gold"
-              delta={delta(totals.revenue, prevTotals.revenue)}
+              delta={delta(cmpTotals.revenue, prevTotals.revenue)}
               footer={noBase(prevTotals.revenue)}
             />
             <KpiCard
@@ -399,7 +404,7 @@ export function FinanceScreen({ onOpenPatient }: FinanceScreenProps) {
               icon={ArrowDownCircle}
               tone="warning"
               invertDelta
-              delta={delta(totals.expenses, prevTotals.expenses)}
+              delta={delta(cmpTotals.expenses, prevTotals.expenses)}
               footer={noBase(prevTotals.expenses) ?? <span className="text-[12px] text-graphite-500">{formatCurrency(totals.payable)} a pagar</span>}
             />
             <KpiCard
@@ -407,7 +412,7 @@ export function FinanceScreen({ onOpenPatient }: FinanceScreenProps) {
               value={formatCurrency(totals.balance)}
               icon={Scale}
               tone="success"
-              delta={delta(totals.balance, prevTotals.balance)}
+              delta={delta(cmpTotals.balance, prevTotals.balance)}
               footer={<span className="text-[12px] text-graphite-500">Receitas − despesas − {formatCurrency(totals.payouts)} em repasses</span>}
             />
             <KpiCard
@@ -416,7 +421,7 @@ export function FinanceScreen({ onOpenPatient }: FinanceScreenProps) {
               icon={Clock}
               tone="ai"
               invertDelta
-              delta={delta(totals.receivable, prevTotals.receivable)}
+              delta={delta(cmpTotals.receivable, prevTotals.receivable)}
               footer={<span className="text-[12px] text-danger">{formatCurrency(totals.overdueReceivable)} em atraso</span>}
             />
           </div>

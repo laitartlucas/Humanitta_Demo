@@ -65,3 +65,6 @@
 4–7. `status` na criação, `subject` no feed, `selectPatientFinance` e `selectPatientScope` no core: **adiados** (soluções locais em uso).
 8. Paciente pré-selecionado na Agenda: **adiado** (documentado em `docs/agents/AGENT_09.md` §2.2).
 9. Abrir conversa específica no WhatsApp: **adiado**.
+
+### Atualização (21/10/2026)
+- §8 Paciente pré-selecionado na Agenda: **atendido** — `useOpenNewAppointment(patientId)` (`src/app/navigation.ts`) + `AgendaScreen.initialNewAppointment`.

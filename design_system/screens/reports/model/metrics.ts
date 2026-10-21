@@ -5,7 +5,7 @@
  * `selectFinancialEntries`, `selectPatients`), então o mesmo perfil vê aqui exatamente o que vê nos
  * demais módulos. Nada de conteúdo clínico: prontuários (`clinicalRecords`) nunca são lidos.
  */
-import { can, selectAppointments, selectAttendances, selectFinancialEntries, selectPatients } from '@core';
+import { can, comparablePeriods, selectAppointments, selectAttendances, selectFinancialEntries, selectPatients, todayKey } from '@core';
 import type {
   AccessContext,
   AppointmentRecord,
@@ -357,22 +357,31 @@ export interface EvolutionSeries {
 export interface ReportData {
   access: ReportAccess;
   range: DateRange;
+  /** Intervalo anterior usado nas VARIAÇÕES (mês em andamento: mesmos dias do mês anterior). */
   previous: DateRange;
+  /** Intervalo atual usado nas variações (mês em andamento: 1º dia → hoje; senão = range). */
+  compared: DateRange;
+  /** Anterior fechado, para o gráfico de evolução dia a dia (mês anterior inteiro). */
+  previousChart: DateRange;
   appointments: AppointmentMetrics;
+  /** Métricas no intervalo `compared` (base das variações). */
+  appointmentsCompared: AppointmentMetrics;
   appointmentsPrevious: AppointmentMetrics;
   appointmentsEvolution: EvolutionSeries;
   attendances: AttendanceMetrics;
   attendancesPrevious: AttendanceMetrics;
+  attendancesCompared: AttendanceMetrics;
   /** Atendimentos finalizados por mês (últimos 6 meses). */
   attendancesMonthly: { label: string; value: number }[];
   finance: FinanceMetrics | null;
   financePrevious: FinanceMetrics | null;
+  financeCompared: FinanceMetrics | null;
   financeEvolution: { labels: string[]; revenue: number[]; costs: number[] } | null;
   financeMonthly: { label: string; revenue: number; costs: number }[] | null;
   patients: PatientMetrics | null;
   professionals: ProfessionalRow[];
   /** Ocupação geral (todos os profissionais filtrados). */
-  occupancy: Comparison & { currentRatio: number | null; previousRatio: number | null };
+  occupancy: Comparison & { currentRatio: number | null; previousRatio: number | null; /** Ocupação no intervalo `compared`. */ comparedRatio: number | null };
   /** [dia da semana seg..sáb][hora 08..17] → consultas. */
   heatmap: number[][];
   /** Quantidade de registros considerados (para estados vazios). */
@@ -406,10 +415,14 @@ function heatmapOf(list: AppointmentRecord[]): number[][] {
   return grid;
 }
 
-export function buildReport(s: Database, ctx: AccessContext, f: ReportFilters): ReportData {
+export function buildReport(s: Database, ctx: AccessContext, f: ReportFilters, today: string = todayKey()): ReportData {
   const access = selectReportAccess(s, ctx);
   const range = f.range;
-  const prevRange = previousRange(range);
+  // Agente 09: mês em andamento compara 1–hoje com os mesmos dias do mês anterior (regra única do core).
+  const comparison = comparablePeriods(range, today);
+  const prevRange = comparison.previous;
+  const cmpRange = comparison.current;
+  const chartPrevRange = previousRange(range);
   const profName = (id: ID) => s.professionals.find((p) => p.id === id)?.name ?? 'Profissional removido';
 
   const appts = access.operational ? selectReportAppointments(s, ctx, f, range) : [];
@@ -417,6 +430,9 @@ export function buildReport(s: Database, ctx: AccessContext, f: ReportFilters): 
   // Atendimentos: mesmos filtros, exceto o status do agendamento (o ciclo do atendimento tem status próprio).
   const apptsNoStatus = access.operational ? selectReportAppointments(s, ctx, f, range, false) : [];
   const apptsNoStatusPrev = access.operational ? selectReportAppointments(s, ctx, f, prevRange, false) : [];
+  const apptsCmp = !comparison.partial ? appts : access.operational ? selectReportAppointments(s, ctx, f, cmpRange) : [];
+  const apptsNoStatusCmp = !comparison.partial ? apptsNoStatus : access.operational ? selectReportAppointments(s, ctx, f, cmpRange, false) : [];
+  const apptsChartPrev = !comparison.partial ? apptsPrev : access.operational ? selectReportAppointments(s, ctx, f, chartPrevRange) : [];
   const attendances = access.operational ? selectAttendances(s, ctx) : [];
 
   const monthlyBuckets = lastMonths(range.to, 6);
@@ -436,12 +452,14 @@ export function buildReport(s: Database, ctx: AccessContext, f: ReportFilters): 
   /* Financeiro */
   let finance: FinanceMetrics | null = null;
   let financePrevious: FinanceMetrics | null = null;
+  let financeCompared: FinanceMetrics | null = null;
   let financeEvolution: ReportData['financeEvolution'] = null;
   let financeMonthly: ReportData['financeMonthly'] = null;
   if (access.financial) {
     const entries = selectReportEntries(s, ctx, f, range);
     finance = computeFinanceMetrics(entries, profName, access.payouts);
     financePrevious = computeFinanceMetrics(selectReportEntries(s, ctx, f, prevRange), profName, false);
+    financeCompared = comparison.partial ? computeFinanceMetrics(selectReportEntries(s, ctx, f, cmpRange), profName, false) : finance;
     const paidIn = (list: FinancialEntryRecord[], b: Bucket, types: FinancialEntryRecord['type'][]) =>
       sum(list.filter((e) => e.status === 'pago' && types.includes(e.type) && inRange(e.date, b)), (e) => e.amount);
     const buckets = bucketsOf(range);
@@ -513,28 +531,35 @@ export function buildReport(s: Database, ctx: AccessContext, f: ReportFilters): 
   const totalBooked = (list: AppointmentRecord[]) => sum(visiblePros, (p) => bookedOf(list, p.id));
   const occCur = ratio(totalBooked(apptsNoStatus), totalAvailable(range));
   const occPrev = ratio(totalBooked(apptsNoStatusPrev), totalAvailable(prevRange));
+  const occCmp = comparison.partial ? ratio(totalBooked(apptsNoStatusCmp), totalAvailable(cmpRange)) : occCur;
 
   return {
     access,
     range,
     previous: prevRange,
+    compared: cmpRange,
+    previousChart: chartPrevRange,
     appointments: computeAppointmentMetrics(appts, profName),
+    appointmentsCompared: computeAppointmentMetrics(apptsCmp, profName),
     appointmentsPrevious: computeAppointmentMetrics(apptsPrev, profName),
-    appointmentsEvolution: evolution(bucketsOf(range), bucketsOf(prevRange), appts, apptsPrev),
+    appointmentsEvolution: evolution(bucketsOf(range), bucketsOf(chartPrevRange), appts, apptsChartPrev),
     attendances: computeAttendanceMetrics(apptsNoStatus, attendances, profName),
     attendancesPrevious: computeAttendanceMetrics(apptsNoStatusPrev, attendances, profName),
+    attendancesCompared: computeAttendanceMetrics(apptsNoStatusCmp, attendances, profName),
     attendancesMonthly,
     finance,
     financePrevious,
+    financeCompared,
     financeEvolution,
     financeMonthly,
     patients,
     professionals,
     occupancy: {
       ...compare(occCur ?? 0, occPrev ?? 0),
-      deltaPct: occCur === null || occPrev === null ? null : compare(occCur, occPrev).deltaPct,
+      deltaPct: occCmp === null || occPrev === null ? null : compare(occCmp, occPrev).deltaPct,
       currentRatio: occCur,
       previousRatio: occPrev,
+      comparedRatio: occCmp,
     },
     heatmap: heatmapOf(appts),
     isEmpty: appts.length === 0 && apptsNoStatus.length === 0 && (finance === null || revenueEntries.length === 0),

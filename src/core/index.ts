@@ -19,3 +19,4 @@ export type { SessionState } from './session/session';
 export * from './selectors';
 export * from './services';
 export * from './hooks';
+export { comparablePeriods, closedPreviousRange, comparisonCaption, formatDayRange, isWholeMonths as isWholeMonthsRange, type ComparablePeriods, type DayRange } from './periods';

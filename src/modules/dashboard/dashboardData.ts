@@ -9,6 +9,7 @@
 import { toDateKey } from '@ds/mocks/clinical';
 import {
   can,
+  comparablePeriods,
   selectAppointments,
   selectFinanceTotals,
   selectFinancialEntries,
@@ -17,6 +18,7 @@ import {
   type ActivityEvent,
   type AppointmentRecord,
   type AppointmentStatus,
+  type ComparablePeriods,
   type Database,
   type Specialty,
 } from '@core';
@@ -63,12 +65,19 @@ export interface DashboardData {
   period: DashboardPeriod;
   range: DateRange;
   previousRange: DateRange;
+  /**
+   * Intervalos usados nas variações. No "Mês" em andamento: 1–hoje × mesmos dias do mês anterior
+   * (regra única em `@core` `comparablePeriods`); em "Dia"/"Semana": o período anterior equivalente.
+   */
+  comparison: ComparablePeriods;
   appointments: AppointmentSummary;
+  /** Total do período atual no intervalo comparável (base da variação). */
+  comparedTotal: number;
   previousTotal: number;
   /** `null` = perfil sem `pacientes_cadastro ≥ ver`. */
   patients: { total: number; active: number; newInPeriod: number } | null;
   /** `null` = perfil sem `financeiro ≥ ver` (ex.: recepção). */
-  revenue: { value: number; previous: number; receivable: number } | null;
+  revenue: { value: number; compared: number; previous: number; receivable: number } | null;
   /** Últimos 12 meses até o mês corrente (receita paga). `null` sem permissão. */
   revenueSeries: RevenuePoint[] | null;
   occupancy: { rate: number; rooms: number; bookedMin: number; capacityMin: number };
@@ -205,9 +214,14 @@ export function selectDashboard(
   if (!can(ctx, 'dashboard_clinica', 'ver', overrides)) return null;
 
   const range = periodRange(period, ref);
-  const previousRange = previousPeriodRange(period, ref);
+  const comparison: ComparablePeriods =
+    period === 'mes'
+      ? comparablePeriods(range, toDateKey(ref))
+      : { current: range, previous: previousPeriodRange(period, ref), partial: false };
+  const previousRange = comparison.previous;
   const list = selectAppointments(s, ctx, range);
   const previous = selectAppointments(s, ctx, previousRange);
+  const compared = comparison.partial ? selectAppointments(s, ctx, comparison.current) : list;
 
   const patientList = selectPatients(s, ctx);
   const patients = can(ctx, 'pacientes_cadastro', 'ver', overrides)
@@ -220,7 +234,12 @@ export function selectDashboard(
 
   const canFinance = can(ctx, 'financeiro', 'ver', overrides);
   const revenue = canFinance
-    ? { value: paidRevenueIn(s, ctx, range), previous: paidRevenueIn(s, ctx, previousRange), receivable: receivableIn(s, ctx, range) }
+    ? {
+        value: paidRevenueIn(s, ctx, range),
+        compared: paidRevenueIn(s, ctx, comparison.current),
+        previous: paidRevenueIn(s, ctx, previousRange),
+        receivable: receivableIn(s, ctx, range),
+      }
     : null;
 
   const specialtyCounts = new Map<Specialty, number>();
@@ -245,7 +264,9 @@ export function selectDashboard(
     period,
     range,
     previousRange,
+    comparison,
     appointments: summarizeAppointments(list),
+    comparedTotal: summarizeAppointments(compared).total,
     previousTotal: summarizeAppointments(previous).total,
     patients,
     revenue,
