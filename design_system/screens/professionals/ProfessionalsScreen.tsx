@@ -135,7 +135,7 @@ export function ProfessionalsScreen({ onOpenProfessional, onOpenAgenda }: Profes
       )}
 
       <div className="flex flex-col gap-3 rounded-md border border-graphite-200 bg-white p-4 shadow-sm">
-        <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+        <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex w-full flex-col gap-3 sm:flex-row md:max-w-xl">
             <div className="w-full sm:flex-1">
               <SearchInput
@@ -284,7 +284,8 @@ export function ProfessionalsScreen({ onOpenProfessional, onOpenAgenda }: Profes
                       tone={pct >= 85 ? 'warning' : 'gold'}
                       label={`Ocupação ${pct}% · ${s.free} ${s.free === 1 ? 'horário livre' : 'horários livres'} na semana`}
                     />
-                    <div className="flex gap-2">
+                    {/* grid: dois Button fullWidth (w-full + shrink-0) numa linha flex estouravam o card. */}
+                    <div className="grid grid-cols-2 gap-2">
                       <Button
                         variant="secondary"
                         size="sm"

@@ -142,7 +142,8 @@
         "vercel.json",
         "docs/agents/AGENT_09.md",
         "docs/SECURITY.md",
-        "docs/DEPLOY.md"
+        "docs/DEPLOY.md",
+        "scripts/serve-pages.mjs"
       ],
       "worktree": false,
       "note": "Trabalha na pasta principal do repositório (branch integracao/agent-09); não recebe worktree próprio."
