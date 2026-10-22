@@ -19,9 +19,10 @@ test('WhatsApp simulado: IA responde, humano assume, IA silencia e histórico pe
   const external: string[] = [];
   // Só são permitidos: o próprio site e o download das fontes do design (Google Fonts, GET).
   const FONT_HOSTS = ['fonts.googleapis.com', 'fonts.gstatic.com'];
+  const ownHost = new URL(test.info().project.use.baseURL ?? 'http://localhost').hostname; // local ou publicado
   page.on('request', (r) => {
     const u = new URL(r.url());
-    if (u.hostname === 'localhost') return;
+    if (u.hostname === ownHost) return;
     if (FONT_HOSTS.includes(u.hostname) && r.method() === 'GET') return;
     external.push(`${r.method()} ${r.url()}`);
   });
