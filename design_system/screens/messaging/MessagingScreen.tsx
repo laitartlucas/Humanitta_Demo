@@ -116,9 +116,18 @@ export function MessagingScreen({ onOpenPatient }: MessagingScreenProps = {}) {
     });
   }, []);
 
+  // Temporizadores da entrega simulada ("entregue"/"lida"): cancelados ao sair da tela, para não gravar
+  // no banco depois do logout nem durante a tela de outro perfil (encontrado no ensaio da apresentação).
+  const deliveryTimers = useRef(new Set<number>());
+
   useEffect(() => {
     const map = timers.current;
-    return () => map.forEach((t) => window.clearTimeout(t));
+    const delivery = deliveryTimers.current;
+    return () => {
+      map.forEach((t) => window.clearTimeout(t));
+      delivery.forEach((t) => window.clearTimeout(t));
+      delivery.clear();
+    };
   }, []);
 
   const { run: runAiReply } = aiReply;
@@ -187,8 +196,13 @@ export function MessagingScreen({ onOpenPatient }: MessagingScreenProps = {}) {
     const msg = await send.run(selected.id, text);
     if (!msg) return;
     // Entrega simulada: nenhuma mensagem sai do navegador.
-    window.setTimeout(() => void deliver.run(msg.id, 'entregue'), 900);
-    window.setTimeout(() => void deliver.run(msg.id, 'lida'), 2400);
+    for (const [status, ms] of [['entregue', 900], ['lida', 2400]] as const) {
+      const t = window.setTimeout(() => {
+        deliveryTimers.current.delete(t);
+        void deliver.run(msg.id, status);
+      }, ms);
+      deliveryTimers.current.add(t);
+    }
   };
 
   const onSimulateIncoming = async (text: string) => {

@@ -89,5 +89,5 @@ test('após o login volta à página pedida; caminho suspeito cai no início do 
   await page.locator('#login-password').fill('demo');
   await page.getByRole('button', { name: 'Entrar' }).click();
   await expect(page).toHaveURL(/#\/agenda$/); // tela inicial da recepção, sem seguir o caminho suspeito
-  expect(new URL(page.url()).host).toBe('localhost:4180');
+  expect(new URL(page.url()).host).toBe(new URL(test.info().project.use.baseURL!).host); // não saiu do site
 });

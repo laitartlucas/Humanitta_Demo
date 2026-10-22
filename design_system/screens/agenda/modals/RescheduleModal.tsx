@@ -29,6 +29,9 @@ export function RescheduleModal({ appointment, rooms, open, onClose, onReschedul
   const [roomId, setRoomId] = useState('');
   const [notify, setNotify] = useState(true);
 
+  // Reinicia o formulário só ao abrir ou ao trocar de registro (ID) — nunca por recálculo da tela
+  // (ex.: cronômetro do atendimento), que antes desmarcava campos com o diálogo aberto.
+  const appointmentId = appointment?.id;
   useEffect(() => {
     if (open && appointment) {
       setDateKey(toDateKey(new Date(appointment.start)));
@@ -37,7 +40,7 @@ export function RescheduleModal({ appointment, rooms, open, onClose, onReschedul
       setRoomId(current?.active ? current.id : '');
       setNotify(true);
     }
-  }, [open, appointment, rooms]);
+  }, [open, appointmentId]);
 
   const slots = useAgendaSlots({
     professionalId: appointment?.professionalId,

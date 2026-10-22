@@ -32,6 +32,9 @@ export function EditAppointmentModal({ appointment, open, onClose, onSave, profe
   const [notes, setNotes] = useState('');
   const [fieldErrors, setFieldErrors] = useState<Record<string, string | undefined>>({});
 
+  // Reinicia o formulário só ao abrir ou ao trocar de registro (ID) — nunca por recálculo da tela
+  // (ex.: cronômetro do atendimento), que antes desmarcava campos com o diálogo aberto.
+  const appointmentId = appointment?.id;
   useEffect(() => {
     if (open && appointment) {
       setProfessionalId(appointment.professionalId);
@@ -43,7 +46,7 @@ export function EditAppointmentModal({ appointment, open, onClose, onSave, profe
       setNotes(appointment.notes ?? '');
       setFieldErrors({});
     }
-  }, [open, appointment]);
+  }, [open, appointmentId]);
 
   useEffect(() => {
     if (error?.fields) setFieldErrors((e) => ({ ...e, ...error.fields }));

@@ -117,12 +117,15 @@ export function NewEntryModal({
   const [form, setForm] = useState<FormState>(() => initialState(firstType, today, entry));
   const [errors, setErrors] = useState<Partial<Record<string, string>>>({});
 
+  // Reinicia o formulário só ao abrir ou ao trocar de registro (ID) — nunca por recálculo da tela
+  // (ex.: cronômetro do atendimento), que antes desmarcava campos com o diálogo aberto.
+  const entryId = entry?.id;
   useEffect(() => {
     if (open) {
       setForm(initialState(firstType, today, entry));
       setErrors({});
     }
-  }, [open, firstType, today, entry]);
+  }, [open, firstType, today, entryId]);
 
   useEffect(() => {
     if (serverErrors) setErrors(serverErrors);

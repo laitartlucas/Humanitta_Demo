@@ -143,7 +143,8 @@
         "docs/agents/AGENT_09.md",
         "docs/SECURITY.md",
         "docs/DEPLOY.md",
-        "scripts/serve-pages.mjs"
+        "scripts/serve-pages.mjs",
+        "playwright.published.config.ts"
       ],
       "worktree": false,
       "note": "Trabalha na pasta principal do repositório (branch integracao/agent-09); não recebe worktree próprio."

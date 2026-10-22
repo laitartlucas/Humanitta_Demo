@@ -16,7 +16,9 @@
     "agents:worktrees": "node scripts/setup-worktrees.mjs",
     "test:e2e": "playwright test",
     "pages:serve": "node scripts/serve-pages.mjs",
-    "verify:full": "npm run verify && npm run test:e2e"
+    "verify:full": "npm run verify && npm run test:e2e",
+    "demo:check": "playwright test -c playwright.published.config.ts tests/e2e/demo-script.spec.ts --project=desktop",
+    "demo:check:full": "playwright test -c playwright.published.config.ts"
   },
   "dependencies": {
     "lucide-react": "0.441.0",

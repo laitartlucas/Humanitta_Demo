@@ -37,7 +37,7 @@ test('fluxo principal: cadastro → agendamento → portal → atendimento → f
   await pDialog.getByLabel(/Nome completo/).fill(PATIENT);
   await pDialog.getByLabel(/Data de nascimento/).fill('1990-05-12');
   await pDialog.getByLabel(/telefone/i).fill('(54) 99100-0997');
-  await pDialog.getByText(/Paciente autorizou/).click();
+  await pDialog.locator('input[type=checkbox]').check(); // consentimento LGPD
   await pDialog.getByRole('button', { name: 'Cadastrar paciente' }).click();
   await expect(page.getByText('Paciente cadastrado')).toBeVisible();
   await page.keyboard.press('Escape');
@@ -76,7 +76,7 @@ test('fluxo principal: cadastro → agendamento → portal → atendimento → f
   await page.goto('./#/portal/atendimentos');
   await page.getByRole('button', { name: 'Finalizar atendimento' }).click(); // Patrícia (em andamento na semente)
   let fDialog = page.getByRole('dialog');
-  await fDialog.getByText('Revisei o registro clínico deste atendimento').click();
+  await fDialog.getByRole('checkbox', { name: /Revisei o registro clínico/ }).check();
   await fDialog.getByRole('button', { name: 'Finalizar', exact: true }).click();
   await expect(page.getByText('Atendimento finalizado')).toBeVisible();
   await page.locator('main').getByText(PATIENT).first().click();
@@ -86,7 +86,7 @@ test('fluxo principal: cadastro → agendamento → portal → atendimento → f
   await notes.nth(1).fill('Teste E2E: exame demonstrativo.');
   await page.getByRole('button', { name: 'Finalizar atendimento' }).click();
   fDialog = page.getByRole('dialog');
-  await fDialog.getByText('Revisei o registro clínico deste atendimento').click();
+  await fDialog.getByRole('checkbox', { name: /Revisei o registro clínico/ }).check();
   await fDialog.getByRole('button', { name: 'Finalizar', exact: true }).click();
   await expect(page.getByText('Atendimento finalizado').first()).toBeVisible();
   await expect.poll(async () => (await dbSnapshot(page)).attendance?.status).toBe('finalizado');

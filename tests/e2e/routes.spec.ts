@@ -90,6 +90,7 @@ for (const role of Object.keys(MENU) as DemoRole[]) {
 }
 
 test('URL fora do subcaminho publicado responde 404 (como no GitHub Pages)', async ({ request }) => {
-  const res = await request.get('http://localhost:4180/agenda');
+  const base = new URL(test.info().project.use.baseURL!);
+  const res = await request.get(`${base.origin}/agenda-inexistente-humanitta`);
   expect(res.status()).toBe(404);
 });

@@ -53,13 +53,17 @@ export function FinishAttendanceModal({ open, onClose, appointment, elapsedMin, 
   const [reviewed, setReviewed] = useState(false);
   const [error, setError] = useState<string | undefined>();
 
+  // Reinicia o formulário só ao abrir ou ao trocar de registro (ID) — nunca por recálculo da tela
+  // (ex.: cronômetro do atendimento), que antes desmarcava campos com o diálogo aberto.
+  const appointmentId = appointment?.id;
+  const appointmentService = appointment?.service;
   useEffect(() => {
-    if (!open || !appointment) return;
-    setReturnIn(suggestedReturnFor(appointment.service));
+    if (!open || !appointmentId || appointmentService === undefined) return;
+    setReturnIn(suggestedReturnFor(appointmentService));
     setNote('');
     setReviewed(false);
     setError(undefined);
-  }, [open, appointment]);
+  }, [open, appointmentId, appointmentService]);
 
   const suggestedDate = returnIn === 'sem' ? undefined : toDateKey(addDays(now(), Number(returnIn)));
 
